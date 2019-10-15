@@ -1,0 +1,19 @@
+Table users as U {
+  id int [pk, increment]
+  first_name varchar [not null]
+  last_name varchar [not null]
+  email varchar [not null, unique]
+  password varchar [not null]
+  created_at datetime
+  updated_at datetime
+}
+
+Table roles as R {
+  id int [pk, increment]
+  name varchar [not null]
+}
+
+Table role_user {
+  role_id int [pk, ref: > roles.id]
+  user_id int [pk, ref: > users.id]
+}
