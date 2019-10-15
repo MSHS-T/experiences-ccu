@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route } from 'react-router-dom';
+import { createMuiTheme } from '@material-ui/core/styles';
+
+import Header from './Header';
+
+const theme = createMuiTheme();
 
 const LandingPage = (props) => {
     return <div>Landing Page</div>;
@@ -12,7 +17,12 @@ const RegisterPage = (props) => {
     return <div>Register Page</div>;
 };
 const DashboardPage = (props) => {
-    return <div>Dashboard Page</div>;
+    return (
+        <div>
+            <Header />
+            Dashboard Page
+        </div>
+    );
 };
 
 class App extends Component {
@@ -22,12 +32,12 @@ class App extends Component {
     render() {
         return (
             <BrowserRouter>
-                <div>
+                <>
                     <Route exact path="/" component={LandingPage} />
                     <Route path="/login" component={LoginPage} />
                     <Route path="/register" component={RegisterPage} />
                     <Route path="/dashboard" component={DashboardPage} />
-                </div>
+                </>
             </BrowserRouter>
         );
     }
