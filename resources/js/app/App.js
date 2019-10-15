@@ -3,27 +3,11 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { createMuiTheme } from '@material-ui/core/styles';
 
-import Header from './Header';
+import LandingPage from './pages/Landing';
+import LoginPage from './pages/Login';
+import DashboardPage from './pages/Dashboard';
 
 const theme = createMuiTheme();
-
-const LandingPage = (props) => {
-    return <div>Landing Page</div>;
-};
-const LoginPage = (props) => {
-    return <div>Log In Page</div>;
-};
-const RegisterPage = (props) => {
-    return <div>Register Page</div>;
-};
-const DashboardPage = (props) => {
-    return (
-        <div>
-            <Header />
-            Dashboard Page
-        </div>
-    );
-};
 
 class App extends Component {
     constructor(props) {
@@ -35,7 +19,6 @@ class App extends Component {
                 <>
                     <Route exact path="/" component={LandingPage} />
                     <Route path="/login" component={LoginPage} />
-                    <Route path="/register" component={RegisterPage} />
                     <Route path="/dashboard" component={DashboardPage} />
                 </>
             </BrowserRouter>
