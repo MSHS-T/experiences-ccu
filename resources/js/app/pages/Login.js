@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -14,6 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import Footer from '../components/Footer';
 import RouterLink from '../components/RouterLink';
+import UserContext from '../context/User';
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -42,6 +43,14 @@ const useStyles = makeStyles(theme => ({
 
 export default function Login() {
     const classes = useStyles();
+    const user = useContext(UserContext);
+    let _email, _password;
+
+    const handleLogin = e => {
+        e.preventDefault();
+
+        user.loginUser(_email.value, _password.value);
+    };
 
     return (
         <Container component="main" maxWidth="xs">
@@ -57,15 +66,16 @@ export default function Login() {
                 <Typography component="h1" variant="h5">
                     Authentification requise
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form className={classes.form} noValidate onSubmit={handleLogin}>
                     <TextField
                         variant="outlined"
                         margin="normal"
                         required
                         fullWidth
                         id="email"
-                        label="Adresse E-Mail"
                         name="email"
+                        label="Adresse E-Mail"
+                        inputRef={input => (_email = input)}
                         autoComplete="email"
                         autoFocus
                     />
@@ -74,10 +84,11 @@ export default function Login() {
                         margin="normal"
                         required
                         fullWidth
-                        name="password"
-                        label="Mot de Passe"
                         type="password"
                         id="password"
+                        name="password"
+                        label="Mot de Passe"
+                        inputRef={input => (_password = input)}
                         autoComplete="current-password"
                     />
                     <FormControlLabel
