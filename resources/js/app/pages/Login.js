@@ -1,15 +1,16 @@
 import React from 'react';
 import Avatar from '@material-ui/core/Avatar';
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
+import Container from '@material-ui/core/Container';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 
 import Footer from '../components/Footer';
 import RouterLink from '../components/RouterLink';
@@ -54,7 +55,7 @@ export default function Login() {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    Authentification requise
                 </Typography>
                 <form className={classes.form} noValidate>
                     <TextField
@@ -63,7 +64,7 @@ export default function Login() {
                         required
                         fullWidth
                         id="email"
-                        label="Email Address"
+                        label="Adresse E-Mail"
                         name="email"
                         autoComplete="email"
                         autoFocus
@@ -74,14 +75,14 @@ export default function Login() {
                         required
                         fullWidth
                         name="password"
-                        label="Password"
+                        label="Mot de Passe"
                         type="password"
                         id="password"
                         autoComplete="current-password"
                     />
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
-                        label="Remember me"
+                        label="Se souvenir de moi"
                     />
                     <Button
                         type="submit"
@@ -90,18 +91,22 @@ export default function Login() {
                         color="primary"
                         className={classes.submit}
                     >
-                        Sign In
+                        Connexion
                     </Button>
                     <Grid container>
                         <Grid item xs>
+                            {/* TODO : Add link to forgot password page */}
                             <Link href="#" variant="body2">
-                                Forgot password?
+                                Mot de passe oublié?
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link href="#" variant="body2">
-                                {"Don't have an account? Sign Up"}
-                            </Link>
+                            {/* TODO : Remove signup link if not needed */}
+                            <Box display="none">
+                                <Link href="#" variant="body2">
+                                    {"Don't have an account? Sign Up"}
+                                </Link>
+                            </Box>
                         </Grid>
                     </Grid>
                 </form>
