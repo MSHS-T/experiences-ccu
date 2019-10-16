@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -9,6 +9,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
 import RouterLink from './RouterLink';
+import UserContext from '../context/User';
 
 const useStyles = makeStyles(theme => ({
     appBar: {
@@ -32,6 +33,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function Header() {
     const classes = useStyles();
+    const user = useContext(UserContext);
+
     return (
         <>
             <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
@@ -44,9 +47,34 @@ export default function Header() {
                             Expériences CCU
                         </Typography>
                     </Link>
-                    <Button component={RouterLink} to="/login" color="inherit" variant="outlined" className={classes.button}>
-                        Login
-                    </Button>
+                    <>
+                        {
+                            user.isLoggedIn ?
+                                (
+                                    <Button
+                                        component={RouterLink}
+                                        to="/login"
+                                        color="inherit"
+                                        variant="outlined"
+                                        className={classes.button}
+                                    >
+                                        Logout
+                                    </Button>
+                                ) :
+                                (
+                                    <Button
+                                        component={RouterLink}
+                                        to="/login"
+                                        color="inherit"
+                                        variant="outlined"
+                                        className={classes.button}
+                                    >
+                                        Login
+                                    </Button>
+                                )
+                        }
+
+                    </>
                 </Toolbar>
             </AppBar>
         </>

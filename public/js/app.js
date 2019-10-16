@@ -101346,6 +101346,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _pages_Landing__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/Landing */ "./resources/js/app/pages/Landing.js");
 /* harmony import */ var _pages_Login__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/Login */ "./resources/js/app/pages/Login.js");
 /* harmony import */ var _pages_Dashboard__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./pages/Dashboard */ "./resources/js/app/pages/Dashboard.js");
+/* harmony import */ var _context_User__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./context/User */ "./resources/js/app/context/User.js");
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -101371,6 +101372,7 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 
 
+
  // createMuiTheme();
 
 var App =
@@ -101387,7 +101389,7 @@ function (_Component) {
   _createClass(App, [{
     key: "render",
     value: function render() {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["BrowserRouter"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["CssBaseline"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_context_User__WEBPACK_IMPORTED_MODULE_8__["UserProvider"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["BrowserRouter"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["CssBaseline"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
         exact: true,
         path: "/",
         component: _pages_Landing__WEBPACK_IMPORTED_MODULE_5__["default"]
@@ -101397,7 +101399,7 @@ function (_Component) {
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
         path: "/dashboard",
         component: _pages_Dashboard__WEBPACK_IMPORTED_MODULE_7__["default"]
-      })));
+      }))));
     }
   }]);
 
@@ -101467,6 +101469,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_core_Toolbar__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/Toolbar */ "./node_modules/@material-ui/core/esm/Toolbar/index.js");
 /* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/esm/Typography/index.js");
 /* harmony import */ var _RouterLink__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./RouterLink */ "./resources/js/app/components/RouterLink.js");
+/* harmony import */ var _context_User__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../context/User */ "./resources/js/app/context/User.js");
+
 
 
 
@@ -101498,6 +101502,7 @@ var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["ma
 });
 function Header() {
   var classes = useStyles();
+  var user = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_User__WEBPACK_IMPORTED_MODULE_10__["default"]);
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_AppBar__WEBPACK_IMPORTED_MODULE_2__["default"], {
     position: "static",
     color: "default",
@@ -101519,13 +101524,19 @@ function Header() {
     variant: "h6",
     color: "inherit",
     noWrap: true
-  }, "Exp\xE9riences CCU")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+  }, "Exp\xE9riences CCU")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, user.isLoggedIn ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
     component: _RouterLink__WEBPACK_IMPORTED_MODULE_9__["default"],
     to: "/login",
     color: "inherit",
     variant: "outlined",
     className: classes.button
-  }, "Login"))));
+  }, "Logout") : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    component: _RouterLink__WEBPACK_IMPORTED_MODULE_9__["default"],
+    to: "/login",
+    color: "inherit",
+    variant: "outlined",
+    className: classes.button
+  }, "Login")))));
 }
 
 /***/ }),
@@ -101552,6 +101563,110 @@ var RouterLink = react__WEBPACK_IMPORTED_MODULE_0___default.a.forwardRef(functio
   }, props));
 });
 /* harmony default export */ __webpack_exports__["default"] = (RouterLink);
+
+/***/ }),
+
+/***/ "./resources/js/app/context/User.js":
+/*!******************************************!*\
+  !*** ./resources/js/app/context/User.js ***!
+  \******************************************/
+/*! exports provided: UserProvider, UserConsumer, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserProvider", function() { return UserProvider; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserConsumer", function() { return UserConsumer; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+var UserContext = react__WEBPACK_IMPORTED_MODULE_0___default.a.createContext();
+
+var UserProvider = function UserProvider(props) {
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      isLoggedIn = _useState2[0],
+      setIsLoggedIn = _useState2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState4 = _slicedToArray(_useState3, 2),
+      user = _useState4[0],
+      setUser = _useState4[1];
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    var state = localStorage["appState"];
+
+    if (state) {
+      var appState = JSON.parse(state);
+      setIsLoggedIn(appState.isLoggedIn);
+      setUser(appState.user);
+    }
+  }, []); // Empty array means useEffect will only be called on first render
+
+  var loginUser = function loginUser(email, password) {
+    console.log('login user');
+    var formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+    return axios.post("http://localhost/api/user/login/", formData).then(function (response) {
+      console.log(response);
+      return response;
+    }).then(function (json) {
+      if (json.data.success) {
+        alert("Login Successful!");
+        var userData = {
+          id: json.data.data.id,
+          first_name: json.data.data.first_name,
+          last_name: json.data.data.last_name,
+          email: json.data.data.email,
+          auth_token: json.data.data.auth_token,
+          timestamp: new Date().toString()
+        };
+        setIsLoggedIn(true);
+        setUser(userData);
+        localStorage["appState"] = JSON.stringify({
+          isLoggedIn: true,
+          user: userData
+        });
+      } else {
+        alert("Login Failed!");
+      }
+    })["catch"](function (error) {
+      alert("An Error Occured! ".concat(error));
+    });
+  };
+
+  var logoutUser = function logoutUser() {
+    setIsLoggedIn(false);
+    setUser(null);
+    localStorage["appState"] = JSON.stringify({
+      isLoggedIn: false,
+      user: null
+    });
+  };
+
+  var context = {
+    isLoggedIn: isLoggedIn,
+    user: user,
+    loginUser: loginUser,
+    logoutUser: logoutUser
+  };
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(UserContext.Provider, {
+    value: context
+  }, props.children);
+};
+
+var UserConsumer = UserContext.Consumer;
+
+/* harmony default export */ __webpack_exports__["default"] = (UserContext);
 
 /***/ }),
 
@@ -101803,6 +101918,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
 /* harmony import */ var _components_Footer__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../components/Footer */ "./resources/js/app/components/Footer.js");
 /* harmony import */ var _components_RouterLink__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../components/RouterLink */ "./resources/js/app/components/RouterLink.js");
+/* harmony import */ var _context_User__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../context/User */ "./resources/js/app/context/User.js");
+
 
 
 
@@ -101847,6 +101964,15 @@ var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_12__["m
 });
 function Login() {
   var classes = useStyles();
+  var user = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_User__WEBPACK_IMPORTED_MODULE_15__["default"]);
+
+  var _email, _password;
+
+  var handleLogin = function handleLogin(e) {
+    e.preventDefault();
+    user.loginUser(_email.value, _password.value);
+  };
+
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Container__WEBPACK_IMPORTED_MODULE_5__["default"], {
     component: "main",
     maxWidth: "xs"
@@ -101868,15 +101994,19 @@ function Login() {
     variant: "h5"
   }, "Authentification requise"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
     className: classes.form,
-    noValidate: true
+    noValidate: true,
+    onSubmit: handleLogin
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_10__["default"], {
     variant: "outlined",
     margin: "normal",
     required: true,
     fullWidth: true,
     id: "email",
-    label: "Adresse E-Mail",
     name: "email",
+    label: "Adresse E-Mail",
+    inputRef: function inputRef(input) {
+      return _email = input;
+    },
     autoComplete: "email",
     autoFocus: true
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_10__["default"], {
@@ -101884,10 +102014,13 @@ function Login() {
     margin: "normal",
     required: true,
     fullWidth: true,
-    name: "password",
-    label: "Mot de Passe",
     type: "password",
     id: "password",
+    name: "password",
+    label: "Mot de Passe",
+    inputRef: function inputRef(input) {
+      return _password = input;
+    },
     autoComplete: "current-password"
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormControlLabel__WEBPACK_IMPORTED_MODULE_6__["default"], {
     control: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Checkbox__WEBPACK_IMPORTED_MODULE_4__["default"], {
