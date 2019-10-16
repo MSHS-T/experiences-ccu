@@ -8,6 +8,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
+import RouterLink from './RouterLink';
+
 const useStyles = makeStyles(theme => ({
     appBar: {
         borderBottom: `1px solid ${theme.palette.divider}`,
@@ -26,6 +28,8 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+
+
 export default function Header() {
     const classes = useStyles();
     return (
@@ -35,12 +39,12 @@ export default function Header() {
                     <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
                         <MenuIcon />
                     </IconButton>
-                    <Link href="/" color="inherit" className={classes.toolbarTitle}>
+                    <Link component={RouterLink} to="/" color="inherit" className={classes.toolbarTitle}>
                         <Typography variant="h6" color="inherit" noWrap>
                             Expériences CCU
                         </Typography>
                     </Link>
-                    <Button href="/login" color="inherit" variant="outlined" className={classes.button}>
+                    <Button component={RouterLink} to="/login" color="inherit" variant="outlined" className={classes.button}>
                         Login
                     </Button>
                 </Toolbar>

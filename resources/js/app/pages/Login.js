@@ -12,6 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 import Footer from '../components/Footer';
+import RouterLink from '../components/RouterLink';
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -44,7 +45,7 @@ export default function Login() {
     return (
         <Container component="main" maxWidth="xs">
             <div className={classes.paper}>
-                <Link href="/">
+                <Link component={RouterLink} to="/">
                     <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom>
                         Expériences CCU
                     </Typography>

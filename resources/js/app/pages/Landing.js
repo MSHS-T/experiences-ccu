@@ -8,14 +8,12 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import Grid from '@material-ui/core/Grid';
-import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -105,7 +103,6 @@ export default function Landing() {
                     {experiences.map(exp => {
                         const badge = (<Badge>{exp.slots}</Badge>);
                         return (
-                            // Enterprise card is full width at sm breakpoint
                             <Grid item key={exp.title} xs={12} sm={6} md={4}>
                                 <Card>
                                     <CardHeader
