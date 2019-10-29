@@ -30,7 +30,7 @@ const UserProvider = (props) => {
             })
             .then(json => {
                 if (json.data.success) {
-                    alert("Login Successful!");
+                    // alert("Login Successful!");
 
                     let userData = {
                         id: json.data.data.id,
@@ -44,7 +44,7 @@ const UserProvider = (props) => {
                     setUser(userData);
                     localStorage["appState"] = JSON.stringify({ isLoggedIn: true, user: userData });
                 } else {
-                    alert("Login Failed!");
+                    // alert("Login Failed!");
                 }
                 return json;
             })

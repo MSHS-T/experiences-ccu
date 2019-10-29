@@ -55,6 +55,8 @@ export default function Login() {
         promise.then(json => {
             if (json.data.success) {
                 setRedirect('/dashboard');
+            } else {
+                // TODO : Show error if login failed
             }
         })
     };
