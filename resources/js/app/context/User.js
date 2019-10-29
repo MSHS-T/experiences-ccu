@@ -46,6 +46,7 @@ const UserProvider = (props) => {
                 } else {
                     alert("Login Failed!");
                 }
+                return json;
             })
             .catch(error => {
                 alert(`An Error Occured! ${error}`);
