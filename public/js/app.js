@@ -32758,7 +32758,7 @@ var defaultTheme = Object(_createMuiTheme__WEBPACK_IMPORTED_MODULE_0__["default"
 /*!************************************************************!*\
   !*** ./node_modules/@material-ui/core/esm/styles/index.js ***!
   \************************************************************/
-/*! exports provided: hexToRgb, rgbToHex, hslToRgb, decomposeColor, recomposeColor, getContrastRatio, getLuminance, emphasize, fade, darken, lighten, createMuiTheme, createStyles, makeStyles, responsiveFontSizes, styled, easing, duration, formatMs, isString, isNumber, useTheme, withStyles, withTheme, createGenerateClassName, jssPreset, ServerStyleSheets, StylesProvider, MuiThemeProvider, ThemeProvider */
+/*! exports provided: createMuiTheme, createStyles, makeStyles, responsiveFontSizes, styled, useTheme, withStyles, withTheme, createGenerateClassName, jssPreset, ServerStyleSheets, StylesProvider, MuiThemeProvider, ThemeProvider, hexToRgb, rgbToHex, hslToRgb, decomposeColor, recomposeColor, getContrastRatio, getLuminance, emphasize, fade, darken, lighten, easing, duration, formatMs, isString, isNumber */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -36577,7 +36577,7 @@ var flexbox = Object(_compose__WEBPACK_IMPORTED_MODULE_1__["default"])(flexBasis
 /*!*******************************************************!*\
   !*** ./node_modules/@material-ui/system/esm/index.js ***!
   \*******************************************************/
-/*! exports provided: borders, border, borderTop, borderRight, borderBottom, borderLeft, borderColor, borderRadius, breakpoints, compose, css, display, flexbox, flexBasis, flexDirection, flexWrap, justifyContent, alignItems, alignContent, order, flex, flexGrow, flexShrink, alignSelf, justifyItems, justifySelf, palette, color, bgcolor, positions, position, zIndex, top, right, bottom, left, shadows, sizing, width, maxWidth, minWidth, height, maxHeight, minHeight, sizeWidth, sizeHeight, spacing, style, typography, fontFamily, fontSize, fontStyle, fontWeight, letterSpacing, lineHeight, textAlign */
+/*! exports provided: borders, breakpoints, compose, css, display, flexbox, palette, positions, shadows, sizing, spacing, style, typography, border, borderTop, borderRight, borderBottom, borderLeft, borderColor, borderRadius, flexBasis, flexDirection, flexWrap, justifyContent, alignItems, alignContent, order, flex, flexGrow, flexShrink, alignSelf, justifyItems, justifySelf, color, bgcolor, position, zIndex, top, right, bottom, left, width, maxWidth, minWidth, height, maxHeight, minHeight, sizeWidth, sizeHeight, fontFamily, fontSize, fontStyle, fontWeight, letterSpacing, lineHeight, textAlign */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -94134,7 +94134,7 @@ if (false) {} else {
 /*!***************************************************************!*\
   !*** ./node_modules/react-router-dom/esm/react-router-dom.js ***!
   \***************************************************************/
-/*! exports provided: MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, __RouterContext, generatePath, matchPath, useHistory, useLocation, useParams, useRouteMatch, withRouter, BrowserRouter, HashRouter, Link, NavLink */
+/*! exports provided: BrowserRouter, HashRouter, Link, NavLink, MemoryRouter, Prompt, Redirect, Route, Router, StaticRouter, Switch, __RouterContext, generatePath, matchPath, useHistory, useLocation, useParams, useRouteMatch, withRouter */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -101468,8 +101468,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _material_ui_core_Toolbar__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/Toolbar */ "./node_modules/@material-ui/core/esm/Toolbar/index.js");
 /* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/esm/Typography/index.js");
-/* harmony import */ var _RouterLink__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./RouterLink */ "./resources/js/app/components/RouterLink.js");
-/* harmony import */ var _context_User__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../context/User */ "./resources/js/app/context/User.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _RouterLink__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./RouterLink */ "./resources/js/app/components/RouterLink.js");
+/* harmony import */ var _context_User__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../context/User */ "./resources/js/app/context/User.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
@@ -101502,8 +101512,22 @@ var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["ma
 });
 function Header() {
   var classes = useStyles();
-  var user = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_User__WEBPACK_IMPORTED_MODULE_10__["default"]);
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_AppBar__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  var user = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_User__WEBPACK_IMPORTED_MODULE_11__["default"]);
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      redirect = _useState2[0],
+      setRedirect = _useState2[1];
+
+  var handleLogout = function handleLogout(e) {
+    e.preventDefault();
+    user.logoutUser();
+    setRedirect('/');
+  };
+
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, redirect !== null ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_9__["Redirect"], {
+    to: redirect
+  }) : "", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_AppBar__WEBPACK_IMPORTED_MODULE_2__["default"], {
     position: "static",
     color: "default",
     elevation: 0,
@@ -101516,7 +101540,7 @@ function Header() {
     color: "inherit",
     "aria-label": "menu"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_6___default.a, null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Link__WEBPACK_IMPORTED_MODULE_5__["default"], {
-    component: _RouterLink__WEBPACK_IMPORTED_MODULE_9__["default"],
+    component: _RouterLink__WEBPACK_IMPORTED_MODULE_10__["default"],
     to: "/",
     color: "inherit",
     className: classes.toolbarTitle
@@ -101525,13 +101549,14 @@ function Header() {
     color: "inherit",
     noWrap: true
   }, "Exp\xE9riences CCU")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, user.isLoggedIn ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    component: _RouterLink__WEBPACK_IMPORTED_MODULE_9__["default"],
-    to: "/login",
+    component: _RouterLink__WEBPACK_IMPORTED_MODULE_10__["default"],
+    onClick: handleLogout,
+    to: "/logout",
     color: "inherit",
     variant: "outlined",
     className: classes.button
   }, "Logout") : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
-    component: _RouterLink__WEBPACK_IMPORTED_MODULE_9__["default"],
+    component: _RouterLink__WEBPACK_IMPORTED_MODULE_10__["default"],
     to: "/login",
     color: "inherit",
     variant: "outlined",
@@ -101639,6 +101664,8 @@ var UserProvider = function UserProvider(props) {
       } else {
         alert("Login Failed!");
       }
+
+      return json;
     })["catch"](function (error) {
       alert("An Error Occured! ".concat(error));
     });
@@ -101916,9 +101943,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/core/TextField */ "./node_modules/@material-ui/core/esm/TextField/index.js");
 /* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/esm/Typography/index.js");
 /* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
-/* harmony import */ var _components_Footer__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../components/Footer */ "./resources/js/app/components/Footer.js");
-/* harmony import */ var _components_RouterLink__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../components/RouterLink */ "./resources/js/app/components/RouterLink.js");
-/* harmony import */ var _context_User__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../context/User */ "./resources/js/app/context/User.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _components_Footer__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../components/Footer */ "./resources/js/app/components/Footer.js");
+/* harmony import */ var _components_RouterLink__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../components/RouterLink */ "./resources/js/app/components/RouterLink.js");
+/* harmony import */ var _context_User__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../context/User */ "./resources/js/app/context/User.js");
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
 
 
 
@@ -101964,22 +102001,34 @@ var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_12__["m
 });
 function Login() {
   var classes = useStyles();
-  var user = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_User__WEBPACK_IMPORTED_MODULE_15__["default"]);
+  var user = Object(react__WEBPACK_IMPORTED_MODULE_0__["useContext"])(_context_User__WEBPACK_IMPORTED_MODULE_16__["default"]);
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState2 = _slicedToArray(_useState, 2),
+      redirect = _useState2[0],
+      setRedirect = _useState2[1];
 
   var _email, _password;
 
   var handleLogin = function handleLogin(e) {
     e.preventDefault();
-    user.loginUser(_email.value, _password.value);
+    var promise = user.loginUser(_email.value, _password.value);
+    promise.then(function (json) {
+      if (json.data.success) {
+        setRedirect('/dashboard');
+      }
+    });
   };
 
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Container__WEBPACK_IMPORTED_MODULE_5__["default"], {
     component: "main",
     maxWidth: "xs"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, redirect !== null ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_13__["Redirect"], {
+    to: redirect
+  }) : "", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: classes.paper
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Link__WEBPACK_IMPORTED_MODULE_8__["default"], {
-    component: _components_RouterLink__WEBPACK_IMPORTED_MODULE_14__["default"],
+    component: _components_RouterLink__WEBPACK_IMPORTED_MODULE_15__["default"],
     to: "/"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_11__["default"], {
     component: "h1",
@@ -102049,7 +102098,7 @@ function Login() {
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Link__WEBPACK_IMPORTED_MODULE_8__["default"], {
     href: "#",
     variant: "body2"
-  }, "Don't have an account? Sign Up")))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Footer__WEBPACK_IMPORTED_MODULE_13__["default"], null));
+  }, "Don't have an account? Sign Up")))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Footer__WEBPACK_IMPORTED_MODULE_14__["default"], null));
 }
 
 /***/ }),

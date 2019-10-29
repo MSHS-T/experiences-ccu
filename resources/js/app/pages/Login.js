@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -11,6 +11,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { Redirect } from 'react-router-dom';
 
 import Footer from '../components/Footer';
 import RouterLink from '../components/RouterLink';
@@ -44,16 +45,23 @@ const useStyles = makeStyles(theme => ({
 export default function Login() {
     const classes = useStyles();
     const user = useContext(UserContext);
+    const [redirect, setRedirect] = useState(null);
     let _email, _password;
 
     const handleLogin = e => {
         e.preventDefault();
 
-        user.loginUser(_email.value, _password.value);
+        let promise = user.loginUser(_email.value, _password.value);
+        promise.then(json => {
+            if (json.data.success) {
+                setRedirect('/dashboard');
+            }
+        })
     };
 
     return (
         <Container component="main" maxWidth="xs">
+            {redirect !== null ? <Redirect to={redirect} /> : ""}
             <div className={classes.paper}>
                 <Link component={RouterLink} to="/">
                     <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom>

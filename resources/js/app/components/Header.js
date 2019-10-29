@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -7,6 +7,7 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import { Redirect } from 'react-router-dom';
 
 import RouterLink from './RouterLink';
 import UserContext from '../context/User';
@@ -34,9 +35,18 @@ const useStyles = makeStyles(theme => ({
 export default function Header() {
     const classes = useStyles();
     const user = useContext(UserContext);
+    const [redirect, setRedirect] = useState(null);
+
+    const handleLogout = e => {
+        e.preventDefault();
+
+        user.logoutUser();
+        setRedirect('/');
+    };
 
     return (
         <>
+            {redirect !== null ? <Redirect to={redirect} /> : ""}
             <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
@@ -53,7 +63,8 @@ export default function Header() {
                                 (
                                     <Button
                                         component={RouterLink}
-                                        to="/login"
+                                        onClick={handleLogout}
+                                        to="/logout"
                                         color="inherit"
                                         variant="outlined"
                                         className={classes.button}
