@@ -8,6 +8,7 @@ import Navigation from './components/Navigation';
 import LandingPage from './pages/Landing';
 import LoginPage from './pages/Login';
 import DashboardPage from './pages/Dashboard';
+import UsersPage from './pages/Users';
 
 import { UserProvider } from './context/User';
 
@@ -24,6 +25,8 @@ class App extends Component {
                         <Route exact path="/" component={LandingPage} />
                         <Route path="/login" component={LoginPage} />
                         <Route path="/dashboard" component={DashboardPage} />
+
+                        <Route path="/users" component={UsersPage} />
                     </Navigation>
                 </BrowserRouter>
             </UserProvider>
