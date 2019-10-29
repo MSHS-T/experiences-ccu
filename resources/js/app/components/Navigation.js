@@ -35,7 +35,7 @@ export default function Navigation({ children }) {
 
     const useStyles = makeStyles(theme => ({
         root: {
-            paddingTop: theme.mixins.toolbar.minHeight,
+            paddingTop: theme.mixins.toolbar.minHeight + 20,
             [theme.breakpoints.up('md')]: {
                 paddingLeft: drawerWidth,
             },
