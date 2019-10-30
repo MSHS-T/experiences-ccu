@@ -10,6 +10,7 @@ const PrivateRoute = ({ component, ...options }) => {
     const { user } = useAuthContext();
     const finalComponent = user ? component : LoginPage;
 
+    // TODO : Add authorization
     return <Route {...options} component={finalComponent} />;
 };
 
