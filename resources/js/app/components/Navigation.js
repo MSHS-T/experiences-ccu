@@ -27,11 +27,12 @@ import ShutterSpeedIcon from '@material-ui/icons/ShutterSpeed';
 import IconButton from '@material-ui/core/IconButton';
 
 import RouterLink from './RouterLink';
-import UserContext from '../context/User';
+import { useAuthContext } from "../context/Auth";
 
 export default function Navigation({ children }) {
-    const user = useContext(UserContext);
-    const drawerWidth = user.isLoggedIn ? 200 : 0;
+    const { user, logoutUser } = useAuthContext();
+    console.log(user);
+    const drawerWidth = user ? 200 : 0;
 
     const useStyles = makeStyles(theme => ({
         root: {
@@ -69,7 +70,6 @@ export default function Navigation({ children }) {
     const classes = useStyles();
     const theme = useTheme();
     const [redirect, setRedirect] = useState(null);
-
     const [mobileOpen, setMobileOpen] = useState(false);
 
     const handleDrawerToggle = () => {
@@ -79,8 +79,8 @@ export default function Navigation({ children }) {
     const handleLogout = e => {
         e.preventDefault();
 
-        user.logoutUser();
-        setRedirect('/');
+        logoutUser();
+        setRedirect('/')
     };
 
     const navLinks = [
@@ -120,7 +120,7 @@ export default function Navigation({ children }) {
             <AppBar position="fixed" color="default" elevation={0} className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     {
-                        user.isLoggedIn ?
+                        user ?
                             (
                                 <IconButton
                                     edge="start"
@@ -140,12 +140,10 @@ export default function Navigation({ children }) {
                     </Link>
                     <>
                         {
-                            user.isLoggedIn ?
+                            user ?
                                 (
                                     <Button
-                                        component={RouterLink}
                                         onClick={handleLogout}
-                                        to="/logout"
                                         color="inherit"
                                         variant="outlined"
                                         className={classes.button}
@@ -170,7 +168,7 @@ export default function Navigation({ children }) {
                 </Toolbar>
             </AppBar>
             {
-                user.isLoggedIn ?
+                user ?
                     (
                         <>
                             {/* The implementation can be swapped with js to avoid SEO duplication of links. */}

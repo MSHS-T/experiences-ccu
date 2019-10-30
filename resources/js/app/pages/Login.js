@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -15,7 +15,7 @@ import { Redirect } from 'react-router-dom';
 
 import Footer from '../components/Footer';
 import RouterLink from '../components/RouterLink';
-import UserContext from '../context/User';
+import { useAuthContext } from "../context/Auth";
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -44,14 +44,14 @@ const useStyles = makeStyles(theme => ({
 
 export default function Login() {
     const classes = useStyles();
-    const user = useContext(UserContext);
+    const { loginUser } = useAuthContext();
     const [redirect, setRedirect] = useState(null);
     let _email, _password;
 
     const handleLogin = e => {
         e.preventDefault();
 
-        let promise = user.loginUser(_email.value, _password.value);
+        let promise = loginUser(_email.value, _password.value);
         promise.then(json => {
             if (json.data.success) {
                 setRedirect('/dashboard');
