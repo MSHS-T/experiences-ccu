@@ -12,9 +12,9 @@ class RolesTableSeeder extends Seeder
     public function run()
     {
         DB::table('roles')->insertOrIgnore([
-            ['id' => 1, 'name' => 'Administrateur'],
-            ['id' => 2, 'name' => 'Responsable Plateau'],
-            ['id' => 3, 'name' => 'Responsable Manipulation'],
+            ['id' => 1, 'key' => 'ADMIN', 'name' => 'Administrateur'],
+            ['id' => 2, 'key' => 'PLAT',  'name' => 'Responsable Plateau'],
+            ['id' => 3, 'key' => 'MANIP', 'name' => 'Responsable Manipulation'],
         ]);
     }
 }
