@@ -37,7 +37,8 @@ const AuthProvider = props => {
                         last_name: json.data.data.last_name,
                         email: json.data.data.email,
                         auth_token: json.data.data.auth_token,
-                        timestamp: new Date().toString()
+                        timestamp: new Date().toString(),
+                        roles: json.data.data.roles.map(r => r.key)
                     };
                     setAuthData({ user });
                     localStorage["appState"] = JSON.stringify({ user });

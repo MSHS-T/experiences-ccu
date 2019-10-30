@@ -101941,7 +101941,8 @@ var PrivateRoute = function PrivateRoute(_ref) {
   var _useAuthContext = Object(_context_Auth__WEBPACK_IMPORTED_MODULE_2__["useAuthContext"])(),
       user = _useAuthContext.user;
 
-  var finalComponent = user ? component : _pages_Login__WEBPACK_IMPORTED_MODULE_4__["default"];
+  var finalComponent = user ? component : _pages_Login__WEBPACK_IMPORTED_MODULE_4__["default"]; // TODO : Add authorization
+
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], _extends({}, options, {
     component: finalComponent
   }));
@@ -102060,7 +102061,10 @@ var AuthProvider = function AuthProvider(props) {
           last_name: json.data.data.last_name,
           email: json.data.data.email,
           auth_token: json.data.data.auth_token,
-          timestamp: new Date().toString()
+          timestamp: new Date().toString(),
+          roles: json.data.data.roles.map(function (r) {
+            return r.key;
+          })
         };
         setAuthData({
           user: user
