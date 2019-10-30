@@ -1,23 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { createContext, useMemo, useState, useEffect, useContext } from 'react';
 
-const UserContext = React.createContext()
+export const AuthContext = createContext(null);
 
-const UserProvider = (props) => {
+const initialAuthData = {};
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [user, setUser] = useState(null);
+const AuthProvider = props => {
+    const [authData, setAuthData] = useState(initialAuthData);
 
     useEffect(() => {
-        let state = localStorage["appState"];
+        const state = localStorage["appState"];
         if (state) {
             let appState = JSON.parse(state);
-            setIsLoggedIn(appState.isLoggedIn);
-            setUser(appState.user);
+            setAuthData({ user: appState.user });
+            console.log(authData);
         }
     }, []); // Empty array means useEffect will only be called on first render
 
     const loginUser = (email, password) => {
-        console.log('login user');
         var formData = new FormData();
         formData.append("email", email);
         formData.append("password", password);
@@ -32,7 +31,7 @@ const UserProvider = (props) => {
                 if (json.data.success) {
                     // alert("Login Successful!");
 
-                    let userData = {
+                    let user = {
                         id: json.data.data.id,
                         first_name: json.data.data.first_name,
                         last_name: json.data.data.last_name,
@@ -40,9 +39,8 @@ const UserProvider = (props) => {
                         auth_token: json.data.data.auth_token,
                         timestamp: new Date().toString()
                     };
-                    setIsLoggedIn(true);
-                    setUser(userData);
-                    localStorage["appState"] = JSON.stringify({ isLoggedIn: true, user: userData });
+                    setAuthData({ user });
+                    localStorage["appState"] = JSON.stringify({ user });
                 } else {
                     // alert("Login Failed!");
                 }
@@ -54,25 +52,16 @@ const UserProvider = (props) => {
     };
 
     const logoutUser = () => {
-        setIsLoggedIn(false);
-        setUser(null);
-        localStorage["appState"] = JSON.stringify({ isLoggedIn: false, user: null });
+        setAuthData(initialAuthData);
+        localStorage["appState"] = JSON.stringify({ user: null });
     };
 
-    const context = {
-        isLoggedIn,
-        user,
-        loginUser,
-        logoutUser
-    }
+    // Memoize given object as long as authData does not change
+    const authDataValue = useMemo(() => ({ ...authData, loginUser, logoutUser }), [authData]);
 
-    return (
-        <UserContext.Provider value={context}>
-            {props.children}
-        </UserContext.Provider>
-    );
-}
+    return <AuthContext.Provider value={authDataValue} {...props} />;
+};
 
-const UserConsumer = UserContext.Consumer
-export { UserProvider, UserConsumer }
-export default UserContext;
+export const useAuthContext = () => useContext(AuthContext);
+
+export default AuthProvider;
