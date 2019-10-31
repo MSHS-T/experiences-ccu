@@ -7,7 +7,7 @@ use App\User;
 use JWTAuth;
 use JWTAuthException;
 
-class UserController extends Controller
+class AuthController extends Controller
 {
     private function getToken($email, $password)
     {
