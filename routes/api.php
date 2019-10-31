@@ -31,6 +31,6 @@ Route::group(['middleware' => 'api-header'], function () {
 
     // The registration and login requests doesn't come with tokens
     // as users at that point have not been authenticated yet
-    Route::post('user/login', 'UserController@login');
-    // Route::post('user/register', 'UserController@register');
+    Route::post('user/login', 'AuthController@login');
+    // Route::post('user/register', 'AuthController@register');
 });
