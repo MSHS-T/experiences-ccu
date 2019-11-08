@@ -11,8 +11,8 @@ const AuthProvider = props => {
         const state = localStorage["appState"];
         if (state) {
             let appState = JSON.parse(state);
+            // TODO : Check if data is expired first
             setAuthData({ user: appState.user });
-            console.log(authData);
         }
     }, []); // Empty array means useEffect will only be called on first render
 
@@ -38,7 +38,8 @@ const AuthProvider = props => {
                         email: json.data.data.email,
                         auth_token: json.data.data.auth_token,
                         timestamp: new Date().toString(),
-                        roles: json.data.data.roles.map(r => r.key)
+                        roles: json.data.data.roles.map(r => r.key),
+                        // TODO : Add expiration date depending on remember me boolean
                     };
                     setAuthData({ user });
                     localStorage["appState"] = JSON.stringify({ user });

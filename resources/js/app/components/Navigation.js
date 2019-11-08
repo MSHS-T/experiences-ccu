@@ -16,13 +16,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-import BuildIcon from '@material-ui/icons/Build';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import HomeIcon from '@material-ui/icons/Home';
-import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
-import PeopleIcon from '@material-ui/icons/People';
-import SettingsIcon from '@material-ui/icons/Settings';
-import ShutterSpeedIcon from '@material-ui/icons/ShutterSpeed';
+import SiteMap from '../data/SiteMap';
 
 import IconButton from '@material-ui/core/IconButton';
 
@@ -31,7 +25,6 @@ import { useAuthContext } from "../context/Auth";
 
 export default function Navigation({ children }) {
     const { user, logoutUser } = useAuthContext();
-    console.log(user);
     const drawerWidth = user ? 200 : 0;
 
     const useStyles = makeStyles(theme => ({
@@ -83,26 +76,15 @@ export default function Navigation({ children }) {
         setRedirect('/')
     };
 
-    const navLinks = [
-        { title: 'Accueil', icon: (<HomeIcon />), url: '/' },
-        { title: 'Dashboard', icon: (<DashboardIcon />), url: '/dashboard' },
-        'divider',
-        { title: 'Plateaux', icon: (<MeetingRoomIcon />), url: '/plateaux' },
-        { title: 'Manipulations', icon: (<ShutterSpeedIcon />), url: '/manipulations' },
-        { title: 'Matériel', icon: (<BuildIcon />), url: '/equipment' },
-        'divider',
-        { title: 'Utilisateurs', icon: (<PeopleIcon />), url: '/users' },
-        { title: 'Paramètres', icon: (<SettingsIcon />), url: '/settings' },
-        'divider',
-    ]
+
 
     const drawer = (
         <div>
             <div className={classes.toolbar} />
             <Divider />
             <List>
-                {navLinks.map((link, index) => {
-                    if (link === "divider") { return (<Divider key={index} />) }
+                {SiteMap.filter(link => (link === '---' || link.showInMenu)).map((link, index) => {
+                    if (link === "---") { return (<Divider key={index} />) }
                     return (
                         <ListItem button component={RouterLink} to={link.url} key={index}>
                             <ListItemIcon>{link.icon}</ListItemIcon>
@@ -139,6 +121,7 @@ export default function Navigation({ children }) {
                         </Typography>
                     </Link>
                     <>
+                        {/* TODO : Replace logout button with user menu */}
                         {
                             user ?
                                 (
