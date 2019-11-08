@@ -101,6 +101,7 @@ export default function Login() {
                         inputRef={input => (_password = input)}
                         autoComplete="current-password"
                     />
+                    {/* TODO : Process rememberme boolean */}
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
                         label="Se souvenir de moi"
@@ -118,7 +119,7 @@ export default function Login() {
                         <Grid item xs>
                             {/* TODO : Add link to forgot password page */}
                             <Link href="#" variant="body2">
-                                Mot de passe oublié?
+                                {"Mot de passe oublié?"}
                             </Link>
                         </Grid>
                         <Grid item>
