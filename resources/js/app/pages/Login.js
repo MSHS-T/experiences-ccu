@@ -11,7 +11,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { Redirect } from 'react-router-dom';
 
 import Footer from '../components/Footer';
 import RouterLink from '../components/RouterLink';
@@ -42,28 +41,25 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function Login() {
+export default function Login(props) {
     const classes = useStyles();
     const { loginUser } = useAuthContext();
-    const [redirect, setRedirect] = useState(null);
-    let _email, _password;
+    let _email, _password, _remember;
 
     const handleLogin = e => {
         e.preventDefault();
-
-        let promise = loginUser(_email.value, _password.value);
-        promise.then(json => {
-            if (json.data.success) {
-                setRedirect('/dashboard');
-            } else {
+        let promise = loginUser(_email.value, _password.value, _remember.checked ? 1 : 0);
+        promise
+            .then(json => {
+                props.history.push('/dashboard');
+            })
+            .catch(error => {
                 // TODO : Show error if login failed
-            }
-        })
+            });
     };
 
     return (
         <Container component="main" maxWidth="xs">
-            {redirect !== null ? <Redirect to={redirect} /> : ""}
             <div className={classes.paper}>
                 <Link component={RouterLink} to="/">
                     <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom>
@@ -103,7 +99,7 @@ export default function Login() {
                     />
                     {/* TODO : Process rememberme boolean */}
                     <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
+                        control={<Checkbox value="remember" color="primary" inputRef={input => (_remember = input)} />}
                         label="Se souvenir de moi"
                     />
                     <Button
