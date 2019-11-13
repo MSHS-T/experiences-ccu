@@ -14,7 +14,7 @@ const AuthProvider = props => {
         const state = localStorage["appState"];
         if (state) {
             let appState = JSON.parse(state);
-            // Check if data is expired first
+            // Check if data is expired firs
             if (appState.tokenExpiration < Date.now()) {
                 // If it is, clear user data, we are logged out
                 clearUserData();

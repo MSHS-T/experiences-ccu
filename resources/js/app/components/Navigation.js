@@ -30,8 +30,10 @@ function Navigation(props) {
     const useStyles = makeStyles(theme => ({
         root: {
             paddingTop: theme.mixins.toolbar.minHeight + 20,
+            paddingLeft: 20,
+            paddingRight: 20,
             [theme.breakpoints.up('md')]: {
-                paddingLeft: drawerWidth,
+                paddingLeft: drawerWidth + 20,
             },
         },
         appBar: {
