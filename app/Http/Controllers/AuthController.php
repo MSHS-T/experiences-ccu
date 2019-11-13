@@ -32,7 +32,8 @@ class AuthController extends Controller
 
         $auth = auth();
         if($rememberMe){
-            $auth = $auth->setTTL(3600 * 24 * 30);
+            // Session will expire in 30 days if remember me is checked (1 hour otherwise)
+            $auth = $auth->setTTL(60 * 24 * 30);
         }
 
         if (! $token = $auth->attempt($credentials)) {
@@ -87,7 +88,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_at' => time() + 10 //(auth()->factory()->getTTL() * 60)
+            'expires_at' => time() + (auth()->factory()->getTTL() * 60)
         ]);
     }
 }

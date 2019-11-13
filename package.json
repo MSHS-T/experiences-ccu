@@ -17,6 +17,7 @@
         "cross-env": "^5.1",
         "laravel-mix": "^4.0.7",
         "lodash": "^4.17.13",
+        "material-table": "^1.54.1",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
         "react-router-dom": "^5.1.2",
