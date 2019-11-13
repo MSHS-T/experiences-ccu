@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -23,7 +23,7 @@ import IconButton from '@material-ui/core/IconButton';
 import RouterLink from './RouterLink';
 import { useAuthContext } from "../context/Auth";
 
-export default function Navigation({ children }) {
+function Navigation(props) {
     const { user, logoutUser } = useAuthContext();
     const drawerWidth = user ? 200 : 0;
 
@@ -62,7 +62,6 @@ export default function Navigation({ children }) {
 
     const classes = useStyles();
     const theme = useTheme();
-    const [redirect, setRedirect] = useState(null);
     const [mobileOpen, setMobileOpen] = useState(false);
 
     const handleDrawerToggle = () => {
@@ -72,8 +71,10 @@ export default function Navigation({ children }) {
     const handleLogout = e => {
         e.preventDefault();
 
-        logoutUser();
-        setRedirect('/')
+        let promise = logoutUser();
+        promise.then(resp => {
+            props.history.push('/');
+        });
     };
 
 
@@ -98,7 +99,6 @@ export default function Navigation({ children }) {
 
     return (
         <div className={classes.root}>
-            {redirect !== null ? <Redirect to={redirect} /> : ""}
             <AppBar position="fixed" color="default" elevation={0} className={classes.appBar}>
                 <Toolbar className={classes.toolbar}>
                     {
@@ -185,7 +185,9 @@ export default function Navigation({ children }) {
                         </>
                     ) : ''
             }
-            {children}
+            {props.children}
         </div>
     );
 }
+
+export default withRouter(Navigation);
