@@ -6,7 +6,7 @@ import { useAuthContext } from "../context/Auth";
 import SiteMap from '../data/SiteMap';
 
 import LoginPage from "../pages/Login";
-import NotAuthorizedPage from "../pages/NotAuthorized";
+import ErrorPage from "../pages/Error";
 
 const PrivateRoute = ({ component, roles, ...options }) => {
     // Fetch user
@@ -21,8 +21,14 @@ const PrivateRoute = ({ component, roles, ...options }) => {
         // We check if there is at least 1 common role between the user's and the requirements
         const isAllowed = intersection(user.roles, roles).length > 0;
         if (!isAllowed) {
-            // If no matching roles are found, we render the NotAuthorized page
-            return <Route render={(props) => <NotAuthorizedPage {...props} requiredRoles={roles} />} {...options} />
+            // If no matching roles are found, we render the Error page
+            return <Route render={(props) => (
+                <ErrorPage {...props}>
+                    Vous n'êtes pas autorisé à accéder à cette page.
+                    <br />
+                    Niveau d'accès requis : {roles.join(' ou ')}
+                </ErrorPage>
+            )} {...options} />
         }
     }
 
