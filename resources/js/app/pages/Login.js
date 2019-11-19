@@ -97,7 +97,6 @@ export default function Login(props) {
                         inputRef={input => (_password = input)}
                         autoComplete="current-password"
                     />
-                    {/* TODO : Process rememberme boolean */}
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" inputRef={input => (_remember = input)} />}
                         label="Se souvenir de moi"

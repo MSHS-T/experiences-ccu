@@ -28,9 +28,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $count = $request->input('count', 5);
-
-        return User::with('roles:name')->paginate($count);
+        return User::with('roles')->get();
     }
 
     /**

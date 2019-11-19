@@ -14,7 +14,10 @@ import DashboardPage from "../pages/Dashboard";
 import PlateauxPage from "../pages/Plateaux";
 import ManipulationsPage from "../pages/Manipulations";
 import EquipmentPage from "../pages/Equipment";
-import UsersPage from "../pages/Users";
+
+import UsersList from "../pages/users/List";
+import UsersView from "../pages/users/View";
+
 import SettingsPage from "../pages/Settings";
 
 const SiteMap = [
@@ -78,16 +81,32 @@ const SiteMap = [
         roles: ["ADMIN", "PLAT", "MANIP"]
     },
     '---',
+    ////////////////////
+    ///// PARAMETRES ///
+    ////////////////////
+    {
+        title: 'Visualiser un utilisateur',
+        icon: false,
+        url: '/users/:id',
+        exactPath: false,
+        showInMenu: false,
+        component: UsersView,
+        authenticated: true,
+        roles: ["ADMIN"]
+    },
     {
         title: 'Utilisateurs',
         icon: (<PeopleIcon />),
         url: '/users',
         exactPath: false,
         showInMenu: true,
-        component: UsersPage,
+        component: UsersList,
         authenticated: true,
         roles: ["ADMIN"]
     },
+    ////////////////////
+    ///// PARAMETRES ///
+    ////////////////////
     {
         title: 'Paramètres',
         icon: (<SettingsIcon />),
