@@ -11,10 +11,10 @@
 |
 */
 
-Route::group(['prefix' => 'ajax'], function() {
+Route::group(['prefix' => 'api'], function() {
     // all routes that don't need to go to react-router
 });
 
-Route::get('/{path?}', function () {
-    return view('web');
-});
+Route::get('{reactRoute}', function () {
+    return view('web'); // your start view
+})->where('reactRoute', '^((?!api).)*$');
