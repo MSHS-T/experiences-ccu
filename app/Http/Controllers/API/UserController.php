@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\User as UserResource;
-use App\Http\Resources\UserCollection;
 use Illuminate\Http\Request;
 
+use App\Role;
 use App\User;
 
 class UserController extends Controller
@@ -39,7 +38,22 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'first_name' => 'required',
+            'last_name'  => 'required',
+            'email'      => 'required|email|unique:users',
+            'password'   => 'required',
+            'roles'      => 'required'
+        ]);
+        $user = User::create($data);
+        $roles = explode(',', $roles);
+        $allRoles = Role::all();
+        $userRoles = $allRoles->reject(function($r) use ($roles){
+            return !in_array($r, $roles);
+        })->map(function($r){ return $r->id; });
+        $user->roles->sync($userRoles);
+        $user->save();
+        return $user;
     }
 
     /**
@@ -50,7 +64,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        return User::with('roles')->findOrFail($id);
     }
 
     /**

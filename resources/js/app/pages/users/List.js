@@ -5,7 +5,7 @@ import { useAuthContext } from "../../context/Auth";
 
 import ViewIcon from '@material-ui/icons/Visibility';
 
-export default function Users() {
+export default function UserList(props) {
     const { user, accessToken } = useAuthContext();
 
     const [ isLoading, setLoading ] = useState(true);
@@ -55,17 +55,17 @@ export default function Users() {
                     icon: 'add',
                     tooltip: 'Nouvel Utilisateur',
                     isFreeAction: true,
-                    onClick: (event) => console.log("New User")
+                    onClick: (event) => props.history.push('/users/new')
                 },
                 {
                     icon: () => <ViewIcon/>,
                     tooltip: 'Visualiser',
-                    onClick: (event, rowData) => console.log("View User #" + rowData.id)
+                    onClick: (event, rowData) => props.history.push('/users/' + rowData.id)
                 },
                 {
                     icon: 'edit',
                     tooltip: 'Modifier',
-                    onClick: (event, rowData) => console.log("Edit User #" + rowData.id)
+                    onClick: (event, rowData) => props.history.push('/users/' + rowData.id + '/edit')
                 },
                 {
                     icon: 'delete',
