@@ -17,6 +17,7 @@ import EquipmentPage from "../pages/Equipment";
 
 import UsersList from "../pages/users/List";
 import UsersView from "../pages/users/View";
+import UsersForm from "../pages/users/Form";
 
 import SettingsPage from "../pages/Settings";
 
@@ -85,22 +86,42 @@ const SiteMap = [
     ///// PARAMETRES ///
     ////////////////////
     {
+        title: 'Utilisateurs',
+        icon: (<PeopleIcon />),
+        url: '/users',
+        exactPath: true,
+        showInMenu: true,
+        component: UsersList,
+        authenticated: true,
+        roles: ["ADMIN"]
+    },
+    {
+        title: 'Créer un utilisateur',
+        icon: false,
+        url: '/users/new',
+        exactPath: true,
+        showInMenu: false,
+        component: UsersForm,
+        authenticated: true,
+        roles: ["ADMIN"]
+    },
+    {
+        title: 'Modifier un utilisateur',
+        icon: false,
+        url: '/users/:id/edit',
+        exactPath: true,
+        showInMenu: false,
+        component: UsersForm,
+        authenticated: true,
+        roles: ["ADMIN"]
+    },
+    {
         title: 'Visualiser un utilisateur',
         icon: false,
         url: '/users/:id',
         exactPath: false,
         showInMenu: false,
         component: UsersView,
-        authenticated: true,
-        roles: ["ADMIN"]
-    },
-    {
-        title: 'Utilisateurs',
-        icon: (<PeopleIcon />),
-        url: '/users',
-        exactPath: false,
-        showInMenu: true,
-        component: UsersList,
         authenticated: true,
         roles: ["ADMIN"]
     },

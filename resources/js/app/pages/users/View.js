@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function View() {
+export default function UserView(props) {
     return (
         <div>
-            View User {this.props.match.params.id}
+            View User {props.match.params.id}
         </div>
     )
 }
