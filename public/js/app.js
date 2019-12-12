@@ -136487,6 +136487,26 @@ var useAuthContext = function useAuthContext() {
 
 /***/ }),
 
+/***/ "./resources/js/app/data/Constants.js":
+/*!********************************************!*\
+  !*** ./resources/js/app/data/Constants.js ***!
+  \********************************************/
+/*! exports provided: API_URL, API_USERS_ENDPOINT, FORM_REDIRECT_TIMEOUT */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "API_URL", function() { return API_URL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "API_USERS_ENDPOINT", function() { return API_USERS_ENDPOINT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FORM_REDIRECT_TIMEOUT", function() { return FORM_REDIRECT_TIMEOUT; });
+// API endpoints
+var API_URL = "http://localhost/api/";
+var API_USERS_ENDPOINT = API_URL + "user/"; // UI
+
+var FORM_REDIRECT_TIMEOUT = 2000;
+
+/***/ }),
+
 /***/ "./resources/js/app/data/SiteMap.js":
 /*!******************************************!*\
   !*** ./resources/js/app/data/SiteMap.js ***!
@@ -137381,8 +137401,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @material-ui/icons/Save */ "./node_modules/@material-ui/icons/Save.js");
 /* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_18__);
 /* harmony import */ var _context_Auth__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../../context/Auth */ "./resources/js/app/context/Auth.js");
-/* harmony import */ var _Error__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../Error */ "./resources/js/app/pages/Error.js");
-/* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../Loading */ "./resources/js/app/pages/Loading.js");
+/* harmony import */ var _data_Constants__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../../data/Constants */ "./resources/js/app/data/Constants.js");
+/* harmony import */ var _Error__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../Error */ "./resources/js/app/pages/Error.js");
+/* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ../Loading */ "./resources/js/app/pages/Loading.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -137396,6 +137417,7 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -137498,7 +137520,7 @@ function UserForm(props) {
   var loadData = function loadData(id) {
     setDataLoading(true);
     setUserData(null);
-    fetch('http://localhost/api/user/' + id, {
+    fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_20__["API_USERS_ENDPOINT"] + id, {
       headers: {
         'Authorization': 'bearer ' + accessToken
       }
@@ -137531,7 +137553,7 @@ function UserForm(props) {
 
   var saveData = function saveData(data) {
     if (mode === "CREATE") {
-      return fetch('http://localhost/api/user/', {
+      return fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_20__["API_USERS_ENDPOINT"], {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -137541,7 +137563,7 @@ function UserForm(props) {
         body: JSON.stringify(data)
       });
     } else {
-      return fetch('http://localhost/api/user/' + props.match.params.id, {
+      return fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_20__["API_USERS_ENDPOINT"] + props.match.params.id, {
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -137561,11 +137583,11 @@ function UserForm(props) {
   }, []); // Empty array means useEffect will only be called on first render
 
   if (isDataLoading) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Loading__WEBPACK_IMPORTED_MODULE_21__["default"], null);
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Loading__WEBPACK_IMPORTED_MODULE_22__["default"], null);
   }
 
   if (error !== null || mode === "EDIT" && userData === null) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Error__WEBPACK_IMPORTED_MODULE_20__["default"], null, "Une erreur s'est produite : ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, error !== null ? error : "No data"));
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Error__WEBPACK_IMPORTED_MODULE_21__["default"], null, "Une erreur s'est produite : ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, error !== null ? error : "No data"));
   }
 
   var meProps = props;
@@ -137614,7 +137636,7 @@ function UserForm(props) {
           setSaveSuccess(true);
           setTimeout(function () {
             return props.history.push('/users');
-          }, 2000);
+          }, _data_Constants__WEBPACK_IMPORTED_MODULE_20__["FORM_REDIRECT_TIMEOUT"]);
         }
       })["finally"](function () {
         setSaveLoading(false);
@@ -137773,9 +137795,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var material_table__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! material-table */ "./node_modules/material-table/dist/index.js");
 /* harmony import */ var material_table__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(material_table__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _context_Auth__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../context/Auth */ "./resources/js/app/context/Auth.js");
-/* harmony import */ var _material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/icons/Visibility */ "./node_modules/@material-ui/icons/Visibility.js");
-/* harmony import */ var _material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
+/* harmony import */ var _material_ui_core_Dialog__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Dialog */ "./node_modules/@material-ui/core/esm/Dialog/index.js");
+/* harmony import */ var _material_ui_core_DialogActions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/DialogActions */ "./node_modules/@material-ui/core/esm/DialogActions/index.js");
+/* harmony import */ var _material_ui_core_DialogContent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/DialogContent */ "./node_modules/@material-ui/core/esm/DialogContent/index.js");
+/* harmony import */ var _material_ui_core_DialogContentText__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/DialogContentText */ "./node_modules/@material-ui/core/esm/DialogContentText/index.js");
+/* harmony import */ var _material_ui_core_DialogTitle__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/DialogTitle */ "./node_modules/@material-ui/core/esm/DialogTitle/index.js");
+/* harmony import */ var _material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/icons/Visibility */ "./node_modules/@material-ui/icons/Visibility.js");
+/* harmony import */ var _material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _context_Auth__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../context/Auth */ "./resources/js/app/context/Auth.js");
+/* harmony import */ var _data_Constants__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../data/Constants */ "./resources/js/app/data/Constants.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -137794,9 +137823,15 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
+
+
+
+
+
+
 function UserList(props) {
-  var _useAuthContext = Object(_context_Auth__WEBPACK_IMPORTED_MODULE_2__["useAuthContext"])(),
-      user = _useAuthContext.user,
+  var _useAuthContext = Object(_context_Auth__WEBPACK_IMPORTED_MODULE_9__["useAuthContext"])(),
       accessToken = _useAuthContext.accessToken;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(true),
@@ -137809,10 +137844,20 @@ function UserList(props) {
       tableData = _useState4[0],
       setTableData = _useState4[1];
 
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState6 = _slicedToArray(_useState5, 2),
+      deleteEntry = _useState6[0],
+      setDeleteEntry = _useState6[1];
+
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState8 = _slicedToArray(_useState7, 2),
+      deleteError = _useState8[0],
+      setDeleteError = _useState8[1];
+
   var loadData = function loadData() {
     setLoading(true);
     setTableData([]);
-    fetch('http://localhost/api/user', {
+    fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_10__["API_USERS_ENDPOINT"], {
       headers: {
         'Authorization': 'bearer ' + accessToken
       }
@@ -137836,9 +137881,29 @@ function UserList(props) {
     });
   };
 
+  var handleDelete = function handleDelete(entry) {
+    setDeleteError(null);
+    fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_10__["API_USERS_ENDPOINT"] + entry.id, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': 'bearer ' + accessToken
+      }
+    }).then(function (response) {
+      if (!response.ok) {
+        throw new Error("".concat(response.status, " (").concat(response.statusText, ")"));
+      }
+
+      setDeleteEntry(null);
+      loadData();
+    })["catch"](function (err) {
+      setDeleteError(err.message);
+      setDeleteEntry(null);
+    });
+  };
+
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(loadData, []); // Empty array means useEffect will only be called on first render
 
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(material_table__WEBPACK_IMPORTED_MODULE_1___default.a, {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(material_table__WEBPACK_IMPORTED_MODULE_1___default.a, {
     title: "Utilisateurs",
     isLoading: isLoading,
     columns: [{
@@ -137873,7 +137938,7 @@ function UserList(props) {
       }
     }, {
       icon: function icon() {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_3___default.a, null);
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_8___default.a, null);
       },
       tooltip: 'Visualiser',
       onClick: function onClick(event, rowData) {
@@ -137889,7 +137954,7 @@ function UserList(props) {
       icon: 'delete',
       tooltip: 'Supprimer',
       onClick: function onClick(event, rowData) {
-        return console.log("Delete User #" + rowData.id);
+        return setDeleteEntry(rowData);
       }
     }],
     options: {
@@ -137915,7 +137980,35 @@ function UserList(props) {
       }
     },
     data: tableData
-  });
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Dialog__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    open: !!deleteEntry || !!deleteError,
+    onClose: function onClose() {
+      setDeleteEntry(null);
+      setDeleteError(null);
+    },
+    "aria-labelledby": "alert-dialog-title",
+    "aria-describedby": "alert-dialog-description"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_DialogTitle__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    id: "alert-dialog-title"
+  }, deleteEntry ? "Supprimer l'utilisateur " + deleteEntry.first_name + " " + deleteEntry.last_name + " ?" : "", deleteError ? "Erreur lors de la suppression : " + deleteError : ""), deleteEntry && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_DialogActions__WEBPACK_IMPORTED_MODULE_4__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    onClick: function onClick() {
+      return setDeleteEntry(null);
+    },
+    color: "secondary"
+  }, "Annuler"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    onClick: function onClick() {
+      return handleDelete(deleteEntry);
+    },
+    color: "primary",
+    autoFocus: true
+  }, "Confirmer")), deleteError && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_DialogActions__WEBPACK_IMPORTED_MODULE_4__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    onClick: function onClick() {
+      setDeleteError(null);
+      loadData();
+    },
+    color: "primary",
+    autoFocus: true
+  }, "Fermer"))));
 }
 
 /***/ }),
