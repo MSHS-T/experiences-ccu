@@ -36708,6 +36708,64 @@ exports.default = _default;
 
 /***/ }),
 
+/***/ "./node_modules/@material-ui/icons/Delete.js":
+/*!***************************************************!*\
+  !*** ./node_modules/@material-ui/icons/Delete.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _createSvgIcon = _interopRequireDefault(__webpack_require__(/*! ./utils/createSvgIcon */ "./node_modules/@material-ui/icons/utils/createSvgIcon.js"));
+
+var _default = (0, _createSvgIcon.default)(_react.default.createElement("path", {
+  d: "M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+}), 'Delete');
+
+exports.default = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@material-ui/icons/Edit.js":
+/*!*************************************************!*\
+  !*** ./node_modules/@material-ui/icons/Edit.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _createSvgIcon = _interopRequireDefault(__webpack_require__(/*! ./utils/createSvgIcon */ "./node_modules/@material-ui/icons/utils/createSvgIcon.js"));
+
+var _default = (0, _createSvgIcon.default)(_react.default.createElement("path", {
+  d: "M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+}), 'Edit');
+
+exports.default = _default;
+
+/***/ }),
+
 /***/ "./node_modules/@material-ui/icons/Error.js":
 /*!**************************************************!*\
   !*** ./node_modules/@material-ui/icons/Error.js ***!
@@ -137484,7 +137542,6 @@ function UserForm(props) {
   var classes = useStyles();
 
   var _useAuthContext = Object(_context_Auth__WEBPACK_IMPORTED_MODULE_19__["useAuthContext"])(),
-      user = _useAuthContext.user,
       accessToken = _useAuthContext.accessToken;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])("CREATE"),
@@ -138025,9 +138082,267 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return UserView; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
+/* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Grid */ "./node_modules/@material-ui/core/esm/Grid/index.js");
+/* harmony import */ var _material_ui_core_Dialog__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Dialog */ "./node_modules/@material-ui/core/esm/Dialog/index.js");
+/* harmony import */ var _material_ui_core_DialogActions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/DialogActions */ "./node_modules/@material-ui/core/esm/DialogActions/index.js");
+/* harmony import */ var _material_ui_core_DialogTitle__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/DialogTitle */ "./node_modules/@material-ui/core/esm/DialogTitle/index.js");
+/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/esm/Typography/index.js");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/icons/Cancel */ "./node_modules/@material-ui/icons/Cancel.js");
+/* harmony import */ var _material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _material_ui_icons_Edit__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @material-ui/icons/Edit */ "./node_modules/@material-ui/icons/Edit.js");
+/* harmony import */ var _material_ui_icons_Edit__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Edit__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _material_ui_icons_Delete__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/icons/Delete */ "./node_modules/@material-ui/icons/Delete.js");
+/* harmony import */ var _material_ui_icons_Delete__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Delete__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _context_Auth__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../context/Auth */ "./resources/js/app/context/Auth.js");
+/* harmony import */ var _data_Constants__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../data/Constants */ "./resources/js/app/data/Constants.js");
+/* harmony import */ var _Error__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../Error */ "./resources/js/app/pages/Error.js");
+/* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../Loading */ "./resources/js/app/pages/Loading.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_7__["makeStyles"])(function (theme) {
+  return {
+    label: {
+      fontWeight: 'bold',
+      textDecoration: 'underline',
+      display: 'inline-block'
+    },
+    value: {
+      fontSize: '110%',
+      display: 'inline-block',
+      marginLeft: theme.spacing(2)
+    },
+    buttonRow: {
+      display: 'flex',
+      justifyContent: 'center'
+    },
+    button: {
+      margin: theme.spacing(2)
+    }
+  };
+});
 function UserView(props) {
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "View User ", props.match.params.id);
+  var classes = useStyles();
+
+  var _useAuthContext = Object(_context_Auth__WEBPACK_IMPORTED_MODULE_11__["useAuthContext"])(),
+      accessToken = _useAuthContext.accessToken;
+
+  var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      isDataLoading = _useState2[0],
+      setDataLoading = _useState2[1];
+
+  var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState4 = _slicedToArray(_useState3, 2),
+      userData = _useState4[0],
+      setUserData = _useState4[1];
+
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState6 = _slicedToArray(_useState5, 2),
+      error = _useState6[0],
+      setError = _useState6[1];
+
+  var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState8 = _slicedToArray(_useState7, 2),
+      deleteEntry = _useState8[0],
+      setDeleteEntry = _useState8[1];
+
+  var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+      _useState10 = _slicedToArray(_useState9, 2),
+      deleteError = _useState10[0],
+      setDeleteError = _useState10[1];
+
+  var loadData = function loadData(id) {
+    setDataLoading(true);
+    setUserData(null);
+    fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_12__["API_USERS_ENDPOINT"] + id, {
+      headers: {
+        'Authorization': 'bearer ' + accessToken
+      }
+    }) // Parse JSON response
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error("".concat(response.status, " (").concat(response.statusText, ")"));
+      }
+
+      return response.json();
+    }) // Reprocess data :
+    //  - flatten roles array to keep only the key field
+    .then(function (data) {
+      return _objectSpread({}, data, {
+        roles: data.roles.map(function (r) {
+          return r.name;
+        })
+      });
+    }) // Set data in state
+    .then(function (data) {
+      setUserData(data);
+      setError(null);
+      setDataLoading(false);
+    })["catch"](function (err) {
+      setUserData(null);
+      setError(err.message);
+      setDataLoading(false);
+    });
+  };
+
+  var handleDelete = function handleDelete() {
+    setDeleteError(null);
+    fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_12__["API_USERS_ENDPOINT"] + userData.id, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': 'bearer ' + accessToken
+      }
+    }).then(function (response) {
+      if (!response.ok) {
+        throw new Error("".concat(response.status, " (").concat(response.statusText, ")"));
+      }
+
+      setDeleteEntry(false);
+      props.history.push('/users');
+    })["catch"](function (err) {
+      setDeleteError(err.message);
+      setDeleteEntry(false);
+    });
+  };
+
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
+    if (props.match.params.hasOwnProperty("id")) {
+      loadData(props.match.params.id);
+    }
+  }, []); // Empty array means useEffect will only be called on first render
+
+  if (isDataLoading) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Loading__WEBPACK_IMPORTED_MODULE_14__["default"], null);
+  }
+
+  if (error !== null) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Error__WEBPACK_IMPORTED_MODULE_13__["default"], null, "Une erreur s'est produite : ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, error !== null ? error : "No data"));
+  }
+
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    component: "h1",
+    variant: "h4",
+    align: "center",
+    color: "textPrimary",
+    gutterBottom: true
+  }, "Visualisation de l'utilisateur #".concat(props.match.params.id)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    container: true,
+    spacing: 2
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    item: true,
+    xs: 12,
+    sm: 6
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    className: classes.label
+  }, "Pr\xE9nom :"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    className: classes.value
+  }, userData && userData.first_name)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    item: true,
+    xs: 12,
+    sm: 6
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    className: classes.label
+  }, "Nom :"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    className: classes.value
+  }, userData && userData.last_name)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    item: true,
+    xs: 12
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    className: classes.label
+  }, "Adresse Email :"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    className: classes.value
+  }, userData && userData.email)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    item: true,
+    xs: 12
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    className: classes.label
+  }, "R\xF4les :"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    className: classes.value
+  }, userData && userData.roles.join(', '))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_2__["default"], {
+    item: true,
+    xs: 12,
+    className: classes.buttonRow
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    variant: "contained",
+    color: "default",
+    className: classes.button,
+    startIcon: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_8___default.a, null),
+    onClick: function onClick(e) {
+      return props.history.push('/users');
+    }
+  }, "Retour"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    variant: "contained",
+    color: "primary",
+    className: classes.button,
+    startIcon: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Edit__WEBPACK_IMPORTED_MODULE_9___default.a, null),
+    onClick: function onClick(e) {
+      return props.history.push('/users/' + userData.id + '/edit');
+    }
+  }, "Modifier"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    variant: "contained",
+    color: "secondary",
+    className: classes.button,
+    startIcon: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Delete__WEBPACK_IMPORTED_MODULE_10___default.a, null),
+    onClick: function onClick(e) {
+      return setDeleteEntry(true);
+    }
+  }, "Supprimer"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Dialog__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    open: deleteEntry || !!deleteError,
+    onClose: function onClose() {
+      setDeleteEntry(false);
+      setDeleteError(null);
+    },
+    "aria-labelledby": "alert-dialog-title",
+    "aria-describedby": "alert-dialog-description"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_DialogTitle__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    id: "alert-dialog-title"
+  }, deleteEntry && userData ? "Supprimer l'utilisateur " + userData.first_name + " " + userData.last_name + " ?" : "", deleteError ? "Erreur lors de la suppression : " + deleteError : ""), deleteEntry && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_DialogActions__WEBPACK_IMPORTED_MODULE_4__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    onClick: function onClick() {
+      return setDeleteEntry(false);
+    },
+    color: "secondary"
+  }, "Annuler"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    onClick: function onClick() {
+      return handleDelete(deleteEntry);
+    },
+    color: "primary",
+    autoFocus: true
+  }, "Confirmer")), deleteError && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_DialogActions__WEBPACK_IMPORTED_MODULE_4__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    onClick: function onClick() {
+      return setDeleteError(null);
+    },
+    color: "primary",
+    autoFocus: true
+  }, "Fermer"))));
 }
 
 /***/ }),

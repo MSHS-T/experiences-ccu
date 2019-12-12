@@ -65,7 +65,7 @@ const allRoles = {
 
 export default function UserForm(props) {
     const classes = useStyles();
-    const { user, accessToken } = useAuthContext();
+    const { accessToken } = useAuthContext();
 
     const [mode, setMode] = useState("CREATE");
     const [isDataLoading, setDataLoading] = useState(false);
