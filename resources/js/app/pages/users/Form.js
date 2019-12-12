@@ -21,6 +21,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
 
 import { useAuthContext } from "../../context/Auth";
+import * as Constants from "../../data/Constants";
 import ErrorPage from "../Error";
 import Loading from "../Loading";
 
@@ -77,7 +78,7 @@ export default function UserForm(props) {
         setDataLoading(true);
         setUserData(null);
 
-        fetch('http://localhost/api/user/' + id, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_USERS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken } })
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -103,7 +104,7 @@ export default function UserForm(props) {
 
     const saveData = (data) => {
         if (mode === "CREATE") {
-            return fetch('http://localhost/api/user/', {
+            return fetch(Constants.API_USERS_ENDPOINT, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -113,7 +114,7 @@ export default function UserForm(props) {
                 body: JSON.stringify(data)
             })
         } else {
-            return fetch('http://localhost/api/user/' + props.match.params.id, {
+            return fetch(Constants.API_USERS_ENDPOINT + props.match.params.id, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -194,7 +195,7 @@ export default function UserForm(props) {
                                 actions.setFieldError('general', data.message);
                             } else {
                                 setSaveSuccess(true);
-                                setTimeout(() => props.history.push('/users'), 2000);
+                                setTimeout(() => props.history.push('/users'), Constants.FORM_REDIRECT_TIMEOUT);
                             }
                         })
                         .finally(() => {
