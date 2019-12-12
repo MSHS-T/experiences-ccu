@@ -10,7 +10,6 @@ export default function Footer() {
         <Box mt={8}>
             <Typography variant="body2" color="textSecondary" align="center">
                 {'Copyright © '}
-                {/* TODO : Set link to app URL */}
                 <Link component={RouterLink} to="/" color="inherit">
                     Expériences CCU
                 </Link>

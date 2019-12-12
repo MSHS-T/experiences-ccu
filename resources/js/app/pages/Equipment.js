@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
-export default class Dashboard extends Component {
+export default class Equipment extends Component {
     render() {
         return (
             <div>
-                Dashboard Page
+                Equipment Page
             </div>
         )
     }

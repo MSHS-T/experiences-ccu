@@ -11,8 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(RolesTableSeeder::class);
         // Insert admin user
-        DB::table('users')->insert([
+        $adminId = DB::table('users')->insertGetId([
             'first_name' => 'Administrateur',
             'last_name' => 'CCU',
             'email' => 'romain@3rgo.tech',
@@ -22,6 +23,10 @@ class DatabaseSeeder extends Seeder
             'updated_at' => '2019-10-16 12:00'
         ]);
 
-        // $this->call(UsersTableSeeder::class);
+        DB::table('role_user') -> insert([
+            'user_id' => $adminId,
+            'role_id' => DB::table('roles')->where('name', 'Administrateur')->first()->id
+        ]);
+
     }
 }

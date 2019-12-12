@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
-import { createMuiTheme } from '@material-ui/core/styles';
 
-import LandingPage from './pages/Landing';
-import LoginPage from './pages/Login';
-import DashboardPage from './pages/Dashboard';
+import Navigation from './components/Navigation';
+import Router from './components/Router';
 
-import { UserProvider } from './context/User';
-
-// createMuiTheme();
+import AuthProvider from './context/Auth';
 
 class App extends Component {
     constructor(props) {
@@ -18,16 +14,14 @@ class App extends Component {
     }
     render() {
         return (
-            <UserProvider>
-                <BrowserRouter>
-                    <>
+            <BrowserRouter>
+                <AuthProvider>
+                    <Navigation>
                         <CssBaseline />
-                        <Route exact path="/" component={LandingPage} />
-                        <Route path="/login" component={LoginPage} />
-                        <Route path="/dashboard" component={DashboardPage} />
-                    </>
-                </BrowserRouter>
-            </UserProvider>
+                        <Router />
+                    </Navigation>
+                </AuthProvider>
+            </BrowserRouter>
         );
     }
 }
