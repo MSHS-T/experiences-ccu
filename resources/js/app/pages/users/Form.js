@@ -1,5 +1,5 @@
-import React, { Component, useState, useEffect } from "react";
-import { Formik, Field, FieldArray } from "formik";
+import React, { useState, useEffect } from "react";
+import { Formik, FieldArray } from "formik";
 import * as Yup from 'yup';
 
 import Button from '@material-ui/core/Button';
