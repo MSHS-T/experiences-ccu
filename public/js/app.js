@@ -137855,13 +137855,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
 /* harmony import */ var _material_ui_core_Dialog__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Dialog */ "./node_modules/@material-ui/core/esm/Dialog/index.js");
 /* harmony import */ var _material_ui_core_DialogActions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/DialogActions */ "./node_modules/@material-ui/core/esm/DialogActions/index.js");
-/* harmony import */ var _material_ui_core_DialogContent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/DialogContent */ "./node_modules/@material-ui/core/esm/DialogContent/index.js");
-/* harmony import */ var _material_ui_core_DialogContentText__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/DialogContentText */ "./node_modules/@material-ui/core/esm/DialogContentText/index.js");
-/* harmony import */ var _material_ui_core_DialogTitle__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/DialogTitle */ "./node_modules/@material-ui/core/esm/DialogTitle/index.js");
-/* harmony import */ var _material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/icons/Visibility */ "./node_modules/@material-ui/icons/Visibility.js");
-/* harmony import */ var _material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var _context_Auth__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../context/Auth */ "./resources/js/app/context/Auth.js");
-/* harmony import */ var _data_Constants__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../data/Constants */ "./resources/js/app/data/Constants.js");
+/* harmony import */ var _material_ui_core_DialogTitle__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/DialogTitle */ "./node_modules/@material-ui/core/esm/DialogTitle/index.js");
+/* harmony import */ var _material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/icons/Visibility */ "./node_modules/@material-ui/icons/Visibility.js");
+/* harmony import */ var _material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var _context_Auth__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../context/Auth */ "./resources/js/app/context/Auth.js");
+/* harmony import */ var _data_Constants__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../data/Constants */ "./resources/js/app/data/Constants.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -137885,10 +137883,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-
-
 function UserList(props) {
-  var _useAuthContext = Object(_context_Auth__WEBPACK_IMPORTED_MODULE_9__["useAuthContext"])(),
+  var _useAuthContext = Object(_context_Auth__WEBPACK_IMPORTED_MODULE_7__["useAuthContext"])(),
       accessToken = _useAuthContext.accessToken;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(true),
@@ -137914,7 +137910,7 @@ function UserList(props) {
   var loadData = function loadData() {
     setLoading(true);
     setTableData([]);
-    fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_10__["API_USERS_ENDPOINT"], {
+    fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_8__["API_USERS_ENDPOINT"], {
       headers: {
         'Authorization': 'bearer ' + accessToken
       }
@@ -137940,7 +137936,7 @@ function UserList(props) {
 
   var handleDelete = function handleDelete(entry) {
     setDeleteError(null);
-    fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_10__["API_USERS_ENDPOINT"] + entry.id, {
+    fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_8__["API_USERS_ENDPOINT"] + entry.id, {
       method: 'DELETE',
       headers: {
         'Authorization': 'bearer ' + accessToken
@@ -137995,7 +137991,7 @@ function UserList(props) {
       }
     }, {
       icon: function icon() {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_8___default.a, null);
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Visibility__WEBPACK_IMPORTED_MODULE_6___default.a, null);
       },
       tooltip: 'Visualiser',
       onClick: function onClick(event, rowData) {
@@ -138045,7 +138041,7 @@ function UserList(props) {
     },
     "aria-labelledby": "alert-dialog-title",
     "aria-describedby": "alert-dialog-description"
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_DialogTitle__WEBPACK_IMPORTED_MODULE_7__["default"], {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_DialogTitle__WEBPACK_IMPORTED_MODULE_5__["default"], {
     id: "alert-dialog-title"
   }, deleteEntry ? "Supprimer l'utilisateur " + deleteEntry.first_name + " " + deleteEntry.last_name + " ?" : "", deleteError ? "Erreur lors de la suppression : " + deleteError : ""), deleteEntry && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_DialogActions__WEBPACK_IMPORTED_MODULE_4__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
     onClick: function onClick() {
