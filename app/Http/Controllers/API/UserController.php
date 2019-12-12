@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 use App\Role;
 use App\User;
@@ -57,6 +58,9 @@ class UserController extends Controller
         $user->roles()->sync($userRoles->toArray());
 
         $user->save();
+
+        // TODO : Add email verification
+
         return $user;
     }
 
@@ -80,7 +84,33 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+        $data = $request->validate([
+            'first_name' => 'required',
+            'last_name'  => 'required',
+            'email'      => [
+                'required',
+                'email',
+                Rule::unique('users')->ignore($user)
+            ],
+            'roles'      => 'required|array'
+        ], [
+            'email.unique' => 'Cette adresse est déjà utilisée.'
+        ]);
+        $user->fill($data);
+
+        // Set roles
+        $allRoles = Role::all();
+        $userRoles = $allRoles->reject(function($r) use ($data){
+            return !in_array($r->key, $data["roles"]);
+        })->map(function($r){ return $r->id; });
+        $user->roles()->sync($userRoles->toArray());
+
+        $user->save();
+
+        // TODO : Add email verification
+
+        return $user;
     }
 
     /**

@@ -36650,6 +36650,35 @@ exports.default = _default;
 
 /***/ }),
 
+/***/ "./node_modules/@material-ui/icons/Check.js":
+/*!**************************************************!*\
+  !*** ./node_modules/@material-ui/icons/Check.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _createSvgIcon = _interopRequireDefault(__webpack_require__(/*! ./utils/createSvgIcon */ "./node_modules/@material-ui/icons/utils/createSvgIcon.js"));
+
+var _default = (0, _createSvgIcon.default)(_react.default.createElement("path", {
+  d: "M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+}), 'Check');
+
+exports.default = _default;
+
+/***/ }),
+
 /***/ "./node_modules/@material-ui/icons/Dashboard.js":
 /*!******************************************************!*\
   !*** ./node_modules/@material-ui/icons/Dashboard.js ***!
@@ -137347,11 +137376,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @material-ui/core/colors */ "./node_modules/@material-ui/core/esm/colors/index.js");
 /* harmony import */ var _material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @material-ui/icons/Cancel */ "./node_modules/@material-ui/icons/Cancel.js");
 /* harmony import */ var _material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_16__);
-/* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @material-ui/icons/Save */ "./node_modules/@material-ui/icons/Save.js");
-/* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_17__);
-/* harmony import */ var _context_Auth__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../../context/Auth */ "./resources/js/app/context/Auth.js");
-/* harmony import */ var _Error__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../Error */ "./resources/js/app/pages/Error.js");
-/* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../Loading */ "./resources/js/app/pages/Loading.js");
+/* harmony import */ var _material_ui_icons_Check__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @material-ui/icons/Check */ "./node_modules/@material-ui/icons/Check.js");
+/* harmony import */ var _material_ui_icons_Check__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Check__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @material-ui/icons/Save */ "./node_modules/@material-ui/icons/Save.js");
+/* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_18__);
+/* harmony import */ var _context_Auth__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../../context/Auth */ "./resources/js/app/context/Auth.js");
+/* harmony import */ var _Error__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../Error */ "./resources/js/app/pages/Error.js");
+/* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ../Loading */ "./resources/js/app/pages/Loading.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -137365,6 +137396,7 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -137429,7 +137461,7 @@ var allRoles = {
 function UserForm(props) {
   var classes = useStyles();
 
-  var _useAuthContext = Object(_context_Auth__WEBPACK_IMPORTED_MODULE_18__["useAuthContext"])(),
+  var _useAuthContext = Object(_context_Auth__WEBPACK_IMPORTED_MODULE_19__["useAuthContext"])(),
       user = _useAuthContext.user,
       accessToken = _useAuthContext.accessToken;
 
@@ -137508,6 +137540,16 @@ function UserForm(props) {
         },
         body: JSON.stringify(data)
       });
+    } else {
+      return fetch('http://localhost/api/user/' + props.match.params.id, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'bearer ' + accessToken,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
     }
   };
 
@@ -137519,11 +137561,11 @@ function UserForm(props) {
   }, []); // Empty array means useEffect will only be called on first render
 
   if (isDataLoading) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Loading__WEBPACK_IMPORTED_MODULE_20__["default"], null);
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Loading__WEBPACK_IMPORTED_MODULE_21__["default"], null);
   }
 
   if (error !== null || mode === "EDIT" && userData === null) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Error__WEBPACK_IMPORTED_MODULE_19__["default"], null, "Une erreur s'est produite : ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, error !== null ? error : "No data"));
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Error__WEBPACK_IMPORTED_MODULE_20__["default"], null, "Une erreur s'est produite : ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, error !== null ? error : "No data"));
   }
 
   var meProps = props;
@@ -137556,6 +137598,7 @@ function UserForm(props) {
       return yup__WEBPACK_IMPORTED_MODULE_2__["object"]().shape(schema);
     },
     onSubmit: function onSubmit(values, actions) {
+      if (saveSuccess) return;
       setSaveLoading(true);
       saveData(values).then(function (response) {
         return response.json();
@@ -137687,10 +137730,11 @@ function UserForm(props) {
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
       variant: "contained",
       color: "secondary",
+      disabled: isSaveLoading,
       className: classes.button,
       startIcon: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_16___default.a, null),
       onClick: function onClick(e) {
-        return meProps.history.push('/users');
+        return !saveSuccess && meProps.history.push('/users');
       }
     }, "Annuler")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: classes.buttonWrapper
@@ -137701,7 +137745,7 @@ function UserForm(props) {
       size: "large",
       disabled: isSaveLoading,
       className: saveSuccess ? classes.buttonSuccess : '',
-      startIcon: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_17___default.a, null)
+      startIcon: saveSuccess ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Check__WEBPACK_IMPORTED_MODULE_17___default.a, null) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_18___default.a, null)
     }, mode === "CREATE" ? "Créer" : "Modifier"), isSaveLoading && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_CircularProgress__WEBPACK_IMPORTED_MODULE_5__["default"], {
       size: 24,
       className: classes.buttonProgress
