@@ -137334,22 +137334,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(yup__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
 /* harmony import */ var _material_ui_core_Checkbox__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/Checkbox */ "./node_modules/@material-ui/core/esm/Checkbox/index.js");
-/* harmony import */ var _material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/FormControl */ "./node_modules/@material-ui/core/esm/FormControl/index.js");
-/* harmony import */ var _material_ui_core_FormControlLabel__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/FormControlLabel */ "./node_modules/@material-ui/core/esm/FormControlLabel/index.js");
-/* harmony import */ var _material_ui_core_FormGroup__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/FormGroup */ "./node_modules/@material-ui/core/esm/FormGroup/index.js");
-/* harmony import */ var _material_ui_core_FormHelperText__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/core/FormHelperText */ "./node_modules/@material-ui/core/esm/FormHelperText/index.js");
-/* harmony import */ var _material_ui_core_FormLabel__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @material-ui/core/FormLabel */ "./node_modules/@material-ui/core/esm/FormLabel/index.js");
-/* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/core/Grid */ "./node_modules/@material-ui/core/esm/Grid/index.js");
-/* harmony import */ var _material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/core/TextField */ "./node_modules/@material-ui/core/esm/TextField/index.js");
-/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/esm/Typography/index.js");
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
-/* harmony import */ var _material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @material-ui/icons/Cancel */ "./node_modules/@material-ui/icons/Cancel.js");
-/* harmony import */ var _material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @material-ui/icons/Save */ "./node_modules/@material-ui/icons/Save.js");
-/* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var _context_Auth__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../context/Auth */ "./resources/js/app/context/Auth.js");
-/* harmony import */ var _Error__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../Error */ "./resources/js/app/pages/Error.js");
-/* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../Loading */ "./resources/js/app/pages/Loading.js");
+/* harmony import */ var _material_ui_core_CircularProgress__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/CircularProgress */ "./node_modules/@material-ui/core/esm/CircularProgress/index.js");
+/* harmony import */ var _material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/FormControl */ "./node_modules/@material-ui/core/esm/FormControl/index.js");
+/* harmony import */ var _material_ui_core_FormControlLabel__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/FormControlLabel */ "./node_modules/@material-ui/core/esm/FormControlLabel/index.js");
+/* harmony import */ var _material_ui_core_FormGroup__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/core/FormGroup */ "./node_modules/@material-ui/core/esm/FormGroup/index.js");
+/* harmony import */ var _material_ui_core_FormHelperText__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @material-ui/core/FormHelperText */ "./node_modules/@material-ui/core/esm/FormHelperText/index.js");
+/* harmony import */ var _material_ui_core_FormLabel__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/core/FormLabel */ "./node_modules/@material-ui/core/esm/FormLabel/index.js");
+/* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/core/Grid */ "./node_modules/@material-ui/core/esm/Grid/index.js");
+/* harmony import */ var _material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core/TextField */ "./node_modules/@material-ui/core/esm/TextField/index.js");
+/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/esm/Typography/index.js");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @material-ui/core/colors */ "./node_modules/@material-ui/core/esm/colors/index.js");
+/* harmony import */ var _material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @material-ui/icons/Cancel */ "./node_modules/@material-ui/icons/Cancel.js");
+/* harmony import */ var _material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @material-ui/icons/Save */ "./node_modules/@material-ui/icons/Save.js");
+/* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var _context_Auth__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../../context/Auth */ "./resources/js/app/context/Auth.js");
+/* harmony import */ var _Error__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../Error */ "./resources/js/app/pages/Error.js");
+/* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ../Loading */ "./resources/js/app/pages/Loading.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -137383,7 +137385,9 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_13__["makeStyles"])(function (theme) {
+
+
+var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_14__["makeStyles"])(function (theme) {
   return {
     form: {
       width: '100%',
@@ -137394,8 +137398,26 @@ var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_13__["m
       display: 'flex',
       justifyContent: 'center'
     },
-    button: {
-      margin: theme.spacing(2)
+    buttonWrapper: {
+      margin: theme.spacing(2),
+      position: 'relative',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center'
+    },
+    buttonSuccess: {
+      backgroundColor: _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_15__["green"][500],
+      '&:hover': {
+        backgroundColor: _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_15__["green"][700]
+      }
+    },
+    buttonProgress: {
+      color: _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_15__["green"][500],
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      marginTop: -12,
+      marginLeft: -12
     }
   };
 });
@@ -137407,7 +137429,7 @@ var allRoles = {
 function UserForm(props) {
   var classes = useStyles();
 
-  var _useAuthContext = Object(_context_Auth__WEBPACK_IMPORTED_MODULE_16__["useAuthContext"])(),
+  var _useAuthContext = Object(_context_Auth__WEBPACK_IMPORTED_MODULE_18__["useAuthContext"])(),
       user = _useAuthContext.user,
       accessToken = _useAuthContext.accessToken;
 
@@ -137418,26 +137440,31 @@ function UserForm(props) {
 
   var _useState3 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
       _useState4 = _slicedToArray(_useState3, 2),
-      isLoading = _useState4[0],
-      setLoading = _useState4[1];
+      isDataLoading = _useState4[0],
+      setDataLoading = _useState4[1];
 
-  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
       _useState6 = _slicedToArray(_useState5, 2),
-      userData = _useState6[0],
-      setUserData = _useState6[1];
+      isSaveLoading = _useState6[0],
+      setSaveLoading = _useState6[1];
 
   var _useState7 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
       _useState8 = _slicedToArray(_useState7, 2),
-      error = _useState8[0],
-      setError = _useState8[1];
+      userData = _useState8[0],
+      setUserData = _useState8[1];
 
   var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null),
       _useState10 = _slicedToArray(_useState9, 2),
-      saveError = _useState10[0],
-      setSaveError = _useState10[1];
+      error = _useState10[0],
+      setError = _useState10[1];
+
+  var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
+      _useState12 = _slicedToArray(_useState11, 2),
+      saveSuccess = _useState12[0],
+      setSaveSuccess = _useState12[1];
 
   var loadData = function loadData(id) {
-    setLoading(true);
+    setDataLoading(true);
     setUserData(null);
     fetch('http://localhost/api/user/' + id, {
       headers: {
@@ -137462,17 +137489,28 @@ function UserForm(props) {
     .then(function (data) {
       setUserData(data);
       setError(null);
-      setLoading(false);
+      setDataLoading(false);
     })["catch"](function (err) {
       setUserData(null);
       setError(err.message);
-      setLoading(false);
+      setDataLoading(false);
     });
   };
 
-  var saveData = function saveData(data) {};
+  var saveData = function saveData(data) {
+    if (mode === "CREATE") {
+      return fetch('http://localhost/api/user/', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'bearer ' + accessToken,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+    }
+  };
 
-  var UserSchema;
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(function () {
     if (props.match.params.hasOwnProperty("id")) {
       setMode("EDIT");
@@ -137480,17 +137518,16 @@ function UserForm(props) {
     }
   }, []); // Empty array means useEffect will only be called on first render
 
-  if (isLoading) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Loading__WEBPACK_IMPORTED_MODULE_18__["default"], null);
+  if (isDataLoading) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Loading__WEBPACK_IMPORTED_MODULE_20__["default"], null);
   }
 
   if (error !== null || mode === "EDIT" && userData === null) {
-    console.debug(error);
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Error__WEBPACK_IMPORTED_MODULE_17__["default"], null, "Une erreur s'est produite : ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, error !== null ? error : "No data"));
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Error__WEBPACK_IMPORTED_MODULE_19__["default"], null, "Une erreur s'est produite : ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, error !== null ? error : "No data"));
   }
 
   var meProps = props;
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_12__["default"], {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13__["default"], {
     component: "h1",
     variant: "h4",
     align: "center",
@@ -137501,6 +137538,7 @@ function UserForm(props) {
       first_name: '',
       last_name: '',
       email: '',
+      password: '',
       roles: []
     }, userData),
     validationSchema: function validationSchema() {
@@ -137518,7 +137556,26 @@ function UserForm(props) {
       return yup__WEBPACK_IMPORTED_MODULE_2__["object"]().shape(schema);
     },
     onSubmit: function onSubmit(values, actions) {
-      console.log('formik submit', values);
+      setSaveLoading(true);
+      saveData(values).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        if (data.errors) {
+          for (var field in data.errors) {
+            if (!data.errors.hasOwnProperty(field)) continue;
+            actions.setFieldError(field, data.errors[field].join(" "));
+          }
+        } else if (data.exception) {
+          actions.setFieldError('general', data.message);
+        } else {
+          setSaveSuccess(true);
+          setTimeout(function () {
+            return props.history.push('/users');
+          }, 2000);
+        }
+      })["finally"](function () {
+        setSaveLoading(false);
+      });
     }
   }, function (_ref) {
     var values = _ref.values,
@@ -137529,14 +137586,14 @@ function UserForm(props) {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
       className: classes.form,
       onSubmit: handleSubmit
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11__["default"], {
       container: true,
       spacing: 2
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11__["default"], {
       item: true,
       xs: 12,
       sm: 6
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_11__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_12__["default"], {
       id: "first_name",
       name: "first_name",
       label: "Pr\xE9nom",
@@ -137548,11 +137605,11 @@ function UserForm(props) {
       variant: "outlined",
       fullWidth: true,
       autoFocus: true
-    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11__["default"], {
       item: true,
       xs: 12,
       sm: 6
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_11__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_12__["default"], {
       id: "last_name",
       name: "last_name",
       label: "Nom",
@@ -137563,10 +137620,10 @@ function UserForm(props) {
       helperText: touched.last_name && errors.last_name,
       variant: "outlined",
       fullWidth: true
-    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11__["default"], {
       item: true,
       xs: 12
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_11__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_12__["default"], {
       id: "email",
       name: "email",
       label: "Adresse Email",
@@ -137577,10 +137634,10 @@ function UserForm(props) {
       helperText: touched.email && errors.email,
       variant: "outlined",
       fullWidth: true
-    })), mode === "EDIT" ? "" : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    })), mode === "EDIT" ? "" : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11__["default"], {
       item: true,
       xs: 12
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_11__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_12__["default"], {
       id: "password",
       name: "password",
       label: "Mot de passe initial",
@@ -137589,20 +137646,21 @@ function UserForm(props) {
       error: errors.password && touched.password,
       helperText: touched.password && errors.password,
       variant: "outlined",
+      autoComplete: "off",
       fullWidth: true
-    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11__["default"], {
       item: true,
       xs: 12
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_1__["FieldArray"], {
       name: "roles",
       render: function render(arrayHelpers) {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_5__["default"], {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_6__["default"], {
           component: "fieldset",
           error: typeof errors.roles === 'string'
-        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormLabel__WEBPACK_IMPORTED_MODULE_9__["default"], {
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormLabel__WEBPACK_IMPORTED_MODULE_10__["default"], {
           component: "legend"
-        }, "R\xF4les"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormGroup__WEBPACK_IMPORTED_MODULE_7__["default"], null, Object.entries(allRoles).map(function (r) {
-          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormControlLabel__WEBPACK_IMPORTED_MODULE_6__["default"], {
+        }, "R\xF4les"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormGroup__WEBPACK_IMPORTED_MODULE_8__["default"], null, Object.entries(allRoles).map(function (r) {
+          return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormControlLabel__WEBPACK_IMPORTED_MODULE_7__["default"], {
             key: "roles-" + r[0],
             label: r[1],
             control: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Checkbox__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -137618,28 +137676,40 @@ function UserForm(props) {
               color: "primary"
             })
           });
-        })), typeof errors.roles === 'string' && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormHelperText__WEBPACK_IMPORTED_MODULE_8__["default"], null, errors.roles));
+        })), typeof errors.roles === 'string' && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormHelperText__WEBPACK_IMPORTED_MODULE_9__["default"], null, errors.roles));
       }
-    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_11__["default"], {
       item: true,
       xs: 12,
       className: classes.buttonRow
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.buttonWrapper
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
       variant: "contained",
       color: "secondary",
       className: classes.button,
-      startIcon: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_14___default.a, null),
+      startIcon: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_16___default.a, null),
       onClick: function onClick(e) {
         return meProps.history.push('/users');
       }
-    }, "Annuler"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    }, "Annuler")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.buttonWrapper
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
       type: "submit",
       variant: "contained",
       color: "primary",
       size: "large",
-      className: classes.button,
-      startIcon: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_15___default.a, null)
-    }, mode === "CREATE" ? "Créer" : "Modifier"))));
+      disabled: isSaveLoading,
+      className: saveSuccess ? classes.buttonSuccess : '',
+      startIcon: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_17___default.a, null)
+    }, mode === "CREATE" ? "Créer" : "Modifier"), isSaveLoading && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_CircularProgress__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      size: 24,
+      className: classes.buttonProgress
+    })))), errors.general && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_13__["default"], {
+      component: "p",
+      align: "center",
+      color: "error"
+    }, "Une erreur s'est produite sur le serveur : ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, errors.general), ".", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("br", null), "Veuillez contacter l'administrateur du site."));
   }));
 }
 

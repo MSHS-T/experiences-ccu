@@ -43,15 +43,19 @@ class UserController extends Controller
             'last_name'  => 'required',
             'email'      => 'required|email|unique:users',
             'password'   => 'required',
-            'roles'      => 'required'
+            'roles'      => 'required|array'
+        ], [
+            'email.unique' => 'Cette adresse est déjà utilisée.'
         ]);
         $user = User::create($data);
-        $roles = explode(',', $roles);
+
+        // Set roles
         $allRoles = Role::all();
-        $userRoles = $allRoles->reject(function($r) use ($roles){
-            return !in_array($r, $roles);
+        $userRoles = $allRoles->reject(function($r) use ($data){
+            return !in_array($r->key, $data["roles"]);
         })->map(function($r){ return $r->id; });
-        $user->roles->sync($userRoles);
+        $user->roles()->sync($userRoles->toArray());
+
         $user->save();
         return $user;
     }
