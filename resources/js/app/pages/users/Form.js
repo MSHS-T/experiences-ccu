@@ -17,6 +17,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 
 import CancelIcon from '@material-ui/icons/Cancel';
+import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
 
 import { useAuthContext } from "../../context/Auth";
@@ -111,6 +112,16 @@ export default function UserForm(props) {
                 },
                 body: JSON.stringify(data)
             })
+        } else {
+            return fetch('http://localhost/api/user/' + props.match.params.id, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'bearer ' + accessToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
         }
     }
 
@@ -168,6 +179,8 @@ export default function UserForm(props) {
                     return Yup.object().shape(schema);
                 }}
                 onSubmit={(values, actions) => {
+                    if (saveSuccess) return;
+
                     setSaveLoading(true);
                     saveData(values)
                         .then(response => response.json())
@@ -291,9 +304,10 @@ export default function UserForm(props) {
                                     <Button
                                         variant="contained"
                                         color="secondary"
+                                        disabled={isSaveLoading}
                                         className={classes.button}
                                         startIcon={<CancelIcon />}
-                                        onClick={e => meProps.history.push('/users')}
+                                        onClick={e => !saveSuccess && meProps.history.push('/users')}
                                     >
                                         Annuler
                                 </Button>
@@ -306,7 +320,7 @@ export default function UserForm(props) {
                                         size="large"
                                         disabled={isSaveLoading}
                                         className={saveSuccess ? classes.buttonSuccess : ''}
-                                        startIcon={<SaveIcon />}
+                                        startIcon={saveSuccess ? <CheckIcon /> : <SaveIcon />}
                                     >
                                         {mode === "CREATE" ? "Créer" : "Modifier"}
                                     </Button>
