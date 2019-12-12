@@ -4,6 +4,7 @@ import * as Yup from 'yup';
 
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
+import CircularProgress from "@material-ui/core/CircularProgress";
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -13,6 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from '@material-ui/core/styles';
+import { green } from '@material-ui/core/colors';
 
 import CancelIcon from '@material-ui/icons/Cancel';
 import SaveIcon from '@material-ui/icons/Save';
@@ -30,8 +32,26 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'center'
     },
-    button: {
+    buttonWrapper: {
         margin: theme.spacing(2),
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center'
+    },
+    buttonSuccess: {
+        backgroundColor: green[500],
+        '&:hover': {
+            backgroundColor: green[700],
+        },
+    },
+    buttonProgress: {
+        color: green[500],
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        marginTop: -12,
+        marginLeft: -12,
     },
 }));
 
@@ -46,13 +66,14 @@ export default function UserForm(props) {
     const { user, accessToken } = useAuthContext();
 
     const [mode, setMode] = useState("CREATE");
-    const [isLoading, setLoading] = useState(false);
+    const [isDataLoading, setDataLoading] = useState(false);
+    const [isSaveLoading, setSaveLoading] = useState(false);
     const [userData, setUserData] = useState(null);
     const [error, setError] = useState(null);
-    const [saveError, setSaveError] = useState(null);
+    const [saveSuccess, setSaveSuccess] = useState(false);
 
     const loadData = (id) => {
-        setLoading(true);
+        setDataLoading(true);
         setUserData(null);
 
         fetch('http://localhost/api/user/' + id, { headers: { 'Authorization': 'bearer ' + accessToken } })
@@ -70,19 +91,28 @@ export default function UserForm(props) {
             .then(data => {
                 setUserData(data);
                 setError(null);
-                setLoading(false);
+                setDataLoading(false);
             })
             .catch(err => {
                 setUserData(null);
                 setError(err.message);
-                setLoading(false);
+                setDataLoading(false);
             });
     }
 
     const saveData = (data) => {
-
+        if (mode === "CREATE") {
+            return fetch('http://localhost/api/user/', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': 'bearer ' + accessToken,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+        }
     }
-    var UserSchema;
 
     useEffect(() => {
         if (props.match.params.hasOwnProperty("id")) {
@@ -91,11 +121,10 @@ export default function UserForm(props) {
         }
     }, []); // Empty array means useEffect will only be called on first render
 
-    if (isLoading) {
+    if (isDataLoading) {
         return <Loading />
     }
     if (error !== null || (mode === "EDIT" && userData === null)) {
-        console.debug(error);
         return (
             <ErrorPage>
                 Une erreur s'est produite : <strong>{(error !== null ? error : ("No data"))}</strong>
@@ -116,6 +145,7 @@ export default function UserForm(props) {
                     first_name: '',
                     last_name: '',
                     email: '',
+                    password: '',
                     roles: [],
                     ...userData
                 }}
@@ -138,7 +168,25 @@ export default function UserForm(props) {
                     return Yup.object().shape(schema);
                 }}
                 onSubmit={(values, actions) => {
-                    console.log('formik submit', values);
+                    setSaveLoading(true);
+                    saveData(values)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.errors) {
+                                for (var field in data.errors) {
+                                    if (!data.errors.hasOwnProperty(field)) continue;
+                                    actions.setFieldError(field, data.errors[field].join(" "));
+                                }
+                            } else if (data.exception) {
+                                actions.setFieldError('general', data.message);
+                            } else {
+                                setSaveSuccess(true);
+                                setTimeout(() => props.history.push('/users'), 2000);
+                            }
+                        })
+                        .finally(() => {
+                            setSaveLoading(false);
+                        });
                 }}
             >
                 {({ values, errors, touched, handleChange, handleSubmit }) => (
@@ -198,6 +246,7 @@ export default function UserForm(props) {
                                         error={errors.password && touched.password}
                                         helperText={touched.password && errors.password}
                                         variant="outlined"
+                                        autoComplete="off"
                                         fullWidth
                                     />
                                 </Grid>
@@ -238,27 +287,40 @@ export default function UserForm(props) {
                                 />
                             </Grid>
                             <Grid item xs={12} className={classes.buttonRow}>
-                                <Button
-                                    variant="contained"
-                                    color="secondary"
-                                    className={classes.button}
-                                    startIcon={<CancelIcon />}
-                                    onClick={e => meProps.history.push('/users')}
-                                >
-                                    Annuler
+                                <div className={classes.buttonWrapper}>
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        className={classes.button}
+                                        startIcon={<CancelIcon />}
+                                        onClick={e => meProps.history.push('/users')}
+                                    >
+                                        Annuler
                                 </Button>
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    color="primary"
-                                    size="large"
-                                    className={classes.button}
-                                    startIcon={<SaveIcon />}
-                                >
-                                    {mode === "CREATE" ? "Créer" : "Modifier"}
-                                </Button>
+                                </div>
+                                <div className={classes.buttonWrapper}>
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        color="primary"
+                                        size="large"
+                                        disabled={isSaveLoading}
+                                        className={saveSuccess ? classes.buttonSuccess : ''}
+                                        startIcon={<SaveIcon />}
+                                    >
+                                        {mode === "CREATE" ? "Créer" : "Modifier"}
+                                    </Button>
+                                    {isSaveLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                                </div>
                             </Grid>
                         </Grid>
+                        {errors.general && (
+                            <Typography component="p" align="center" color="error">
+                                Une erreur s'est produite sur le serveur : <strong>{errors.general}</strong>.
+                                <br />
+                                Veuillez contacter l'administrateur du site.
+                            </Typography>
+                        )}
                     </form>
                 )}
             </Formik>
