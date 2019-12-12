@@ -13,24 +13,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-Route::group(['middleware' => ['jwt.auth','api-header']], function () {
-
-    // all routes to protected resources are registered here
-    Route::get('users/list', function(){
-        $users = App\User::all();
-
-        $response = ['success'=>true, 'data'=>$users];
-        return response()->json($response, 201);
+Route::group(['middleware' => 'apiheader'], function($router){
+    Route::group(['prefix' => 'auth'], function ($router) {
+        Route::post('login', 'AuthController@login')->name('login');
+        Route::post('logout', 'AuthController@logout');
+        Route::post('refresh', 'AuthController@refresh');
+        Route::post('me', 'AuthController@me');
     });
-});
-Route::group(['middleware' => 'api-header'], function () {
-
-    // The registration and login requests doesn't come with tokens
-    // as users at that point have not been authenticated yet
-    Route::post('user/login', 'UserController@login');
-    // Route::post('user/register', 'UserController@register');
+    Route::apiResource('user', 'API\UserController');
 });
