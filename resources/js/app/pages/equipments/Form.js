@@ -167,7 +167,7 @@ export default function EquipmentForm(props) {
                     name: '',
                     type: '',
                     quantity: 0,
-                    description: "test",
+                    description: "",
                     ...equipmentData
                 }}
                 validationSchema={() => {
