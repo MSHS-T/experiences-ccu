@@ -28,5 +28,8 @@ class DatabaseSeeder extends Seeder
             'role_id' => DB::table('roles')->where('name', 'Administrateur')->first()->id
         ]);
 
+        if(env('APP_ENV', 'production') !== 'production'){
+            $this->call(TestDatabaseSeeder::class);
+        }
     }
 }
