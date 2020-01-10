@@ -21,4 +21,5 @@ Route::group(['middleware' => 'apiheader'], function($router){
         Route::post('me', 'AuthController@me');
     });
     Route::apiResource('user', 'API\UserController');
+    Route::apiResource('equipment', 'API\EquipmentController');
 });

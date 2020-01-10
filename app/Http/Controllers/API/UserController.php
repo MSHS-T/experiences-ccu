@@ -19,6 +19,8 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('jwtauth');
+
+        // TODO : add authorization gates (https://laravel.com/docs/6.x/authorization)
     }
 
     /**

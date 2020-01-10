@@ -13,11 +13,14 @@ import LoginPage from "../pages/Login";
 import DashboardPage from "../pages/Dashboard";
 import PlateauxPage from "../pages/Plateaux";
 import ManipulationsPage from "../pages/Manipulations";
-import EquipmentPage from "../pages/Equipment";
 
 import UsersList from "../pages/users/List";
 import UsersView from "../pages/users/View";
 import UsersForm from "../pages/users/Form";
+
+import EquipmentsList from "../pages/equipments/List";
+import EquipmentsView from "../pages/equipments/View";
+import EquipmentsForm from "../pages/equipments/Form";
 
 import SettingsPage from "../pages/Settings";
 
@@ -71,19 +74,52 @@ const SiteMap = [
         authenticated: true,
         roles: ["ADMIN", "MANIP"]
     },
+    ////////////////
+    /// MATERIEL ///
+    ////////////////
     {
         title: 'Matériel',
         icon: (<BuildIcon />),
-        url: '/equipment',
-        exactPath: false,
+        url: '/equipments',
+        exactPath: true,
         showInMenu: true,
-        component: EquipmentPage,
+        component: EquipmentsList,
         authenticated: true,
         roles: ["ADMIN", "PLAT", "MANIP"]
     },
+    {
+        title: 'Créer un matériel',
+        icon: false,
+        url: '/equipments/new',
+        exactPath: true,
+        showInMenu: false,
+        component: EquipmentsForm,
+        authenticated: true,
+        roles: ["ADMIN"]
+    },
+    {
+        title: 'Modifier un matériel',
+        icon: false,
+        url: '/equipments/:id/edit',
+        exactPath: true,
+        showInMenu: false,
+        component: EquipmentsForm,
+        authenticated: true,
+        roles: ["ADMIN"]
+    },
+    {
+        title: 'Visualiser un matériel',
+        icon: false,
+        url: '/equipments/:id',
+        exactPath: false,
+        showInMenu: false,
+        component: EquipmentsView,
+        authenticated: true,
+        roles: ["ADMIN"]
+    },
     '---',
     ////////////////////
-    ///// PARAMETRES ///
+    /// UTILISATEURS ///
     ////////////////////
     {
         title: 'Utilisateurs',
@@ -125,9 +161,9 @@ const SiteMap = [
         authenticated: true,
         roles: ["ADMIN"]
     },
-    ////////////////////
-    ///// PARAMETRES ///
-    ////////////////////
+    //////////////////
+    /// PARAMETRES ///
+    //////////////////
     {
         title: 'Paramètres',
         icon: (<SettingsIcon />),
