@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 
 import Button from '@material-ui/core/Button';
 import CircularProgress from "@material-ui/core/CircularProgress";
+import FormHelperText from "@material-ui/core/FormHelperText";
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Typography from "@material-ui/core/Typography";
@@ -55,29 +56,8 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const useWysiwygClasses = makeStyles(theme => ({
-    root: {
-        border: `1px solid rgba(0, 0, 0, 0.23)`,
-        borderRadius: "4px"
-    },
-    toolbar: {
-        marginTop: 0,
-        borderBottom: `1px solid rgba(0, 0, 0, 0.23)`
-    },
-    container: {
-        marginTop: 0
-    },
-    editor: {
-        padding: theme.spacing(2)
-    },
-    placeHolder: {
-        padding: theme.spacing(2)
-    },
-}));
-
 export default function EquipmentForm(props) {
     const classes = useStyles();
-    const wysiwygClasses = useWysiwygClasses();
     const { accessToken } = useAuthContext();
 
     const [mode, setMode] = useState("CREATE");
@@ -259,7 +239,13 @@ export default function EquipmentForm(props) {
                             <Grid item xs={12}>
                                 <ReactQuill
                                     value={values.description}
-                                    onChange={v => { setFieldValue("description", v) }}
+                                    onChange={v => {
+                                        setFieldValue("description", v)
+                                    }}
+                                    style={{
+                                        // borderRadius: '0.5em',
+                                        border: errors.description && touched.description ? '1px solid #f44336' : 'none'
+                                    }}
                                     modules={{
                                         toolbar: [
                                             ['bold', 'italic', 'underline', 'strike'],
@@ -268,6 +254,11 @@ export default function EquipmentForm(props) {
                                     }}
                                     formats={['bold', 'italic', 'underline', 'strike', 'list', 'bullet']}
                                 />
+                                {errors.description && touched.description && (
+                                    <FormHelperText error variant="outlined">
+                                        {errors.description}
+                                    </FormHelperText>
+                                )}
                             </Grid>
                             <Grid item xs={12} className={classes.buttonRow}>
                                 <div className={classes.buttonWrapper}>
@@ -298,6 +289,7 @@ export default function EquipmentForm(props) {
                                 </div>
                             </Grid>
                         </Grid>
+                        {console.log(values, errors, touched)}
                         {errors.general && (
                             <Typography component="p" align="center" color="error">
                                 Une erreur s'est produite sur le serveur : <strong>{errors.general}</strong>.

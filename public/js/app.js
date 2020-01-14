@@ -163870,21 +163870,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(yup__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
 /* harmony import */ var _material_ui_core_CircularProgress__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/CircularProgress */ "./node_modules/@material-ui/core/esm/CircularProgress/index.js");
-/* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/Grid */ "./node_modules/@material-ui/core/esm/Grid/index.js");
-/* harmony import */ var _material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/core/TextField */ "./node_modules/@material-ui/core/esm/TextField/index.js");
-/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/esm/Typography/index.js");
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
-/* harmony import */ var _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/core/colors */ "./node_modules/@material-ui/core/esm/colors/index.js");
-/* harmony import */ var _material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/icons/Cancel */ "./node_modules/@material-ui/icons/Cancel.js");
-/* harmony import */ var _material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var _material_ui_icons_Check__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @material-ui/icons/Check */ "./node_modules/@material-ui/icons/Check.js");
-/* harmony import */ var _material_ui_icons_Check__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Check__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @material-ui/icons/Save */ "./node_modules/@material-ui/icons/Save.js");
-/* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _context_Auth__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../context/Auth */ "./resources/js/app/context/Auth.js");
-/* harmony import */ var _data_Constants__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../data/Constants */ "./resources/js/app/data/Constants.js");
-/* harmony import */ var _Error__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../Error */ "./resources/js/app/pages/Error.js");
-/* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../Loading */ "./resources/js/app/pages/Loading.js");
+/* harmony import */ var _material_ui_core_FormHelperText__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/FormHelperText */ "./node_modules/@material-ui/core/esm/FormHelperText/index.js");
+/* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/core/Grid */ "./node_modules/@material-ui/core/esm/Grid/index.js");
+/* harmony import */ var _material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @material-ui/core/TextField */ "./node_modules/@material-ui/core/esm/TextField/index.js");
+/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/esm/Typography/index.js");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core/colors */ "./node_modules/@material-ui/core/esm/colors/index.js");
+/* harmony import */ var _material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @material-ui/icons/Cancel */ "./node_modules/@material-ui/icons/Cancel.js");
+/* harmony import */ var _material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var _material_ui_icons_Check__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @material-ui/icons/Check */ "./node_modules/@material-ui/icons/Check.js");
+/* harmony import */ var _material_ui_icons_Check__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Check__WEBPACK_IMPORTED_MODULE_14__);
+/* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @material-ui/icons/Save */ "./node_modules/@material-ui/icons/Save.js");
+/* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_15__);
+/* harmony import */ var _context_Auth__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../context/Auth */ "./resources/js/app/context/Auth.js");
+/* harmony import */ var _data_Constants__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../../data/Constants */ "./resources/js/app/data/Constants.js");
+/* harmony import */ var _Error__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../Error */ "./resources/js/app/pages/Error.js");
+/* harmony import */ var _Loading__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ../Loading */ "./resources/js/app/pages/Loading.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -163918,7 +163919,8 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
-var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_10__["makeStyles"])(function (theme) {
+
+var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_11__["makeStyles"])(function (theme) {
   return {
     form: {
       width: '100%',
@@ -163937,13 +163939,13 @@ var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_10__["m
       justifyContent: 'center'
     },
     buttonSuccess: {
-      backgroundColor: _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_11__["green"][500],
+      backgroundColor: _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_12__["green"][500],
       '&:hover': {
-        backgroundColor: _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_11__["green"][700]
+        backgroundColor: _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_12__["green"][700]
       }
     },
     buttonProgress: {
-      color: _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_11__["green"][500],
+      color: _material_ui_core_colors__WEBPACK_IMPORTED_MODULE_12__["green"][500],
       position: 'absolute',
       top: '50%',
       left: '50%',
@@ -163952,32 +163954,10 @@ var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_10__["m
     }
   };
 });
-var useWysiwygClasses = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_10__["makeStyles"])(function (theme) {
-  return {
-    root: {
-      border: "1px solid rgba(0, 0, 0, 0.23)",
-      borderRadius: "4px"
-    },
-    toolbar: {
-      marginTop: 0,
-      borderBottom: "1px solid rgba(0, 0, 0, 0.23)"
-    },
-    container: {
-      marginTop: 0
-    },
-    editor: {
-      padding: theme.spacing(2)
-    },
-    placeHolder: {
-      padding: theme.spacing(2)
-    }
-  };
-});
 function EquipmentForm(props) {
   var classes = useStyles();
-  var wysiwygClasses = useWysiwygClasses();
 
-  var _useAuthContext = Object(_context_Auth__WEBPACK_IMPORTED_MODULE_15__["useAuthContext"])(),
+  var _useAuthContext = Object(_context_Auth__WEBPACK_IMPORTED_MODULE_16__["useAuthContext"])(),
       accessToken = _useAuthContext.accessToken;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])("CREATE"),
@@ -164013,7 +163993,7 @@ function EquipmentForm(props) {
   var loadData = function loadData(id) {
     setDataLoading(true);
     setEquipmentData(null);
-    fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_16__["API_EQUIPMENTS_ENDPOINT"] + id, {
+    fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_17__["API_EQUIPMENTS_ENDPOINT"] + id, {
       headers: {
         'Authorization': 'bearer ' + accessToken
       }
@@ -164038,7 +164018,7 @@ function EquipmentForm(props) {
 
   var saveData = function saveData(data) {
     if (mode === "CREATE") {
-      return fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_16__["API_EQUIPMENTS_ENDPOINT"], {
+      return fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_17__["API_EQUIPMENTS_ENDPOINT"], {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -164048,7 +164028,7 @@ function EquipmentForm(props) {
         body: JSON.stringify(data)
       });
     } else {
-      return fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_16__["API_EQUIPMENTS_ENDPOINT"] + props.match.params.id, {
+      return fetch(_data_Constants__WEBPACK_IMPORTED_MODULE_17__["API_EQUIPMENTS_ENDPOINT"] + props.match.params.id, {
         method: 'PUT',
         headers: {
           'Accept': 'application/json',
@@ -164068,15 +164048,15 @@ function EquipmentForm(props) {
   }, []); // Empty array means useEffect will only be called on first render
 
   if (isDataLoading) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Loading__WEBPACK_IMPORTED_MODULE_18__["default"], null);
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Loading__WEBPACK_IMPORTED_MODULE_19__["default"], null);
   }
 
   if (error !== null || mode === "EDIT" && equipmentData === null) {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Error__WEBPACK_IMPORTED_MODULE_17__["default"], null, "Une erreur s'est produite : ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, error !== null ? error : "No data"));
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Error__WEBPACK_IMPORTED_MODULE_18__["default"], null, "Une erreur s'est produite : ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, error !== null ? error : "No data"));
   }
 
   var meProps = props;
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_9__["default"], {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_10__["default"], {
     component: "h1",
     variant: "h4",
     align: "center",
@@ -164087,7 +164067,7 @@ function EquipmentForm(props) {
       name: '',
       type: '',
       quantity: 0,
-      description: "test"
+      description: ""
     }, equipmentData),
     validationSchema: function validationSchema() {
       var schema = {
@@ -164115,7 +164095,7 @@ function EquipmentForm(props) {
           setSaveSuccess(true);
           setTimeout(function () {
             return props.history.push('/equipments');
-          }, _data_Constants__WEBPACK_IMPORTED_MODULE_16__["FORM_REDIRECT_TIMEOUT"]);
+          }, _data_Constants__WEBPACK_IMPORTED_MODULE_17__["FORM_REDIRECT_TIMEOUT"]);
         }
       })["finally"](function () {
         setSaveLoading(false);
@@ -164131,13 +164111,13 @@ function EquipmentForm(props) {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
       className: classes.form,
       onSubmit: handleSubmit
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__["default"], {
       container: true,
       spacing: 2
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__["default"], {
       item: true,
       xs: 12
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_9__["default"], {
       id: "name",
       name: "name",
       label: "Nom",
@@ -164149,11 +164129,11 @@ function EquipmentForm(props) {
       variant: "outlined",
       fullWidth: true,
       autoFocus: true
-    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__["default"], {
       item: true,
       xs: 12,
       sm: 6
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_9__["default"], {
       id: "type",
       name: "type",
       label: "Type",
@@ -164164,11 +164144,11 @@ function EquipmentForm(props) {
       helperText: touched.type && errors.type,
       variant: "outlined",
       fullWidth: true
-    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__["default"], {
       item: true,
       xs: 12,
       sm: 6
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_8__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_9__["default"], {
       id: "quantity",
       name: "quantity",
       label: "Quantit\xE9",
@@ -164183,13 +164163,17 @@ function EquipmentForm(props) {
       helperText: touched.quantity && errors.quantity,
       variant: "outlined",
       fullWidth: true
-    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__["default"], {
       item: true,
       xs: 12
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_quill__WEBPACK_IMPORTED_MODULE_1___default.a, {
       value: values.description,
       onChange: function onChange(v) {
         setFieldValue("description", v);
+      },
+      style: {
+        // borderRadius: '0.5em',
+        border: errors.description && touched.description ? '1px solid #f44336' : 'none'
       },
       modules: {
         toolbar: [['bold', 'italic', 'underline', 'strike'], [{
@@ -164199,7 +164183,10 @@ function EquipmentForm(props) {
         }, 'clean']]
       },
       formats: ['bold', 'italic', 'underline', 'strike', 'list', 'bullet']
-    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }), errors.description && touched.description && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormHelperText__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      error: true,
+      variant: "outlined"
+    }, errors.description)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_8__["default"], {
       item: true,
       xs: 12,
       className: classes.buttonRow
@@ -164210,7 +164197,7 @@ function EquipmentForm(props) {
       color: "secondary",
       disabled: isSaveLoading,
       className: classes.button,
-      startIcon: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_12___default.a, null),
+      startIcon: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Cancel__WEBPACK_IMPORTED_MODULE_13___default.a, null),
       onClick: function onClick(e) {
         return !saveSuccess && meProps.history.push('/equipments');
       }
@@ -164223,11 +164210,11 @@ function EquipmentForm(props) {
       size: "large",
       disabled: isSaveLoading,
       className: saveSuccess ? classes.buttonSuccess : '',
-      startIcon: saveSuccess ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Check__WEBPACK_IMPORTED_MODULE_13___default.a, null) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_14___default.a, null)
+      startIcon: saveSuccess ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Check__WEBPACK_IMPORTED_MODULE_14___default.a, null) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_15___default.a, null)
     }, mode === "CREATE" ? "Créer" : "Modifier"), isSaveLoading && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_CircularProgress__WEBPACK_IMPORTED_MODULE_6__["default"], {
       size: 24,
       className: classes.buttonProgress
-    })))), errors.general && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    })))), console.log(values, errors, touched), errors.general && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_10__["default"], {
       component: "p",
       align: "center",
       color: "error"
