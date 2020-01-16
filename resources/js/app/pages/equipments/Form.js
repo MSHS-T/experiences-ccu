@@ -289,7 +289,6 @@ export default function EquipmentForm(props) {
                                 </div>
                             </Grid>
                         </Grid>
-                        {console.log(values, errors, touched)}
                         {errors.general && (
                             <Typography component="p" align="center" color="error">
                                 Une erreur s'est produite sur le serveur : <strong>{errors.general}</strong>.

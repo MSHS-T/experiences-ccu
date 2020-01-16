@@ -11,7 +11,6 @@ import ShutterSpeedIcon from '@material-ui/icons/ShutterSpeed';
 import LandingPage from "../pages/Landing";
 import LoginPage from "../pages/Login";
 import DashboardPage from "../pages/Dashboard";
-import PlateauxPage from "../pages/Plateaux";
 import ManipulationsPage from "../pages/Manipulations";
 
 import UsersList from "../pages/users/List";
@@ -21,6 +20,10 @@ import UsersForm from "../pages/users/Form";
 import EquipmentsList from "../pages/equipments/List";
 import EquipmentsView from "../pages/equipments/View";
 import EquipmentsForm from "../pages/equipments/Form";
+
+import PlateauxList from "../pages/plateaux/List";
+import PlateauxView from "../pages/plateaux/View";
+import PlateauxForm from "../pages/plateaux/Form";
 
 import SettingsPage from "../pages/Settings";
 
@@ -54,16 +57,52 @@ const SiteMap = [
         roles: ["ADMIN", "MANIP", "PLAT"]
     },
     '---',
+    ////////////////
+    /// PLATEAUX ///
+    ////////////////
     {
         title: 'Plateaux',
         icon: (<MeetingRoomIcon />),
         url: '/plateaux',
-        exactPath: false,
+        exactPath: true,
         showInMenu: true,
-        component: PlateauxPage,
+        component: PlateauxList,
         authenticated: true,
         roles: ["ADMIN", "PLAT"]
     },
+    {
+        title: 'Créer un plateau',
+        icon: false,
+        url: '/plateaux/new',
+        exactPath: true,
+        showInMenu: false,
+        component: PlateauxForm,
+        authenticated: true,
+        roles: ["ADMIN"]
+    },
+    {
+        title: 'Modifier un plateau',
+        icon: false,
+        url: '/plateaux/:id/edit',
+        exactPath: true,
+        showInMenu: false,
+        component: PlateauxForm,
+        authenticated: true,
+        roles: ["ADMIN"]
+    },
+    {
+        title: 'Visualiser un plateau',
+        icon: false,
+        url: '/plateaux/:id',
+        exactPath: false,
+        showInMenu: false,
+        component: PlateauxView,
+        authenticated: true,
+        roles: ["ADMIN"]
+    },
+    /////////////////////
+    /// MANIPULATIONS ///
+    /////////////////////
     {
         title: 'Manipulations',
         icon: (<ShutterSpeedIcon />),
