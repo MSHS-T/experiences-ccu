@@ -80,4 +80,8 @@ class User extends Authenticatable implements JWTSubject
     public function plateaux(){
         return $this->hasMany('App\Plateau', 'manager_id');
     }
+
+    public function manipulations(){
+        return $this->belongsToMany('App\Manipulation');
+    }
 }
