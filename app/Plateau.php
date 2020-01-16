@@ -30,4 +30,8 @@ class Plateau extends Model
     public function manager(){
         return $this->belongsTo('App\User', 'manager_id');
     }
+
+    public function manipulations(){
+        return $this->hasMany('App\Manipulation');
+    }
 }
