@@ -8,8 +8,12 @@ import * as Yup from 'yup';
 
 import Button from '@material-ui/core/Button';
 import CircularProgress from "@material-ui/core/CircularProgress";
+import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from "@material-ui/core/FormHelperText";
 import Grid from '@material-ui/core/Grid';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from '@material-ui/core/styles';
@@ -28,6 +32,9 @@ const useStyles = makeStyles(theme => ({
     form: {
         width: '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(3),
+    },
+    formControl: {
+        width: '100%',
     },
     buttonRow: {
         display: 'flex',
@@ -56,22 +63,43 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function EquipmentForm(props) {
+export default function PlateauForm(props) {
     const classes = useStyles();
     const { accessToken } = useAuthContext();
 
     const [mode, setMode] = useState("CREATE");
-    const [isDataLoading, setDataLoading] = useState(false);
+    const [dataLoading, setDataLoading] = useState(0);
     const [isSaveLoading, setSaveLoading] = useState(false);
-    const [equipmentData, setEquipmentData] = useState(null);
+    const [plateauData, setPlateauData] = useState(null);
+    const [userData, setUserData] = useState(null);
     const [error, setError] = useState(null);
     const [saveSuccess, setSaveSuccess] = useState(false);
 
-    const loadData = (id) => {
-        setDataLoading(true);
-        setEquipmentData(null);
+    const loadUsers = () => {
+        setDataLoading(dataLoading + 1);
+        setUserData(null);
 
-        fetch(Constants.API_EQUIPMENTS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_USERS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken } })
+            // Parse JSON response
+            .then(data => data.json())
+            // Reprocess data:
+            //  - flatten roles array to keep only the key field
+            //  - filter users to keep only those possessing the "PLAT" role
+            .then(data => data.map(row => ({
+                ...row,
+                roles: row.roles.map(r => r.key)
+            })).filter(row => row.roles.includes('PLAT')))
+            // Set data in state
+            .then(data => {
+                setUserData(data);
+                setDataLoading(dataLoading - 1);
+            });
+    }
+    const loadData = (id) => {
+        setDataLoading(dataLoading + 1);
+        setPlateauData(null);
+
+        fetch(Constants.API_PLATEAUX_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken } })
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -81,20 +109,20 @@ export default function EquipmentForm(props) {
             })
             // Set data in state
             .then(data => {
-                setEquipmentData(data);
+                setPlateauData(data);
                 setError(null);
-                setDataLoading(false);
+                setDataLoading(dataLoading - 1);
             })
             .catch(err => {
-                setEquipmentData(null);
+                setPlateauData(null);
                 setError(err.message);
-                setDataLoading(false);
+                setDataLoading(dataLoading - 1);
             });
     }
 
     const saveData = (data) => {
         if (mode === "CREATE") {
-            return fetch(Constants.API_EQUIPMENTS_ENDPOINT, {
+            return fetch(Constants.API_PLATEAUX_ENDPOINT, {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -104,7 +132,7 @@ export default function EquipmentForm(props) {
                 body: JSON.stringify(data)
             })
         } else {
-            return fetch(Constants.API_EQUIPMENTS_ENDPOINT + props.match.params.id, {
+            return fetch(Constants.API_PLATEAUX_ENDPOINT + props.match.params.id, {
                 method: 'PUT',
                 headers: {
                     'Accept': 'application/json',
@@ -116,17 +144,22 @@ export default function EquipmentForm(props) {
         }
     }
 
+    const inputLabel = React.useRef(null);
+    const [labelWidth, setLabelWidth] = React.useState(0);
+
     useEffect(() => {
+        setLabelWidth(inputLabel.current.offsetWidth);
+        loadUsers();
         if (props.match.params.hasOwnProperty("id")) {
             setMode("EDIT");
             loadData(props.match.params.id);
         }
     }, []); // Empty array means useEffect will only be called on first render
 
-    if (isDataLoading) {
+    if (dataLoading > 0) {
         return <Loading />
     }
-    if (error !== null || (mode === "EDIT" && equipmentData === null)) {
+    if (error !== null || (mode === "EDIT" && plateauData === null)) {
         return (
             <ErrorPage>
                 Une erreur s'est produite : <strong>{(error !== null ? error : ("No data"))}</strong>
@@ -139,25 +172,21 @@ export default function EquipmentForm(props) {
     return (
         <>
             <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom>
-                {mode === "CREATE" ? "Nouveau Matériel" : `Modification du Matériel #${props.match.params.id}`}
+                {mode === "CREATE" ? "Nouveau Plateau" : `Modification du Plateau #${props.match.params.id}`}
             </Typography>
             <hr />
             <Formik
                 initialValues={{
                     name: '',
-                    type: '',
-                    quantity: 0,
                     description: "",
-                    ...equipmentData
+                    manager_id: '',
+                    ...plateauData
                 }}
                 validationSchema={() => {
                     let schema = {
                         name: Yup.string()
                             .required('Requis'),
-                        type: Yup.string()
-                            .required('Requis'),
-                        quantity: Yup.number()
-                            .min(0, 'Minimum autorisé : 0')
+                        manager_id: Yup.number()
                             .required('Requis'),
                         description: Yup.string()
                             .required('Requis')
@@ -180,7 +209,7 @@ export default function EquipmentForm(props) {
                                 actions.setFieldError('general', data.message);
                             } else {
                                 setSaveSuccess(true);
-                                setTimeout(() => props.history.push('/equipments'), Constants.FORM_REDIRECT_TIMEOUT);
+                                setTimeout(() => props.history.push('/plateaux'), Constants.FORM_REDIRECT_TIMEOUT);
                             }
                         })
                         .finally(() => {
@@ -196,7 +225,7 @@ export default function EquipmentForm(props) {
                                     id="name"
                                     name="name"
                                     label="Nom"
-                                    autoComplete="equipment_name"
+                                    autoComplete="plateau_name"
                                     value={values.name}
                                     onChange={handleChange}
                                     error={errors.name && touched.name}
@@ -206,35 +235,35 @@ export default function EquipmentForm(props) {
                                     autoFocus
                                 />
                             </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    id="type"
-                                    name="type"
-                                    label="Type"
-                                    autoComplete="equipment_type"
-                                    value={values.type}
-                                    onChange={handleChange}
-                                    error={errors.type && touched.type}
-                                    helperText={touched.type && errors.type}
-                                    variant="outlined"
-                                    fullWidth
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    id="quantity"
-                                    name="quantity"
-                                    label="Quantité"
-                                    autoComplete="equipment_quantity"
-                                    type="number"
-                                    inputProps={{ min: 0 }}
-                                    value={values.quantity}
-                                    onChange={handleChange}
-                                    error={errors.quantity && touched.quantity}
-                                    helperText={touched.quantity && errors.quantity}
-                                    variant="outlined"
-                                    fullWidth
-                                />
+                            <Grid item xs={12}>
+                                <FormControl variant="outlined" className={classes.formControl}>
+                                    <InputLabel
+                                        id="manager-id-label"
+                                        ref={inputLabel}
+                                    >
+                                        Responsable
+                                    </InputLabel>
+                                    <Select
+                                        labelId="manager-id-label"
+                                        labelWidth={labelWidth}
+                                        id="manager_id"
+                                        name="manager_id"
+                                        value={values.manager_id}
+                                        onChange={handleChange}
+                                        error={errors.manager_id && touched.manager_id}
+                                    >
+                                        {/* <MenuItem value=""></MenuItem> */}
+                                        {userData && userData.map(u => (
+                                            <MenuItem key={u.id} value={u.id}>{u.name}</MenuItem>
+                                        ))}
+                                    </Select>
+                                    {touched.manager_id && errors.manager_id && (
+                                        <FormHelperText error variant="outlined">
+                                            {touched.manager_id && errors.manager_id}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
+
                             </Grid>
                             <Grid item xs={12}>
                                 <ReactQuill
@@ -268,7 +297,7 @@ export default function EquipmentForm(props) {
                                         disabled={isSaveLoading}
                                         className={classes.button}
                                         startIcon={<CancelIcon />}
-                                        onClick={e => !saveSuccess && meProps.history.push('/equipments')}
+                                        onClick={e => !saveSuccess && meProps.history.push('/plateaux')}
                                     >
                                         Annuler
                                 </Button>

@@ -39,6 +39,13 @@ class User extends Authenticatable implements JWTSubject
     ];
 
     /**
+     * The attributes that should be included in all requests
+     *
+     * @var array
+     */
+    protected $appends = array('name');
+
+    /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
      * @return mixed
@@ -57,12 +64,20 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
+    }
+
+    public function getNameAttribute(){
+        return ucfirst($this->first_name) . " " . strtoupper($this->last_name);
+    }
+
     public function roles(){
         return $this->belongsToMany('App\Role');
     }
 
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = bcrypt($value);
+    public function plateaux(){
+        return $this->hasMany('App\Plateau', 'manager_id');
     }
 }
