@@ -22,5 +22,6 @@ Route::group(['middleware' => 'apiheader'], function($router){
     });
     Route::apiResource('user', 'API\UserController');
     Route::apiResource('equipment', 'API\EquipmentController');
+    Route::apiResource('manipulation', 'API\ManipulationController');
     Route::apiResource('plateau', 'API\PlateauController');
 });
