@@ -4,15 +4,32 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
+
+import { makeStyles } from '@material-ui/core/styles';
 
 import ViewIcon from '@material-ui/icons/Visibility';
 
 import { useAuthContext } from "../../context/Auth";
 import * as Constants from "../../data/Constants";
 
+const useStyles = makeStyles(theme => ({
+    statusDanger: {
+        color: theme.palette.error.main,
+        fontWeight: 'bold'
+    },
+    statusWarning: {
+        color: theme.palette.warning.main,
+        fontWeight: 'bold'
+    },
+    statusOk: {
+        color: theme.palette.success.main
+    }
+}));
 
-export default function EquipmentList(props) {
-    const { accessToken, user } = useAuthContext();
+export default function ManipulationList(props) {
+    const classes = useStyles();
+    const { accessToken } = useAuthContext();
 
     const [isLoading, setLoading] = useState(true);
     const [tableData, setTableData] = useState([]);
@@ -23,9 +40,15 @@ export default function EquipmentList(props) {
         setLoading(true);
         setTableData([]);
 
-        fetch(Constants.API_EQUIPMENTS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken } })
             // Parse JSON response
             .then(data => data.json())
+            // Reprocess data :
+            //  - get manager names from nested objects
+            .then(data => data.map(row => ({
+                ...row,
+                manager_names: row.managers.map(u => u.name).sort().join(', ')
+            })))
             // Set data in state
             .then(data => {
                 setTableData(data);
@@ -35,7 +58,7 @@ export default function EquipmentList(props) {
 
     const handleDelete = (entry) => {
         setDeleteError(null);
-        fetch(Constants.API_EQUIPMENTS_ENDPOINT + entry.id, {
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT + entry.id, {
             method: 'DELETE',
             headers: {
                 'Authorization': 'bearer ' + accessToken,
@@ -54,18 +77,41 @@ export default function EquipmentList(props) {
             });
     }
 
+    const Stats = (rowData) => {
+        const target = rowData.target_slots;
+        // TODO : Get real slots counts
+        const slots = 0; //rowData.slots.length || 0;
+        const signedup = 0; //rowData.slotsFilledCount.length || 0;
+        const slotsPercent = slots / target * 100;
+        const signedupPercent = signedup / target * 100;
+
+        const colorPercent = (percent) => (percent < 100 ? classes.statusDanger : (percent >= 110 ? classes.statusOk : classes.statusWarning))
+
+        return (
+            <>
+                <Typography variant="inherit" display="inline" className={colorPercent(slotsPercent)}>{slots} Créneaux</Typography>
+                <span> | </span>
+                <Typography variant="inherit" display="inline" className={colorPercent(signedupPercent)}>{signedup} Inscrits</Typography>
+                <span> | </span>
+                <Typography variant="inherit" display="inline">{target} Cible</Typography>
+            </>
+        )
+    }
+
+
     useEffect(loadData, []); // Empty array means useEffect will only be called on first render
 
     return (
         <>
             <MaterialTable
-                title="Matériel"
+                title="Manipulations"
                 isLoading={isLoading}
                 columns={[
                     { title: 'ID', field: 'id', defaultSort: 'desc' },
                     { title: 'Nom', field: 'name' },
-                    { title: 'Type', field: 'type' },
-                    { title: 'Quantité', field: 'quantity' }
+                    { title: 'Date de début', field: 'start_date', type: 'date' },
+                    { title: 'Statistiques', field: 'target_slots', render: Stats },
+                    { title: 'Responsables', field: 'manager_names' }
                 ]}
                 actions={[
                     {
@@ -76,25 +122,25 @@ export default function EquipmentList(props) {
                     },
                     {
                         icon: 'add',
-                        tooltip: 'Nouvel Utilisateur',
+                        tooltip: 'Nouvelle Manipulation',
                         isFreeAction: true,
-                        onClick: (event) => props.history.push('/equipments/new')
+                        onClick: (event) => props.history.push('/manipulations/new')
                     },
                     {
                         icon: () => <ViewIcon />,
                         tooltip: 'Visualiser',
-                        onClick: (event, rowData) => props.history.push('/equipments/' + rowData.id)
+                        onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id)
                     },
                     {
                         icon: 'edit',
                         tooltip: 'Modifier',
-                        onClick: (event, rowData) => props.history.push('/equipments/' + rowData.id + '/edit')
+                        onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id + '/edit')
                     },
-                    (user.roles.includes("ADMIN") ? {
+                    {
                         icon: 'delete',
                         tooltip: 'Supprimer',
                         onClick: (event, rowData) => setDeleteEntry(rowData)
-                    } : null)
+                    }
                 ]}
                 options={{
                     actionsColumnIndex: 5,
@@ -130,7 +176,7 @@ export default function EquipmentList(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {deleteEntry ? ("Supprimer le matériel " + deleteEntry.name + " ?") : ""}
+                    {deleteEntry ? ("Supprimer la manipulation " + deleteEntry.name + " ?") : ""}
                     {deleteError ? ("Erreur lors de la suppression : " + deleteError) : ""}
                 </DialogTitle>
                 {deleteEntry && (
