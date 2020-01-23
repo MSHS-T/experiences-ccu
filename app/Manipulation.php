@@ -19,8 +19,8 @@ class Manipulation extends Model
         'target_slots',
         'start_date',
         'location',
-        'available_hours',
-        'requirements'
+        'requirements',
+        'available_hours'
     ];
 
     /**
@@ -36,7 +36,7 @@ class Manipulation extends Model
     /**
      * The relationships that should always be included
      */
-    protected $with = ['requirements'];
+    protected $with = ['managers'];
 
     public function plateau(){
         return $this->belongsTo('App\Plateau', 'plateau_id');
