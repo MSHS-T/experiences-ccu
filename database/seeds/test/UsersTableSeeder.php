@@ -31,7 +31,7 @@ class TestUsersTableSeeder extends Seeder
                 'created_at' => '2019-10-16 12:00',
                 'updated_at' => '2019-10-16 12:00'
             ]);
-            DB::table('role_user') -> insert([
+            DB::table('role_user')->insert([
                 'user_id' => $userId,
                 'role_id' => DB::table('roles')->where('key', $roles[array_rand($roles)])->first()->id
             ]);
