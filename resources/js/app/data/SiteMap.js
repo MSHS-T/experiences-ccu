@@ -11,7 +11,6 @@ import ShutterSpeedIcon from '@material-ui/icons/ShutterSpeed';
 import LandingPage from "../pages/Landing";
 import LoginPage from "../pages/Login";
 import DashboardPage from "../pages/Dashboard";
-import ManipulationsPage from "../pages/Manipulations";
 
 import UsersList from "../pages/users/List";
 import UsersView from "../pages/users/View";
@@ -20,6 +19,10 @@ import UsersForm from "../pages/users/Form";
 import EquipmentsList from "../pages/equipments/List";
 import EquipmentsView from "../pages/equipments/View";
 import EquipmentsForm from "../pages/equipments/Form";
+
+import ManipulationsList from "../pages/manipulations/List";
+import ManipulationsView from "../pages/manipulations/View";
+import ManipulationsForm from "../pages/manipulations/Form";
 
 import PlateauxList from "../pages/plateaux/List";
 import PlateauxView from "../pages/plateaux/View";
@@ -78,7 +81,7 @@ const SiteMap = [
         showInMenu: false,
         component: PlateauxForm,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles: ["ADMIN", "PLAT"]
     },
     {
         title: 'Modifier un plateau',
@@ -88,7 +91,7 @@ const SiteMap = [
         showInMenu: false,
         component: PlateauxForm,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles: ["ADMIN", "PLAT"]
     },
     {
         title: 'Visualiser un plateau',
@@ -98,7 +101,7 @@ const SiteMap = [
         showInMenu: false,
         component: PlateauxView,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles: ["ADMIN", "PLAT"]
     },
     /////////////////////
     /// MANIPULATIONS ///
@@ -107,9 +110,39 @@ const SiteMap = [
         title: 'Manipulations',
         icon: (<ShutterSpeedIcon />),
         url: '/manipulations',
-        exactPath: false,
+        exactPath: true,
         showInMenu: true,
-        component: ManipulationsPage,
+        component: ManipulationsList,
+        authenticated: true,
+        roles: ["ADMIN", "MANIP"]
+    },
+    {
+        title: 'Créer une manipulation',
+        icon: false,
+        url: '/manipulations/new',
+        exactPath: true,
+        showInMenu: false,
+        component: ManipulationsForm,
+        authenticated: true,
+        roles: ["ADMIN", "MANIP"]
+    },
+    {
+        title: 'Modifier une manipulation',
+        icon: false,
+        url: '/manipulations/:id/edit',
+        exactPath: true,
+        showInMenu: false,
+        component: ManipulationsForm,
+        authenticated: true,
+        roles: ["ADMIN", "MANIP"]
+    },
+    {
+        title: 'Visualiser une manipulation',
+        icon: false,
+        url: '/manipulations/:id',
+        exactPath: false,
+        showInMenu: false,
+        component: ManipulationsView,
         authenticated: true,
         roles: ["ADMIN", "MANIP"]
     },
