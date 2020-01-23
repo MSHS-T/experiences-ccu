@@ -144,7 +144,7 @@ export default function PlateauView(props) {
                         color="default"
                         className={classes.button}
                         startIcon={<CancelIcon />}
-                        onClick={e => props.history.push('/plateaux')}
+                        onClick={props.history.goBack}
                     >
                         Retour
                     </Button>

@@ -142,7 +142,7 @@ export default function UserView(props) {
                         color="default"
                         className={classes.button}
                         startIcon={<CancelIcon />}
-                        onClick={e => props.history.push('/users')}
+                        onClick={props.history.goBack}
                     >
                         Retour
                     </Button>

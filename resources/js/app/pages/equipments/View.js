@@ -46,7 +46,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function EquipmentView(props) {
     const classes = useStyles();
-    const { accessToken } = useAuthContext();
+    const { accessToken, user } = useAuthContext();
 
     const [isDataLoading, setDataLoading] = useState(false);
     const [equipmentData, setEquipmentData] = useState(null);
@@ -148,7 +148,7 @@ export default function EquipmentView(props) {
                         color="default"
                         className={classes.button}
                         startIcon={<CancelIcon />}
-                        onClick={e => props.history.push('/equipments')}
+                        onClick={props.history.goBack}
                     >
                         Retour
                     </Button>
@@ -161,7 +161,7 @@ export default function EquipmentView(props) {
                     >
                         Modifier
                     </Button>
-                    <Button
+                    {user.roles.includes("ADMIN") ? (<Button
                         variant="contained"
                         color="secondary"
                         className={classes.button}
@@ -169,7 +169,7 @@ export default function EquipmentView(props) {
                         onClick={e => setDeleteEntry(true)}
                     >
                         Supprimer
-                    </Button>
+                    </Button>) : ''}
                 </Grid>
             </Grid>
             <Dialog
