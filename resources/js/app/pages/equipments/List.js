@@ -12,7 +12,7 @@ import * as Constants from "../../data/Constants";
 
 
 export default function EquipmentList(props) {
-    const { accessToken } = useAuthContext();
+    const { accessToken, user } = useAuthContext();
 
     const [isLoading, setLoading] = useState(true);
     const [tableData, setTableData] = useState([]);
@@ -54,7 +54,6 @@ export default function EquipmentList(props) {
             });
     }
 
-
     useEffect(loadData, []); // Empty array means useEffect will only be called on first render
 
     return (
@@ -91,11 +90,11 @@ export default function EquipmentList(props) {
                         tooltip: 'Modifier',
                         onClick: (event, rowData) => props.history.push('/equipments/' + rowData.id + '/edit')
                     },
-                    {
+                    (user.roles.includes("ADMIN") ? {
                         icon: 'delete',
                         tooltip: 'Supprimer',
                         onClick: (event, rowData) => setDeleteEntry(rowData)
-                    }
+                    } : null)
                 ]}
                 options={{
                     actionsColumnIndex: 5,
