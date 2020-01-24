@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         $adminId = DB::table('users')->insertGetId([
             'first_name' => 'Administrateur',
             'last_name' => 'CCU',
-            'email' => 'romain@3rgo.tech',
+            'email' => (env('APP_ENV', 'production') === 'production' ? 'romain@3rgo.tech' : 'julien.tardieu@univ-tlse2.fr'),
             'email_verified_at' => '2019-10-16 12:00',
             'password' => bcrypt('admin'),
             'created_at' => '2019-10-16 12:00',
