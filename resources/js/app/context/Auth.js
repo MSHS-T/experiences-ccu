@@ -37,13 +37,13 @@ const AuthProvider = props => {
 
         // Send login query
         return axios
-            .post(Constants.API_URL + "auth/login/", formData)
+            .post(Constants.API_URL + "auth/login", formData)
             .then(json_token => {
                 // Store access token
                 setAccessToken(json_token.data.access_token);
 
                 // Send /me query to get user information
-                axios.post(Constants.API_URL + "auth/me/", {}, {
+                axios.post(Constants.API_URL + "auth/me", {}, {
                     headers: { 'Authorization': "bearer " + json_token.data.access_token }
                 }).then(json_me => {
                     let user = {
@@ -73,7 +73,7 @@ const AuthProvider = props => {
 
     const logoutUser = () => {
         // Send logout query
-        return axios.post(Constants.API_URL + "auth/logout/", {}, {
+        return axios.post(Constants.API_URL + "auth/logout", {}, {
             headers: { 'Authorization': "bearer " + accessToken }
         }).then(json => {
             // Once it's done, clear user data
