@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
 
 class TestPlateauxTableSeeder extends Seeder
@@ -16,7 +17,9 @@ class TestPlateauxTableSeeder extends Seeder
         $managers = DB::table('role_user')->select('id')->where('role_id', $role_id)->get()->pluck('id');
         $faker = Faker::create('fr_FR');
         foreach (range(1, 10) as $i) {
-            $description = array_map(function($p) { return '<p>'.$p.'</p>'; }, $faker->paragraphs(3));
+            $description = array_map(function ($p) {
+                return '<p>' . $p . '</p>';
+            }, $faker->paragraphs(3));
             DB::table('plateaux')->insert([
                 'name' => "Plateau $i",
                 'description' => implode('', $description),
