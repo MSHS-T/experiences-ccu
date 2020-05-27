@@ -1,5 +1,4 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
 import Badge from '@material-ui/core/Badge';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -130,7 +129,7 @@ export default function Landing() {
                                     </CardActions>
                                 </Card>
                             </Grid>
-                        )
+                        );
                     })}
                 </Grid>
                 <Box my={2}>

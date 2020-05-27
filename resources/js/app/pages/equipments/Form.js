@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-import { Formik } from "formik";
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import Button from '@material-ui/core/Button';
-import CircularProgress from "@material-ui/core/CircularProgress";
-import FormHelperText from "@material-ui/core/FormHelperText";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import Typography from "@material-ui/core/Typography";
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 
@@ -19,10 +19,10 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
 
-import { useAuthContext } from "../../context/Auth";
-import * as Constants from "../../data/Constants";
-import ErrorPage from "../Error";
-import Loading from "../Loading";
+import { useAuthContext } from '../../context/Auth';
+import * as Constants from '../../data/Constants';
+import ErrorPage from '../Error';
+import Loading from '../Loading';
 
 const useStyles = makeStyles(theme => ({
     form: {
@@ -60,7 +60,7 @@ export default function EquipmentForm(props) {
     const classes = useStyles();
     const { accessToken } = useAuthContext();
 
-    const [mode, setMode] = useState("CREATE");
+    const [mode, setMode] = useState('CREATE');
     const [isDataLoading, setDataLoading] = useState(false);
     const [isSaveLoading, setSaveLoading] = useState(false);
     const [equipmentData, setEquipmentData] = useState(null);
@@ -77,7 +77,7 @@ export default function EquipmentForm(props) {
                 if (!response.ok) {
                     throw new Error(`${response.status} (${response.statusText})`);
                 }
-                return response.json()
+                return response.json();
             })
             // Set data in state
             .then(data => {
@@ -90,10 +90,10 @@ export default function EquipmentForm(props) {
                 setError(err.message);
                 setDataLoading(false);
             });
-    }
+    };
 
     const saveData = (data) => {
-        if (mode === "CREATE") {
+        if (mode === 'CREATE') {
             return fetch(Constants.API_EQUIPMENTS_ENDPOINT, {
                 method: 'POST',
                 headers: {
@@ -102,7 +102,7 @@ export default function EquipmentForm(props) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
-            })
+            });
         } else {
             return fetch(Constants.API_EQUIPMENTS_ENDPOINT + props.match.params.id, {
                 method: 'PUT',
@@ -112,26 +112,26 @@ export default function EquipmentForm(props) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data)
-            })
+            });
         }
-    }
+    };
 
     useEffect(() => {
-        if (props.match.params.hasOwnProperty("id")) {
-            setMode("EDIT");
+        if (Object.prototype.hasOwnProperty.call(props.match.params,'id')) {
+            setMode('EDIT');
             loadData(props.match.params.id);
         }
     }, []); // Empty array means useEffect will only be called on first render
 
     if (isDataLoading) {
-        return <Loading />
+        return <Loading />;
     }
-    if (error !== null || (mode === "EDIT" && equipmentData === null)) {
+    if (error !== null || (mode === 'EDIT' && equipmentData === null)) {
         return (
             <ErrorPage>
-                Une erreur s'est produite : <strong>{(error !== null ? error : ("No data"))}</strong>
+                Une erreur s&apos;est produite : <strong>{(error !== null ? error : ('No data'))}</strong>
             </ErrorPage>
-        )
+        );
     }
 
     const meProps = props;
@@ -139,7 +139,7 @@ export default function EquipmentForm(props) {
     return (
         <>
             <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom>
-                {mode === "CREATE" ? "Nouveau Matériel" : `Modification du Matériel #${props.match.params.id}`}
+                {mode === 'CREATE' ? 'Nouveau Matériel' : `Modification du Matériel #${props.match.params.id}`}
             </Typography>
             <hr />
             <Formik
@@ -147,7 +147,7 @@ export default function EquipmentForm(props) {
                     name: '',
                     type: '',
                     quantity: 0,
-                    description: "",
+                    description: '',
                     ...equipmentData
                 }}
                 validationSchema={() => {
@@ -161,7 +161,7 @@ export default function EquipmentForm(props) {
                             .required('Requis'),
                         description: Yup.string()
                             .required('Requis')
-                    }
+                    };
                     return Yup.object().shape(schema);
                 }}
                 onSubmit={(values, actions) => {
@@ -173,8 +173,8 @@ export default function EquipmentForm(props) {
                         .then(data => {
                             if (data.errors) {
                                 for (var field in data.errors) {
-                                    if (!data.errors.hasOwnProperty(field)) continue;
-                                    actions.setFieldError(field, data.errors[field].join(" "));
+                                    if (!Object.prototype.hasOwnProperty.call(data.errors,field)) continue;
+                                    actions.setFieldError(field, data.errors[field].join(' '));
                                 }
                             } else if (data.exception) {
                                 actions.setFieldError('general', data.message);
@@ -240,7 +240,7 @@ export default function EquipmentForm(props) {
                                 <ReactQuill
                                     value={values.description}
                                     onChange={v => {
-                                        setFieldValue("description", v)
+                                        setFieldValue('description', v);
                                     }}
                                     style={{
                                         // borderRadius: '0.5em',
@@ -268,10 +268,10 @@ export default function EquipmentForm(props) {
                                         disabled={isSaveLoading}
                                         className={classes.button}
                                         startIcon={<CancelIcon />}
-                                        onClick={e => !saveSuccess && meProps.history.push('/equipments')}
+                                        onClick={() => !saveSuccess && meProps.history.push('/equipments')}
                                     >
                                         Annuler
-                                </Button>
+                                    </Button>
                                 </div>
                                 <div className={classes.buttonWrapper}>
                                     <Button
@@ -283,7 +283,7 @@ export default function EquipmentForm(props) {
                                         className={saveSuccess ? classes.buttonSuccess : ''}
                                         startIcon={saveSuccess ? <CheckIcon /> : <SaveIcon />}
                                     >
-                                        {mode === "CREATE" ? "Créer" : "Modifier"}
+                                        {mode === 'CREATE' ? 'Créer' : 'Modifier'}
                                     </Button>
                                     {isSaveLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
                                 </div>
@@ -291,15 +291,15 @@ export default function EquipmentForm(props) {
                         </Grid>
                         {errors.general && (
                             <Typography component="p" align="center" color="error">
-                                Une erreur s'est produite sur le serveur : <strong>{errors.general}</strong>.
+                                Une erreur s&apos;est produite sur le serveur : <strong>{errors.general}</strong>.
                                 <br />
-                                Veuillez contacter l'administrateur du site.
+                                Veuillez contacter l&apos;administrateur du site.
                             </Typography>
                         )}
                     </form>
                 )}
             </Formik>
         </>
-    )
+    );
 }
 

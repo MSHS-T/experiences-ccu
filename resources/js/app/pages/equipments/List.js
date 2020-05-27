@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import MaterialTable from "material-table";
+import React, { useState, useEffect } from 'react';
+import MaterialTable from 'material-table';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -7,8 +7,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import ViewIcon from '@material-ui/icons/Visibility';
 
-import { useAuthContext } from "../../context/Auth";
-import * as Constants from "../../data/Constants";
+import { useAuthContext } from '../../context/Auth';
+import * as Constants from '../../data/Constants';
 
 
 export default function EquipmentList(props) {
@@ -31,7 +31,7 @@ export default function EquipmentList(props) {
                 setTableData(data);
                 setLoading(false);
             });
-    }
+    };
 
     const handleDelete = (entry) => {
         setDeleteError(null);
@@ -52,7 +52,7 @@ export default function EquipmentList(props) {
                 setDeleteError(err.message);
                 setDeleteEntry(null);
             });
-    }
+    };
 
     useEffect(loadData, []); // Empty array means useEffect will only be called on first render
 
@@ -78,7 +78,7 @@ export default function EquipmentList(props) {
                         icon: 'add',
                         tooltip: 'Nouvel Utilisateur',
                         isFreeAction: true,
-                        onClick: (event) => props.history.push('/equipments/new')
+                        onClick: () => props.history.push('/equipments/new')
                     },
                     {
                         icon: () => <ViewIcon />,
@@ -90,7 +90,7 @@ export default function EquipmentList(props) {
                         tooltip: 'Modifier',
                         onClick: (event, rowData) => props.history.push('/equipments/' + rowData.id + '/edit')
                     },
-                    (user.roles.includes("ADMIN") ? {
+                    (user.roles.includes('ADMIN') ? {
                         icon: 'delete',
                         tooltip: 'Supprimer',
                         onClick: (event, rowData) => setDeleteEntry(rowData)
@@ -130,8 +130,8 @@ export default function EquipmentList(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {deleteEntry ? ("Supprimer le matériel " + deleteEntry.name + " ?") : ""}
-                    {deleteError ? ("Erreur lors de la suppression : " + deleteError) : ""}
+                    {deleteEntry ? ('Supprimer le matériel ' + deleteEntry.name + ' ?') : ''}
+                    {deleteError ? ('Erreur lors de la suppression : ' + deleteError) : ''}
                 </DialogTitle>
                 {deleteEntry && (
                     <DialogActions>
@@ -152,6 +152,6 @@ export default function EquipmentList(props) {
                 )}
             </Dialog>
         </>
-    )
+    );
 }
 

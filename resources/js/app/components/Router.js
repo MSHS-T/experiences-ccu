@@ -1,12 +1,12 @@
-import React from "react";
-import { Route, Switch } from "react-router-dom";
+import React from 'react';
+import { Route, Switch } from 'react-router-dom';
 import intersection from 'lodash/intersection';
 
-import { useAuthContext } from "../context/Auth";
+import { useAuthContext } from '../context/Auth';
 import SiteMap from '../data/SiteMap';
 
-import LoginPage from "../pages/Login";
-import ErrorPage from "../pages/Error";
+import LoginPage from '../pages/Login';
+import ErrorPage from '../pages/Error';
 
 const PrivateRoute = ({ component, roles, ...options }) => {
     // Fetch user
@@ -24,11 +24,11 @@ const PrivateRoute = ({ component, roles, ...options }) => {
             // If no matching roles are found, we render the Error page
             return <Route render={(props) => (
                 <ErrorPage {...props}>
-                    Vous n'êtes pas autorisé à accéder à cette page.
+                    Vous n&apos;êtes pas autorisé à accéder à cette page.
                     <br />
-                    Niveau d'accès requis : {roles.join(' ou ')}
+                    Niveau d&apos;accès requis : {roles.join(' ou ')}
                 </ErrorPage>
-            )} {...options} />
+            )} {...options} />;
         }
     }
 
@@ -48,7 +48,7 @@ const Router = () => (
                     roles={link.roles}
                     component={link.component}
                 />
-            )
+            );
         })}
     </Switch>
 );

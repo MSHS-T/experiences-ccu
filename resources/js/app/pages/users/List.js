@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import MaterialTable from "material-table";
+import React, { useState, useEffect } from 'react';
+import MaterialTable from 'material-table';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -7,8 +7,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import ViewIcon from '@material-ui/icons/Visibility';
 
-import { useAuthContext } from "../../context/Auth";
-import * as Constants from "../../data/Constants";
+import { useAuthContext } from '../../context/Auth';
+import * as Constants from '../../data/Constants';
 
 
 export default function UserList(props) {
@@ -37,7 +37,7 @@ export default function UserList(props) {
                 setTableData(data);
                 setLoading(false);
             });
-    }
+    };
 
     const handleDelete = (entry) => {
         setDeleteError(null);
@@ -58,7 +58,7 @@ export default function UserList(props) {
                 setDeleteError(err.message);
                 setDeleteEntry(null);
             });
-    }
+    };
 
 
     useEffect(loadData, []); // Empty array means useEffect will only be called on first render
@@ -86,7 +86,7 @@ export default function UserList(props) {
                         icon: 'add',
                         tooltip: 'Nouvel Utilisateur',
                         isFreeAction: true,
-                        onClick: (event) => props.history.push('/users/new')
+                        onClick: () => props.history.push('/users/new')
                     },
                     {
                         icon: () => <ViewIcon />,
@@ -140,8 +140,8 @@ export default function UserList(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {deleteEntry ? ("Supprimer l'utilisateur " + deleteEntry.first_name + " " + deleteEntry.last_name + " ?") : ""}
-                    {deleteError ? ("Erreur lors de la suppression : " + deleteError) : ""}
+                    {deleteEntry ? ('Supprimer l\'utilisateur ' + deleteEntry.first_name + ' ' + deleteEntry.last_name + ' ?') : ''}
+                    {deleteError ? ('Erreur lors de la suppression : ' + deleteError) : ''}
                 </DialogTitle>
                 {deleteEntry && (
                     <DialogActions>
@@ -162,6 +162,6 @@ export default function UserList(props) {
                 )}
             </Dialog>
         </>
-    )
+    );
 }
 

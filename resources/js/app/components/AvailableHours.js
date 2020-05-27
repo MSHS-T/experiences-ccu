@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 import Table from '@material-ui/core/Table';
@@ -36,7 +36,7 @@ const useStyles = makeStyles(theme => ({
     },
     timePicker: {
         width: 150,
-        display: "inline-block",
+        display: 'inline-block',
         margin: theme.spacing(1)
     },
     ampmCell: {
@@ -73,12 +73,12 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
             ...initialStateData,
             ...value
         };
-        initialStateData = mapValues(initialStateData, (v, d) => {
+        initialStateData = mapValues(initialStateData, (v) => {
             ['start_am', 'end_am', 'start_pm', 'end_pm'].forEach(timeField => {
-                v[timeField] = moment(v[timeField], "HH:mm");
-            })
+                v[timeField] = moment(v[timeField], 'HH:mm');
+            });
             return v;
-        })
+        });
         // console.log("Transformed initial state data to : ", initialStateData);
     }
     const [data, setData] = useState(initialStateData);
@@ -90,9 +90,9 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
             ...data,
             [d]: { ...data[d], [field]: !data[d][field] }
         });
-    }
+    };
 
-    const handleTimeChange = (name, dateObj, rawValue) => {
+    const handleTimeChange = (name, dateObj) => {
         if (dateObj.isValid()) {
             let day, field;
             [day, field] = name.split('-');
@@ -102,7 +102,7 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                 [day]: { ...data[day], [field]: dateObj }
             });
         }
-    }
+    };
 
 
     const validateData = () => {
@@ -110,18 +110,18 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
         let warning = [];
         if (duration > 0) {
             Object.keys(days).forEach(d => {
-                if (!data.hasOwnProperty(d)) { return; }
+                if (!Object.prototype.hasOwnProperty.call(data, d)) { return; }
                 if (!data[d].enabled) { return; }
 
                 ['am', 'pm'].map(ampm => {
                     if (data[d][ampm]) {
-                        const openDuration = moment(data[d][`end_${ampm}`], "HH:mm")
-                            .diff(moment(data[d][`start_${ampm}`], "HH:mm"), 'minutes');
+                        const openDuration = moment(data[d][`end_${ampm}`], 'HH:mm')
+                            .diff(moment(data[d][`start_${ampm}`], 'HH:mm'), 'minutes');
                         if (openDuration % duration !== 0) {
                             warning.push([
                                 days[d],
                                 ' ',
-                                ampm == "am" ? "matin" : "après-midi",
+                                ampm == 'am' ? 'matin' : 'après-midi',
                                 ' (',
                                 openDuration % duration,
                                 ' minutes perdues)'
@@ -129,13 +129,13 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                         }
                     }
                 });
-            })
+            });
             setDurationWarning(warning);
         }
 
         // If valid, we fire onChange given in props
         onChange(data);
-    }
+    };
 
     // When data changes, validate it
     useEffect(validateData, [data]);
@@ -155,7 +155,7 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                                     <Switch
                                         checked={data[d].enabled}
                                         onChange={toggleSwitch}
-                                        inputProps={{ "data-target": "enabled" }}
+                                        inputProps={{ 'data-target': 'enabled' }}
                                         value={d}
                                         color="primary"
                                     />
@@ -167,7 +167,7 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                         <TableRow>
                             <TableCell component="th" scope="row" className={classes.ampmCell}>
                                 Matin
-                        </TableCell>
+                            </TableCell>
                             {Object.keys(days).map(d => {
                                 const rootCls = data[d].enabled ? '' : classes.disabledDay;
                                 const cls = data[d].am ? classes.enabledArea : classes.disabledArea;
@@ -176,7 +176,7 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                                         <Switch
                                             checked={data[d].am}
                                             disabled={!data[d].enabled}
-                                            inputProps={{ "data-target": "am" }}
+                                            inputProps={{ 'data-target': 'am' }}
                                             onChange={toggleSwitch}
                                             value={d}
                                             color="primary"
@@ -190,7 +190,7 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                                                 name={`${d}-start_am`}
                                                 value={data[d].start_am}
                                                 minutesStep={5}
-                                                onChange={(date, value) => { handleTimeChange(`${d}-start_am`, date, value) }}
+                                                onChange={(date, value) => { handleTimeChange(`${d}-start_am`, date, value); }}
                                             />
                                             <KeyboardTimePicker
                                                 className={classes.timePicker}
@@ -200,7 +200,7 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                                                 name={`${d}-end_am`}
                                                 value={data[d].end_am}
                                                 minutesStep={5}
-                                                onChange={(date, value) => { handleTimeChange(`${d}-end_am`, date, value) }}
+                                                onChange={(date, value) => { handleTimeChange(`${d}-end_am`, date, value); }}
                                             />
                                         </div>
                                     </TableCell>
@@ -211,7 +211,7 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                         <TableRow>
                             <TableCell component="th" scope="row" className={classes.ampmCell}>
                                 Après-midi
-                        </TableCell>
+                            </TableCell>
                             {Object.keys(days).map(d => {
                                 const rootCls = data[d].enabled ? '' : classes.disabledDay;
                                 const cls = data[d].pm ? classes.enabledArea : classes.disabledArea;
@@ -220,7 +220,7 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                                         <Switch
                                             checked={data[d].pm}
                                             disabled={!data[d].enabled}
-                                            inputProps={{ "data-target": "pm" }}
+                                            inputProps={{ 'data-target': 'pm' }}
                                             onChange={toggleSwitch}
                                             value={d}
                                             color="primary"
@@ -234,7 +234,7 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                                                 name={`${d}-start_pm`}
                                                 value={data[d].start_pm}
                                                 minutesStep={5}
-                                                onChange={(date, value) => { handleTimeChange(`${d}-start_pm`, date, value) }}
+                                                onChange={(date, value) => { handleTimeChange(`${d}-start_pm`, date, value); }}
                                             />
                                             <KeyboardTimePicker
                                                 className={classes.timePicker}
@@ -244,7 +244,7 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                                                 name={`${d}-end_pm`}
                                                 value={data[d].end_pm}
                                                 minutesStep={5}
-                                                onChange={(date, value) => { handleTimeChange(`${d}-end_pm`, date, value) }}
+                                                onChange={(date, value) => { handleTimeChange(`${d}-end_pm`, date, value); }}
                                             />
                                         </div>
                                     </TableCell>
@@ -258,24 +258,24 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                                         {helperText}
                                     </TableCell>
                                 ) : (
-                                        <>
-                                            <TableCell></TableCell>
-                                            {Object.keys(days).map(d => (
-                                                <TableCell
-                                                    align="center"
-                                                    key={`error-${d}`}
-                                                    className={classes.cellError}
-                                                >
-                                                    {
-                                                        /* helperText[d] == null will match with undefined too */
-                                                        (typeof helperText[d] === "string" || helperText[d] == null)
-                                                            ? helperText[d]
-                                                            : Object.values(helperText[d]).join('<br/>')
-                                                    }
-                                                </TableCell>
-                                            ))}
-                                        </>
-                                    )}
+                                    <>
+                                        <TableCell></TableCell>
+                                        {Object.keys(days).map(d => (
+                                            <TableCell
+                                                align="center"
+                                                key={`error-${d}`}
+                                                className={classes.cellError}
+                                            >
+                                                {
+                                                    /* helperText[d] == null will match with undefined too */
+                                                    (typeof helperText[d] === 'string' || helperText[d] == null)
+                                                        ? helperText[d]
+                                                        : Object.values(helperText[d]).join('<br/>')
+                                                }
+                                            </TableCell>
+                                        ))}
+                                    </>
+                                )}
                             </TableRow>
                         )}
                     </TableBody>
@@ -286,7 +286,7 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                     <Alert severity="warning" variant="filled">
                         <AlertTitle>
                             Les horaires des demi-journées suivantes ne permettent pas un nombre optimal de créneaux :
-                                                    </AlertTitle>
+                        </AlertTitle>
                         <ul>
                             {durationWarning.map((dw, i) => (
                                 <li key={`warning-${i}`}>{dw}</li>
@@ -296,5 +296,5 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                 )
             }
         </>
-    )
+    );
 }

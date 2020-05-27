@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import MaterialTable from "material-table";
+import React, { useState, useEffect } from 'react';
+import MaterialTable from 'material-table';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -9,9 +9,10 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ViewIcon from '@material-ui/icons/Visibility';
+import TodayIcon from '@material-ui/icons/Today';
 
-import { useAuthContext } from "../../context/Auth";
-import * as Constants from "../../data/Constants";
+import { useAuthContext } from '../../context/Auth';
+import * as Constants from '../../data/Constants';
 
 const useStyles = makeStyles(theme => ({
     statusDanger: {
@@ -54,7 +55,7 @@ export default function ManipulationList(props) {
                 setTableData(data);
                 setLoading(false);
             });
-    }
+    };
 
     const handleDelete = (entry) => {
         setDeleteError(null);
@@ -75,7 +76,7 @@ export default function ManipulationList(props) {
                 setDeleteError(err.message);
                 setDeleteEntry(null);
             });
-    }
+    };
 
     const Stats = (rowData) => {
         const target = rowData.target_slots;
@@ -85,7 +86,7 @@ export default function ManipulationList(props) {
         const slotsPercent = slots / target * 100;
         const signedupPercent = signedup / target * 100;
 
-        const colorPercent = (percent) => (percent < 100 ? classes.statusDanger : (percent >= 110 ? classes.statusOk : classes.statusWarning))
+        const colorPercent = (percent) => (percent < 100 ? classes.statusDanger : (percent >= 110 ? classes.statusOk : classes.statusWarning));
 
         return (
             <>
@@ -95,8 +96,8 @@ export default function ManipulationList(props) {
                 <span> | </span>
                 <Typography variant="inherit" display="inline">{target} Cible</Typography>
             </>
-        )
-    }
+        );
+    };
 
 
     useEffect(loadData, []); // Empty array means useEffect will only be called on first render
@@ -124,12 +125,17 @@ export default function ManipulationList(props) {
                         icon: 'add',
                         tooltip: 'Nouvelle Manipulation',
                         isFreeAction: true,
-                        onClick: (event) => props.history.push('/manipulations/new')
+                        onClick: () => props.history.push('/manipulations/new')
                     },
                     {
                         icon: () => <ViewIcon />,
                         tooltip: 'Visualiser',
                         onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id)
+                    },
+                    {
+                        icon: () => <TodayIcon />,
+                        tooltip: 'Créneaux',
+                        onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id + '/slots')
                     },
                     {
                         icon: 'edit',
@@ -176,8 +182,8 @@ export default function ManipulationList(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {deleteEntry ? ("Supprimer la manipulation " + deleteEntry.name + " ?") : ""}
-                    {deleteError ? ("Erreur lors de la suppression : " + deleteError) : ""}
+                    {deleteEntry ? ('Supprimer la manipulation ' + deleteEntry.name + ' ?') : ''}
+                    {deleteError ? ('Erreur lors de la suppression : ' + deleteError) : ''}
                 </DialogTitle>
                 {deleteEntry && (
                     <DialogActions>
@@ -198,6 +204,6 @@ export default function ManipulationList(props) {
                 )}
             </Dialog>
         </>
-    )
+    );
 }
 
