@@ -1,0 +1,61 @@
+version: '3.7'
+
+volumes:
+    db_data:
+
+services:
+    nginx:
+        build: ./.docker/nginx
+        depends_on:
+            - php
+        volumes:
+            - ./.docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./.docker/nginx/sites/:/etc/nginx/sites-available
+            - ./.docker/nginx/conf.d/:/etc/nginx/conf.d
+            - ./logs/nginx:/var/log/nginx
+            # Code
+            - .:/var/www/html
+        ports:
+            - "80:80"
+
+    php:
+        build: ./.docker/php
+        working_dir: /var/www/html/
+        depends_on:
+            - db
+        volumes:
+            # Code
+            - .:/var/www/html:delegated
+        ports:
+            - "9000:9000"
+
+    db:
+        image: mysql:5.7
+        volumes:
+        - db_data:/var/lib/mysql
+        ports:
+        - "3306:3306"
+        environment:
+        - MYSQL_ROOT_PASSWORD=mysql
+        - MYSQL_USER=collabccu
+        - MYSQL_PASSWORD=collabccu
+        - MYSQL_DATABASE=collabccu
+
+    yarn:
+        image: node:current-alpine
+        depends_on:
+            - php
+        working_dir: /var/www/html/
+        command: sh -c "npm install && npm run watch"
+        volumes:
+            # Code
+            - .:/var/www/html
+
+    adminer:
+        image: adminer
+        depends_on:
+            - php
+            - db
+        ports:
+            # local 8080:8080 remote
+            - 8080:8080
