@@ -16,11 +16,11 @@ import * as Constants from '../../data/Constants';
 
 const useStyles = makeStyles(theme => ({
     statusDanger: {
-        color: theme.palette.error.main,
+        color:      theme.palette.error.main,
         fontWeight: 'bold'
     },
     statusWarning: {
-        color: theme.palette.warning.main,
+        color:      theme.palette.warning.main,
         fontWeight: 'bold'
     },
     statusOk: {
@@ -41,7 +41,7 @@ export default function ManipulationList(props) {
         setLoading(true);
         setTableData([]);
 
-        fetch(Constants.API_MANIPULATIONS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(data => data.json())
             // Reprocess data :
@@ -60,7 +60,7 @@ export default function ManipulationList(props) {
     const handleDelete = (entry) => {
         setDeleteError(null);
         fetch(Constants.API_MANIPULATIONS_ENDPOINT + entry.id, {
-            method: 'DELETE',
+            method:  'DELETE',
             headers: {
                 'Authorization': 'bearer ' + accessToken,
             }
@@ -116,56 +116,56 @@ export default function ManipulationList(props) {
                 ]}
                 actions={[
                     {
-                        icon: 'refresh',
-                        tooltip: 'Recharger',
+                        icon:         'refresh',
+                        tooltip:      'Recharger',
                         isFreeAction: true,
-                        onClick: loadData,
+                        onClick:      loadData,
                     },
                     {
-                        icon: 'add',
-                        tooltip: 'Nouvelle Manipulation',
+                        icon:         'add',
+                        tooltip:      'Nouvelle Manipulation',
                         isFreeAction: true,
-                        onClick: () => props.history.push('/manipulations/new')
+                        onClick:      () => props.history.push('/manipulations/new')
                     },
                     {
-                        icon: () => <ViewIcon />,
+                        icon:    () => <ViewIcon />,
                         tooltip: 'Visualiser',
                         onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id)
                     },
                     {
-                        icon: () => <TodayIcon />,
+                        icon:    () => <TodayIcon />,
                         tooltip: 'Créneaux',
                         onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id + '/slots')
                     },
                     {
-                        icon: 'edit',
+                        icon:    'edit',
                         tooltip: 'Modifier',
                         onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id + '/edit')
                     },
                     {
-                        icon: 'delete',
+                        icon:    'delete',
                         tooltip: 'Supprimer',
                         onClick: (event, rowData) => setDeleteEntry(rowData)
                     }
                 ]}
                 options={{
                     actionsColumnIndex: 5,
-                    filtering: true,
-                    pageSize: 10,
-                    pageSizeOptions: [10, 25, 50]
+                    filtering:          true,
+                    pageSize:           10,
+                    pageSizeOptions:    [10, 25, 50]
                 }}
                 localization={{
                     pagination: {
                         labelDisplayedRows: '{from}-{to} sur {count}',
-                        labelRowsSelect: 'lignes',
-                        labelRowsPerPage: 'Lignes par page',
+                        labelRowsSelect:    'lignes',
+                        labelRowsPerPage:   'Lignes par page',
                     },
                     header: {
                         actions: 'Actions'
                     },
                     body: {
                         emptyDataSourceMessage: 'Aucune ligne à afficher',
-                        filterRow: {
+                        filterRow:              {
                             filterTooltip: 'Filtrer'
                         }
                     }

@@ -30,35 +30,35 @@ import Loading from '../Loading';
 
 const useStyles = makeStyles(theme => ({
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width:     '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(3),
     },
     formControl: {
         width: '100%',
     },
     buttonRow: {
-        display: 'flex',
+        display:        'flex',
         justifyContent: 'center'
     },
     buttonWrapper: {
-        margin: theme.spacing(2),
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
+        margin:         theme.spacing(2),
+        position:       'relative',
+        display:        'flex',
+        flexDirection:  'column',
         justifyContent: 'center'
     },
     buttonSuccess: {
         backgroundColor: green[500],
-        '&:hover': {
+        '&:hover':       {
             backgroundColor: green[700],
         },
     },
     buttonProgress: {
-        color: green[500],
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        marginTop: -12,
+        color:      green[500],
+        position:   'absolute',
+        top:        '50%',
+        left:       '50%',
+        marginTop:  -12,
         marginLeft: -12,
     },
 }));
@@ -79,7 +79,7 @@ export default function PlateauForm(props) {
         setDataLoading(dataLoading + 1);
         setUserData(null);
 
-        fetch(Constants.API_USERS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_USERS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(data => data.json())
             // Reprocess data:
@@ -99,7 +99,7 @@ export default function PlateauForm(props) {
         setDataLoading(dataLoading + 1);
         setPlateauData(null);
 
-        fetch(Constants.API_PLATEAUX_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_PLATEAUX_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -123,21 +123,21 @@ export default function PlateauForm(props) {
     const saveData = (data) => {
         if (mode === 'CREATE') {
             return fetch(Constants.API_PLATEAUX_ENDPOINT, {
-                method: 'POST',
+                method:  'POST',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept':        'application/json',
                     'Authorization': 'bearer ' + accessToken,
-                    'Content-Type': 'application/json'
+                    'Content-Type':  'application/json'
                 },
                 body: JSON.stringify(data)
             });
         } else {
             return fetch(Constants.API_PLATEAUX_ENDPOINT + props.match.params.id, {
-                method: 'PUT',
+                method:  'PUT',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept':        'application/json',
                     'Authorization': 'bearer ' + accessToken,
-                    'Content-Type': 'application/json'
+                    'Content-Type':  'application/json'
                 },
                 body: JSON.stringify(data)
             });
@@ -177,9 +177,9 @@ export default function PlateauForm(props) {
             <hr />
             <Formik
                 initialValues={{
-                    name: '',
+                    name:        '',
                     description: '',
-                    manager_id: '',
+                    manager_id:  '',
                     ...plateauData
                 }}
                 validationSchema={() => {

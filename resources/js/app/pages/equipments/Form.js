@@ -26,32 +26,32 @@ import Loading from '../Loading';
 
 const useStyles = makeStyles(theme => ({
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width:     '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(3),
     },
     buttonRow: {
-        display: 'flex',
+        display:        'flex',
         justifyContent: 'center'
     },
     buttonWrapper: {
-        margin: theme.spacing(2),
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
+        margin:         theme.spacing(2),
+        position:       'relative',
+        display:        'flex',
+        flexDirection:  'column',
         justifyContent: 'center'
     },
     buttonSuccess: {
         backgroundColor: green[500],
-        '&:hover': {
+        '&:hover':       {
             backgroundColor: green[700],
         },
     },
     buttonProgress: {
-        color: green[500],
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        marginTop: -12,
+        color:      green[500],
+        position:   'absolute',
+        top:        '50%',
+        left:       '50%',
+        marginTop:  -12,
         marginLeft: -12,
     },
 }));
@@ -71,7 +71,7 @@ export default function EquipmentForm(props) {
         setDataLoading(true);
         setEquipmentData(null);
 
-        fetch(Constants.API_EQUIPMENTS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_EQUIPMENTS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -95,21 +95,21 @@ export default function EquipmentForm(props) {
     const saveData = (data) => {
         if (mode === 'CREATE') {
             return fetch(Constants.API_EQUIPMENTS_ENDPOINT, {
-                method: 'POST',
+                method:  'POST',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept':        'application/json',
                     'Authorization': 'bearer ' + accessToken,
-                    'Content-Type': 'application/json'
+                    'Content-Type':  'application/json'
                 },
                 body: JSON.stringify(data)
             });
         } else {
             return fetch(Constants.API_EQUIPMENTS_ENDPOINT + props.match.params.id, {
-                method: 'PUT',
+                method:  'PUT',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept':        'application/json',
                     'Authorization': 'bearer ' + accessToken,
-                    'Content-Type': 'application/json'
+                    'Content-Type':  'application/json'
                 },
                 body: JSON.stringify(data)
             });
@@ -117,7 +117,7 @@ export default function EquipmentForm(props) {
     };
 
     useEffect(() => {
-        if (Object.prototype.hasOwnProperty.call(props.match.params,'id')) {
+        if (Object.prototype.hasOwnProperty.call(props.match.params, 'id')) {
             setMode('EDIT');
             loadData(props.match.params.id);
         }
@@ -144,9 +144,9 @@ export default function EquipmentForm(props) {
             <hr />
             <Formik
                 initialValues={{
-                    name: '',
-                    type: '',
-                    quantity: 0,
+                    name:        '',
+                    type:        '',
+                    quantity:    0,
                     description: '',
                     ...equipmentData
                 }}
@@ -173,7 +173,7 @@ export default function EquipmentForm(props) {
                         .then(data => {
                             if (data.errors) {
                                 for (var field in data.errors) {
-                                    if (!Object.prototype.hasOwnProperty.call(data.errors,field)) continue;
+                                    if (!Object.prototype.hasOwnProperty.call(data.errors, field)) continue;
                                     actions.setFieldError(field, data.errors[field].join(' '));
                                 }
                             } else if (data.exception) {

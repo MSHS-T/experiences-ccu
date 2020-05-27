@@ -49,20 +49,20 @@ const AuthProvider = props => {
                     headers: { 'Authorization': 'bearer ' + json_token.data.access_token }
                 }).then(json_me => {
                     let user = {
-                        id: json_me.data.id,
+                        id:         json_me.data.id,
                         first_name: json_me.data.first_name,
-                        last_name: json_me.data.last_name,
-                        email: json_me.data.email,
+                        last_name:  json_me.data.last_name,
+                        email:      json_me.data.email,
                         auth_token: json_me.data.auth_token,
-                        timestamp: new Date().toString(),
-                        roles: json_me.data.roles.map(r => r.key),
+                        timestamp:  new Date().toString(),
+                        roles:      json_me.data.roles.map(r => r.key),
                     };
                     // Store user data in state
                     setAuthData({ user });
                     // Store user data, token and expiration date in local storage
                     localStorage['appState'] = JSON.stringify({
                         user,
-                        token: json_token.data.access_token,
+                        token:           json_token.data.access_token,
                         tokenExpiration: json_token.data.expires_at * 1000
                     });
                 });

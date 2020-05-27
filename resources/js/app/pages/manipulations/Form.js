@@ -41,7 +41,7 @@ import Loading from '../Loading';
 
 const useStyles = makeStyles(theme => ({
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width:     '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(3),
     },
     formControl: {
@@ -51,33 +51,33 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(2)
     },
     requirementsContainer: {
-        border: '1px solid ' + theme.palette.divider,
+        border:       '1px solid ' + theme.palette.divider,
         borderRadius: 5,
-        padding: theme.spacing(2),
+        padding:      theme.spacing(2),
     },
     buttonRow: {
-        display: 'flex',
+        display:        'flex',
         justifyContent: 'center'
     },
     buttonWrapper: {
-        margin: theme.spacing(2),
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
+        margin:         theme.spacing(2),
+        position:       'relative',
+        display:        'flex',
+        flexDirection:  'column',
         justifyContent: 'center'
     },
     buttonSuccess: {
         backgroundColor: green[500],
-        '&:hover': {
+        '&:hover':       {
             backgroundColor: green[700],
         },
     },
     buttonProgress: {
-        color: green[500],
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        marginTop: -12,
+        color:      green[500],
+        position:   'absolute',
+        top:        '50%',
+        left:       '50%',
+        marginTop:  -12,
         marginLeft: -12,
     },
 }));
@@ -99,7 +99,7 @@ export default function ManipulationForm(props) {
         setDataLoading(dataLoading + 2);
         setUserData(null);
 
-        fetch(Constants.API_USERS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_USERS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(data => data.json())
             // Reprocess data:
@@ -114,7 +114,7 @@ export default function ManipulationForm(props) {
                 setUserData(data);
                 setDataLoading(dataLoading - 1);
             });
-        fetch(Constants.API_PLATEAUX_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_PLATEAUX_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(data => data.json())
             // Set data in state
@@ -127,7 +127,7 @@ export default function ManipulationForm(props) {
         setDataLoading(dataLoading + 1);
         setManipulationData(null);
 
-        fetch(Constants.API_MANIPULATIONS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -160,21 +160,21 @@ export default function ManipulationForm(props) {
 
         if (mode === 'CREATE') {
             return fetch(Constants.API_MANIPULATIONS_ENDPOINT, {
-                method: 'POST',
+                method:  'POST',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept':        'application/json',
                     'Authorization': 'bearer ' + accessToken,
-                    'Content-Type': 'application/json'
+                    'Content-Type':  'application/json'
                 },
                 body: JSON.stringify(data)
             });
         } else {
             return fetch(Constants.API_MANIPULATIONS_ENDPOINT + props.match.params.id, {
-                method: 'PUT',
+                method:  'PUT',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept':        'application/json',
                     'Authorization': 'bearer ' + accessToken,
-                    'Content-Type': 'application/json'
+                    'Content-Type':  'application/json'
                 },
                 body: JSON.stringify(data)
             });
@@ -189,7 +189,7 @@ export default function ManipulationForm(props) {
     useEffect(() => {
         setLabelWidth(inputLabel.current.offsetWidth);
         loadExtraData();
-        if (Object.prototype.hasOwnProperty.call(props.match.params,'id')) {
+        if (Object.prototype.hasOwnProperty.call(props.match.params, 'id')) {
             setMode('EDIT');
             loadData(props.match.params.id);
         }
@@ -222,16 +222,16 @@ export default function ManipulationForm(props) {
             <MuiPickersUtilsProvider utils={MomentUtils}>
                 <Formik
                     initialValues={{
-                        name: '',
-                        description: '',
-                        plateau_id: '',
-                        duration: 0,
-                        target_slots: 0,
-                        start_date: new Date(),
-                        location: '',
-                        requirements: [Constants.REQUIREMENT_PREFIX],
+                        name:            '',
+                        description:     '',
+                        plateau_id:      '',
+                        duration:        0,
+                        target_slots:    0,
+                        start_date:      new Date(),
+                        location:        '',
+                        requirements:    [Constants.REQUIREMENT_PREFIX],
                         available_hours: {},
-                        managers: [],
+                        managers:        [],
                         ...manipulationData
                     }}
                     validationSchema={() => {
@@ -246,14 +246,14 @@ export default function ManipulationForm(props) {
                         // };
                         let daySchema = Yup
                             .object({
-                                day: Yup.string().oneOf(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']),
-                                enabled: Yup.boolean(),
-                                am: Yup.boolean(),
-                                start_am: Yup.object(),//Yup.mixed().when('am', hourCondition),
-                                end_am: Yup.object(),//Yup.mixed().when('am', hourCondition),
-                                pm: Yup.boolean(),
-                                start_pm: Yup.object(),//Yup.mixed().when('pm', hourCondition),
-                                end_pm: Yup.object(),//Yup.mixed().when('pm', hourCondition),
+                                day:      Yup.string().oneOf(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']),
+                                enabled:  Yup.boolean(),
+                                am:       Yup.boolean(),
+                                start_am: Yup.object(), //Yup.mixed().when('am', hourCondition),
+                                end_am:   Yup.object(), //Yup.mixed().when('am', hourCondition),
+                                pm:       Yup.boolean(),
+                                start_pm: Yup.object(), //Yup.mixed().when('pm', hourCondition),
+                                end_pm:   Yup.object(), //Yup.mixed().when('pm', hourCondition),
                             })
                             .test(
                                 'am-hours',
