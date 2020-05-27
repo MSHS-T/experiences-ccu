@@ -12,7 +12,7 @@ import * as Constants from "../../data/Constants";
 
 
 export default function UserList(props) {
-    const { authData, accessToken } = useAuthContext();
+    const { user: connectedUser, accessToken } = useAuthContext();
 
     const [isLoading, setLoading] = useState(true);
     const [tableData, setTableData] = useState([]);
@@ -99,8 +99,8 @@ export default function UserList(props) {
                         onClick: (event, rowData) => props.history.push('/users/' + rowData.id + '/edit')
                     },
                     rowData => ({
-                        disabled: rowData.id == 1,
-                        hidden: rowData.id == 1,
+                        disabled: rowData.id == 1 || rowData.id == connectedUser.id,
+                        hidden: rowData.id == 1 || rowData.id == connectedUser.id,
                         icon: 'delete',
                         tooltip: 'Supprimer',
                         onClick: (event, rowData) => setDeleteEntry(rowData)
