@@ -19,29 +19,29 @@ import { CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     label: {
-        fontWeight: 'bold',
+        fontWeight:     'bold',
         textDecoration: 'underline',
-        display: 'block',
-        float: 'left'
+        display:        'block',
+        float:          'left'
     },
     value: {
-        fontSize: '110%',
-        display: 'inline-block',
+        fontSize:   '110%',
+        display:    'inline-block',
         marginLeft: theme.spacing(2)
     },
     noMargin: {
-        marginTop: 0,
+        marginTop:   0,
         paddingLeft: theme.spacing(1)
     },
     wysiwygvalue: {
-        fontSize: '110%',
-        display: 'inline-block',
-        borderLeft: `1px solid ${theme.palette.divider}`,
-        marginLeft: theme.spacing(2),
+        fontSize:    '110%',
+        display:     'inline-block',
+        borderLeft:  `1px solid ${theme.palette.divider}`,
+        marginLeft:  theme.spacing(2),
         paddingLeft: theme.spacing(1)
     },
     buttonRow: {
-        display: 'flex',
+        display:        'flex',
         justifyContent: 'center'
     },
     button: {
@@ -63,7 +63,7 @@ export default function ManipulationSlots(props) {
         setDataLoading(true);
         setSlotData(null);
 
-        fetch(Constants.API_SLOTS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_SLOTS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -86,11 +86,11 @@ export default function ManipulationSlots(props) {
 
     const saveData = (data) => {
         return fetch(Constants.API_MANIPULATIONS_ENDPOINT + props.match.params.id, {
-            method: 'PUT',
+            method:  'PUT',
             headers: {
-                'Accept': 'application/json',
+                'Accept':        'application/json',
                 'Authorization': 'bearer ' + accessToken,
-                'Content-Type': 'application/json'
+                'Content-Type':  'application/json'
             },
             body: JSON.stringify(data)
         });

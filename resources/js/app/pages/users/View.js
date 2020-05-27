@@ -19,17 +19,17 @@ import Loading from '../Loading';
 
 const useStyles = makeStyles(theme => ({
     label: {
-        fontWeight: 'bold',
+        fontWeight:     'bold',
         textDecoration: 'underline',
-        display: 'inline-block'
+        display:        'inline-block'
     },
     value: {
-        fontSize: '110%',
-        display: 'inline-block',
+        fontSize:   '110%',
+        display:    'inline-block',
         marginLeft: theme.spacing(2)
     },
     buttonRow: {
-        display: 'flex',
+        display:        'flex',
         justifyContent: 'center'
     },
     button: {
@@ -51,7 +51,7 @@ export default function UserView(props) {
         setDataLoading(true);
         setUserData(null);
 
-        fetch(Constants.API_USERS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_USERS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -78,7 +78,7 @@ export default function UserView(props) {
     const handleDelete = () => {
         setDeleteError(null);
         fetch(Constants.API_USERS_ENDPOINT + userData.id, {
-            method: 'DELETE',
+            method:  'DELETE',
             headers: {
                 'Authorization': 'bearer ' + accessToken,
             }

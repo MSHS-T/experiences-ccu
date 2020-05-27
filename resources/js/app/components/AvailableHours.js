@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     },
     disabledArea: {
         background: 'repeating-linear-gradient( -45deg, #999, #999 10px, #AAA 10px, #AAA 20px )',
-        minHeight: 100,
+        minHeight:  100,
     },
     disabledDay: {
         background: 'repeating-linear-gradient( -45deg, #999, #999 10px, #AAA 10px, #AAA 20px )',
@@ -35,9 +35,9 @@ const useStyles = makeStyles(theme => ({
         minHeight: 100
     },
     timePicker: {
-        width: 150,
+        width:   150,
         display: 'inline-block',
-        margin: theme.spacing(1)
+        margin:  theme.spacing(1)
     },
     ampmCell: {
         width: 110
@@ -58,14 +58,14 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
         ...dayLabels
     };
     let initialStateData = mapValues(days, (label, d) => ({
-        day: d,
-        enabled: (d != 'Sat' && d != 'Sun'),
-        am: true,
+        day:      d,
+        enabled:  (d != 'Sat' && d != 'Sun'),
+        am:       true,
         start_am: moment('09:00', 'HH:mm'),
-        end_am: moment('12:00', 'HH:mm'),
-        pm: true,
+        end_am:   moment('12:00', 'HH:mm'),
+        pm:       true,
         start_pm: moment('14:00', 'HH:mm'),
-        end_pm: moment('17:00', 'HH:mm'),
+        end_pm:   moment('17:00', 'HH:mm'),
     }));
     if (Object.keys(value).length > 0) {
         // console.log("Given value in props : ", value);

@@ -5,10 +5,10 @@ import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles(theme => ({
     container: {
-        display: 'flex',
+        display:       'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        marginTop: theme.spacing(5)
+        alignItems:    'center',
+        marginTop:     theme.spacing(5)
     }
 }));
 

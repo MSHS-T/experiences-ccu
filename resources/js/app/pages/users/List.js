@@ -23,7 +23,7 @@ export default function UserList(props) {
         setLoading(true);
         setTableData([]);
 
-        fetch(Constants.API_USERS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_USERS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(data => data.json())
             // Reprocess data :
@@ -42,7 +42,7 @@ export default function UserList(props) {
     const handleDelete = (entry) => {
         setDeleteError(null);
         fetch(Constants.API_USERS_ENDPOINT + entry.id, {
-            method: 'DELETE',
+            method:  'DELETE',
             headers: {
                 'Authorization': 'bearer ' + accessToken,
             }
@@ -77,53 +77,53 @@ export default function UserList(props) {
                 ]}
                 actions={[
                     {
-                        icon: 'refresh',
-                        tooltip: 'Recharger',
+                        icon:         'refresh',
+                        tooltip:      'Recharger',
                         isFreeAction: true,
-                        onClick: loadData,
+                        onClick:      loadData,
                     },
                     {
-                        icon: 'add',
-                        tooltip: 'Nouvel Utilisateur',
+                        icon:         'add',
+                        tooltip:      'Nouvel Utilisateur',
                         isFreeAction: true,
-                        onClick: () => props.history.push('/users/new')
+                        onClick:      () => props.history.push('/users/new')
                     },
                     {
-                        icon: () => <ViewIcon />,
+                        icon:    () => <ViewIcon />,
                         tooltip: 'Visualiser',
                         onClick: (event, rowData) => props.history.push('/users/' + rowData.id)
                     },
                     {
-                        icon: 'edit',
+                        icon:    'edit',
                         tooltip: 'Modifier',
                         onClick: (event, rowData) => props.history.push('/users/' + rowData.id + '/edit')
                     },
                     rowData => ({
                         disabled: rowData.id == 1 || rowData.id == connectedUser.id,
-                        hidden: rowData.id == 1 || rowData.id == connectedUser.id,
-                        icon: 'delete',
-                        tooltip: 'Supprimer',
-                        onClick: (event, rowData) => setDeleteEntry(rowData)
+                        hidden:   rowData.id == 1 || rowData.id == connectedUser.id,
+                        icon:     'delete',
+                        tooltip:  'Supprimer',
+                        onClick:  (event, rowData) => setDeleteEntry(rowData)
                     })
                 ]}
                 options={{
                     actionsColumnIndex: 5,
-                    filtering: true,
-                    pageSize: 10,
-                    pageSizeOptions: [10, 25, 50]
+                    filtering:          true,
+                    pageSize:           10,
+                    pageSizeOptions:    [10, 25, 50]
                 }}
                 localization={{
                     pagination: {
                         labelDisplayedRows: '{from}-{to} sur {count}',
-                        labelRowsSelect: 'lignes',
-                        labelRowsPerPage: 'Lignes par page',
+                        labelRowsSelect:    'lignes',
+                        labelRowsPerPage:   'Lignes par page',
                     },
                     header: {
                         actions: 'Actions'
                     },
                     body: {
                         emptyDataSourceMessage: 'Aucune ligne à afficher',
-                        filterRow: {
+                        filterRow:              {
                             filterTooltip: 'Filtrer'
                         }
                     }

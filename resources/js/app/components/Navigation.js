@@ -29,24 +29,24 @@ function Navigation(props) {
 
     const useStyles = makeStyles(theme => ({
         root: {
-            paddingTop: theme.mixins.toolbar.minHeight + 20,
-            paddingLeft: 20,
-            paddingRight: 20,
+            paddingTop:                   theme.mixins.toolbar.minHeight + 20,
+            paddingLeft:                  20,
+            paddingRight:                 20,
             [theme.breakpoints.up('md')]: {
                 paddingLeft: drawerWidth + 20,
             },
         },
         appBar: {
             borderBottom: `1px solid ${theme.palette.divider}`,
-            zIndex: theme.zIndex.drawer + 1,
+            zIndex:       theme.zIndex.drawer + 1,
         },
         drawer: {
-            width: drawerWidth,
+            width:      drawerWidth,
             flexShrink: 0,
         },
-        toolbar: theme.mixins.toolbar,
+        toolbar:    theme.mixins.toolbar,
         menuButton: {
-            marginRight: theme.spacing(2),
+            marginRight:                  theme.spacing(2),
             [theme.breakpoints.up('md')]: {
                 display: 'none',
             },
@@ -78,8 +78,6 @@ function Navigation(props) {
             props.history.push('/');
         });
     };
-
-
 
     const drawer = (
         <div>

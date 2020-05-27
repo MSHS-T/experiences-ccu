@@ -20,23 +20,23 @@ import Loading from '../Loading';
 
 const useStyles = makeStyles(theme => ({
     label: {
-        fontWeight: 'bold',
+        fontWeight:     'bold',
         textDecoration: 'underline',
-        display: 'inline-block'
+        display:        'inline-block'
     },
     value: {
-        fontSize: '110%',
-        display: 'inline-block',
+        fontSize:   '110%',
+        display:    'inline-block',
         marginLeft: theme.spacing(2)
     },
     wysiwygvalue: {
-        fontSize: '110%',
-        display: 'inline-block',
-        borderLeft: `1px solid ${theme.palette.divider}`,
+        fontSize:    '110%',
+        display:     'inline-block',
+        borderLeft:  `1px solid ${theme.palette.divider}`,
         paddingLeft: theme.spacing(2)
     },
     buttonRow: {
-        display: 'flex',
+        display:        'flex',
         justifyContent: 'center'
     },
     button: {
@@ -58,7 +58,7 @@ export default function PlateauView(props) {
         setDataLoading(true);
         setPlateauData(null);
 
-        fetch(Constants.API_PLATEAUX_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_PLATEAUX_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -82,7 +82,7 @@ export default function PlateauView(props) {
     const handleDelete = () => {
         setDeleteError(null);
         fetch(Constants.API_PLATEAUX_ENDPOINT + plateauData.id, {
-            method: 'DELETE',
+            method:  'DELETE',
             headers: {
                 'Authorization': 'bearer ' + accessToken,
             }
