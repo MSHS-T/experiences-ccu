@@ -195415,7 +195415,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 function UserList(props) {
   var _useAuthContext = Object(_context_Auth__WEBPACK_IMPORTED_MODULE_7__["useAuthContext"])(),
-      authData = _useAuthContext.authData,
+      connectedUser = _useAuthContext.user,
       accessToken = _useAuthContext.accessToken;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(true),
@@ -195536,8 +195536,8 @@ function UserList(props) {
       }
     }, function (rowData) {
       return {
-        disabled: rowData.id == 1,
-        hidden: rowData.id == 1,
+        disabled: rowData.id == 1 || rowData.id == connectedUser.id,
+        hidden: rowData.id == 1 || rowData.id == connectedUser.id,
         icon: 'delete',
         tooltip: 'Supprimer',
         onClick: function onClick(event, rowData) {
