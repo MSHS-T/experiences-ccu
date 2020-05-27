@@ -12,7 +12,7 @@ import * as Constants from "../../data/Constants";
 
 
 export default function UserList(props) {
-    const { accessToken } = useAuthContext();
+    const { authData, accessToken } = useAuthContext();
 
     const [isLoading, setLoading] = useState(true);
     const [tableData, setTableData] = useState([]);
@@ -98,11 +98,13 @@ export default function UserList(props) {
                         tooltip: 'Modifier',
                         onClick: (event, rowData) => props.history.push('/users/' + rowData.id + '/edit')
                     },
-                    {
+                    rowData => ({
+                        disabled: rowData.id == 1,
+                        hidden: rowData.id == 1,
                         icon: 'delete',
                         tooltip: 'Supprimer',
                         onClick: (event, rowData) => setDeleteEntry(rowData)
-                    }
+                    })
                 ]}
                 options={{
                     actionsColumnIndex: 5,
