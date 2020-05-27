@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
 
 class TestUsersTableSeeder extends Seeder
@@ -18,10 +19,10 @@ class TestUsersTableSeeder extends Seeder
             'MANIP'
         ];
         $faker = Faker::create('fr_FR');
-        foreach (range(1,10) as $index) {
+        foreach (range(1, 10) as $index) {
             $firstName = $faker->firstName;
             $lastName = $faker->lastName;
-            $email = strtolower("$firstName.$lastName@".$faker->freeEmailDomain);
+            $email = strtolower("$firstName.$lastName@" . $faker->freeEmailDomain);
             $userId = DB::table('users')->insertGetId([
                 'first_name' => $firstName,
                 'last_name' => $lastName,
