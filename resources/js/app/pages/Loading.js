@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Grid from '@material-ui/core/Grid';
@@ -20,7 +20,7 @@ const Loading = () => {
                 <CircularProgress />
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
-export default Loading
+export default Loading;

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 import BuildIcon from '@material-ui/icons/Build';
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -8,27 +8,28 @@ import PeopleIcon from '@material-ui/icons/People';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ShutterSpeedIcon from '@material-ui/icons/ShutterSpeed';
 
-import LandingPage from "../pages/Landing";
-import LoginPage from "../pages/Login";
-import DashboardPage from "../pages/Dashboard";
+import LandingPage from '../pages/Landing';
+import LoginPage from '../pages/Login';
+import DashboardPage from '../pages/Dashboard';
 
-import UsersList from "../pages/users/List";
-import UsersView from "../pages/users/View";
-import UsersForm from "../pages/users/Form";
+import UsersList from '../pages/users/List';
+import UsersView from '../pages/users/View';
+import UsersForm from '../pages/users/Form';
 
-import EquipmentsList from "../pages/equipments/List";
-import EquipmentsView from "../pages/equipments/View";
-import EquipmentsForm from "../pages/equipments/Form";
+import EquipmentsList from '../pages/equipments/List';
+import EquipmentsView from '../pages/equipments/View';
+import EquipmentsForm from '../pages/equipments/Form';
 
-import ManipulationsList from "../pages/manipulations/List";
-import ManipulationsView from "../pages/manipulations/View";
-import ManipulationsForm from "../pages/manipulations/Form";
+import ManipulationsList from '../pages/manipulations/List';
+import ManipulationsView from '../pages/manipulations/View';
+import ManipulationsForm from '../pages/manipulations/Form';
+import ManipulationsSlots from '../pages/manipulations/Slots';
 
-import PlateauxList from "../pages/plateaux/List";
-import PlateauxView from "../pages/plateaux/View";
-import PlateauxForm from "../pages/plateaux/Form";
+import PlateauxList from '../pages/plateaux/List';
+import PlateauxView from '../pages/plateaux/View';
+import PlateauxForm from '../pages/plateaux/Form';
 
-import SettingsPage from "../pages/Settings";
+import SettingsPage from '../pages/Settings';
 
 const SiteMap = [
     {
@@ -57,7 +58,7 @@ const SiteMap = [
         showInMenu: true,
         component: DashboardPage,
         authenticated: true,
-        roles: ["ADMIN", "MANIP", "PLAT"]
+        roles: ['ADMIN', 'MANIP', 'PLAT']
     },
     '---',
     ////////////////
@@ -71,7 +72,7 @@ const SiteMap = [
         showInMenu: true,
         component: PlateauxList,
         authenticated: true,
-        roles: ["ADMIN", "PLAT"]
+        roles: ['ADMIN', 'PLAT']
     },
     {
         title: 'Créer un plateau',
@@ -81,7 +82,7 @@ const SiteMap = [
         showInMenu: false,
         component: PlateauxForm,
         authenticated: true,
-        roles: ["ADMIN", "PLAT"]
+        roles: ['ADMIN', 'PLAT']
     },
     {
         title: 'Modifier un plateau',
@@ -91,7 +92,7 @@ const SiteMap = [
         showInMenu: false,
         component: PlateauxForm,
         authenticated: true,
-        roles: ["ADMIN", "PLAT"]
+        roles: ['ADMIN', 'PLAT']
     },
     {
         title: 'Visualiser un plateau',
@@ -101,7 +102,7 @@ const SiteMap = [
         showInMenu: false,
         component: PlateauxView,
         authenticated: true,
-        roles: ["ADMIN", "PLAT"]
+        roles: ['ADMIN', 'PLAT']
     },
     /////////////////////
     /// MANIPULATIONS ///
@@ -114,7 +115,7 @@ const SiteMap = [
         showInMenu: true,
         component: ManipulationsList,
         authenticated: true,
-        roles: ["ADMIN", "MANIP"]
+        roles: ['ADMIN', 'MANIP']
     },
     {
         title: 'Créer une manipulation',
@@ -124,7 +125,7 @@ const SiteMap = [
         showInMenu: false,
         component: ManipulationsForm,
         authenticated: true,
-        roles: ["ADMIN", "MANIP"]
+        roles: ['ADMIN', 'MANIP']
     },
     {
         title: 'Modifier une manipulation',
@@ -134,7 +135,17 @@ const SiteMap = [
         showInMenu: false,
         component: ManipulationsForm,
         authenticated: true,
-        roles: ["ADMIN", "MANIP"]
+        roles: ['ADMIN', 'MANIP']
+    },
+    {
+        title: 'Gérer les créneaux',
+        icon: false,
+        url: '/manipulations/:id/slots',
+        exactPath: true,
+        showInMenu: false,
+        component: ManipulationsSlots,
+        authenticated: true,
+        roles: ['ADMIN', 'MANIP']
     },
     {
         title: 'Visualiser une manipulation',
@@ -144,7 +155,7 @@ const SiteMap = [
         showInMenu: false,
         component: ManipulationsView,
         authenticated: true,
-        roles: ["ADMIN", "MANIP"]
+        roles: ['ADMIN', 'MANIP']
     },
     ////////////////
     /// MATERIEL ///
@@ -157,7 +168,7 @@ const SiteMap = [
         showInMenu: true,
         component: EquipmentsList,
         authenticated: true,
-        roles: ["ADMIN", "PLAT", "MANIP"]
+        roles: ['ADMIN', 'PLAT', 'MANIP']
     },
     {
         title: 'Créer un matériel',
@@ -167,7 +178,7 @@ const SiteMap = [
         showInMenu: false,
         component: EquipmentsForm,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles: ['ADMIN']
     },
     {
         title: 'Modifier un matériel',
@@ -177,7 +188,7 @@ const SiteMap = [
         showInMenu: false,
         component: EquipmentsForm,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles: ['ADMIN']
     },
     {
         title: 'Visualiser un matériel',
@@ -187,7 +198,7 @@ const SiteMap = [
         showInMenu: false,
         component: EquipmentsView,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles: ['ADMIN']
     },
     '---',
     ////////////////////
@@ -201,7 +212,7 @@ const SiteMap = [
         showInMenu: true,
         component: UsersList,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles: ['ADMIN']
     },
     {
         title: 'Créer un utilisateur',
@@ -211,7 +222,7 @@ const SiteMap = [
         showInMenu: false,
         component: UsersForm,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles: ['ADMIN']
     },
     {
         title: 'Modifier un utilisateur',
@@ -221,7 +232,7 @@ const SiteMap = [
         showInMenu: false,
         component: UsersForm,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles: ['ADMIN']
     },
     {
         title: 'Visualiser un utilisateur',
@@ -231,7 +242,7 @@ const SiteMap = [
         showInMenu: false,
         component: UsersView,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles: ['ADMIN']
     },
     //////////////////
     /// PARAMETRES ///
@@ -244,7 +255,7 @@ const SiteMap = [
         showInMenu: true,
         component: SettingsPage,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles: ['ADMIN']
     },
     '---',
 ];

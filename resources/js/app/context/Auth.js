@@ -1,10 +1,10 @@
 import React, { createContext, useMemo, useState, useEffect, useContext } from 'react';
-import * as Constants from "../data/Constants";
+import * as Constants from '../data/Constants';
 
 export const AuthContext = createContext(null);
 
 const initialAuthData = {};
-const initialAccessToken = "";
+const initialAccessToken = '';
 
 const AuthProvider = props => {
     const [authData, setAuthData] = useState(initialAuthData);
@@ -12,7 +12,7 @@ const AuthProvider = props => {
 
     useEffect(() => {
         // Check if we have a stored state
-        const state = localStorage["appState"];
+        const state = localStorage['appState'];
         if (state) {
             let appState = JSON.parse(state);
             // Check if data is expired firs
@@ -31,20 +31,22 @@ const AuthProvider = props => {
     const loginUser = (email, password, remember_me) => {
         // Build form data
         var formData = new FormData();
-        formData.append("email", email);
-        formData.append("password", password);
-        formData.append("remember_me", remember_me);
+        formData.append('email', email);
+        formData.append('password', password);
+        formData.append('remember_me', remember_me);
 
         // Send login query
+        // eslint-disable-next-line no-undef
         return axios
-            .post(Constants.API_URL + "auth/login/", formData)
+            .post(Constants.API_URL + 'auth/login/', formData)
             .then(json_token => {
                 // Store access token
                 setAccessToken(json_token.data.access_token);
 
                 // Send /me query to get user information
-                axios.post(Constants.API_URL + "auth/me/", {}, {
-                    headers: { 'Authorization': "bearer " + json_token.data.access_token }
+                // eslint-disable-next-line no-undef
+                axios.post(Constants.API_URL + 'auth/me/', {}, {
+                    headers: { 'Authorization': 'bearer ' + json_token.data.access_token }
                 }).then(json_me => {
                     let user = {
                         id: json_me.data.id,
@@ -58,7 +60,7 @@ const AuthProvider = props => {
                     // Store user data in state
                     setAuthData({ user });
                     // Store user data, token and expiration date in local storage
-                    localStorage["appState"] = JSON.stringify({
+                    localStorage['appState'] = JSON.stringify({
                         user,
                         token: json_token.data.access_token,
                         tokenExpiration: json_token.data.expires_at * 1000
@@ -73,9 +75,10 @@ const AuthProvider = props => {
 
     const logoutUser = () => {
         // Send logout query
-        return axios.post(Constants.API_URL + "auth/logout/", {}, {
-            headers: { 'Authorization': "bearer " + accessToken }
-        }).then(json => {
+        // eslint-disable-next-line no-undef
+        return axios.post(Constants.API_URL + 'auth/logout/', {}, {
+            headers: { 'Authorization': 'bearer ' + accessToken }
+        }).then(() => {
             // Once it's done, clear user data
             clearUserData();
         });
@@ -88,7 +91,7 @@ const AuthProvider = props => {
         setAccessToken(initialAccessToken);
         // Clear local storage
         localStorage.clear();
-    }
+    };
 
     // Memoize given object as long as authData does not change
     const authDataValue = useMemo(() => ({ ...authData, accessToken, loginUser, logoutUser }), [authData]);

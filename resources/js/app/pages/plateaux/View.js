@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 
 import Button from '@material-ui/core/Button';
@@ -6,17 +6,17 @@ import Grid from '@material-ui/core/Grid';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Typography from "@material-ui/core/Typography";
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 import CancelIcon from '@material-ui/icons/Cancel';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import { useAuthContext } from "../../context/Auth";
-import * as Constants from "../../data/Constants";
-import ErrorPage from "../Error";
-import Loading from "../Loading";
+import { useAuthContext } from '../../context/Auth';
+import * as Constants from '../../data/Constants';
+import ErrorPage from '../Error';
+import Loading from '../Loading';
 
 const useStyles = makeStyles(theme => ({
     label: {
@@ -64,7 +64,7 @@ export default function PlateauView(props) {
                 if (!response.ok) {
                     throw new Error(`${response.status} (${response.statusText})`);
                 }
-                return response.json()
+                return response.json();
             })
             // Set data in state
             .then(data => {
@@ -77,7 +77,7 @@ export default function PlateauView(props) {
                 setError(err.message);
                 setDataLoading(false);
             });
-    }
+    };
 
     const handleDelete = () => {
         setDeleteError(null);
@@ -98,23 +98,23 @@ export default function PlateauView(props) {
                 setDeleteError(err.message);
                 setDeleteEntry(false);
             });
-    }
+    };
 
     useEffect(() => {
-        if (props.match.params.hasOwnProperty("id")) {
+        if (Object.prototype.hasOwnProperty.call(props.match.params, 'id')) {
             loadData(props.match.params.id);
         }
     }, []); // Empty array means useEffect will only be called on first render
 
     if (isDataLoading) {
-        return <Loading />
+        return <Loading />;
     }
     if (error !== null) {
         return (
             <ErrorPage>
-                Une erreur s'est produite : <strong>{(error !== null ? error : ("No data"))}</strong>
+                Une erreur s&apos;est produite : <strong>{(error !== null ? error : ('No data'))}</strong>
             </ErrorPage>
-        )
+        );
     }
 
     return (
@@ -153,7 +153,7 @@ export default function PlateauView(props) {
                         color="primary"
                         className={classes.button}
                         startIcon={<EditIcon />}
-                        onClick={e => props.history.push('/plateaux/' + plateauData.id + '/edit')}
+                        onClick={() => props.history.push('/plateaux/' + plateauData.id + '/edit')}
                     >
                         Modifier
                     </Button>
@@ -162,7 +162,7 @@ export default function PlateauView(props) {
                         color="secondary"
                         className={classes.button}
                         startIcon={<DeleteIcon />}
-                        onClick={e => setDeleteEntry(true)}
+                        onClick={() => setDeleteEntry(true)}
                     >
                         Supprimer
                     </Button>
@@ -178,8 +178,8 @@ export default function PlateauView(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {(deleteEntry && plateauData) ? ("Supprimer le plateau " + plateauData.name + " ?") : ""}
-                    {deleteError ? ("Erreur lors de la suppression : " + deleteError) : ""}
+                    {(deleteEntry && plateauData) ? ('Supprimer le plateau ' + plateauData.name + ' ?') : ''}
+                    {deleteError ? ('Erreur lors de la suppression : ' + deleteError) : ''}
                 </DialogTitle>
                 {deleteEntry && (
                     <DialogActions>
@@ -200,5 +200,5 @@ export default function PlateauView(props) {
                 )}
             </Dialog>
         </>
-    )
+    );
 }

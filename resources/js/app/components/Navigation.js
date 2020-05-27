@@ -21,7 +21,7 @@ import SiteMap from '../data/SiteMap';
 import IconButton from '@material-ui/core/IconButton';
 
 import RouterLink from './RouterLink';
-import { useAuthContext } from "../context/Auth";
+import { useAuthContext } from '../context/Auth';
 
 function Navigation(props) {
     const { user, logoutUser } = useAuthContext();
@@ -74,7 +74,7 @@ function Navigation(props) {
         e.preventDefault();
 
         let promise = logoutUser();
-        promise.then(resp => {
+        promise.then(() => {
             props.history.push('/');
         });
     };
@@ -87,13 +87,13 @@ function Navigation(props) {
             <Divider />
             <List>
                 {SiteMap.filter(link => (link === '---' || link.showInMenu)).map((link, index) => {
-                    if (link === "---") { return (<Divider key={index} />) }
+                    if (link === '---') { return (<Divider key={index} />); }
                     return (
                         <ListItem button component={RouterLink} to={link.url} key={index}>
                             <ListItemIcon>{link.icon}</ListItemIcon>
                             <ListItemText primary={link.title} />
                         </ListItem>
-                    )
+                    );
                 })}
             </List>
         </div>
