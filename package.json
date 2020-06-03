@@ -24,6 +24,7 @@
         "laravel-mix": "^4.0.7",
         "lodash": "^4.17.13",
         "material-table": "^1.54.1",
+        "material-ui-day-time-table": "^1.0.2",
         "moment": "^2.24.0",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
