@@ -8,9 +8,12 @@ import Router from './components/Router';
 
 import AuthProvider from './context/Auth';
 
+import * as moment from 'moment';
+
 class App extends Component {
     constructor(props) {
         super(props);
+        moment.locale('fr');
     }
     render() {
         return (
