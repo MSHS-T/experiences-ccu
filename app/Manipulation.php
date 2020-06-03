@@ -45,4 +45,8 @@ class Manipulation extends Model
     public function managers(){
         return $this->belongsToMany('App\User');
     }
+
+    public function slots(){
+        return $this->hasMany('App\Slot');
+    }
 }
