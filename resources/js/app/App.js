@@ -13,6 +13,10 @@ import * as moment from 'moment';
 class App extends Component {
     constructor(props) {
         super(props);
+        moment.updateLocale('fr', { week: {
+            dow: 1, // First day of week is Monday
+            doy: 4  // First week of year must contain 4 January (7 + 1 - 4)
+        }});
         moment.locale('fr');
     }
     render() {
