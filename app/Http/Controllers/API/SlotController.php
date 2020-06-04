@@ -33,7 +33,7 @@ class SlotController extends Controller
      */
     public function index(Manipulation $manipulation)
     {
-        return $manipulation->slots()->get();
+        return $manipulation->slots()->orderBy('start')->get();
     }
 
     /**
@@ -67,7 +67,7 @@ class SlotController extends Controller
                         while ($current_date->diffInMinutes($limit) >= $duration) {
                             $next_date = $current_date->copy()->addMinutes($duration);
                             $slots[] = ['start' => $current_date, 'end' => $next_date];
-                            $current_date = $next_date;
+                            $current_date = $next_date->copy();
                         }
                     }
                 }
@@ -77,7 +77,7 @@ class SlotController extends Controller
 
         $manipulation->slots()->createMany($slots);
 
-        return $manipulation->slots()->get();
+        return $manipulation->slots()->orderBy('start')->get();
     }
 
     /**
