@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Table, TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
+import { Table, TableHead, TableRow, TableCell, TableBody, TableFooter } from '@material-ui/core';
 
 class DayTimeTable extends Component {
 
@@ -21,6 +21,7 @@ class DayTimeTable extends Component {
             rowNum,
             showCell,
             showHeader,
+            showFooter,
             showTime,
             tableProps,
             timeText,
@@ -30,6 +31,9 @@ class DayTimeTable extends Component {
 
         var headers = data.map((day, ii) => (
             <TableCell key={ii}>{showHeader(day)}</TableCell>
+        ));
+        var footers = data.map((day, ii) => (
+            <TableCell key={ii}>{showFooter(day)}</TableCell>
         ));
         var colNum = headers.length;
         var grid = [];
@@ -59,7 +63,12 @@ class DayTimeTable extends Component {
         return (
             <Table
                 {...tableProps}
+                // style={{ tableLayout: 'fixed' }}
             >
+                <colgroup>
+                    <col width="9%" />
+                    {headers.map((h, i) => <col key={'colWidth_'+i} width={Math.trunc(91/(headers.length)) + '%'}/>)}
+                </colgroup>
                 {!hideHeaders && (
                     <TableHead>
                         {!!caption && (
@@ -85,7 +94,6 @@ class DayTimeTable extends Component {
                             borderRight: '1px solid rgb(224, 224, 224)',
                             borderLeft:  '1px solid rgb(224, 224, 224)'
                         };
-
                         return (
                             <TableRow key={ii}>
                                 {!hideTimes && (
@@ -120,6 +128,12 @@ class DayTimeTable extends Component {
                         );
                     })}
                 </TableBody>
+                <TableFooter>
+                    <TableRow>
+                        {!hideTimes && <TableCell>{timeText}</TableCell>}
+                        {footers}
+                    </TableRow>
+                </TableFooter>
             </Table>
         );
     }
