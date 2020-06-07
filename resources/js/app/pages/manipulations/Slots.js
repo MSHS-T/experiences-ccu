@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -20,7 +20,7 @@ import { useAuthContext } from '../../context/Auth';
 import * as Constants from '../../data/Constants';
 import ErrorPage from '../Error';
 import Loading from '../Loading';
-import { CircularProgress, Card, CardContent, CardActions, IconButton, CardHeader } from '@material-ui/core';
+import { CircularProgress, Card, CardContent, IconButton, CardHeader } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     cardHeader: {
@@ -34,9 +34,11 @@ const useStyles = makeStyles(theme => ({
             paddingBottom: theme.spacing(1)
         }
     },
+    weekWrapper: {
+        border: `1px solid ${theme.palette.divider}`,
+    },
     weekChange: {
-        padding:   theme.spacing(0.5),
-        marginTop: theme.spacing(-0.5)
+        padding: theme.spacing(0.5)
     },
     buttonWrapper: {
         margin:         theme.spacing(2),
@@ -311,6 +313,44 @@ export default function ManipulationSlots(props) {
         }
     }, []); // Empty array means useEffect will only be called on first render
 
+
+    const momentTime = (time) => moment(time, moment.HTML5_FMT.TIME);
+    const diffMinutes = (a, b) => momentTime(b).diff(momentTime(a), 'minutes', true);
+
+    const changeWeek = (direction) => {
+        setCurrentMonday(moment(currentMonday)[direction == 1 ? 'add' : 'subtract'](7, 'days').format('YYYY-MM-DD'));
+    };
+    const createTableCaption = (monday) => monday && (
+        <Grid container justify="center">
+            <Grid item>
+                <IconButton
+                    aria-label="Semaine précédente"
+                    className={classes.weekChange}
+                    disabled={ moment(monday).format('YYYY-MM-DD') <= calendarBounds[0]}
+                    onClick={() => { changeWeek(-1); }}
+                >
+                    <ArrowLeftIcon/>
+                </IconButton>
+            </Grid>
+            <Grid item xs={4} className={classes.weekWrapper}>
+                <Typography component="h2" variant="h5" align="center" color="textPrimary">
+                    {`Semaine ${moment(monday).format('ww')} → ${moment(monday).format('DD/MM/YYYY')}-${moment(monday).add(6, 'days').format('DD/MM/YYYY')}`}
+                </Typography>
+            </Grid>
+            <Grid item>
+                <IconButton
+                    aria-label="Semaine précédente"
+                    className={classes.weekChange}
+                    onClick={() => { changeWeek(1); }}
+                >
+                    <ArrowRightIcon/>
+                </IconButton>
+
+            </Grid>
+        </Grid>
+    );
+    const tableCaption = useMemo(() => createTableCaption(currentMonday), [currentMonday]);
+
     if (isDataLoading || isManipulationLoading) {
         return <Loading />;
     }
@@ -357,26 +397,6 @@ export default function ManipulationSlots(props) {
         );
     }
 
-    const momentTime = (time) => moment(time, moment.HTML5_FMT.TIME);
-    const diffMinutes = (a, b) => momentTime(b).diff(momentTime(a), 'minutes', true);
-
-    const tableCaption = () => currentMonday && (
-        <Typography component="h2" variant="h5" align="center" color="textPrimary">
-            { moment(currentMonday).format('YYYY-MM-DD') > calendarBounds[0] && (
-                <IconButton aria-label="Semaine précédente" className={classes.weekChange} onClick={() => { setCurrentMonday(moment(currentMonday).subtract(7, 'days').format('YYYY-MM-DD')); }}>
-                    <ArrowLeftIcon/>
-                </IconButton>
-            )}
-            {`Semaine ${moment(currentMonday).format('ww')} → ${moment(currentMonday).format('DD/MM/YYYY')}-${moment(currentMonday).add(6, 'days').format('DD/MM/YYYY')}`}
-            { moment(currentMonday).clone().add(6, 'days').format('YYYY-MM-DD') < calendarBounds[1] && (
-                <IconButton aria-label="Semaine précédente" className={classes.weekChange} onClick={() => { setCurrentMonday(moment(currentMonday).add(7, 'days').format('YYYY-MM-DD')); }}>
-                    <ArrowRightIcon/>
-                </IconButton>
-            )}
-        </Typography>
-        // TODO : Add week navigation
-    );
-
     // Compute calendar settings
     if(manipulationData){
         var interval = 30; // 30 minutes rows for the table view
@@ -404,7 +424,7 @@ export default function ManipulationSlots(props) {
                 <Grid item xs={12}>
                     {manipulationData && (
                         <DayTimeTable
-                            caption={tableCaption(currentMonday)}
+                            caption={tableCaption}
                             cellKey={cell => cell.id}
                             calcCellHeight={cell => diffMinutes(cell.start, cell.end)/interval }
                             showHeader={col => col.name}
