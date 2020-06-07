@@ -11,9 +11,12 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import CancelIcon from '@material-ui/icons/Cancel';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
+import DeleteIcon from '@material-ui/icons/Delete';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 import * as moment from 'moment';
+import capitalize from 'lodash/capitalize';
+import truncate from 'lodash/truncate';
 
 import DayTimeTable from '../../components/DayTimeTable';
 import { useAuthContext } from '../../context/Auth';
@@ -61,7 +64,7 @@ const useStyles = makeStyles(theme => ({
         left:       '50%',
         marginTop:  -12,
         marginLeft: -12,
-    },
+    }
 }));
 
 export default function ManipulationSlots(props) {
@@ -208,9 +211,9 @@ export default function ManipulationSlots(props) {
             });
     };
 
-    const deleteSlot = (id) => {
-        setDeleteLoading(id);
-        setDeleteSuccess(null);
+    const deleteSlot = (id, enableEvents = true) => {
+        enableEvents && setDeleteLoading(id);
+        enableEvents && setDeleteSuccess(null);
         return fetch(Constants.API_SLOTS_ENDPOINT + id, {
             method:  'DELETE',
             headers: { 'Authorization': 'bearer ' + accessToken }
@@ -221,18 +224,38 @@ export default function ManipulationSlots(props) {
                     throw new Error(`${response.status} (${response.statusText})`);
                 }
                 setError(null);
-                setDeleteLoading(null);
-                setDeleteSuccess(id);
+                enableEvents && setDeleteLoading(null);
+                enableEvents && setDeleteSuccess(id);
                 setTimeout(() => {
-                    setDeleteSuccess(null);
-                    loadSlotData(props.match.params.id);
+                    enableEvents && setDeleteSuccess(null);
+                    enableEvents && loadSlotData(props.match.params.id);
                 }, 1000);
-
             })
             .catch(err => {
                 setError(err.message);
-                setDeleteLoading(null);
+                enableEvents && setDeleteLoading(null);
             });
+    };
+
+    const deleteSlotsForDay = (day) => {
+        setDeleteLoading(day);
+        setDeleteSuccess(null);
+
+        var deleting = 0;
+        slotData.filter((s) => moment(s.start).isSame(moment(day), 'day')).forEach((slot) => {
+            deleting++;
+            deleteSlot(slot.id, false).finally(() => {
+                deleting--;
+                if(deleting == 0){
+                    setDeleteLoading(null);
+                    setDeleteSuccess(day);
+                    setTimeout(() => {
+                        setDeleteSuccess(null);
+                        loadSlotData(props.match.params.id);
+                    }, 1000);
+                }
+            });
+        });
     };
 
     // const handleSave = (values) => {
@@ -263,7 +286,14 @@ export default function ManipulationSlots(props) {
             for(let i = 0; i < 7; i++){
                 let day = moment(currentMonday).add(i, 'days');
                 data.push({
-                    name: day.format('dddd D MMMM YYYY'),
+                    name: (
+                        <>
+                            {capitalize(day.format('dddd'))}
+                            <br/>
+                            {day.format('D')} {capitalize(day.format('MMMM'))}
+                        </>
+                    ),
+                    date: day.format('YYYY-MM-DD'),
                     info: slotData.filter((s) => moment(s.start).isSame(day, 'day')).map((s) => {
                         return {
                             id:    s.id,
@@ -275,7 +305,8 @@ export default function ManipulationSlots(props) {
                                         <CardHeader
                                             className={classes.cardHeader}
                                             action={
-                                                <IconButton aria-label="delete" size="small" disabled={!!isDeleteLoading} onClick={() => deleteSlot(s.id)}>
+                                                // TODO : Ask confirmation
+                                                <IconButton aria-label="delete single slot" size="small" disabled={!!isDeleteLoading} onClick={() => deleteSlot(s.id)}>
                                                     { isDeleteLoading === s.id && <CircularProgress size={16} />}
                                                     { deleteSuccess === s.id && <CheckIcon />}
                                                     { deleteSuccess !== s.id && isDeleteLoading !== s.id && <CloseIcon />}
@@ -289,7 +320,7 @@ export default function ManipulationSlots(props) {
                                                 <>
                                                     {s.subject_first_name} {s.subject_last_name}
                                                     <br />
-                                                    <a href={'mailto:'+s.subject_email}>{s.subject_email}</a>
+                                                    <a href={'mailto:'+s.subject_email} title={s.subject_email}>{truncate(s.subject_email, { length: 20 })}</a>
                                                 </>
                                             )}
                                         </CardContent>
@@ -317,7 +348,7 @@ export default function ManipulationSlots(props) {
     const momentTime = (time) => moment(time, moment.HTML5_FMT.TIME);
     const diffMinutes = (a, b) => momentTime(b).diff(momentTime(a), 'minutes', true);
 
-    const changeWeek = (direction) => {
+    const navigateWeek = (direction) => {
         setCurrentMonday(moment(currentMonday)[direction == 1 ? 'add' : 'subtract'](7, 'days').format('YYYY-MM-DD'));
     };
     const createTableCaption = (monday) => monday && (
@@ -327,7 +358,7 @@ export default function ManipulationSlots(props) {
                     aria-label="Semaine précédente"
                     className={classes.weekChange}
                     disabled={ moment(monday).format('YYYY-MM-DD') <= calendarBounds[0]}
-                    onClick={() => { changeWeek(-1); }}
+                    onClick={() => { navigateWeek(-1); }}
                 >
                     <ArrowLeftIcon/>
                 </IconButton>
@@ -341,7 +372,7 @@ export default function ManipulationSlots(props) {
                 <IconButton
                     aria-label="Semaine précédente"
                     className={classes.weekChange}
-                    onClick={() => { changeWeek(1); }}
+                    onClick={() => { navigateWeek(1); }}
                 >
                     <ArrowRightIcon/>
                 </IconButton>
@@ -399,7 +430,9 @@ export default function ManipulationSlots(props) {
 
     // Compute calendar settings
     if(manipulationData){
+        // TODO : Compute interval based on manipulation duration
         var interval = 30; // 30 minutes rows for the table view
+        // TODO : Compute min and max based on real
         var min = Object.values(manipulationData.available_hours).reduce((best, item) => {
             if(item.enabled && item.am) { return item.start_am < best ? item.start_am : best; }
             if(item.enabled && item.pm) { return item.start_pm < best ? item.start_pm : best; }
@@ -427,9 +460,35 @@ export default function ManipulationSlots(props) {
                             caption={tableCaption}
                             cellKey={cell => cell.id}
                             calcCellHeight={cell => diffMinutes(cell.start, cell.end)/interval }
-                            showHeader={col => col.name}
+                            showHeader={col => (
+                                <Typography component="h3" variant="h6" align="center" color="textPrimary">
+                                    {col.name}
+                                </Typography>
+                            )}
+                            showFooter={col => col.info.length > 0 ? (
+                                // TODO : Ask for confirmation
+                                <Button
+                                    size="small"
+                                    variant="outlined"
+                                    disabled={!!isDeleteLoading}
+                                    onClick={() => deleteSlotsForDay(col.date)}
+                                    startIcon={(
+                                        <>
+                                            { isDeleteLoading === col.date && <CircularProgress size={16} />}
+                                            { deleteSuccess === col.date && <CheckIcon />}
+                                            { deleteSuccess !== col.date && isDeleteLoading !== col.date && <DeleteIcon />}
+                                        </>
+                                    )}
+                                >
+                                    Supprimer la journée
+                                </Button>
+                            ) : ''}
                             showCell={cell => cell.text}
-                            showTime={step => momentTime(min).add(interval * step, 'minutes').format('HH:mm')}
+                            showTime={step => (
+                                <center>
+                                    {momentTime(min).add(interval * step, 'minutes').format('HH:mm')}
+                                </center>
+                            )}
                             isActive={(cell, step) => {
                                 var current = momentTime(min).add(interval * step, 'minutes');
                                 return momentTime(cell.start) <= current && current < momentTime(cell.end);
