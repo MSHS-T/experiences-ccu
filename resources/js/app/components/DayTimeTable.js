@@ -14,11 +14,13 @@ class DayTimeTable extends Component {
             calcCellHeight,
             caption,
             cellKey,
+            cellStyle,
             data,
             hideHeaders,
             hideTimes,
             isActive,
             rowNum,
+            rowStyle,
             showCell,
             showHeader,
             showFooter,
@@ -60,14 +62,19 @@ class DayTimeTable extends Component {
             }
         }
 
+        const defaultCellStyle = {
+            height:      'auto !important',
+            borderRight: '1px solid rgb(224, 224, 224)',
+            borderLeft:  '1px solid rgb(224, 224, 224)'
+        };
+
         return (
             <Table
                 {...tableProps}
-                // style={{ tableLayout: 'fixed' }}
             >
                 <colgroup>
-                    <col width="9%" />
-                    {headers.map((h, i) => <col key={'colWidth_'+i} width={Math.trunc(91/(headers.length)) + '%'}/>)}
+                    {!hideTimes && <col width="5%" />}
+                    {headers.map((h, i) => <col key={'colWidth_'+i} width={(!hideTimes ? 95 : 100)/(headers.length) + '%'}/>)}
                 </colgroup>
                 {!hideHeaders && (
                     <TableHead>
@@ -90,21 +97,18 @@ class DayTimeTable extends Component {
                 )}
                 <TableBody>
                     {grid.map((row, ii) => {
-                        var cellStyle = {
-                            borderRight: '1px solid rgb(224, 224, 224)',
-                            borderLeft:  '1px solid rgb(224, 224, 224)'
-                        };
                         return (
-                            <TableRow key={ii}>
+                            <TableRow key={ii} style={rowStyle}>
                                 {!hideTimes && (
-                                    <TableCell style={cellStyle}>
+                                    <TableCell style={{ ...cellStyle(ii, -1, null, row), ...defaultCellStyle }}>
                                         {showTime(ii)}
                                     </TableCell>
                                 )}
                                 {row.map((xx, jj) => {
+                                    const computedCellStyle = { ...cellStyle(ii, jj, xx, row), ...defaultCellStyle };
                                     if (!xx.info) {
                                         return (
-                                            <TableCell key={`${ii}-${jj}`} style={cellStyle} />
+                                            <TableCell key={`${ii}-${jj}`} style={computedCellStyle} />
                                         );
                                     } else if (xx.first) {
                                         if (!xx.info.props) {
@@ -115,7 +119,7 @@ class DayTimeTable extends Component {
                                                 key={cellKey(xx.info)}
                                                 rowSpan={xx.height}
                                                 {...xx.info.props}
-                                                style={Object.assign(xx.info.props.style, cellStyle)}
+                                                style={Object.assign(xx.info.props.style, computedCellStyle)}
                                             >
                                                 {showCell(xx.info)}
                                             </TableCell>
@@ -143,11 +147,13 @@ DayTimeTable.propTypes = {
     calcCellHeight: PropTypes.func.isRequired,
     caption:        PropTypes.object,
     cellKey:        PropTypes.func.isRequired,
+    cellStyle:      PropTypes.func,
     data:           PropTypes.array.isRequired,
     hideHeaders:    PropTypes.bool,
     hideTimes:      PropTypes.bool,
     isActive:       PropTypes.func.isRequired,
     rowNum:         PropTypes.number.isRequired,
+    rowStyle:       PropTypes.object,
     showCell:       PropTypes.func.isRequired,
     showHeader:     PropTypes.func.isRequired,
     showTime:       PropTypes.func.isRequired,
@@ -158,8 +164,10 @@ DayTimeTable.propTypes = {
 };
 
 DayTimeTable.defaultProps = {
-    timeText: 'Times',
-    toolTip:  ''
+    cellStyle: () => {},
+    rowStyle:  {},
+    timeText:  'Times',
+    toolTip:   ''
 };
 
 export default DayTimeTable;
