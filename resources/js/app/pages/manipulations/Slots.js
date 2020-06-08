@@ -17,6 +17,7 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import * as moment from 'moment';
 import capitalize from 'lodash/capitalize';
 import truncate from 'lodash/truncate';
+import { gcd } from 'mathjs';
 
 import DayTimeTable from '../../components/DayTimeTable';
 import { useAuthContext } from '../../context/Auth';
@@ -382,8 +383,6 @@ export default function ManipulationSlots(props) {
                             )
                         };
                     })
-                    // TODO : Add grey blocks outside of available hours
-                    // TODO : Prevent crash if a slot is outside available hours
                 });
             }
         }
@@ -482,9 +481,17 @@ export default function ManipulationSlots(props) {
     }
 
     // Compute calendar settings
-    if(manipulationData){
-        // TODO : Compute interval based on manipulation duration
-        var interval = 30; // 30 minutes rows for the table view
+    if(manipulationData && slotData){
+        // Get an array with unique durations gathered from default duration and slots actual durations
+        const slotsDurations = slotData.reduce((all, slot) => {
+            const d = diffMinutes(slot.start, slot.end);
+            if(!all.includes(d)){
+                all.push(d);
+            }
+            return all;
+        }, [manipulationData.duration]);
+        // Compute the calendar interval (duration of each row) as the GCD of all the slots durations
+        var interval = gcd(...slotsDurations);
         // TODO : Compute min and max based on real
         var min = Object.values(manipulationData.available_hours).reduce((best, item) => {
             if(item.enabled && item.am) { return item.start_am < best ? item.start_am : best; }
@@ -512,7 +519,7 @@ export default function ManipulationSlots(props) {
                         <DayTimeTable
                             caption={tableCaption}
                             cellKey={cell => cell.id}
-                            cellStyle={(rowIndex, colIndex, cellData, rowData) => {
+                            cellStyle={(rowIndex, colIndex,) => {
                                 if(colIndex < 0){ return {}; }
                                 const day = Object.values(manipulationData.available_hours)[colIndex];
                                 const cellTime = momentTime(min).add(interval * rowIndex, 'minutes').format('HH:mm');
@@ -526,7 +533,7 @@ export default function ManipulationSlots(props) {
                                     background: 'repeating-linear-gradient( -55deg, #ddd, #ddd 10px, #fff 10px, #fff 20px )'
                                 } : {};
                             }}
-                            calcCellHeight={cell => diffMinutes(cell.start, cell.end)/interval }
+                            calcCellHeight={cell => Math.ceil(diffMinutes(cell.start, cell.end)/interval) }
                             showHeader={col => (
                                 <Typography component="h3" variant="h6" align="center" color="textPrimary">
                                     {col.name}
@@ -562,7 +569,7 @@ export default function ManipulationSlots(props) {
                             tableProps={{ size: 'small' }}
                             timeText=""
                             toolTip="Table has tooltip"
-                            rowStyle={{ height: '40px' }}
+                            rowStyle={{ height: '50px' }}
                             max={max}
                             min={min}
                             data={data}
