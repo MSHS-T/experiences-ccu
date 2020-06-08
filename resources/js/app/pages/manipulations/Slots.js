@@ -503,8 +503,8 @@ export default function ManipulationSlots(props) {
             if(item.enabled && item.am) { return item.end_am > best ? item.end_am : best; }
             return best;
         }, '00:01');
-        min = momentTime(min).subtract(interval, 'minutes').format('HH:mm');
-        max = momentTime(max).add(interval, 'minutes').format('HH:mm');
+        min = momentTime(min).subtract(manipulationData.duration * 2, 'minutes').format('HH:mm');
+        max = momentTime(max).add(manipulationData.duration * 2, 'minutes').format('HH:mm');
         var data = getCalendarData();
 
     }

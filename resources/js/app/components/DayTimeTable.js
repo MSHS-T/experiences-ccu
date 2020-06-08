@@ -68,6 +68,12 @@ class DayTimeTable extends Component {
             // borderLeft:  '1px solid rgb(224, 224, 224)'
         };
 
+        const defaultTimeCellStyle = {
+            height:      'auto !important',
+            border:      'none',
+            borderRight: '1px solid rgb(180, 180, 180)',
+        };
+
         return (
             <Table
                 {...tableProps}
@@ -100,7 +106,7 @@ class DayTimeTable extends Component {
                         return (
                             <TableRow key={ii} style={rowStyle}>
                                 {!hideTimes && (
-                                    <TableCell style={{ ...cellStyle(ii, -1, null, row), ...defaultCellStyle }}>
+                                    <TableCell style={{ ...cellStyle(ii, -1, null, row), ...defaultTimeCellStyle }}>
                                         {showTime(ii)}
                                     </TableCell>
                                 )}
