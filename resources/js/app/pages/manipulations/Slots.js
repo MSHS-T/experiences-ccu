@@ -324,8 +324,8 @@ export default function ManipulationSlots(props) {
                     info: slotData.filter((s) => moment(s.start).isSame(day, 'day')).map((s) => {
                         return {
                             id:    s.id,
-                            start: moment(s.start).format('HH:mm'),
-                            end:   moment(s.end).format('HH:mm'),
+                            start: momentToTime(s.start),
+                            end:   momentToTime(s.end),
                             text:  (
                                 <div>
                                     <Card style={{ backgroundColor: s.subject_email !== null ? 'lightGreen' : 'orange' }}>
@@ -364,7 +364,7 @@ export default function ManipulationSlots(props) {
                                                     { deleteSuccess !== s.id && isDeleteLoading !== s.id && <CloseIcon />}
                                                 </IconButton>
                                             }
-                                            title={moment(s.start).format('HH:mm')+ ' - ' + moment(s.end).format('HH:mm')}
+                                            title={momentToTime(s.start) + ' - ' + momentToTime(s.end)}
                                             disableTypography
                                         />
                                         <CardContent className={classes.cardContent}>
@@ -398,6 +398,7 @@ export default function ManipulationSlots(props) {
 
 
     const momentTime = (time) => moment(time, moment.HTML5_FMT.TIME);
+    const momentToTime = (date) => moment(date).format(moment.HTML5_FMT.TIME);
     const diffMinutes = (a, b) => momentTime(b).diff(momentTime(a), 'minutes', true);
 
     const navigateWeek = (direction) => {
@@ -492,21 +493,24 @@ export default function ManipulationSlots(props) {
         }, [manipulationData.duration]);
         // Compute the calendar interval (duration of each row) as the GCD of all the slots durations
         var interval = gcd(...slotsDurations);
-        // TODO : Compute min and max based on real
-        var min = Object.values(manipulationData.available_hours).reduce((best, item) => {
+        // Compute min and max hours based on manipulation available hours
+        var defaultMin = Object.values(manipulationData.available_hours).reduce((best, item) => {
             if(item.enabled && item.am) { return item.start_am < best ? item.start_am : best; }
             if(item.enabled && item.pm) { return item.start_pm < best ? item.start_pm : best; }
             return best;
         }, '23:59');
-        var max = Object.values(manipulationData.available_hours).reduce((best, item) => {
+        var defaultMax = Object.values(manipulationData.available_hours).reduce((best, item) => {
             if(item.enabled && item.pm) { return item.end_pm > best ? item.end_pm : best; }
             if(item.enabled && item.am) { return item.end_am > best ? item.end_am : best; }
             return best;
         }, '00:01');
-        min = momentTime(min).subtract(manipulationData.duration * 2, 'minutes').format('HH:mm');
-        max = momentTime(max).add(manipulationData.duration * 2, 'minutes').format('HH:mm');
-        var data = getCalendarData();
+        // Update min/max based on real slots positioning
+        var min = slotData.reduce((best, slot) => momentToTime(slot.start) < best ? momentToTime(slot.start) : best, defaultMin);
+        var max = slotData.reduce((best, slot) => momentToTime(slot.start) > best ? momentToTime(slot.end) : best, defaultMax);
 
+        min = momentToTime(momentTime(min).subtract(2 * manipulationData.duration, 'minutes'));
+        max = momentToTime(momentTime(max).add(2 * manipulationData.duration, 'minutes'));
+        var data = getCalendarData();
     }
 
     return (
@@ -522,7 +526,7 @@ export default function ManipulationSlots(props) {
                             cellStyle={(rowIndex, colIndex,) => {
                                 if(colIndex < 0){ return {}; }
                                 const day = Object.values(manipulationData.available_hours)[colIndex];
-                                const cellTime = momentTime(min).add(interval * rowIndex, 'minutes').format('HH:mm');
+                                const cellTime = momentToTime(momentTime(min).add(interval * rowIndex, 'minutes'));
 
                                 const isGreyed = !day.enabled
                                     || (!day.am && (cellTime < day.start_pm || cellTime >= day.end_pm))
@@ -559,7 +563,7 @@ export default function ManipulationSlots(props) {
                             showCell={cell => cell.text}
                             showTime={step => (
                                 <center>
-                                    {momentTime(min).add(interval * step, 'minutes').format('HH:mm')}
+                                    {momentToTime(momentTime(min).add(interval * step, 'minutes'))}
                                 </center>
                             )}
                             isActive={(cell, step) => {
