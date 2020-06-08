@@ -134,6 +134,7 @@ class SlotController extends Controller
     public function destroy($id)
     {
         Slot::findOrFail($id)->delete();
+        // TODO : If slot is booked, send notification to subject before deleting
         return 204;
     }
 }
