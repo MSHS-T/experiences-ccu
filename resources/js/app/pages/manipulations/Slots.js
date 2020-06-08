@@ -28,14 +28,17 @@ import { useConfirm } from 'material-ui-confirm';
 
 const useStyles = makeStyles(theme => ({
     cardHeader: {
-        padding:    theme.spacing(1),
-        fontWeight: 'bold',
-        fontSize:   '1rem'
+        padding:       theme.spacing(1),
+        paddingBottom: theme.spacing(0.5),
+        fontWeight:    'bold',
+        fontSize:      '1rem'
     },
     cardContent: {
         padding:        theme.spacing(1),
+        paddingTop:     theme.spacing(0),
+        paddingBottom:  theme.spacing(0.5),
         '&:last-child': {
-            paddingBottom: theme.spacing(1)
+            paddingBottom: theme.spacing(0.5)
         }
     },
     weekWrapper: {
@@ -509,6 +512,20 @@ export default function ManipulationSlots(props) {
                         <DayTimeTable
                             caption={tableCaption}
                             cellKey={cell => cell.id}
+                            cellStyle={(rowIndex, colIndex, cellData, rowData) => {
+                                if(colIndex < 0){ return {}; }
+                                const day = Object.values(manipulationData.available_hours)[colIndex];
+                                const cellTime = momentTime(min).add(interval * rowIndex, 'minutes').format('HH:mm');
+
+                                const isGreyed = !day.enabled
+                                    || (!day.am && (cellTime < day.start_pm || cellTime >= day.end_pm))
+                                    || (!day.pm && (cellTime < day.start_am || cellTime >= day.end_am))
+                                    || (cellTime < day.start_am || (cellTime >= day.end_am && cellTime < day.start_pm) || cellTime >= day.end_pm);
+
+                                return isGreyed ? {
+                                    background: 'repeating-linear-gradient( -55deg, #ddd, #ddd 10px, #fff 10px, #fff 20px )'
+                                } : {};
+                            }}
                             calcCellHeight={cell => diffMinutes(cell.start, cell.end)/interval }
                             showHeader={col => (
                                 <Typography component="h3" variant="h6" align="center" color="textPrimary">
@@ -545,6 +562,7 @@ export default function ManipulationSlots(props) {
                             tableProps={{ size: 'small' }}
                             timeText=""
                             toolTip="Table has tooltip"
+                            rowStyle={{ height: '40px' }}
                             max={max}
                             min={min}
                             data={data}
