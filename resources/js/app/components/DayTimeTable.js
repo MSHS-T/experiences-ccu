@@ -32,7 +32,7 @@ class DayTimeTable extends Component {
         } = this.props;
 
         var headers = data.map((day, ii) => (
-            <TableCell key={ii}>{showHeader(day)}</TableCell>
+            <TableCell key={ii} style={{ borderBottom: '1px solid rgb(180, 180, 180)' }}>{showHeader(day)}</TableCell>
         ));
         var footers = data.map((day, ii) => (
             <TableCell key={ii}>{showFooter(day)}</TableCell>
@@ -63,9 +63,9 @@ class DayTimeTable extends Component {
         }
 
         const defaultCellStyle = {
-            height:      'auto !important',
-            borderRight: '1px solid rgb(224, 224, 224)',
-            borderLeft:  '1px solid rgb(224, 224, 224)'
+            height: 'auto !important',
+            border: '1px solid rgb(180, 180, 180)',
+            // borderLeft:  '1px solid rgb(224, 224, 224)'
         };
 
         return (
