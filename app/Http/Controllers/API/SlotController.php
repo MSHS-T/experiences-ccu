@@ -11,6 +11,7 @@ use App\Manipulation;
 use App\Slot;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Response;
 
 class SlotController extends Controller
 {
@@ -45,6 +46,8 @@ class SlotController extends Controller
      */
     public function generate(Manipulation $manipulation)
     {
+        // TODO : If manipulation has slots, we generate after the last one until quota is met
+        // TODO : If given a 'date' parameter, we generate slots to fill the available hours of that day
         // Generate all slots if manipulation doesn't have any
         if (!$manipulation->slots->isEmpty()) {
             return [];
@@ -91,18 +94,18 @@ class SlotController extends Controller
         // Validate data
         $data = $request->validate([
             'start' => 'required|date_format:Y-m-d H:i:s',
-            'end'   => 'required|date_format:Y-m-d H:i:s'
+            'end'   => 'required|date_format:Y-m-d H:i:s|after_or_equal:start'
         ]);
         // Check for overlap with existing slots
         $noOverlap = $manipulation->slots->every(function ($slot) use ($data) {
-            return !Carbon::create($data['start'])->betweenExcluded($slot->start, $slot->end)
-                && !Carbon::create($data['end'])->betweenExcluded($slot->start, $slot->end);
+            return Carbon::create($data['start'])->greaterThanOrEqualTo($slot->end)
+                || Carbon::create($data['end'])->lessThanOrEqualTo($slot->start);
         });
         if ($noOverlap) {
             $manipulation->slots()->create($data);
             return 201;
         }
-        return response(null, 400)->json(['message' => 'Impossible de chevaucher plusieurs créneaux']);
+        return Response::json(['message' => 'Impossible de chevaucher plusieurs créneaux'], 400);
     }
 
 
