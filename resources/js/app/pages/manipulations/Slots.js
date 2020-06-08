@@ -3,8 +3,8 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import { green } from '@material-ui/core/colors';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { green, orange, red, grey } from '@material-ui/core/colors';
 
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
@@ -24,7 +24,7 @@ import { useAuthContext } from '../../context/Auth';
 import * as Constants from '../../data/Constants';
 import ErrorPage from '../Error';
 import Loading from '../Loading';
-import { CircularProgress, Card, CardContent, IconButton, CardHeader } from '@material-ui/core';
+import { CircularProgress, Card, CardContent, IconButton, CardHeader, Box, LinearProgress } from '@material-ui/core';
 import { useConfirm } from 'material-ui-confirm';
 
 const useStyles = makeStyles(theme => ({
@@ -71,6 +71,48 @@ const useStyles = makeStyles(theme => ({
         marginLeft: -12,
     }
 }));
+
+const GreenLinearProgress = withStyles((theme) => ({
+    root: {
+        height:       10,
+        borderRadius: 5,
+    },
+    colorPrimary: {
+        backgroundColor: green[200],
+    },
+    bar: {
+        borderRadius:    5,
+        backgroundColor: green[700],
+    },
+}))(LinearProgress);
+
+const OrangeLinearProgress = withStyles((theme) => ({
+    root: {
+        height:       10,
+        borderRadius: 5,
+    },
+    colorPrimary: {
+        backgroundColor: orange[200],
+    },
+    bar: {
+        borderRadius:    5,
+        backgroundColor: orange[700],
+    },
+}))(LinearProgress);
+
+const RedLinearProgress = withStyles((theme) => ({
+    root: {
+        height:       10,
+        borderRadius: 5,
+    },
+    colorPrimary: {
+        backgroundColor: grey[theme.palette.type === 'light' ? 200 : 700],
+    },
+    bar: {
+        borderRadius:    5,
+        backgroundColor: red[700],
+    },
+}))(LinearProgress);
 
 export default function ManipulationSlots(props) {
     const classes = useStyles();
@@ -511,6 +553,12 @@ export default function ManipulationSlots(props) {
         min = momentToTime(momentTime(min).subtract(2 * manipulationData.duration, 'minutes'));
         max = momentToTime(momentTime(max).add(2 * manipulationData.duration, 'minutes'));
         var data = getCalendarData();
+
+        // TODO : Get real overbooking setting
+        var overbooking = 110;
+        // var slotCountProgress = 109;
+        var slotCountProgress = (slotData.length / manipulationData.target_slots)*100;
+        console.log(slotCountProgress);
     }
 
     return (
@@ -582,7 +630,46 @@ export default function ManipulationSlots(props) {
                         />
                     )}
                 </Grid>
-
+                <Grid item xs={12} container justify="center">
+                    <Grid item xs={8} container>
+                        <Grid item xs={4}>
+                            <Typography component="p" variant="body1" align="left" color="textPrimary">
+                                {'Cible de participants :'} <strong>{manipulationData.target_slots}</strong>
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Typography component="p" variant="body1" align="center" color="textPrimary">
+                                {/* // TODO : Fetch real overbooking setting */}
+                                {'Paramétrage de surréservation :'} <strong>{overbooking+'%'}</strong>
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                            <Typography component="p" variant="body1" align="right" color="textPrimary">
+                                {'Nombre de créneaux créés :'} <strong>{slotData.length}</strong>
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Box
+                                display="flex"
+                                alignItems="center"
+                                color={slotCountProgress < 100 ? 'error.main' : (slotCountProgress < 110 ? 'warning.main' : 'success.main')}
+                            >
+                                <Box width="100%" mr={1}>
+                                    {slotCountProgress < 100 && <RedLinearProgress variant="determinate" value={slotCountProgress} />}
+                                    {slotCountProgress < overbooking && slotCountProgress >= 100 && <OrangeLinearProgress variant="determinate" value={slotCountProgress-100} />}
+                                    {slotCountProgress >= overbooking && <GreenLinearProgress variant="determinate" value={Math.min(slotCountProgress-100, 100)} />}
+                                </Box>
+                                <Box minWidth={35}>
+                                    <Typography variant="body2" component="div" color="inherit" align="right">
+                                        <strong>
+                                            {Math.floor(slotCountProgress)+'%'}
+                                        </strong>
+                                    </Typography>
+                                </Box>
+                            </Box>
+                        </Grid>
+                    </Grid>
+                </Grid>
                 <Grid item xs={12} className={classes.buttonRow}>
                     <div className={classes.buttonWrapper}>
                         <Button
