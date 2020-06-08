@@ -24,6 +24,7 @@ import * as Constants from '../../data/Constants';
 import ErrorPage from '../Error';
 import Loading from '../Loading';
 import { CircularProgress, Card, CardContent, IconButton, CardHeader } from '@material-ui/core';
+import { useConfirm } from 'material-ui-confirm';
 
 const useStyles = makeStyles(theme => ({
     cardHeader: {
@@ -70,6 +71,7 @@ const useStyles = makeStyles(theme => ({
 export default function ManipulationSlots(props) {
     const classes = useStyles();
     const { accessToken } = useAuthContext();
+    const confirm = useConfirm();
 
     const [isSaveLoading, setSaveLoading] = useState(false);
     const [isDeleteLoading, setDeleteLoading] = useState(false);
@@ -238,24 +240,45 @@ export default function ManipulationSlots(props) {
     };
 
     const deleteSlotsForDay = (day) => {
-        setDeleteLoading(day);
-        setDeleteSuccess(null);
+        const slots = slotData.filter((s) => moment(s.start).isSame(moment(day), 'day'));
+        const hasReservations = slots.filter(s => s.subject_email !== null).length > 0;
 
-        var deleting = 0;
-        slotData.filter((s) => moment(s.start).isSame(moment(day), 'day')).forEach((slot) => {
-            deleting++;
-            deleteSlot(slot.id, false).finally(() => {
-                deleting--;
-                if(deleting == 0){
-                    setDeleteLoading(null);
-                    setDeleteSuccess(day);
-                    setTimeout(() => {
-                        setDeleteSuccess(null);
-                        loadSlotData(props.match.params.id);
-                    }, 1000);
-                }
-            });
-        });
+        confirm({
+            title:       'Confirmation de suppression',
+            description: (
+                <>
+                    {'Êtes-vous sûr de vouloir supprimer ces créneaux ? Cette action est irréversible.'}
+                    {hasReservations && (
+                        <>
+                            <br/>
+                            <Typography variant="subtitle2" component="span" color="error">
+                                {'Au moins un créneau étant réservé, les participants seront informés de l\'annulation de leurs rendez-vous.'}
+                            </Typography>
+                        </>
+                    )}
+                </>
+            )
+        })
+            .then(() => {
+                setDeleteLoading(day);
+                setDeleteSuccess(null);
+
+                var deleting = slots.length;
+                slots.forEach((slot) => {
+                    deleteSlot(slot.id, false).finally(() => {
+                        deleting--;
+                        if(deleting == 0){
+                            setDeleteLoading(null);
+                            setDeleteSuccess(day);
+                            setTimeout(() => {
+                                setDeleteSuccess(null);
+                                loadSlotData(props.match.params.id);
+                            }, 1000);
+                        }
+                    });
+                });
+            })
+            .catch(() => {});
     };
 
     // const handleSave = (values) => {
@@ -305,8 +328,33 @@ export default function ManipulationSlots(props) {
                                         <CardHeader
                                             className={classes.cardHeader}
                                             action={
-                                                // TODO : Ask confirmation
-                                                <IconButton aria-label="delete single slot" size="small" disabled={!!isDeleteLoading} onClick={() => deleteSlot(s.id)}>
+                                                <IconButton
+                                                    aria-label="delete single slot"
+                                                    size="small"
+                                                    disabled={!!isDeleteLoading}
+                                                    onClick={() => {
+                                                        confirm({
+                                                            title:       'Confirmation de suppression',
+                                                            description: (
+                                                                <>
+                                                                    {'Êtes-vous sûr de vouloir supprimer ce créneau ? Cette action est irréversible.'}
+                                                                    {s.subject_email !== null
+                                                                        ? (
+                                                                            <>
+                                                                                <br/>
+                                                                                <Typography variant="subtitle2" component="span" color="error">
+                                                                                    {'Ce créneau étant réservé, le participant sera informé de l\'annulation de son rendez-vous.'}
+                                                                                </Typography>
+                                                                            </>
+                                                                        ) : ''
+                                                                    }
+                                                                </>
+                                                            )
+                                                        })
+                                                            .then(() => { deleteSlot(s.id); })
+                                                            .catch(() => {});
+                                                    }}
+                                                >
                                                     { isDeleteLoading === s.id && <CircularProgress size={16} />}
                                                     { deleteSuccess === s.id && <CheckIcon />}
                                                     { deleteSuccess !== s.id && isDeleteLoading !== s.id && <CloseIcon />}
@@ -320,7 +368,9 @@ export default function ManipulationSlots(props) {
                                                 <>
                                                     {s.subject_first_name} {s.subject_last_name}
                                                     <br />
-                                                    <a href={'mailto:'+s.subject_email} title={s.subject_email}>{truncate(s.subject_email, { length: 20 })}</a>
+                                                    <a href={'mailto:'+s.subject_email} title={s.subject_email}>
+                                                        {truncate(s.subject_email, { length: 20 })}
+                                                    </a>
                                                 </>
                                             )}
                                         </CardContent>
@@ -466,7 +516,6 @@ export default function ManipulationSlots(props) {
                                 </Typography>
                             )}
                             showFooter={col => col.info.length > 0 ? (
-                                // TODO : Ask for confirmation
                                 <Button
                                     size="small"
                                     variant="outlined"
