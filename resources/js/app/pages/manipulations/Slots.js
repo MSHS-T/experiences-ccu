@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { green, orange, red, grey } from '@material-ui/core/colors';
 
+import AddIcon from '@material-ui/icons/Add';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -20,12 +21,15 @@ import truncate from 'lodash/truncate';
 import { gcd } from 'mathjs';
 
 import DayTimeTable from '../../components/DayTimeTable';
+import LabelledOutline from '../../components/LabelledOutline';
 import { useAuthContext } from '../../context/Auth';
 import * as Constants from '../../data/Constants';
 import ErrorPage from '../Error';
 import Loading from '../Loading';
 import { CircularProgress, Card, CardContent, IconButton, CardHeader, Box, LinearProgress } from '@material-ui/core';
 import { useConfirm } from 'material-ui-confirm';
+import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 
 const useStyles = makeStyles(theme => ({
     cardHeader: {
@@ -119,17 +123,55 @@ export default function ManipulationSlots(props) {
     const { accessToken } = useAuthContext();
     const confirm = useConfirm();
 
-    const [isSaveLoading, setSaveLoading] = useState(false);
-    const [isDeleteLoading, setDeleteLoading] = useState(false);
+    // Data loading states
     const [isDataLoading, setDataLoading] = useState(false);
     const [isManipulationLoading, setManipulationLoading] = useState(false);
+    // Data states
     const [manipulationData, setManipulationData] = useState(null);
     const [slotData, setSlotData] = useState([]);
-    const [saveSuccess, setSaveSuccess] = useState(false);
-    const [deleteSuccess, setDeleteSuccess] = useState(false);
-    const [error, setError] = useState(null);
+    // Secondary data states
     const [calendarBounds, setCalendarBounds] = useState([]);
     const [currentMonday, setCurrentMonday] = useState(null);
+    // CRUD loading states
+    const [isGenerateLoading, setGenerateLoading] = useState(false);
+    const [isDeleteLoading, setDeleteLoading] = useState(false);
+    const [isCreateLoading, setCreateLoading] = useState(false);
+    // CRUD success states
+    const [generateSuccess, setGenerateSuccess] = useState(false);
+    const [deleteSuccess, setDeleteSuccess] = useState(null);
+    const [createSuccess, setCreateSuccess] = useState(null);
+    // Misc states
+    const [error, setError] = useState(null);
+    const [createError, setCreateError] = useState(null);
+    const [newSlotDatetime, setNewSlotDatetime] = useState(null);
+
+    const nextAvailability = useMemo(() => {
+        if(slotData.length == 0 || manipulationData == null){
+            return null;
+        }
+        var firstAvailableDay = moment(slotData[slotData.length-1].end);
+        // eslint-disable-next-line no-constant-condition
+        while(true){
+            // Add 1 day until we find an enabled day
+            firstAvailableDay.add(1, 'day');
+            const dayHours = manipulationData.available_hours[firstAvailableDay.clone().locale('en').format('ddd')];
+            if(dayHours.enabled){
+                // Now set the time to the start of the day
+                if(dayHours.am){
+                    const [start_h, start_m] = dayHours.start_am.split(':');
+                    firstAvailableDay.hour(start_h).minutes(start_m);
+                    break;
+                }
+                if(dayHours.pm){
+                    const [start_h, start_m] = dayHours.start_pm.split(':');
+                    firstAvailableDay.hour(start_h).minutes(start_m);
+                    break;
+                }
+            }
+        }
+        setNewSlotDatetime(firstAvailableDay);
+        return firstAvailableDay;
+    }, [slotData, manipulationData]);
 
     const storeSlotData = (data) => {
         setSlotData(data);
@@ -174,7 +216,7 @@ export default function ManipulationSlots(props) {
 
     const loadSlotData = (id) => {
         setDataLoading(true);
-        setSlotData(null);
+        setSlotData([]);
 
         fetch(Constants.API_SLOTS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
@@ -197,43 +239,55 @@ export default function ManipulationSlots(props) {
             });
     };
 
-    const createSlot = (manipulationId, start, end) => {
-        setSaveLoading(true);
-        setSaveSuccess(false);
+    const createSlot = (start, fromInput) => {
+        setCreateLoading(fromInput);
+        setCreateSuccess(null);
 
-        fetch(Constants.API_SLOTS_ENDPOINT + manipulationId, {
-            method:  'PUT',
+        fetch(Constants.API_SLOTS_ENDPOINT + props.match.params.id, {
+            method:  'POST',
             headers: {
                 'Accept':        'application/json',
                 'Authorization': 'bearer ' + accessToken,
                 'Content-Type':  'application/json'
             },
-            body: JSON.stringify({ start, end })
+            body: JSON.stringify({
+                start: start.format('YYYY-MM-DD HH:mm:ss'),
+                end:   start.clone().add(interval, 'minutes').format('YYYY-MM-DD HH:mm:ss')
+            })
         })
             // Parse JSON response
             .then(response => {
-                if (!response.ok) {
-                    throw new Error(`${response.status} (${response.statusText})`);
+                if(response.ok){
+                    return response.json();
                 }
-                return response.json();
+                if(response.status == 400){
+                    response.json().then((data) => {
+                        setCreateError(data.message);
+                    });
+                } else {
+                    setCreateError(`${response.status} (${response.statusText})`);
+                }
+                setCreateLoading(false);
+                throw new Error();
             })
             // Set data in state
-            .then(data => {
-                console.log(data);
-                setError(null);
-                setSaveLoading(false);
-                setSaveSuccess(true);
+            .then(() => {
+                setCreateError(null);
+                setCreateLoading(false);
+                setCreateSuccess(fromInput);
+                setTimeout(() => {
+                    setCreateSuccess(null);
+                    loadSlotData(props.match.params.id);
+                }, 1000);
             })
-            .catch(err => {
-                setError(err.message);
-                setSaveLoading(false);
-            });
+            .catch(() => {});
     };
 
-    const createAllSlots = () => {
-        setSaveLoading(true);
+    const generateSlots = () => {
+        setGenerateLoading(true);
+        setGenerateSuccess(null);
 
-        fetch(Constants.API_SLOTS_ENDPOINT + props.match.params.id + '/generate', {
+        fetch(Constants.API_SLOTS_ENDPOINT + props.match.params.id, {
             method:  'POST',
             headers: { 'Authorization': 'bearer ' + accessToken },
         })
@@ -247,15 +301,16 @@ export default function ManipulationSlots(props) {
             // Set data in state
             .then(data => {
                 setError(null);
-                setSaveSuccess(true);
+                setGenerateLoading(false);
+                setGenerateSuccess(true);
                 setTimeout(() => {
-                    setSaveLoading(false);
+                    setGenerateSuccess(null);
                     storeSlotData(data);
                 }, 1000);
             })
             .catch(err => {
                 setError(err.message);
-                setSaveLoading(false);
+                setGenerateLoading(false);
             });
     };
 
@@ -509,14 +564,14 @@ export default function ManipulationSlots(props) {
                             variant="contained"
                             color="primary"
                             size="large"
-                            disabled={isSaveLoading}
-                            className={saveSuccess ? classes.buttonSuccess : ''}
-                            startIcon={saveSuccess ? <CheckIcon /> : <SettingsIcon />}
-                            onClick={createAllSlots}
+                            disabled={isGenerateLoading}
+                            className={generateSuccess ? classes.buttonSuccess : ''}
+                            startIcon={generateSuccess ? <CheckIcon /> : <SettingsIcon />}
+                            onClick={generateSlots}
                         >
                             {'Générer les créneaux de manipulation'}
                         </Button>
-                        {isSaveLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                        {isGenerateLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
                     </div>
                 </Grid>
             </>
@@ -556,9 +611,7 @@ export default function ManipulationSlots(props) {
 
         // TODO : Get real overbooking setting
         var overbooking = 110;
-        // var slotCountProgress = 109;
         var slotCountProgress = (slotData.length / manipulationData.target_slots)*100;
-        console.log(slotCountProgress);
     }
 
     return (
@@ -670,12 +723,50 @@ export default function ManipulationSlots(props) {
                         </Grid>
                     </Grid>
                 </Grid>
+                <Grid item xs={12} container>
+                    <MuiPickersUtilsProvider utils={MomentUtils}>
+                        <Grid item xs={4} container justify="center">
+                            <LabelledOutline id="newSlotDatetime" label="Ajouter un créneau">
+                                <DateTimePicker
+                                    ampm={false}
+                                    format="DD/MM/YYYY HH:mm"
+                                    minutesStep={5}
+                                    value={newSlotDatetime}
+                                    onChange={date => { setNewSlotDatetime(date); }}
+                                />
+                                <Button
+                                    variant="contained"
+                                    color="default"
+                                    size="small"
+                                    ml={2}
+                                    disabled={!!isCreateLoading}
+                                    startIcon={(
+                                        <>
+                                            { isCreateLoading === 'newSlotDatetime' && <CircularProgress size={16} />}
+                                            { createSuccess === 'newSlotDatetime' && <CheckIcon />}
+                                            { createSuccess !== 'newSlotDatetime' && isCreateLoading !== 'newSlotDatetime' && <AddIcon />}
+                                        </>
+                                    )}
+                                    onClick={() => createSlot(newSlotDatetime, 'newSlotDatetime')}
+                                >
+                                    Ajouter
+                                </Button>
+                                <br/>
+                                {createError && (
+                                    <Typography component="p" variant="subtitle2" align="center" color="error">
+                                        <strong>{createError}</strong>
+                                    </Typography>
+                                )}
+                            </LabelledOutline>
+                        </Grid>
+                    </MuiPickersUtilsProvider>
+                </Grid>
                 <Grid item xs={12} className={classes.buttonRow}>
                     <div className={classes.buttonWrapper}>
                         <Button
                             variant="contained"
                             color="default"
-                            disabled={isSaveLoading}
+                            disabled={!!isGenerateLoading || !!isDeleteLoading || !!isCreateLoading}
                             className={classes.button}
                             startIcon={<CancelIcon />}
                             onClick={() => props.history.push('/manipulations')}

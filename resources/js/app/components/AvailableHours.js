@@ -186,7 +186,8 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                                                 className={classes.timePicker}
                                                 disabled={!data[d].am}
                                                 ampm={false}
-                                                mask="__:__"
+                                                format="DD/MM/YYYY HH:mm"
+                                                mask="__/__/____ __:__"
                                                 name={`${d}-start_am`}
                                                 value={data[d].start_am}
                                                 minutesStep={5}
