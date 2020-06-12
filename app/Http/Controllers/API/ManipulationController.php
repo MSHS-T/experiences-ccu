@@ -151,6 +151,8 @@ class ManipulationController extends Controller
         $managers = User::whereIn('id', $data['managers'])->get();
         $manipulation->managers()->sync($managers->modelKeys());
 
+        $manipulation->save();
+
         return $manipulation;
     }
 
