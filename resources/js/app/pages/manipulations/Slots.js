@@ -28,7 +28,7 @@ import ErrorPage from '../Error';
 import Loading from '../Loading';
 import { CircularProgress, Card, CardContent, IconButton, CardHeader, Box, LinearProgress } from '@material-ui/core';
 import { useConfirm } from 'material-ui-confirm';
-import { MuiPickersUtilsProvider, DateTimePicker } from '@material-ui/pickers';
+import { MuiPickersUtilsProvider, DateTimePicker, DatePicker } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 
 const useStyles = makeStyles(theme => ({
@@ -76,7 +76,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const GreenLinearProgress = withStyles((theme) => ({
+const GreenLinearProgress = withStyles(() => ({
     root: {
         height:       10,
         borderRadius: 5,
@@ -90,7 +90,7 @@ const GreenLinearProgress = withStyles((theme) => ({
     },
 }))(LinearProgress);
 
-const OrangeLinearProgress = withStyles((theme) => ({
+const OrangeLinearProgress = withStyles(() => ({
     root: {
         height:       10,
         borderRadius: 5,
@@ -140,38 +140,13 @@ export default function ManipulationSlots(props) {
     const [generateSuccess, setGenerateSuccess] = useState(false);
     const [deleteSuccess, setDeleteSuccess] = useState(null);
     const [createSuccess, setCreateSuccess] = useState(null);
+    // Next availability states
+    const [newSlotDate, setNewSlotDate] = useState(null);
+    const [newSlotDatetime, setNewSlotDatetime] = useState(null);
+
     // Misc states
     const [error, setError] = useState(null);
     const [createError, setCreateError] = useState(null);
-    const [newSlotDatetime, setNewSlotDatetime] = useState(null);
-
-    const nextAvailability = useMemo(() => {
-        if(slotData.length == 0 || manipulationData == null){
-            return null;
-        }
-        var firstAvailableDay = moment(slotData[slotData.length-1].end);
-        // eslint-disable-next-line no-constant-condition
-        while(true){
-            // Add 1 day until we find an enabled day
-            firstAvailableDay.add(1, 'day');
-            const dayHours = manipulationData.available_hours[firstAvailableDay.clone().locale('en').format('ddd')];
-            if(dayHours.enabled){
-                // Now set the time to the start of the day
-                if(dayHours.am){
-                    const [start_h, start_m] = dayHours.start_am.split(':');
-                    firstAvailableDay.hour(start_h).minutes(start_m);
-                    break;
-                }
-                if(dayHours.pm){
-                    const [start_h, start_m] = dayHours.start_pm.split(':');
-                    firstAvailableDay.hour(start_h).minutes(start_m);
-                    break;
-                }
-            }
-        }
-        setNewSlotDatetime(firstAvailableDay);
-        return firstAvailableDay;
-    }, [slotData, manipulationData]);
 
     const storeSlotData = (data) => {
         setSlotData(data);
@@ -183,6 +158,7 @@ export default function ManipulationSlots(props) {
                 moment(data[data.length-1].end).format('YYYY-MM-DD')
             ]);
             // Deduce the first monday from the bounds
+            // TODO : Read hash for current week
             if(currentMonday === null){
                 setCurrentMonday(moment(data[0].start).startOf('week').format('YYYY-MM-DD'));
             }
@@ -283,13 +259,17 @@ export default function ManipulationSlots(props) {
             .catch(() => {});
     };
 
-    const generateSlots = () => {
-        setGenerateLoading(true);
+    const generateSlots = (date, fromInput) => {
+        setGenerateLoading(fromInput);
         setGenerateSuccess(null);
 
-        fetch(Constants.API_SLOTS_ENDPOINT + props.match.params.id, {
+        fetch(Constants.API_SLOTS_ENDPOINT + props.match.params.id + '/generate', {
             method:  'POST',
-            headers: { 'Authorization': 'bearer ' + accessToken },
+            headers: {
+                'Authorization': 'bearer ' + accessToken,
+                'Content-Type':  'application/json'
+            },
+            body: JSON.stringify({ date })
         })
             // Parse JSON response
             .then(response => {
@@ -302,7 +282,7 @@ export default function ManipulationSlots(props) {
             .then(data => {
                 setError(null);
                 setGenerateLoading(false);
-                setGenerateSuccess(true);
+                setGenerateSuccess(fromInput);
                 setTimeout(() => {
                     setGenerateSuccess(null);
                     storeSlotData(data);
@@ -381,28 +361,6 @@ export default function ManipulationSlots(props) {
             })
             .catch(() => {});
     };
-
-    // const handleSave = (values) => {
-    //     setSaveLoading(true);
-    //     saveData(values)
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             if (data.errors) {
-    //                 for (var field in data.errors) {
-    //                     if (!Object.prototype.hasOwnProperty.call(data.errors, field)) continue;
-    //                     actions.setFieldError(field, data.errors[field].join(' '));
-    //                 }
-    //             } else if (data.exception) {
-    //                 actions.setFieldError('general', data.message);
-    //             } else {
-    //                 setSaveSuccess(true);
-    //                 setTimeout(() => props.history.push('/manipulations'), Constants.FORM_REDIRECT_TIMEOUT);
-    //             }
-    //         })
-    //         .finally(() => {
-    //             setSaveLoading(false);
-    //         });
-    // };
 
     const getCalendarData = () => {
         var data = [];
@@ -500,6 +458,7 @@ export default function ManipulationSlots(props) {
 
     const navigateWeek = (direction) => {
         setCurrentMonday(moment(currentMonday)[direction == 1 ? 'add' : 'subtract'](7, 'days').format('YYYY-MM-DD'));
+        // TODO : Set has based on the current week (2020w26)
     };
     const createTableCaption = (monday) => monday && (
         <Grid container justify="center">
@@ -564,14 +523,14 @@ export default function ManipulationSlots(props) {
                             variant="contained"
                             color="primary"
                             size="large"
-                            disabled={isGenerateLoading}
-                            className={generateSuccess ? classes.buttonSuccess : ''}
-                            startIcon={generateSuccess ? <CheckIcon /> : <SettingsIcon />}
-                            onClick={generateSlots}
+                            disabled={!!isGenerateLoading}
+                            className={generateSuccess === 'all' ? classes.buttonSuccess : ''}
+                            startIcon={generateSuccess === 'all' ? <CheckIcon /> : <SettingsIcon />}
+                            onClick={() => generateSlots(null, 'all')}
                         >
                             {'Générer les créneaux de manipulation'}
                         </Button>
-                        {isGenerateLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                        {isGenerateLoading === 'all' && <CircularProgress size={24} className={classes.buttonProgress} />}
                     </div>
                 </Grid>
             </>
@@ -612,6 +571,32 @@ export default function ManipulationSlots(props) {
         // TODO : Get real overbooking setting
         var overbooking = 110;
         var slotCountProgress = (slotData.length / manipulationData.target_slots)*100;
+
+        // Store next availability
+        var firstAvailableDay = moment(slotData[slotData.length-1].end);
+        // eslint-disable-next-line no-constant-condition
+        while(true){
+            // Add 1 day until we find an enabled day
+            firstAvailableDay.add(1, 'day');
+            const dayHours = manipulationData.available_hours[firstAvailableDay.clone().locale('en').format('ddd')];
+            if(dayHours.enabled){
+                // Now set the time to the start of the day
+                if(dayHours.am){
+                    const [start_h, start_m] = dayHours.start_am.split(':');
+                    firstAvailableDay.hour(start_h).minutes(start_m);
+                    break;
+                }
+                if(dayHours.pm){
+                    const [start_h, start_m] = dayHours.start_pm.split(':');
+                    firstAvailableDay.hour(start_h).minutes(start_m);
+                    break;
+                }
+            }
+        }
+        if(newSlotDatetime === null){
+            setNewSlotDatetime(firstAvailableDay);
+            setNewSlotDate(firstAvailableDay);
+        }
     }
 
     return (
@@ -691,14 +676,14 @@ export default function ManipulationSlots(props) {
                             </Typography>
                         </Grid>
                         <Grid item xs={4}>
-                            <Typography component="p" variant="body1" align="center" color="textPrimary">
-                                {/* // TODO : Fetch real overbooking setting */}
-                                {'Paramétrage de surréservation :'} <strong>{overbooking+'%'}</strong>
+                            <Typography component="p" variant="body1" align="right" color="textPrimary">
+                                {'Nombre de créneaux créés :'} <strong>{slotData.length}</strong>
                             </Typography>
                         </Grid>
                         <Grid item xs={4}>
-                            <Typography component="p" variant="body1" align="right" color="textPrimary">
-                                {'Nombre de créneaux créés :'} <strong>{slotData.length}</strong>
+                            <Typography component="p" variant="body1" align="center" color="textPrimary">
+                                {/* // TODO : Fetch real overbooking setting */}
+                                {'Paramétrage de surréservation :'} <strong>{overbooking+'%'}</strong>
                             </Typography>
                         </Grid>
                         <Grid item xs={12}>
@@ -747,7 +732,7 @@ export default function ManipulationSlots(props) {
                                             { createSuccess !== 'newSlotDatetime' && isCreateLoading !== 'newSlotDatetime' && <AddIcon />}
                                         </>
                                     )}
-                                    onClick={() => createSlot(newSlotDatetime, 'newSlotDatetime')}
+                                    onClick={() => createSlot(newSlotDatetime.format('YYYY-MM-DD HH:mm'), 'newSlotDatetime')}
                                 >
                                     Ajouter
                                 </Button>
@@ -757,6 +742,56 @@ export default function ManipulationSlots(props) {
                                         <strong>{createError}</strong>
                                     </Typography>
                                 )}
+                            </LabelledOutline>
+                        </Grid>
+                        <Grid item xs={4} container justify="center">
+                            <LabelledOutline id="newSlotDatetime" label="Remplir une journée">
+                                <DatePicker
+                                    ampm={false}
+                                    format="DD/MM/YYYY"
+                                    minutesStep={5}
+                                    value={newSlotDate}
+                                    onChange={date => { setNewSlotDate(date); }}
+                                />
+                                <Button
+                                    variant="contained"
+                                    color="default"
+                                    size="small"
+                                    ml={2}
+                                    disabled={!!isGenerateLoading}
+                                    startIcon={(
+                                        <>
+                                            { isGenerateLoading === 'newSlotDate' && <CircularProgress size={16} />}
+                                            { generateSuccess === 'newSlotDate' && <CheckIcon />}
+                                            { generateSuccess !== 'newSlotDate' && isGenerateLoading !== 'newSlotDate' && <AddIcon />}
+                                        </>
+                                    )}
+                                    onClick={() => generateSlots(newSlotDate.format('YYYY-MM-DD HH:mm'), 'newSlotDate')}
+                                >
+                                    Remplir
+                                </Button>
+                            </LabelledOutline>
+                        </Grid>
+                        <Grid item xs={4} container justify="center">
+                            <LabelledOutline id="newSlotDatetime" label="Générer jusqu'à remplissage">
+
+                                <Button
+                                    variant="contained"
+                                    color="default"
+                                    size="small"
+                                    ml={2}
+                                    disabled={!!isCreateLoading || !!isGenerateLoading}
+                                    startIcon={(
+                                        <>
+                                            { isGenerateLoading === 'fromDate' && <CircularProgress size={16} />}
+                                            { generateSuccess === 'fromDate' && <CheckIcon />}
+                                            { generateSuccess !== 'fromDate' && isGenerateLoading !== 'fromDate' && <SettingsIcon />}
+                                        </>
+                                    )}
+                                    onClick={() => generateSlots(null, 'fromDate')}
+                                >
+                                    Générer à partir du {firstAvailableDay.format('DD/MM/YYYY')}
+                                </Button>
                             </LabelledOutline>
                         </Grid>
                     </MuiPickersUtilsProvider>
