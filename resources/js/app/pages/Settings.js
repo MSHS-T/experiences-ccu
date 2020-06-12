@@ -6,6 +6,6 @@ export default class Settings extends Component {
             <div>
                 Settings Page
             </div>
-        )
+        );
     }
 }

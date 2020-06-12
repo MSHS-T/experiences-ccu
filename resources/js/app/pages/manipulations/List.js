@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import MaterialTable from "material-table";
+import React, { useState, useEffect } from 'react';
+import MaterialTable from 'material-table';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -9,17 +9,18 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ViewIcon from '@material-ui/icons/Visibility';
+import TodayIcon from '@material-ui/icons/Today';
 
-import { useAuthContext } from "../../context/Auth";
-import * as Constants from "../../data/Constants";
+import { useAuthContext } from '../../context/Auth';
+import * as Constants from '../../data/Constants';
 
 const useStyles = makeStyles(theme => ({
     statusDanger: {
-        color: theme.palette.error.main,
+        color:      theme.palette.error.main,
         fontWeight: 'bold'
     },
     statusWarning: {
-        color: theme.palette.warning.main,
+        color:      theme.palette.warning.main,
         fontWeight: 'bold'
     },
     statusOk: {
@@ -40,7 +41,7 @@ export default function ManipulationList(props) {
         setLoading(true);
         setTableData([]);
 
-        fetch(Constants.API_MANIPULATIONS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(data => data.json())
             // Reprocess data :
@@ -54,12 +55,12 @@ export default function ManipulationList(props) {
                 setTableData(data);
                 setLoading(false);
             });
-    }
+    };
 
     const handleDelete = (entry) => {
         setDeleteError(null);
         fetch(Constants.API_MANIPULATIONS_ENDPOINT + entry.id, {
-            method: 'DELETE',
+            method:  'DELETE',
             headers: {
                 'Authorization': 'bearer ' + accessToken,
             }
@@ -75,7 +76,7 @@ export default function ManipulationList(props) {
                 setDeleteError(err.message);
                 setDeleteEntry(null);
             });
-    }
+    };
 
     const Stats = (rowData) => {
         const target = rowData.target_slots;
@@ -85,7 +86,7 @@ export default function ManipulationList(props) {
         const slotsPercent = slots / target * 100;
         const signedupPercent = signedup / target * 100;
 
-        const colorPercent = (percent) => (percent < 100 ? classes.statusDanger : (percent >= 110 ? classes.statusOk : classes.statusWarning))
+        const colorPercent = (percent) => (percent < 100 ? classes.statusDanger : (percent >= 110 ? classes.statusOk : classes.statusWarning));
 
         return (
             <>
@@ -95,8 +96,8 @@ export default function ManipulationList(props) {
                 <span> | </span>
                 <Typography variant="inherit" display="inline">{target} Cible</Typography>
             </>
-        )
-    }
+        );
+    };
 
 
     useEffect(loadData, []); // Empty array means useEffect will only be called on first render
@@ -115,51 +116,56 @@ export default function ManipulationList(props) {
                 ]}
                 actions={[
                     {
-                        icon: 'refresh',
-                        tooltip: 'Recharger',
+                        icon:         'refresh',
+                        tooltip:      'Recharger',
                         isFreeAction: true,
-                        onClick: loadData,
+                        onClick:      loadData,
                     },
                     {
-                        icon: 'add',
-                        tooltip: 'Nouvelle Manipulation',
+                        icon:         'add',
+                        tooltip:      'Nouvelle Manipulation',
                         isFreeAction: true,
-                        onClick: (event) => props.history.push('/manipulations/new')
+                        onClick:      () => props.history.push('/manipulations/new')
                     },
                     {
-                        icon: () => <ViewIcon />,
+                        icon:    () => <ViewIcon />,
                         tooltip: 'Visualiser',
                         onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id)
                     },
                     {
-                        icon: 'edit',
+                        icon:    () => <TodayIcon />,
+                        tooltip: 'Créneaux',
+                        onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id + '/slots')
+                    },
+                    {
+                        icon:    'edit',
                         tooltip: 'Modifier',
                         onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id + '/edit')
                     },
                     {
-                        icon: 'delete',
+                        icon:    'delete',
                         tooltip: 'Supprimer',
                         onClick: (event, rowData) => setDeleteEntry(rowData)
                     }
                 ]}
                 options={{
                     actionsColumnIndex: 5,
-                    filtering: true,
-                    pageSize: 10,
-                    pageSizeOptions: [10, 25, 50]
+                    filtering:          true,
+                    pageSize:           10,
+                    pageSizeOptions:    [10, 25, 50]
                 }}
                 localization={{
                     pagination: {
                         labelDisplayedRows: '{from}-{to} sur {count}',
-                        labelRowsSelect: 'lignes',
-                        labelRowsPerPage: 'Lignes par page',
+                        labelRowsSelect:    'lignes',
+                        labelRowsPerPage:   'Lignes par page',
                     },
                     header: {
                         actions: 'Actions'
                     },
                     body: {
                         emptyDataSourceMessage: 'Aucune ligne à afficher',
-                        filterRow: {
+                        filterRow:              {
                             filterTooltip: 'Filtrer'
                         }
                     }
@@ -176,8 +182,8 @@ export default function ManipulationList(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {deleteEntry ? ("Supprimer la manipulation " + deleteEntry.name + " ?") : ""}
-                    {deleteError ? ("Erreur lors de la suppression : " + deleteError) : ""}
+                    {deleteEntry ? ('Supprimer la manipulation ' + deleteEntry.name + ' ?') : ''}
+                    {deleteError ? ('Erreur lors de la suppression : ' + deleteError) : ''}
                 </DialogTitle>
                 {deleteEntry && (
                     <DialogActions>
@@ -198,6 +204,6 @@ export default function ManipulationList(props) {
                 )}
             </Dialog>
         </>
-    )
+    );
 }
 

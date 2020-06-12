@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,7 +14,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::group(['middleware' => 'apiheader'], function($router){
+Route::group(['middleware' => 'apiheader'], function ($router) {
     Route::group(['prefix' => 'auth'], function ($router) {
         Route::post('login', 'AuthController@login')->name('login');
         Route::post('logout', 'AuthController@logout');
@@ -24,4 +25,12 @@ Route::group(['middleware' => 'apiheader'], function($router){
     Route::apiResource('equipment', 'API\EquipmentController');
     Route::apiResource('manipulation', 'API\ManipulationController');
     Route::apiResource('plateau', 'API\PlateauController');
+
+    Route::prefix('slot')->group(function () {
+        Route::get('{manipulation}', 'API\SlotController@index');
+        Route::post('{manipulation}/generate', 'API\SlotController@generate');
+        Route::post('{manipulation}', 'API\SlotController@store');
+        Route::put('{slot}', 'API\SlotController@update');
+        Route::delete('{slot}', 'API\SlotController@destroy');
+    });
 });

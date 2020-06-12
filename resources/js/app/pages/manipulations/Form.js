@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-import { Formik, FieldArray } from "formik";
+import { Formik, FieldArray } from 'formik';
 import * as Yup from 'yup';
 
 import mapValues from 'lodash/mapValues';
 
 import Button from '@material-ui/core/Button';
-import CircularProgress from "@material-ui/core/CircularProgress";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from "@material-ui/core/FormHelperText";
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -19,7 +19,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
-import Typography from "@material-ui/core/Typography";
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 
@@ -33,15 +33,15 @@ import CheckIcon from '@material-ui/icons/Check';
 import RemoveIcon from '@material-ui/icons/Remove';
 import SaveIcon from '@material-ui/icons/Save';
 
-import { useAuthContext } from "../../context/Auth";
-import * as Constants from "../../data/Constants";
-import AvailableHours from "../../components/AvailableHours";
-import ErrorPage from "../Error";
-import Loading from "../Loading";
+import { useAuthContext } from '../../context/Auth';
+import * as Constants from '../../data/Constants';
+import AvailableHours from '../../components/AvailableHours';
+import ErrorPage from '../Error';
+import Loading from '../Loading';
 
 const useStyles = makeStyles(theme => ({
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width:     '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(3),
     },
     formControl: {
@@ -51,33 +51,33 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(2)
     },
     requirementsContainer: {
-        border: '1px solid ' + theme.palette.divider,
+        border:       '1px solid ' + theme.palette.divider,
         borderRadius: 5,
-        padding: theme.spacing(2),
+        padding:      theme.spacing(2),
     },
     buttonRow: {
-        display: 'flex',
+        display:        'flex',
         justifyContent: 'center'
     },
     buttonWrapper: {
-        margin: theme.spacing(2),
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
+        margin:         theme.spacing(2),
+        position:       'relative',
+        display:        'flex',
+        flexDirection:  'column',
         justifyContent: 'center'
     },
     buttonSuccess: {
         backgroundColor: green[500],
-        '&:hover': {
+        '&:hover':       {
             backgroundColor: green[700],
         },
     },
     buttonProgress: {
-        color: green[500],
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        marginTop: -12,
+        color:      green[500],
+        position:   'absolute',
+        top:        '50%',
+        left:       '50%',
+        marginTop:  -12,
         marginLeft: -12,
     },
 }));
@@ -86,7 +86,7 @@ export default function ManipulationForm(props) {
     const classes = useStyles();
     const { accessToken } = useAuthContext();
 
-    const [mode, setMode] = useState("CREATE");
+    const [mode, setMode] = useState('CREATE');
     const [dataLoading, setDataLoading] = useState(0);
     const [isSaveLoading, setSaveLoading] = useState(false);
     const [manipulationData, setManipulationData] = useState(null);
@@ -99,7 +99,7 @@ export default function ManipulationForm(props) {
         setDataLoading(dataLoading + 2);
         setUserData(null);
 
-        fetch(Constants.API_USERS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_USERS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(data => data.json())
             // Reprocess data:
@@ -114,7 +114,7 @@ export default function ManipulationForm(props) {
                 setUserData(data);
                 setDataLoading(dataLoading - 1);
             });
-        fetch(Constants.API_PLATEAUX_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_PLATEAUX_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(data => data.json())
             // Set data in state
@@ -122,21 +122,24 @@ export default function ManipulationForm(props) {
                 setPlateauData(data);
                 setDataLoading(dataLoading - 1);
             });
-    }
+    };
     const loadData = (id) => {
         setDataLoading(dataLoading + 1);
         setManipulationData(null);
 
-        fetch(Constants.API_MANIPULATIONS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`${response.status} (${response.statusText})`);
                 }
-                return response.json()
+                return response.json();
             })
             // Set data in state
             .then(data => {
+                // Only keep managers IDs
+                data.managers = data.managers.map(m => m.id);
+
                 setManipulationData(data);
                 setError(null);
                 setDataLoading(dataLoading - 1);
@@ -146,41 +149,40 @@ export default function ManipulationForm(props) {
                 setError(err.message);
                 setDataLoading(dataLoading - 1);
             });
-    }
+    };
 
     const saveData = (data) => {
         // Reformat some data
-        data.available_hours = mapValues(data.available_hours, (v, d) => {
+        data.available_hours = mapValues(data.available_hours, (v) => {
             ['start_am', 'end_am', 'start_pm', 'end_pm'].forEach(timeField => {
-                v[timeField] = moment(v[timeField], "HH:mm").format("HH:mm");
-            })
+                v[timeField] = moment(v[timeField], 'HH:mm').format('HH:mm');
+            });
             return v;
-        })
+        });
         data.start_date = moment(data.start_date).format('YYYY-MM-DD');
 
-        debugger;
-        if (mode === "CREATE") {
+        if (mode === 'CREATE') {
             return fetch(Constants.API_MANIPULATIONS_ENDPOINT, {
-                method: 'POST',
+                method:  'POST',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept':        'application/json',
                     'Authorization': 'bearer ' + accessToken,
-                    'Content-Type': 'application/json'
+                    'Content-Type':  'application/json'
                 },
                 body: JSON.stringify(data)
-            })
+            });
         } else {
             return fetch(Constants.API_MANIPULATIONS_ENDPOINT + props.match.params.id, {
-                method: 'PUT',
+                method:  'PUT',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept':        'application/json',
                     'Authorization': 'bearer ' + accessToken,
-                    'Content-Type': 'application/json'
+                    'Content-Type':  'application/json'
                 },
                 body: JSON.stringify(data)
-            })
+            });
         }
-    }
+    };
 
 
 
@@ -190,21 +192,21 @@ export default function ManipulationForm(props) {
     useEffect(() => {
         setLabelWidth(inputLabel.current.offsetWidth);
         loadExtraData();
-        if (props.match.params.hasOwnProperty("id")) {
-            setMode("EDIT");
+        if (Object.prototype.hasOwnProperty.call(props.match.params, 'id')) {
+            setMode('EDIT');
             loadData(props.match.params.id);
         }
     }, []); // Empty array means useEffect will only be called on first render
 
     if (dataLoading > 0) {
-        return <Loading />
+        return <Loading />;
     }
-    if (error !== null || (mode === "EDIT" && manipulationData === null)) {
+    if (error !== null || (mode === 'EDIT' && manipulationData === null)) {
         return (
             <ErrorPage>
-                Une erreur s'est produite : <strong>{(error !== null ? error : ("No data"))}</strong>
+                Une erreur s&apos;est produite : <strong>{(error !== null ? error : ('No data'))}</strong>
             </ErrorPage>
-        )
+        );
     }
 
     const meProps = props;
@@ -217,58 +219,58 @@ export default function ManipulationForm(props) {
     return (
         <>
             <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom>
-                {mode === "CREATE" ? "Nouvelle Manipulation" : `Modification de la Manipulation #${props.match.params.id}`}
+                {mode === 'CREATE' ? 'Nouvelle Manipulation' : `Modification de la Manipulation #${props.match.params.id}`}
             </Typography>
             <hr />
             <MuiPickersUtilsProvider utils={MomentUtils}>
                 <Formik
                     initialValues={{
-                        name: '',
-                        description: '',
-                        plateau_id: '',
-                        duration: 0,
-                        target_slots: 0,
-                        start_date: new Date(),
-                        location: '',
-                        requirements: [Constants.REQUIREMENT_PREFIX],
+                        name:            '',
+                        description:     '',
+                        plateau_id:      '',
+                        duration:        0,
+                        target_slots:    0,
+                        start_date:      new Date(),
+                        location:        '',
+                        requirements:    [Constants.REQUIREMENT_PREFIX],
                         available_hours: {},
-                        managers: [],
+                        managers:        [],
                         ...manipulationData
                     }}
                     validationSchema={() => {
-                        let hourCondition = {
-                            is: true,
-                            then: Yup.string()
-                                .matches(/^\d{2}:\d{2}$/, "Mauvais format d'heure (HH:mm requis)")
-                                .transform((v, ov) => { return moment(ov, "HH:mm").format("HH:mm") }),
-                            otherwise: Yup.mixed()
-                                .notRequired()
-                                .transform((v, ov) => { return null })
-                        };
+                        // let hourCondition = {
+                        //     is: true,
+                        //     then: Yup.string()
+                        //         .matches(/^\d{2}:\d{2}$/, 'Mauvais format d\'heure (HH:mm requis)')
+                        //         .transform((v, ov) => { return moment(ov, 'HH:mm').format('HH:mm'); }),
+                        //     otherwise: Yup.mixed()
+                        //         .notRequired()
+                        //         .transform((v, ov) => { return null; })
+                        // };
                         let daySchema = Yup
                             .object({
-                                day: Yup.string().oneOf(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']),
-                                enabled: Yup.boolean(),
-                                am: Yup.boolean(),
-                                start_am: Yup.object(),//Yup.mixed().when('am', hourCondition),
-                                end_am: Yup.object(),//Yup.mixed().when('am', hourCondition),
-                                pm: Yup.boolean(),
-                                start_pm: Yup.object(),//Yup.mixed().when('pm', hourCondition),
-                                end_pm: Yup.object(),//Yup.mixed().when('pm', hourCondition),
+                                day:      Yup.string().oneOf(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']),
+                                enabled:  Yup.boolean(),
+                                am:       Yup.boolean(),
+                                start_am: Yup.object(), //Yup.mixed().when('am', hourCondition),
+                                end_am:   Yup.object(), //Yup.mixed().when('am', hourCondition),
+                                pm:       Yup.boolean(),
+                                start_pm: Yup.object(), //Yup.mixed().when('pm', hourCondition),
+                                end_pm:   Yup.object(), //Yup.mixed().when('pm', hourCondition),
                             })
                             .test(
                                 'am-hours',
-                                "La fin de matinée doit être postérieure au début de matinée",
+                                'La fin de matinée doit être postérieure au début de matinée',
                                 v => (!(v.enabled && v.am) || v.end_am > v.start_am)
                             )
                             .test(
                                 'pm-hours',
-                                "La fin d'après-midi doit être postérieure au début d'après-midi",
+                                'La fin d\'après-midi doit être postérieure au début d\'après-midi',
                                 v => (!(v.enabled && v.pm) || v.end_pm > v.start_pm)
                             )
                             .test(
                                 'pm-hours',
-                                "Le début d'après-midi doit être postérieur à la fin de matinée",
+                                'Le début d\'après-midi doit être postérieur à la fin de matinée',
                                 v => (!(v.enabled && v.am && v.pm) || v.start_pm > v.end_am)
                             );
 
@@ -288,7 +290,7 @@ export default function ManipulationForm(props) {
                             location: Yup.string()
                                 .required('Requis'),
                             requirements: Yup.array().of(
-                                Yup.string().required("Requis").notOneOf([Constants.REQUIREMENT_PREFIX], "Requis")
+                                Yup.string().required('Requis').notOneOf([Constants.REQUIREMENT_PREFIX], 'Requis')
                             )
                                 .min(1, '1 Pré-requis minimum'),
                             available_hours: Yup.object({
@@ -313,7 +315,7 @@ export default function ManipulationForm(props) {
                                 .min(1, '1 Responsable minimum')
                                 .max(2, '2 Responsables maximum')
                                 .required('Requis'),
-                        }
+                        };
                         return Yup.object().shape(schema);
                     }}
                     onSubmit={(values, actions) => {
@@ -325,8 +327,8 @@ export default function ManipulationForm(props) {
                             .then(data => {
                                 if (data.errors) {
                                     for (var field in data.errors) {
-                                        if (!data.errors.hasOwnProperty(field)) continue;
-                                        actions.setFieldError(field, data.errors[field].join(" "));
+                                        if (!Object.prototype.hasOwnProperty.call(data.errors, field)) continue;
+                                        actions.setFieldError(field, data.errors[field].join(' '));
                                     }
                                 } else if (data.exception) {
                                     actions.setFieldError('general', data.message);
@@ -362,8 +364,8 @@ export default function ManipulationForm(props) {
                                     <ReactQuill
                                         value={values.description}
                                         onChange={v => {
-                                            setFieldValue("description", v)
-                                            setFieldTouched("description", true)
+                                            setFieldValue('description', v);
+                                            setFieldTouched('description', true);
                                         }}
                                         style={{
                                             // borderRadius: '0.5em',
@@ -390,7 +392,7 @@ export default function ManipulationForm(props) {
                                             ref={inputLabel}
                                         >
                                             Plateau
-                                    </InputLabel>
+                                        </InputLabel>
                                         <Select
                                             labelId="plateau-id-label"
                                             labelWidth={labelWidth}
@@ -455,11 +457,11 @@ export default function ManipulationForm(props) {
                                             helperText={touched.start_date && errors.start_date}
                                             onChange={v => {
                                                 if (moment(v).isValid()) {
-                                                    setFieldValue("start_date", moment(v).toDate())
+                                                    setFieldValue('start_date', moment(v).toDate());
                                                 }
                                             }}
                                             inputVariant="outlined"
-                                            InputAdornmentProps={{ position: "start" }}
+                                            InputAdornmentProps={{ position: 'start' }}
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change date',
                                             }}
@@ -519,9 +521,9 @@ export default function ManipulationForm(props) {
                                                         <Grid item xs={12} key={`requirement-${idx}`}>
                                                             <TextField
                                                                 name="requirements[]"
-                                                                label={"Pré-requis #" + (idx + 1)}
+                                                                label={'Pré-requis #' + (idx + 1)}
                                                                 value={req}
-                                                                onChange={(e) => { arrayHelpers.replace(idx, e.target.value) }}
+                                                                onChange={(e) => { arrayHelpers.replace(idx, e.target.value); }}
                                                                 error={
                                                                     errors.requirements && errors.requirements[idx]
                                                                     && touched.requirements && touched.requirements[idx]
@@ -537,7 +539,7 @@ export default function ManipulationForm(props) {
                                                                         <InputAdornment position="end">
                                                                             <IconButton
                                                                                 aria-label="add new requirement"
-                                                                                onClick={e => {
+                                                                                onClick={() => {
                                                                                     if (idx == values.requirements.length - 1) {
                                                                                         arrayHelpers.push(Constants.REQUIREMENT_PREFIX);
                                                                                     } else {
@@ -557,7 +559,7 @@ export default function ManipulationForm(props) {
                                                 </>
                                             )}
                                         />
-                                        {touched.requirements && errors.requirements && typeof errors.requirements === "string" && (
+                                        {touched.requirements && errors.requirements && typeof errors.requirements === 'string' && (
                                             <FormHelperText error variant="outlined">
                                                 {touched.requirements && errors.requirements}
                                             </FormHelperText>
@@ -572,9 +574,9 @@ export default function ManipulationForm(props) {
                                         error={errors.available_hours && touched.available_hours}
                                         helperText={touched.available_hours && errors.available_hours}
                                         onChange={v => {
-
-                                            setFieldValue("available_hours", v);
-                                            setFieldTouched("available_hours", true, false);
+                                            console.log(v);
+                                            setFieldValue('available_hours', v);
+                                            setFieldTouched('available_hours', true, false);
                                         }}
                                     />
                                 </Grid>
@@ -586,10 +588,10 @@ export default function ManipulationForm(props) {
                                             disabled={isSaveLoading}
                                             className={classes.button}
                                             startIcon={<CancelIcon />}
-                                            onClick={e => !saveSuccess && meProps.history.push('/manipulations')}
+                                            onClick={() => !saveSuccess && meProps.history.push('/manipulations')}
                                         >
                                             Annuler
-                                </Button>
+                                        </Button>
                                     </div>
                                     <div className={classes.buttonWrapper}>
                                         <Button
@@ -601,7 +603,7 @@ export default function ManipulationForm(props) {
                                             className={saveSuccess ? classes.buttonSuccess : ''}
                                             startIcon={saveSuccess ? <CheckIcon /> : <SaveIcon />}
                                         >
-                                            {mode === "CREATE" ? "Créer" : "Modifier"}
+                                            {mode === 'CREATE' ? 'Créer' : 'Modifier'}
                                         </Button>
                                         {isSaveLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
                                     </div>
@@ -609,16 +611,15 @@ export default function ManipulationForm(props) {
                             </Grid>
                             {errors.general && (
                                 <Typography component="p" align="center" color="error">
-                                    Une erreur s'est produite sur le serveur : <strong>{errors.general}</strong>.
-                                <br />
-                                    Veuillez contacter l'administrateur du site.
-                            </Typography>
+                                    Une erreur s&apos;est produite sur le serveur : <strong>{errors.general}</strong>.
+                                    <br />
+                                    Veuillez contacter l&apos;administrateur du site.
+                                </Typography>
                             )}
                         </form>
                     )}
                 </Formik>
             </MuiPickersUtilsProvider>
         </>
-    )
+    );
 }
-

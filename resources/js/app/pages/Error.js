@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import ErrorIcon from '@material-ui/icons/Error';
 
@@ -13,5 +13,5 @@ export default function Error(props) {
                 {props.children}
             </Typography>
         </div>
-    )
+    );
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import ReactHtmlParser from 'react-html-parser';
 
 import Button from '@material-ui/core/Button';
@@ -6,45 +6,45 @@ import Grid from '@material-ui/core/Grid';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import Typography from "@material-ui/core/Typography";
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 import CancelIcon from '@material-ui/icons/Cancel';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-import * as moment from "moment";
+import * as moment from 'moment';
 
-import { useAuthContext } from "../../context/Auth";
-import * as Constants from "../../data/Constants";
-import ErrorPage from "../Error";
-import Loading from "../Loading";
+import { useAuthContext } from '../../context/Auth';
+import * as Constants from '../../data/Constants';
+import ErrorPage from '../Error';
+import Loading from '../Loading';
 
 const useStyles = makeStyles(theme => ({
     label: {
-        fontWeight: 'bold',
+        fontWeight:     'bold',
         textDecoration: 'underline',
-        display: 'block',
-        float: 'left'
+        display:        'block',
+        float:          'left'
     },
     value: {
-        fontSize: '110%',
-        display: 'inline-block',
+        fontSize:   '110%',
+        display:    'inline-block',
         marginLeft: theme.spacing(2)
     },
     noMargin: {
-        marginTop: 0,
+        marginTop:   0,
         paddingLeft: theme.spacing(1)
     },
     wysiwygvalue: {
-        fontSize: '110%',
-        display: 'inline-block',
-        borderLeft: `1px solid ${theme.palette.divider}`,
-        marginLeft: theme.spacing(2),
+        fontSize:    '110%',
+        display:     'inline-block',
+        borderLeft:  `1px solid ${theme.palette.divider}`,
+        marginLeft:  theme.spacing(2),
         paddingLeft: theme.spacing(1)
     },
     buttonRow: {
-        display: 'flex',
+        display:        'flex',
         justifyContent: 'center'
     },
     button: {
@@ -66,13 +66,13 @@ export default function ManipulationView(props) {
         setDataLoading(true);
         setManipulationData(null);
 
-        fetch(Constants.API_MANIPULATIONS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`${response.status} (${response.statusText})`);
                 }
-                return response.json()
+                return response.json();
             })
             // Set data in state
             .then(data => {
@@ -85,12 +85,12 @@ export default function ManipulationView(props) {
                 setError(err.message);
                 setDataLoading(false);
             });
-    }
+    };
 
     const handleDelete = () => {
         setDeleteError(null);
         fetch(Constants.API_MANIPULATIONS_ENDPOINT + manipulationData.id, {
-            method: 'DELETE',
+            method:  'DELETE',
             headers: {
                 'Authorization': 'bearer ' + accessToken,
             }
@@ -106,23 +106,23 @@ export default function ManipulationView(props) {
                 setDeleteError(err.message);
                 setDeleteEntry(false);
             });
-    }
+    };
 
     useEffect(() => {
-        if (props.match.params.hasOwnProperty("id")) {
+        if (Object.prototype.hasOwnProperty.call(props.match.params, 'id')) {
             loadData(props.match.params.id);
         }
     }, []); // Empty array means useEffect will only be called on first render
 
     if (isDataLoading) {
-        return <Loading />
+        return <Loading />;
     }
     if (error !== null) {
         return (
             <ErrorPage>
-                Une erreur s'est produite : <strong>{(error !== null ? error : ("No data"))}</strong>
+                Une erreur s&apos;est produite : <strong>{(error !== null ? error : ('No data'))}</strong>
             </ErrorPage>
-        )
+        );
     }
 
     return (
@@ -144,7 +144,7 @@ export default function ManipulationView(props) {
                     <Typography className={classes.label}>Plateau :</Typography>
                     <Typography className={classes.value}>
                         {
-                            manipulationData && (<a href={"/plateaux/" + manipulationData.plateau.id}>{manipulationData.plateau.name}</a>)
+                            manipulationData && (<a href={'/plateaux/' + manipulationData.plateau.id}>{manipulationData.plateau.name}</a>)
                         }
                     </Typography>
                 </Grid>
@@ -158,7 +158,7 @@ export default function ManipulationView(props) {
                 </Grid>
                 <Grid item xs={12}>
                     <Typography className={classes.label}>Date de début :</Typography>
-                    <Typography className={classes.value}>{manipulationData && moment(manipulationData.start_date).format("DD/MM/YYYY")}</Typography>
+                    <Typography className={classes.value}>{manipulationData && moment(manipulationData.start_date).format('DD/MM/YYYY')}</Typography>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography className={classes.label}>Responsables :</Typography>
@@ -166,7 +166,7 @@ export default function ManipulationView(props) {
                         {
                             manipulationData && manipulationData.managers
                                 .sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
-                                .map(m => (<a href={"/users/" + m.id} key={`user-${m.id}`}>{m.name}</a>))
+                                .map(m => (<a href={'/users/' + m.id} key={`user-${m.id}`}>{m.name}</a>))
                                 .reduce((prev, curr) => [prev, ', ', curr])
                         }
                     </Typography>
@@ -185,7 +185,7 @@ export default function ManipulationView(props) {
                         <dl className={classes.noMargin}>
                             {manipulationData && Object.values(manipulationData.available_hours)
                                 .filter((d) => d.enabled && (d.am || d.pm))
-                                .map((d, i) => {
+                                .map((d) => {
                                     const hours = [];
                                     if (d.am) { hours.push(d.start_am + '-' + d.end_am); }
                                     if (d.pm) { hours.push(d.start_pm + '-' + d.end_pm); }
@@ -219,7 +219,7 @@ export default function ManipulationView(props) {
                         color="primary"
                         className={classes.button}
                         startIcon={<EditIcon />}
-                        onClick={e => props.history.push('/manipulations/' + manipulationData.id + '/edit')}
+                        onClick={() => props.history.push('/manipulations/' + manipulationData.id + '/edit')}
                     >
                         Modifier
                     </Button>
@@ -228,7 +228,7 @@ export default function ManipulationView(props) {
                         color="secondary"
                         className={classes.button}
                         startIcon={<DeleteIcon />}
-                        onClick={e => setDeleteEntry(true)}
+                        onClick={() => setDeleteEntry(true)}
                     >
                         Supprimer
                     </Button>
@@ -244,8 +244,8 @@ export default function ManipulationView(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {(deleteEntry && manipulationData) ? ("Supprimer la manipulation " + manipulationData.name + " ?") : ""}
-                    {deleteError ? ("Erreur lors de la suppression : " + deleteError) : ""}
+                    {(deleteEntry && manipulationData) ? ('Supprimer la manipulation ' + manipulationData.name + ' ?') : ''}
+                    {deleteError ? ('Erreur lors de la suppression : ' + deleteError) : ''}
                 </DialogTitle>
                 {deleteEntry && (
                     <DialogActions>
@@ -266,5 +266,5 @@ export default function ManipulationView(props) {
                 )}
             </Dialog>
         </>
-    )
+    );
 }

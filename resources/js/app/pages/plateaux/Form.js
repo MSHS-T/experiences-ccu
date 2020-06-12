@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-import { Formik } from "formik";
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import Button from '@material-ui/core/Button';
-import CircularProgress from "@material-ui/core/CircularProgress";
+import CircularProgress from '@material-ui/core/CircularProgress';
 import FormControl from '@material-ui/core/FormControl';
-import FormHelperText from "@material-ui/core/FormHelperText";
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Grid from '@material-ui/core/Grid';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import TextField from '@material-ui/core/TextField';
-import Typography from "@material-ui/core/Typography";
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import { green } from '@material-ui/core/colors';
 
@@ -23,42 +23,42 @@ import CancelIcon from '@material-ui/icons/Cancel';
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
 
-import { useAuthContext } from "../../context/Auth";
-import * as Constants from "../../data/Constants";
-import ErrorPage from "../Error";
-import Loading from "../Loading";
+import { useAuthContext } from '../../context/Auth';
+import * as Constants from '../../data/Constants';
+import ErrorPage from '../Error';
+import Loading from '../Loading';
 
 const useStyles = makeStyles(theme => ({
     form: {
-        width: '100%', // Fix IE 11 issue.
+        width:     '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(3),
     },
     formControl: {
         width: '100%',
     },
     buttonRow: {
-        display: 'flex',
+        display:        'flex',
         justifyContent: 'center'
     },
     buttonWrapper: {
-        margin: theme.spacing(2),
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
+        margin:         theme.spacing(2),
+        position:       'relative',
+        display:        'flex',
+        flexDirection:  'column',
         justifyContent: 'center'
     },
     buttonSuccess: {
         backgroundColor: green[500],
-        '&:hover': {
+        '&:hover':       {
             backgroundColor: green[700],
         },
     },
     buttonProgress: {
-        color: green[500],
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        marginTop: -12,
+        color:      green[500],
+        position:   'absolute',
+        top:        '50%',
+        left:       '50%',
+        marginTop:  -12,
         marginLeft: -12,
     },
 }));
@@ -67,7 +67,7 @@ export default function PlateauForm(props) {
     const classes = useStyles();
     const { accessToken } = useAuthContext();
 
-    const [mode, setMode] = useState("CREATE");
+    const [mode, setMode] = useState('CREATE');
     const [dataLoading, setDataLoading] = useState(0);
     const [isSaveLoading, setSaveLoading] = useState(false);
     const [plateauData, setPlateauData] = useState(null);
@@ -79,7 +79,7 @@ export default function PlateauForm(props) {
         setDataLoading(dataLoading + 1);
         setUserData(null);
 
-        fetch(Constants.API_USERS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_USERS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(data => data.json())
             // Reprocess data:
@@ -94,18 +94,18 @@ export default function PlateauForm(props) {
                 setUserData(data);
                 setDataLoading(dataLoading - 1);
             });
-    }
+    };
     const loadData = (id) => {
         setDataLoading(dataLoading + 1);
         setPlateauData(null);
 
-        fetch(Constants.API_PLATEAUX_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_PLATEAUX_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`${response.status} (${response.statusText})`);
                 }
-                return response.json()
+                return response.json();
             })
             // Set data in state
             .then(data => {
@@ -118,31 +118,31 @@ export default function PlateauForm(props) {
                 setError(err.message);
                 setDataLoading(dataLoading - 1);
             });
-    }
+    };
 
     const saveData = (data) => {
-        if (mode === "CREATE") {
+        if (mode === 'CREATE') {
             return fetch(Constants.API_PLATEAUX_ENDPOINT, {
-                method: 'POST',
+                method:  'POST',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept':        'application/json',
                     'Authorization': 'bearer ' + accessToken,
-                    'Content-Type': 'application/json'
+                    'Content-Type':  'application/json'
                 },
                 body: JSON.stringify(data)
-            })
+            });
         } else {
             return fetch(Constants.API_PLATEAUX_ENDPOINT + props.match.params.id, {
-                method: 'PUT',
+                method:  'PUT',
                 headers: {
-                    'Accept': 'application/json',
+                    'Accept':        'application/json',
                     'Authorization': 'bearer ' + accessToken,
-                    'Content-Type': 'application/json'
+                    'Content-Type':  'application/json'
                 },
                 body: JSON.stringify(data)
-            })
+            });
         }
-    }
+    };
 
     const inputLabel = React.useRef(null);
     const [labelWidth, setLabelWidth] = React.useState(0);
@@ -150,21 +150,21 @@ export default function PlateauForm(props) {
     useEffect(() => {
         setLabelWidth(inputLabel.current.offsetWidth);
         loadUsers();
-        if (props.match.params.hasOwnProperty("id")) {
-            setMode("EDIT");
+        if (Object.prototype.hasOwnProperty.call(props.match.params, 'id')) {
+            setMode('EDIT');
             loadData(props.match.params.id);
         }
     }, []); // Empty array means useEffect will only be called on first render
 
     if (dataLoading > 0) {
-        return <Loading />
+        return <Loading />;
     }
-    if (error !== null || (mode === "EDIT" && plateauData === null)) {
+    if (error !== null || (mode === 'EDIT' && plateauData === null)) {
         return (
             <ErrorPage>
-                Une erreur s'est produite : <strong>{(error !== null ? error : ("No data"))}</strong>
+                Une erreur s&apos;est produite : <strong>{(error !== null ? error : ('No data'))}</strong>
             </ErrorPage>
-        )
+        );
     }
 
     const meProps = props;
@@ -172,14 +172,14 @@ export default function PlateauForm(props) {
     return (
         <>
             <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom>
-                {mode === "CREATE" ? "Nouveau Plateau" : `Modification du Plateau #${props.match.params.id}`}
+                {mode === 'CREATE' ? 'Nouveau Plateau' : `Modification du Plateau #${props.match.params.id}`}
             </Typography>
             <hr />
             <Formik
                 initialValues={{
-                    name: '',
-                    description: "",
-                    manager_id: '',
+                    name:        '',
+                    description: '',
+                    manager_id:  '',
                     ...plateauData
                 }}
                 validationSchema={() => {
@@ -190,7 +190,7 @@ export default function PlateauForm(props) {
                             .required('Requis'),
                         description: Yup.string()
                             .required('Requis')
-                    }
+                    };
                     return Yup.object().shape(schema);
                 }}
                 onSubmit={(values, actions) => {
@@ -202,8 +202,8 @@ export default function PlateauForm(props) {
                         .then(data => {
                             if (data.errors) {
                                 for (var field in data.errors) {
-                                    if (!data.errors.hasOwnProperty(field)) continue;
-                                    actions.setFieldError(field, data.errors[field].join(" "));
+                                    if (!Object.prototype.hasOwnProperty.call(data.errors, field)) continue;
+                                    actions.setFieldError(field, data.errors[field].join(' '));
                                 }
                             } else if (data.exception) {
                                 actions.setFieldError('general', data.message);
@@ -269,7 +269,7 @@ export default function PlateauForm(props) {
                                 <ReactQuill
                                     value={values.description}
                                     onChange={v => {
-                                        setFieldValue("description", v)
+                                        setFieldValue('description', v);
                                     }}
                                     style={{
                                         // borderRadius: '0.5em',
@@ -297,10 +297,10 @@ export default function PlateauForm(props) {
                                         disabled={isSaveLoading}
                                         className={classes.button}
                                         startIcon={<CancelIcon />}
-                                        onClick={e => !saveSuccess && meProps.history.push('/plateaux')}
+                                        onClick={() => !saveSuccess && meProps.history.push('/plateaux')}
                                     >
                                         Annuler
-                                </Button>
+                                    </Button>
                                 </div>
                                 <div className={classes.buttonWrapper}>
                                     <Button
@@ -312,7 +312,7 @@ export default function PlateauForm(props) {
                                         className={saveSuccess ? classes.buttonSuccess : ''}
                                         startIcon={saveSuccess ? <CheckIcon /> : <SaveIcon />}
                                     >
-                                        {mode === "CREATE" ? "Créer" : "Modifier"}
+                                        {mode === 'CREATE' ? 'Créer' : 'Modifier'}
                                     </Button>
                                     {isSaveLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
                                 </div>
@@ -320,15 +320,15 @@ export default function PlateauForm(props) {
                         </Grid>
                         {errors.general && (
                             <Typography component="p" align="center" color="error">
-                                Une erreur s'est produite sur le serveur : <strong>{errors.general}</strong>.
+                                Une erreur s&apos;est produite sur le serveur : <strong>{errors.general}</strong>.
                                 <br />
-                                Veuillez contacter l'administrateur du site.
+                                Veuillez contacter l&apos;administrateur du site.
                             </Typography>
                         )}
                     </form>
                 )}
             </Formik>
         </>
-    )
+    );
 }
 
