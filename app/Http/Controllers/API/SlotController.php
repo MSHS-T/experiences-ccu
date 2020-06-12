@@ -44,25 +44,41 @@ class SlotController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function generate(Manipulation $manipulation)
+    public function generate(Manipulation $manipulation, Request $request)
     {
-        // TODO : If manipulation has slots, we generate after the last one until quota is met
-        // TODO : If given a 'date' parameter, we generate slots to fill the available hours of that day
-        // Generate all slots if manipulation doesn't have any
-        if (!$manipulation->slots->isEmpty()) {
-            return [];
+        // If given a 'date' parameter, we generate slots to fill the available hours of that day
+        $fromDate = $request->input('date', false);
+        // If a date was given we will only fill that day
+        $toDate = $fromDate;
+
+        // Existing slots
+        $existingSlots = $manipulation->slots()->orderBy('start')->get();
+
+        // If no date was given, we generate until quota is met
+        if ($fromDate === false) {
+            // If no slots exist we start at the manipulation start date
+            if ($manipulation->slots->isEmpty()) {
+                $fromDate = $manipulation->start_date;
+            }
+            // If slots already exist, we start the day after the last slot
+            else {
+                $fromDate = $existingSlots->last()->start->addDay();
+            }
         }
+
+        // Generate all slots if manipulation doesn't have any
+        // TODO : If manipulation has slots, we generate after the last one until quota is met
         $hours = $manipulation->available_hours;
         $duration = $manipulation->duration;
 
-        $current_date = new Carbon($manipulation->start_date);
+        $current_date = new Carbon($fromDate);
         $current_date->startOfDay();
         $slots = [];
         do {
             $day = $current_date->shortEnglishDayOfWeek;
             if ($hours[$day]['enabled'] === true) {
                 foreach (['am', 'pm'] as $ampm) {
-                    if ($hours[$day]['am'] === true) {
+                    if ($hours[$day][$ampm] === true) {
                         list($start_h, $start_m) = array_map('intval', explode(':', $hours[$day]['start_' . $ampm]));
                         list($end_h, $end_m) = array_map('intval', explode(':', $hours[$day]['end_' . $ampm]));
                         $current_date->setTime($start_h, $start_m, 0);
@@ -76,7 +92,18 @@ class SlotController extends Controller
                 }
             }
             $current_date->startOfDay()->addDay();
-        } while (count($slots) < $manipulation->target_slots); // TODO : Use overbooking percentage from settings
+            if ($toDate !== false && $current_date->greaterThan(Carbon::create($toDate)->endOfDay())) {
+                break;
+            }
+        } while ((count($slots) + count($existingSlots)) < $manipulation->target_slots); // TODO : Use overbooking percentage from settings
+
+        // Filter slots against existing ones (if any) to avoid duplicates
+        $slots = array_filter($slots, function ($s) use ($existingSlots) {
+            return $existingSlots->isEmpty() || $existingSlots->every(function ($slot) use ($s) {
+                return $s['start']->greaterThanOrEqualTo($slot->end)
+                    || $s['end']->lessThanOrEqualTo($slot->start);
+            });
+        });
 
         $manipulation->slots()->createMany($slots);
 
@@ -125,6 +152,7 @@ class SlotController extends Controller
             'subject_email'      => 'required|email'
         ]);
         $slot->fill($data);
+        $slot->save();
         return $slot;
     }
 

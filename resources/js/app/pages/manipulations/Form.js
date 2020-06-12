@@ -137,6 +137,9 @@ export default function ManipulationForm(props) {
             })
             // Set data in state
             .then(data => {
+                // Only keep managers IDs
+                data.managers = data.managers.map(m => m.id);
+
                 setManipulationData(data);
                 setError(null);
                 setDataLoading(dataLoading - 1);
@@ -571,7 +574,7 @@ export default function ManipulationForm(props) {
                                         error={errors.available_hours && touched.available_hours}
                                         helperText={touched.available_hours && errors.available_hours}
                                         onChange={v => {
-
+                                            console.log(v);
                                             setFieldValue('available_hours', v);
                                             setFieldTouched('available_hours', true, false);
                                         }}
