@@ -157,10 +157,14 @@ export default function ManipulationSlots(props) {
                 moment(data[0].start).format('YYYY-MM-DD'),
                 moment(data[data.length-1].end).format('YYYY-MM-DD')
             ]);
-            // Deduce the first monday from the bounds
-            // TODO : Read hash for current week
+            // Deduce the first monday from the bounds (or the hash if filled)
             if(currentMonday === null){
-                setCurrentMonday(moment(data[0].start).startOf('week').format('YYYY-MM-DD'));
+                const hash = location.hash.slice(1);
+                if(hash === ''){
+                    setCurrentMonday(moment(data[0].start).startOf('week').format('YYYY-MM-DD'));
+                } else {
+                    setCurrentMonday(moment(hash, moment.HTML5_FMT.WEEK).startOf('week').format('YYYY-MM-DD'));
+                }
             }
         }
     };
@@ -457,8 +461,9 @@ export default function ManipulationSlots(props) {
     const diffMinutes = (a, b) => momentTime(b).diff(momentTime(a), 'minutes', true);
 
     const navigateWeek = (direction) => {
-        setCurrentMonday(moment(currentMonday)[direction == 1 ? 'add' : 'subtract'](7, 'days').format('YYYY-MM-DD'));
-        // TODO : Set has based on the current week (2020w26)
+        const newMonday = moment(currentMonday)[direction == 1 ? 'add' : 'subtract'](7, 'days');
+        setCurrentMonday(newMonday.format('YYYY-MM-DD'));
+        location.hash = newMonday.format(moment.HTML5_FMT.WEEK);
     };
     const createTableCaption = (monday) => monday && (
         <Grid container justify="center">
@@ -466,7 +471,7 @@ export default function ManipulationSlots(props) {
                 <IconButton
                     aria-label="Semaine précédente"
                     className={classes.weekChange}
-                    disabled={ moment(monday).format('YYYY-MM-DD') <= calendarBounds[0]}
+                    // disabled={ moment(monday).format('YYYY-MM-DD') <= calendarBounds[0]}
                     onClick={() => { navigateWeek(-1); }}
                 >
                     <ArrowLeftIcon/>
@@ -489,7 +494,7 @@ export default function ManipulationSlots(props) {
             </Grid>
         </Grid>
     );
-    const tableCaption = useMemo(() => createTableCaption(currentMonday), [currentMonday]);
+    // const tableCaption = useMemo(() => createTableCaption(currentMonday), [currentMonday]);
 
     if (isDataLoading || isManipulationLoading) {
         return <Loading />;
@@ -607,7 +612,7 @@ export default function ManipulationSlots(props) {
                 <Grid item xs={12}>
                     {manipulationData && (
                         <DayTimeTable
-                            caption={tableCaption}
+                            caption={createTableCaption(currentMonday)}
                             cellKey={cell => cell.id}
                             cellStyle={(rowIndex, colIndex,) => {
                                 if(colIndex < 0){ return {}; }
