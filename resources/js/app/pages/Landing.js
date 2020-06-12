@@ -1,5 +1,4 @@
 import React from 'react';
-import AppBar from '@material-ui/core/AppBar';
 import Badge from '@material-ui/core/Badge';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -20,7 +19,7 @@ const useStyles = makeStyles(theme => ({
             backgroundColor: theme.palette.common.white,
         },
         ul: {
-            margin: 0,
+            margin:  0,
             padding: 0,
         },
         li: {
@@ -37,18 +36,18 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.grey[200],
     },
     cardExperience: {
-        display: 'flex',
+        display:        'flex',
         justifyContent: 'center',
-        alignItems: 'baseline',
-        marginBottom: theme.spacing(2),
+        alignItems:     'baseline',
+        marginBottom:   theme.spacing(2),
     }
 }));
 
 const experiences = [
     {
-        title: 'Cillum veniam id in',
-        enddate: '12/03/2020',
-        slots: 95,
+        title:       'Cillum veniam id in',
+        enddate:     '12/03/2020',
+        slots:       95,
         description: [
             '10 users included',
             '2 GB of storage',
@@ -57,9 +56,9 @@ const experiences = [
         ],
     },
     {
-        title: 'Pariatur eu velit',
-        enddate: '19/07/2020',
-        slots: 11,
+        title:       'Pariatur eu velit',
+        enddate:     '19/07/2020',
+        slots:       11,
         description: [
             '20 users included',
             '10 GB of storage',
@@ -68,9 +67,9 @@ const experiences = [
         ],
     },
     {
-        title: 'Quis culpa sint ad',
-        enddate: '20/06/2020',
-        slots: 59,
+        title:       'Quis culpa sint ad',
+        enddate:     '20/06/2020',
+        slots:       59,
         description: [
             '50 users included',
             '30 GB of storage',
@@ -130,7 +129,7 @@ export default function Landing() {
                                     </CardActions>
                                 </Card>
                             </Grid>
-                        )
+                        );
                     })}
                 </Grid>
                 <Box my={2}>

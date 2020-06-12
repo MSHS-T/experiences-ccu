@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 import BuildIcon from '@material-ui/icons/Build';
 import DashboardIcon from '@material-ui/icons/Dashboard';
@@ -8,243 +8,254 @@ import PeopleIcon from '@material-ui/icons/People';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ShutterSpeedIcon from '@material-ui/icons/ShutterSpeed';
 
-import LandingPage from "../pages/Landing";
-import LoginPage from "../pages/Login";
-import DashboardPage from "../pages/Dashboard";
+import LandingPage from '../pages/Landing';
+import LoginPage from '../pages/Login';
+import DashboardPage from '../pages/Dashboard';
 
-import UsersList from "../pages/users/List";
-import UsersView from "../pages/users/View";
-import UsersForm from "../pages/users/Form";
+import UsersList from '../pages/users/List';
+import UsersView from '../pages/users/View';
+import UsersForm from '../pages/users/Form';
 
-import EquipmentsList from "../pages/equipments/List";
-import EquipmentsView from "../pages/equipments/View";
-import EquipmentsForm from "../pages/equipments/Form";
+import EquipmentsList from '../pages/equipments/List';
+import EquipmentsView from '../pages/equipments/View';
+import EquipmentsForm from '../pages/equipments/Form';
 
-import ManipulationsList from "../pages/manipulations/List";
-import ManipulationsView from "../pages/manipulations/View";
-import ManipulationsForm from "../pages/manipulations/Form";
+import ManipulationsList from '../pages/manipulations/List';
+import ManipulationsView from '../pages/manipulations/View';
+import ManipulationsForm from '../pages/manipulations/Form';
+import ManipulationsSlots from '../pages/manipulations/Slots';
 
-import PlateauxList from "../pages/plateaux/List";
-import PlateauxView from "../pages/plateaux/View";
-import PlateauxForm from "../pages/plateaux/Form";
+import PlateauxList from '../pages/plateaux/List';
+import PlateauxView from '../pages/plateaux/View';
+import PlateauxForm from '../pages/plateaux/Form';
 
-import SettingsPage from "../pages/Settings";
+import SettingsPage from '../pages/Settings';
 
 const SiteMap = [
     {
-        title: 'Accueil',
-        icon: (<HomeIcon />),
-        url: '/',
-        exactPath: true,
-        showInMenu: true,
-        component: LandingPage,
+        title:         'Accueil',
+        icon:          (<HomeIcon />),
+        url:           '/',
+        exactPath:     true,
+        showInMenu:    true,
+        component:     LandingPage,
         authenticated: false
     },
     {
-        title: 'Login',
-        icon: false,
-        url: '/login',
-        exactPath: false,
-        showInMenu: false,
-        component: LoginPage,
+        title:         'Login',
+        icon:          false,
+        url:           '/login',
+        exactPath:     false,
+        showInMenu:    false,
+        component:     LoginPage,
         authenticated: false
     },
     {
-        title: 'Dashboard',
-        icon: (<DashboardIcon />),
-        url: '/dashboard',
-        exactPath: false,
-        showInMenu: true,
-        component: DashboardPage,
+        title:         'Dashboard',
+        icon:          (<DashboardIcon />),
+        url:           '/dashboard',
+        exactPath:     false,
+        showInMenu:    true,
+        component:     DashboardPage,
         authenticated: true,
-        roles: ["ADMIN", "MANIP", "PLAT"]
+        roles:         ['ADMIN', 'MANIP', 'PLAT']
     },
     '---',
     ////////////////
     /// PLATEAUX ///
     ////////////////
     {
-        title: 'Plateaux',
-        icon: (<MeetingRoomIcon />),
-        url: '/plateaux',
-        exactPath: true,
-        showInMenu: true,
-        component: PlateauxList,
+        title:         'Plateaux',
+        icon:          (<MeetingRoomIcon />),
+        url:           '/plateaux',
+        exactPath:     true,
+        showInMenu:    true,
+        component:     PlateauxList,
         authenticated: true,
-        roles: ["ADMIN", "PLAT"]
+        roles:         ['ADMIN', 'PLAT']
     },
     {
-        title: 'Créer un plateau',
-        icon: false,
-        url: '/plateaux/new',
-        exactPath: true,
-        showInMenu: false,
-        component: PlateauxForm,
+        title:         'Créer un plateau',
+        icon:          false,
+        url:           '/plateaux/new',
+        exactPath:     true,
+        showInMenu:    false,
+        component:     PlateauxForm,
         authenticated: true,
-        roles: ["ADMIN", "PLAT"]
+        roles:         ['ADMIN', 'PLAT']
     },
     {
-        title: 'Modifier un plateau',
-        icon: false,
-        url: '/plateaux/:id/edit',
-        exactPath: true,
-        showInMenu: false,
-        component: PlateauxForm,
+        title:         'Modifier un plateau',
+        icon:          false,
+        url:           '/plateaux/:id/edit',
+        exactPath:     true,
+        showInMenu:    false,
+        component:     PlateauxForm,
         authenticated: true,
-        roles: ["ADMIN", "PLAT"]
+        roles:         ['ADMIN', 'PLAT']
     },
     {
-        title: 'Visualiser un plateau',
-        icon: false,
-        url: '/plateaux/:id',
-        exactPath: false,
-        showInMenu: false,
-        component: PlateauxView,
+        title:         'Visualiser un plateau',
+        icon:          false,
+        url:           '/plateaux/:id',
+        exactPath:     false,
+        showInMenu:    false,
+        component:     PlateauxView,
         authenticated: true,
-        roles: ["ADMIN", "PLAT"]
+        roles:         ['ADMIN', 'PLAT']
     },
     /////////////////////
     /// MANIPULATIONS ///
     /////////////////////
     {
-        title: 'Manipulations',
-        icon: (<ShutterSpeedIcon />),
-        url: '/manipulations',
-        exactPath: true,
-        showInMenu: true,
-        component: ManipulationsList,
+        title:         'Manipulations',
+        icon:          (<ShutterSpeedIcon />),
+        url:           '/manipulations',
+        exactPath:     true,
+        showInMenu:    true,
+        component:     ManipulationsList,
         authenticated: true,
-        roles: ["ADMIN", "MANIP"]
+        roles:         ['ADMIN', 'MANIP']
     },
     {
-        title: 'Créer une manipulation',
-        icon: false,
-        url: '/manipulations/new',
-        exactPath: true,
-        showInMenu: false,
-        component: ManipulationsForm,
+        title:         'Créer une manipulation',
+        icon:          false,
+        url:           '/manipulations/new',
+        exactPath:     true,
+        showInMenu:    false,
+        component:     ManipulationsForm,
         authenticated: true,
-        roles: ["ADMIN", "MANIP"]
+        roles:         ['ADMIN', 'MANIP']
     },
     {
-        title: 'Modifier une manipulation',
-        icon: false,
-        url: '/manipulations/:id/edit',
-        exactPath: true,
-        showInMenu: false,
-        component: ManipulationsForm,
+        title:         'Modifier une manipulation',
+        icon:          false,
+        url:           '/manipulations/:id/edit',
+        exactPath:     true,
+        showInMenu:    false,
+        component:     ManipulationsForm,
         authenticated: true,
-        roles: ["ADMIN", "MANIP"]
+        roles:         ['ADMIN', 'MANIP']
     },
     {
-        title: 'Visualiser une manipulation',
-        icon: false,
-        url: '/manipulations/:id',
-        exactPath: false,
-        showInMenu: false,
-        component: ManipulationsView,
+        title:         'Gérer les créneaux',
+        icon:          false,
+        url:           '/manipulations/:id/slots',
+        exactPath:     true,
+        showInMenu:    false,
+        component:     ManipulationsSlots,
         authenticated: true,
-        roles: ["ADMIN", "MANIP"]
+        roles:         ['ADMIN', 'MANIP']
+    },
+    {
+        title:         'Visualiser une manipulation',
+        icon:          false,
+        url:           '/manipulations/:id',
+        exactPath:     false,
+        showInMenu:    false,
+        component:     ManipulationsView,
+        authenticated: true,
+        roles:         ['ADMIN', 'MANIP']
     },
     ////////////////
     /// MATERIEL ///
     ////////////////
     {
-        title: 'Matériel',
-        icon: (<BuildIcon />),
-        url: '/equipments',
-        exactPath: true,
-        showInMenu: true,
-        component: EquipmentsList,
+        title:         'Matériel',
+        icon:          (<BuildIcon />),
+        url:           '/equipments',
+        exactPath:     true,
+        showInMenu:    true,
+        component:     EquipmentsList,
         authenticated: true,
-        roles: ["ADMIN", "PLAT", "MANIP"]
+        roles:         ['ADMIN', 'PLAT', 'MANIP']
     },
     {
-        title: 'Créer un matériel',
-        icon: false,
-        url: '/equipments/new',
-        exactPath: true,
-        showInMenu: false,
-        component: EquipmentsForm,
+        title:         'Créer un matériel',
+        icon:          false,
+        url:           '/equipments/new',
+        exactPath:     true,
+        showInMenu:    false,
+        component:     EquipmentsForm,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles:         ['ADMIN']
     },
     {
-        title: 'Modifier un matériel',
-        icon: false,
-        url: '/equipments/:id/edit',
-        exactPath: true,
-        showInMenu: false,
-        component: EquipmentsForm,
+        title:         'Modifier un matériel',
+        icon:          false,
+        url:           '/equipments/:id/edit',
+        exactPath:     true,
+        showInMenu:    false,
+        component:     EquipmentsForm,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles:         ['ADMIN']
     },
     {
-        title: 'Visualiser un matériel',
-        icon: false,
-        url: '/equipments/:id',
-        exactPath: false,
-        showInMenu: false,
-        component: EquipmentsView,
+        title:         'Visualiser un matériel',
+        icon:          false,
+        url:           '/equipments/:id',
+        exactPath:     false,
+        showInMenu:    false,
+        component:     EquipmentsView,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles:         ['ADMIN']
     },
     '---',
     ////////////////////
     /// UTILISATEURS ///
     ////////////////////
     {
-        title: 'Utilisateurs',
-        icon: (<PeopleIcon />),
-        url: '/users',
-        exactPath: true,
-        showInMenu: true,
-        component: UsersList,
+        title:         'Utilisateurs',
+        icon:          (<PeopleIcon />),
+        url:           '/users',
+        exactPath:     true,
+        showInMenu:    true,
+        component:     UsersList,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles:         ['ADMIN']
     },
     {
-        title: 'Créer un utilisateur',
-        icon: false,
-        url: '/users/new',
-        exactPath: true,
-        showInMenu: false,
-        component: UsersForm,
+        title:         'Créer un utilisateur',
+        icon:          false,
+        url:           '/users/new',
+        exactPath:     true,
+        showInMenu:    false,
+        component:     UsersForm,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles:         ['ADMIN']
     },
     {
-        title: 'Modifier un utilisateur',
-        icon: false,
-        url: '/users/:id/edit',
-        exactPath: true,
-        showInMenu: false,
-        component: UsersForm,
+        title:         'Modifier un utilisateur',
+        icon:          false,
+        url:           '/users/:id/edit',
+        exactPath:     true,
+        showInMenu:    false,
+        component:     UsersForm,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles:         ['ADMIN']
     },
     {
-        title: 'Visualiser un utilisateur',
-        icon: false,
-        url: '/users/:id',
-        exactPath: false,
-        showInMenu: false,
-        component: UsersView,
+        title:         'Visualiser un utilisateur',
+        icon:          false,
+        url:           '/users/:id',
+        exactPath:     false,
+        showInMenu:    false,
+        component:     UsersView,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles:         ['ADMIN']
     },
     //////////////////
     /// PARAMETRES ///
     //////////////////
     {
-        title: 'Paramètres',
-        icon: (<SettingsIcon />),
-        url: '/settings',
-        exactPath: false,
-        showInMenu: true,
-        component: SettingsPage,
+        title:         'Paramètres',
+        icon:          (<SettingsIcon />),
+        url:           '/settings',
+        exactPath:     false,
+        showInMenu:    true,
+        component:     SettingsPage,
         authenticated: true,
-        roles: ["ADMIN"]
+        roles:         ['ADMIN']
     },
     '---',
 ];

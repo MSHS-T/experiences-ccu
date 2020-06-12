@@ -21,7 +21,7 @@ import SiteMap from '../data/SiteMap';
 import IconButton from '@material-ui/core/IconButton';
 
 import RouterLink from './RouterLink';
-import { useAuthContext } from "../context/Auth";
+import { useAuthContext } from '../context/Auth';
 
 function Navigation(props) {
     const { user, logoutUser } = useAuthContext();
@@ -29,24 +29,24 @@ function Navigation(props) {
 
     const useStyles = makeStyles(theme => ({
         root: {
-            paddingTop: theme.mixins.toolbar.minHeight + 20,
-            paddingLeft: 20,
-            paddingRight: 20,
+            paddingTop:                   theme.mixins.toolbar.minHeight + 20,
+            paddingLeft:                  20,
+            paddingRight:                 20,
             [theme.breakpoints.up('md')]: {
                 paddingLeft: drawerWidth + 20,
             },
         },
         appBar: {
             borderBottom: `1px solid ${theme.palette.divider}`,
-            zIndex: theme.zIndex.drawer + 1,
+            zIndex:       theme.zIndex.drawer + 1,
         },
         drawer: {
-            width: drawerWidth,
+            width:      drawerWidth,
             flexShrink: 0,
         },
-        toolbar: theme.mixins.toolbar,
+        toolbar:    theme.mixins.toolbar,
         menuButton: {
-            marginRight: theme.spacing(2),
+            marginRight:                  theme.spacing(2),
             [theme.breakpoints.up('md')]: {
                 display: 'none',
             },
@@ -74,12 +74,10 @@ function Navigation(props) {
         e.preventDefault();
 
         let promise = logoutUser();
-        promise.then(resp => {
+        promise.then(() => {
             props.history.push('/');
         });
     };
-
-
 
     const drawer = (
         <div>
@@ -87,13 +85,13 @@ function Navigation(props) {
             <Divider />
             <List>
                 {SiteMap.filter(link => (link === '---' || link.showInMenu)).map((link, index) => {
-                    if (link === "---") { return (<Divider key={index} />) }
+                    if (link === '---') { return (<Divider key={index} />); }
                     return (
                         <ListItem button component={RouterLink} to={link.url} key={index}>
                             <ListItemIcon>{link.icon}</ListItemIcon>
                             <ListItemText primary={link.title} />
                         </ListItem>
-                    )
+                    );
                 })}
             </List>
         </div>
@@ -117,8 +115,10 @@ function Navigation(props) {
                                 </IconButton>
                             ) : ''
                     }
-                    <Link component={RouterLink} to="/" color="inherit" className={classes.toolbarTitle}>
-                        <Typography variant="h6" color="inherit" noWrap>
+                    <img src="/favicon.png" alt="Logo" height="22" />
+                    &nbsp;
+                    <Link component={RouterLink} to="/" color="inherit" underline="none" className={classes.toolbarTitle}>
+                        <Typography component="h1" variant="h6" color="inherit" noWrap>
                             Expériences CCU
                         </Typography>
                     </Link>

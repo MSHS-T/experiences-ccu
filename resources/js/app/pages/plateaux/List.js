@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import MaterialTable from "material-table";
+import React, { useState, useEffect } from 'react';
+import MaterialTable from 'material-table';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -7,8 +7,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import ViewIcon from '@material-ui/icons/Visibility';
 
-import { useAuthContext } from "../../context/Auth";
-import * as Constants from "../../data/Constants";
+import { useAuthContext } from '../../context/Auth';
+import * as Constants from '../../data/Constants';
 
 
 export default function PlateauList(props) {
@@ -23,7 +23,7 @@ export default function PlateauList(props) {
         setLoading(true);
         setTableData([]);
 
-        fetch(Constants.API_PLATEAUX_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken } })
+        fetch(Constants.API_PLATEAUX_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(data => data.json())
             // Set data in state
@@ -31,12 +31,12 @@ export default function PlateauList(props) {
                 setTableData(data);
                 setLoading(false);
             });
-    }
+    };
 
     const handleDelete = (entry) => {
         setDeleteError(null);
         fetch(Constants.API_PLATEAUX_ENDPOINT + entry.id, {
-            method: 'DELETE',
+            method:  'DELETE',
             headers: {
                 'Authorization': 'bearer ' + accessToken,
             }
@@ -52,7 +52,7 @@ export default function PlateauList(props) {
                 setDeleteError(err.message);
                 setDeleteEntry(null);
             });
-    }
+    };
 
 
     useEffect(loadData, []); // Empty array means useEffect will only be called on first render
@@ -69,51 +69,51 @@ export default function PlateauList(props) {
                 ]}
                 actions={[
                     {
-                        icon: 'refresh',
-                        tooltip: 'Recharger',
+                        icon:         'refresh',
+                        tooltip:      'Recharger',
                         isFreeAction: true,
-                        onClick: loadData,
+                        onClick:      loadData,
                     },
                     {
-                        icon: 'add',
-                        tooltip: 'Nouveau Plateau',
+                        icon:         'add',
+                        tooltip:      'Nouveau Plateau',
                         isFreeAction: true,
-                        onClick: (event) => props.history.push('/plateaux/new')
+                        onClick:      () => props.history.push('/plateaux/new')
                     },
                     {
-                        icon: () => <ViewIcon />,
+                        icon:    () => <ViewIcon />,
                         tooltip: 'Visualiser',
                         onClick: (event, rowData) => props.history.push('/plateaux/' + rowData.id)
                     },
                     {
-                        icon: 'edit',
+                        icon:    'edit',
                         tooltip: 'Modifier',
                         onClick: (event, rowData) => props.history.push('/plateaux/' + rowData.id + '/edit')
                     },
                     {
-                        icon: 'delete',
+                        icon:    'delete',
                         tooltip: 'Supprimer',
                         onClick: (event, rowData) => setDeleteEntry(rowData)
                     }
                 ]}
                 options={{
                     actionsColumnIndex: 5,
-                    filtering: true,
-                    pageSize: 10,
-                    pageSizeOptions: [10, 25, 50]
+                    filtering:          true,
+                    pageSize:           10,
+                    pageSizeOptions:    [10, 25, 50]
                 }}
                 localization={{
                     pagination: {
                         labelDisplayedRows: '{from}-{to} sur {count}',
-                        labelRowsSelect: 'lignes',
-                        labelRowsPerPage: 'Lignes par page',
+                        labelRowsSelect:    'lignes',
+                        labelRowsPerPage:   'Lignes par page',
                     },
                     header: {
                         actions: 'Actions'
                     },
                     body: {
                         emptyDataSourceMessage: 'Aucune ligne à afficher',
-                        filterRow: {
+                        filterRow:              {
                             filterTooltip: 'Filtrer'
                         }
                     }
@@ -130,8 +130,8 @@ export default function PlateauList(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {deleteEntry ? ("Supprimer le plateau " + deleteEntry.name + " ?") : ""}
-                    {deleteError ? ("Erreur lors de la suppression : " + deleteError) : ""}
+                    {deleteEntry ? ('Supprimer le plateau ' + deleteEntry.name + ' ?') : ''}
+                    {deleteError ? ('Erreur lors de la suppression : ' + deleteError) : ''}
                 </DialogTitle>
                 {deleteEntry && (
                     <DialogActions>
@@ -152,6 +152,6 @@ export default function PlateauList(props) {
                 )}
             </Dialog>
         </>
-    )
+    );
 }
 
