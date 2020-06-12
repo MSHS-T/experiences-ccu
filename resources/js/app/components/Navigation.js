@@ -115,8 +115,10 @@ function Navigation(props) {
                                 </IconButton>
                             ) : ''
                     }
-                    <Link component={RouterLink} to="/" color="inherit" className={classes.toolbarTitle}>
-                        <Typography variant="h6" color="inherit" noWrap>
+                    <img src="/favicon.png" alt="Logo" height="22" />
+                    &nbsp;
+                    <Link component={RouterLink} to="/" color="inherit" underline="none" className={classes.toolbarTitle}>
+                        <Typography component="h1" variant="h6" color="inherit" noWrap>
                             Expériences CCU
                         </Typography>
                     </Link>
