@@ -9,7 +9,8 @@
 
     <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png')}}" />
+    <link rel="icon" media="(prefers-color-scheme:dark)" href="{{ asset('favicon-dark-mode.png')}}" type="image/png" />
+    <link rel="icon" media="(prefers-color-scheme:light)" href="{{ asset('favicon.png')}}" type="image/png" />
 </head>
 
 <body>
