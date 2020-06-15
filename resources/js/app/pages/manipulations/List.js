@@ -80,9 +80,8 @@ export default function ManipulationList(props) {
 
     const Stats = (rowData) => {
         const target = rowData.target_slots;
-        // TODO : Get real slots counts
-        const slots = 0; //rowData.slots.length || 0;
-        const signedup = 0; //rowData.slotsFilledCount.length || 0;
+        const slots = rowData.slots.length || 0;
+        const signedup = rowData.slots.filter(s => !!s.subject_email).length || 0;
         const slotsPercent = slots / target * 100;
         const signedupPercent = signedup / target * 100;
 
@@ -206,4 +205,3 @@ export default function ManipulationList(props) {
         </>
     );
 }
-
