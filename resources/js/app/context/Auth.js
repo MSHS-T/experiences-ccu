@@ -66,10 +66,6 @@ const AuthProvider = props => {
                         tokenExpiration: json_token.data.expires_at * 1000
                     });
                 });
-            })
-            .catch(error => {
-                // TODO : Fail gracefully
-                alert(`An Error Occured! ${error}`);
             });
     };
 
