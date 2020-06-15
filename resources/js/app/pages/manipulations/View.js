@@ -26,8 +26,7 @@ const useStyles = makeStyles(theme => ({
     label: {
         fontWeight:     'bold',
         textDecoration: 'underline',
-        display:        'block',
-        float:          'left'
+        textAlign:      'right'
     },
     value: {
         fontSize:   '110%',
@@ -46,11 +45,15 @@ const useStyles = makeStyles(theme => ({
         paddingLeft: theme.spacing(1)
     },
     buttonRow: {
-        display:        'flex',
-        justifyContent: 'center'
+        display:                      'flex',
+        flexDirection:                'column',
+        justifyContent:               'center',
+        [theme.breakpoints.up('sm')]: {
+            flexDirection: 'row',
+        }
     },
     button: {
-        margin: theme.spacing(2)
+        margin: theme.spacing(1)
     }
 }));
 
@@ -133,17 +136,23 @@ export default function ManipulationView(props) {
                 {`Visualisation de la manipulation #${props.match.params.id}`}
             </Typography>
             <hr />
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Nom :</Typography>
+            <Grid container spacing={1}>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Nom</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography className={classes.value}>{manipulationData && manipulationData.name}</Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Description :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Description</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography component="div" className={classes.wysiwygvalue}>{manipulationData && ReactHtmlParser(manipulationData.description)}</Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Plateau :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Plateau</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography className={classes.value}>
                         { manipulationData && (
                             <Link component={RouterLink} to={`/plateaux/${manipulationData.plateau.id}`}>
@@ -152,20 +161,28 @@ export default function ManipulationView(props) {
                         )}
                     </Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Durée :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Durée</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography className={classes.value}>{manipulationData && manipulationData.duration} minutes</Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Cible de participants :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Cible de participants</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography className={classes.value}>{manipulationData && manipulationData.target_slots}</Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Date de début :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Date de début</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography className={classes.value}>{manipulationData && moment(manipulationData.start_date).format('DD/MM/YYYY')}</Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Responsables :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Responsables</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography className={classes.value}>
                         {
                             manipulationData && manipulationData.managers
@@ -179,16 +196,20 @@ export default function ManipulationView(props) {
                         }
                     </Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Pré-requis :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Pré-requis</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <div className={classes.value}>
                         <ul className={classes.noMargin}>
                             {manipulationData && manipulationData.requirements.map((r, i) => <li key={`requirement-${i}`}>{r}</li>)}
                         </ul>
                     </div>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Horaires :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Horaires</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <div className={classes.value}>
                         <dl className={classes.noMargin}>
                             {manipulationData && Object.values(manipulationData.available_hours)

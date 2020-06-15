@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
     label: {
         fontWeight:     'bold',
         textDecoration: 'underline',
-        display:        'inline-block'
+        textAlign:      'right'
     },
     value: {
         fontSize:   '110%',
@@ -36,11 +36,15 @@ const useStyles = makeStyles(theme => ({
         paddingLeft: theme.spacing(2)
     },
     buttonRow: {
-        display:        'flex',
-        justifyContent: 'center'
+        display:                      'flex',
+        flexDirection:                'column',
+        justifyContent:               'center',
+        [theme.breakpoints.up('sm')]: {
+            flexDirection: 'row',
+        }
     },
     button: {
-        margin: theme.spacing(2)
+        margin: theme.spacing(1)
     }
 }));
 
@@ -124,22 +128,28 @@ export default function EquipmentView(props) {
             </Typography>
             <hr />
             <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Nom :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Nom</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography className={classes.value}>{equipmentData && equipmentData.name}</Typography>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Typography className={classes.label}>Type :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Type</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography className={classes.value}>{equipmentData && equipmentData.type}</Typography>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <Typography className={classes.label}>Quantité :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Quantité</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography className={classes.value}>{equipmentData && equipmentData.quantity}</Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Description :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Description</Typography>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={8} sm={6}>
                     <Typography component="div" className={classes.wysiwygvalue}>{equipmentData && ReactHtmlParser(equipmentData.description)}</Typography>
                 </Grid>
                 <Grid item xs={12} className={classes.buttonRow}>

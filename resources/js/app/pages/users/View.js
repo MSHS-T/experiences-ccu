@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     label: {
         fontWeight:     'bold',
         textDecoration: 'underline',
-        display:        'inline-block'
+        textAlign:      'right'
     },
     value: {
         fontSize:   '110%',
@@ -31,11 +31,15 @@ const useStyles = makeStyles(theme => ({
         marginLeft: theme.spacing(2)
     },
     buttonRow: {
-        display:        'flex',
-        justifyContent: 'center'
+        display:                      'flex',
+        flexDirection:                'column',
+        justifyContent:               'center',
+        [theme.breakpoints.up('sm')]: {
+            flexDirection: 'row',
+        }
     },
     button: {
-        margin: theme.spacing(2)
+        margin: theme.spacing(1)
     }
 }));
 
@@ -122,49 +126,65 @@ export default function UserView(props) {
             </Typography>
             <hr />
             <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Prénom :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Prénom</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography className={classes.value}>{userData && userData.first_name}</Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Nom :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Nom</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography className={classes.value}>{userData && userData.last_name}</Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Adresse Email :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Email</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography className={classes.value}>{userData && userData.email}</Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Rôles :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Rôles</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography className={classes.value}>{userData && userData.roles.join(', ')}</Typography>
                 </Grid>
                 {userData && userData.plateaux.length > 0 && (
-                    <Grid item xs={12}>
-                        <Typography className={classes.label}>Plateaux :</Typography>
-                        <Typography className={classes.value}>
-                            {
-                                userData.plateaux.map((p, i) => (
-                                    <Link component={RouterLink} to={`/plateaux/${p.id}`} key={`user-plateaux-${i}`}>
-                                        {p.name}
-                                    </Link>
-                                )).reduce((prev, curr) => [prev, ', ', curr])
-                            }
-                        </Typography>
-                    </Grid>
+                    <>
+                        <Grid item xs={4} sm={6}>
+                            <Typography className={classes.label}>Plateaux</Typography>
+                        </Grid>
+                        <Grid item xs={8} sm={6}>
+                            <Typography className={classes.value}>
+                                {
+                                    userData.plateaux.map((p, i) => (
+                                        <Link component={RouterLink} to={`/plateaux/${p.id}`} key={`user-plateaux-${i}`}>
+                                            {p.name}
+                                        </Link>
+                                    )).reduce((prev, curr) => [prev, ', ', curr])
+                                }
+                            </Typography>
+                        </Grid>
+                    </>
                 )}
                 {userData && userData.manipulations.length > 0 && (
-                    <Grid item xs={12}>
-                        <Typography className={classes.label}>Manipulations :</Typography>
-                        <Typography className={classes.value}>
-                            {
-                                userData.manipulations.map((m, i) => (
-                                    <Link component={RouterLink} to={`/manipulations/${m.id}`} key={`user-manipulations-${i}`}>
-                                        {m.name}
-                                    </Link>
-                                )).reduce((prev, curr) => [prev, ', ', curr])
-                            }
-                        </Typography>
-                    </Grid>
+                    <>
+                        <Grid item xs={4} sm={6}>
+                            <Typography className={classes.label}>Manipulations</Typography>
+                        </Grid>
+                        <Grid item xs={8} sm={6}>
+                            <Typography className={classes.value}>
+                                {
+                                    userData.manipulations.map((m, i) => (
+                                        <Link component={RouterLink} to={`/manipulations/${m.id}`} key={`user-manipulations-${i}`}>
+                                            {m.name}
+                                        </Link>
+                                    )).reduce((prev, curr) => [prev, ', ', curr])
+                                }
+                            </Typography>
+                        </Grid>
+                    </>
                 )}
                 <Grid item xs={12} className={classes.buttonRow}>
                     <Button
