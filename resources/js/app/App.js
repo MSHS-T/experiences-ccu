@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { CssBaseline } from '@material-ui/core';
+import { ConfirmProvider } from 'material-ui-confirm';
+
+import * as moment from 'moment';
 
 import Navigation from './components/Navigation';
 import Router from './components/Router';
 
 import AuthProvider from './context/Auth';
 
-import * as moment from 'moment';
-import { ConfirmProvider } from 'material-ui-confirm';
 
 class App extends Component {
     constructor(props) {
@@ -22,20 +24,29 @@ class App extends Component {
     }
     render() {
         return (
-            <BrowserRouter>
-                <AuthProvider>
-                    <ConfirmProvider defaultOptions={{
-                        title:            'Êtes-vous sûr ?',
-                        confirmationText: 'Confirmer',
-                        cancellationText: 'Annuler'
-                    }}>
-                        <Navigation>
-                            <CssBaseline />
-                            <Router />
-                        </Navigation>
-                    </ConfirmProvider>
-                </AuthProvider>
-            </BrowserRouter>
+            <>
+                <Helmet
+                    titleTemplate="%s | Expériences CCU"
+                >
+                    <meta charset="utf-8" />
+                    <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no" />
+                    <title>Accueil</title>
+                </Helmet>
+                <BrowserRouter>
+                    <AuthProvider>
+                        <ConfirmProvider defaultOptions={{
+                            title:            'Êtes-vous sûr ?',
+                            confirmationText: 'Confirmer',
+                            cancellationText: 'Annuler'
+                        }}>
+                            <Navigation>
+                                <CssBaseline />
+                                <Router />
+                            </Navigation>
+                        </ConfirmProvider>
+                    </AuthProvider>
+                </BrowserRouter>
+            </>
         );
     }
 }
