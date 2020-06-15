@@ -118,14 +118,6 @@ export default function Login(props) {
                                 {'Mot de passe oublié?'}
                             </Link>
                         </Grid>
-                        <Grid item>
-                            {/* TODO : Remove signup link if not needed */}
-                            <Box display="none">
-                                <Link href="#" variant="body2">
-                                    {'Don\'t have an account? Sign Up'}
-                                </Link>
-                            </Box>
-                        </Grid>
                     </Grid>
                 </form>
             </div>
