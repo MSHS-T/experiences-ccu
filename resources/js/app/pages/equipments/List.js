@@ -97,10 +97,11 @@ export default function EquipmentList(props) {
                     } : null)
                 ]}
                 options={{
-                    actionsColumnIndex: 5,
-                    filtering:          true,
-                    pageSize:           10,
-                    pageSizeOptions:    [10, 25, 50]
+                    actionsColumnIndex:  5,
+                    filtering:           true,
+                    pageSize:            25,
+                    pageSizeOptions:     [10, 25, 50],
+                    emptyRowsWhenPaging: false,
                 }}
                 localization={{
                     pagination: {
@@ -154,4 +155,3 @@ export default function EquipmentList(props) {
         </>
     );
 }
-
