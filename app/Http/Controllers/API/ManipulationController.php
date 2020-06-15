@@ -31,7 +31,7 @@ class ManipulationController extends Controller
      */
     public function index(Request $request)
     {
-        return Manipulation::all();
+        return Manipulation::with('slots')->get();
     }
 
     /**
