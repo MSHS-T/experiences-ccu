@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 
 import { makeStyles, useTheme } from '@material-ui/core/styles';
@@ -22,14 +22,14 @@ import IconButton from '@material-ui/core/IconButton';
 
 import RouterLink from './RouterLink';
 import { useAuthContext } from '../context/Auth';
-import { Avatar, MenuItem, Menu } from '@material-ui/core';
+import { Avatar, MenuItem, Menu, createMuiTheme, ThemeProvider } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 
 function Navigation(props) {
     const { user, logoutUser } = useAuthContext();
     const drawerWidth = user ? 200 : 0;
 
-    const useStyles = makeStyles(theme => ({
+    const classes = makeStyles(theme => ({
         root: {
             paddingTop:                   theme.mixins.toolbar.minHeight + 20,
             paddingLeft:                  20,
@@ -48,7 +48,7 @@ function Navigation(props) {
         },
         toolbar:    theme.mixins.toolbar,
         menuButton: {
-            marginRight:                  theme.spacing(2),
+            marginRight:                  theme.spacing(0.5),
             [theme.breakpoints.up('md')]: {
                 display: 'none',
             },
@@ -67,10 +67,31 @@ function Navigation(props) {
         button: {
             margin: theme.spacing(1, 1.5),
         },
-    }));
+    }))();
 
-    const classes = useStyles();
-    const theme = useTheme();
+
+    // Dark Mode management
+    const [isDarkMode, setIsDarkMode] = useState(false);
+    const darkTheme = createMuiTheme({
+        palette: {
+            type: isDarkMode ? 'dark' : 'light'
+        }
+    });
+    const toggleTheme = () => {
+        if(isDarkMode){
+            setIsDarkMode(false);
+            window.localStorage.setItem('theme', 'light');
+        } else {
+            setIsDarkMode(true);
+            window.localStorage.setItem('theme', 'dark');
+        }
+    };
+    useEffect(() => {
+        const localTheme = window.localStorage.getItem('theme');
+        !!localTheme && setIsDarkMode(localTheme === 'dark');
+    }, []);
+
+    // Drawer open state
     const [mobileOpen, setMobileOpen] = useState(false);
 
     // User menu
@@ -118,127 +139,134 @@ function Navigation(props) {
     );
 
     return (
-        <div className={classes.root}>
-            <AppBar position="fixed" color="default" elevation={0} className={classes.appBar}>
-                <Toolbar className={classes.toolbar}>
-                    {
-                        user ?
-                            (
-                                <IconButton
-                                    edge="start"
-                                    className={classes.menuButton}
-                                    color="inherit"
-                                    aria-label="menu"
-                                    onClick={handleDrawerToggle}
-                                >
-                                    <MenuIcon />
-                                </IconButton>
-                            ) : ''
-                    }
-                    <img src="/favicon.png" alt="Logo" height="22" />
+        <ThemeProvider theme={darkTheme}>
+            <div className={classes.root}>
+                <AppBar position="fixed" color="default" elevation={0} className={classes.appBar}>
+                    <Toolbar className={classes.toolbar}>
+                        {
+                            user ?
+                                (
+                                    <IconButton
+                                        edge="start"
+                                        className={classes.menuButton}
+                                        color="inherit"
+                                        aria-label="menu"
+                                        onClick={handleDrawerToggle}
+                                    >
+                                        <MenuIcon />
+                                    </IconButton>
+                                ) : ''
+                        }
+                        <img src={`/favicon${isDarkMode ? '-dark-mode' : ''}.png`} alt="Logo" height="22" />
                     &nbsp;
-                    <Link component={RouterLink} to="/" color="inherit" underline="none">
-                        <Typography component="h1" variant="h6" color="inherit" noWrap>
+                        <Link component={RouterLink} to="/" color="inherit" underline="none">
+                            <Typography component="h1" variant="h6" color="inherit" noWrap>
                             Expériences CCU
-                        </Typography>
-                    </Link>
-                    <div className={classes.toolbarDivider}> </div>
-                    <>
-                        {!!user && (
-                            <Avatar
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleUserMenu}
-                                color="inherit"
-                                className={classes.avatar}
-                            >
-                                <PersonIcon />
-                            </Avatar>
-                        )}
-                        {!!user && (
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorEl}
-                                anchorOrigin={{
-                                    vertical:   'bottom',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical:   'top',
-                                    horizontal: 'right',
-                                }}
-                                open={userMenuOpen}
-                                onClose={handleUserMenuClose}
-                                getContentAnchorEl={null}
-                            >
-                                <MenuItem
-                                    onClick={handleUserMenuClose}
-                                    component={RouterLink}
-                                    to="/profile"
-                                >
-                                    Profil
-                                </MenuItem>
-                                <Divider />
-                                <MenuItem
-                                    onClick={handleLogout}
-                                >
-                                    Déconnexion
-                                </MenuItem>
-                            </Menu>
-                        )}
-                        {!user && (
-                            <Button
-                                component={RouterLink}
-                                to="/login"
-                                color="inherit"
-                                variant="outlined"
-                                className={classes.button}
-                            >
-                            Connexion
-                            </Button>
-                        )}
-                    </>
-                </Toolbar>
-            </AppBar>
-            {
-                user ?
-                    (
+                            </Typography>
+                        </Link>
+                        <div className={classes.toolbarDivider}> </div>
                         <>
-                            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-                            <Hidden mdUp implementation="css">
-                                <Drawer
-                                    variant="temporary"
-                                    anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-                                    open={mobileOpen}
-                                    onClose={handleDrawerToggle}
-                                    classes={{
-                                        paper: classes.drawerPaper,
-                                    }}
-                                    ModalProps={{
-                                        keepMounted: true, // Better open performance on mobile.
-                                    }}
+                            {!!user && (
+                                <Avatar
+                                    aria-label="account of current user"
+                                    aria-controls="menu-appbar"
+                                    aria-haspopup="true"
+                                    onClick={handleUserMenu}
+                                    color="inherit"
+                                    className={classes.avatar}
                                 >
-                                    {drawer}
-                                </Drawer>
-                            </Hidden>
-                            <Hidden smDown implementation="css">
-                                <Drawer
-                                    classes={{
-                                        paper: classes.drawerPaper,
+                                    <PersonIcon />
+                                </Avatar>
+                            )}
+                            {!!user && (
+                                <Menu
+                                    id="menu-appbar"
+                                    anchorEl={anchorEl}
+                                    anchorOrigin={{
+                                        vertical:   'bottom',
+                                        horizontal: 'right',
                                     }}
-                                    variant="permanent"
-                                    open
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical:   'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={userMenuOpen}
+                                    onClose={handleUserMenuClose}
+                                    getContentAnchorEl={null}
                                 >
-                                    {drawer}
-                                </Drawer>
-                            </Hidden>
+                                    <MenuItem
+                                        onClick={handleUserMenuClose}
+                                        component={RouterLink}
+                                        to="/profile"
+                                    >
+                                        Profil
+                                    </MenuItem>
+                                    <MenuItem
+                                        onClick={toggleTheme}
+                                    >
+                                        {isDarkMode ? 'Thème Clair' : 'Thème sombre'}
+                                    </MenuItem>
+                                    <Divider />
+                                    <MenuItem
+                                        onClick={handleLogout}
+                                    >
+                                        Déconnexion
+                                    </MenuItem>
+                                </Menu>
+                            )}
+                            {!user && (
+                                <Button
+                                    component={RouterLink}
+                                    to="/login"
+                                    color="inherit"
+                                    variant="outlined"
+                                    className={classes.button}
+                                >
+                            Connexion
+                                </Button>
+                            )}
                         </>
-                    ) : ''
-            }
-            {props.children}
-        </div>
+                    </Toolbar>
+                </AppBar>
+                {
+                    user ?
+                        (
+                            <>
+                                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+                                <Hidden mdUp implementation="css">
+                                    <Drawer
+                                        variant="temporary"
+                                        anchor="left"
+                                        open={mobileOpen}
+                                        onClose={handleDrawerToggle}
+                                        classes={{
+                                            paper: classes.drawerPaper,
+                                        }}
+                                        ModalProps={{
+                                            keepMounted: true, // Better open performance on mobile.
+                                        }}
+                                    >
+                                        {drawer}
+                                    </Drawer>
+                                </Hidden>
+                                <Hidden smDown implementation="css">
+                                    <Drawer
+                                        classes={{
+                                            paper: classes.drawerPaper,
+                                        }}
+                                        variant="permanent"
+                                        open
+                                    >
+                                        {drawer}
+                                    </Drawer>
+                                </Hidden>
+                            </>
+                        ) : ''
+                }
+                {props.children}
+            </div>
+        </ThemeProvider>
     );
 }
 
