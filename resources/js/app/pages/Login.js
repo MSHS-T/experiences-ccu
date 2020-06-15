@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
-import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import Container from '@material-ui/core/Container';
@@ -44,9 +43,11 @@ const useStyles = makeStyles(theme => ({
 export default function Login(props) {
     const classes = useStyles();
     const { loginUser } = useAuthContext();
+    const [error, setError] = useState(null);
     let _email, _password, _remember;
 
     const handleLogin = e => {
+        setError(null);
         e.preventDefault();
         let promise = loginUser(_email.value, _password.value, _remember.checked ? 1 : 0);
         promise
@@ -54,8 +55,8 @@ export default function Login(props) {
                 props.history.push('/dashboard');
             })
             .catch(error => {
-                console.log(error);
-                // TODO : Show error if login failed
+                console.error(error);
+                setError('Votre connexion a échoué. Veuillez vérifier vos identifiants et réessayer.');
             });
     };
 
@@ -102,6 +103,11 @@ export default function Login(props) {
                         control={<Checkbox value="remember" color="primary" inputRef={input => (_remember = input)} />}
                         label="Se souvenir de moi"
                     />
+                    {!!error && (
+                        <Typography component="p" variant="body1" align="center" color="error" gutterBottom>
+                            {error}
+                        </Typography>
+                    )}
                     <Button
                         type="submit"
                         fullWidth
