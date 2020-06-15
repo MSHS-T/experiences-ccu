@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     label: {
         fontWeight:     'bold',
         textDecoration: 'underline',
-        display:        'inline-block'
+        textAlign:      'right'
     },
     value: {
         fontSize:   '110%',
@@ -38,11 +38,15 @@ const useStyles = makeStyles(theme => ({
         paddingLeft: theme.spacing(2)
     },
     buttonRow: {
-        display:        'flex',
-        justifyContent: 'center'
+        display:                      'flex',
+        flexDirection:                'column',
+        justifyContent:               'center',
+        [theme.breakpoints.up('sm')]: {
+            flexDirection: 'row',
+        }
     },
     button: {
-        margin: theme.spacing(2)
+        margin: theme.spacing(1)
     }
 }));
 
@@ -126,12 +130,16 @@ export default function PlateauView(props) {
             </Typography>
             <hr />
             <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Nom :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Nom</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography className={classes.value}>{plateauData && plateauData.name}</Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Responsable :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Responsable</Typography>
+                </Grid>
+                <Grid item xs={8} sm={6}>
                     <Typography className={classes.value}>
                         {plateauData && (
                             <Link component={RouterLink} to={`/users/${plateauData.manager.id}`}>
@@ -140,25 +148,29 @@ export default function PlateauView(props) {
                         )}
                     </Typography>
                 </Grid>
-                <Grid item xs={12}>
-                    <Typography className={classes.label}>Description :</Typography>
+                <Grid item xs={4} sm={6}>
+                    <Typography className={classes.label}>Description</Typography>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={8} sm={6}>
                     <Typography component="div" className={classes.wysiwygvalue}>{plateauData && ReactHtmlParser(plateauData.description)}</Typography>
                 </Grid>
                 {plateauData && plateauData.manipulations.length > 0 && (
-                    <Grid item xs={12}>
-                        <Typography className={classes.label}>Manipulations :</Typography>
-                        <Typography className={classes.value}>
-                            {
-                                plateauData.manipulations.map((m, i) => (
-                                    <Link component={RouterLink} to={`/manipulations/${m.id}`} key={`plateau-manipulations-${i}`}>
-                                        {m.name}
-                                    </Link>
-                                )).reduce((prev, curr) => [prev, ', ', curr])
-                            }
-                        </Typography>
-                    </Grid>
+                    <>
+                        <Grid item xs={4} sm={6}>
+                            <Typography className={classes.label}>Manipulations</Typography>
+                        </Grid>
+                        <Grid item xs={8} sm={6}>
+                            <Typography className={classes.value}>
+                                {
+                                    plateauData.manipulations.map((m, i) => (
+                                        <Link component={RouterLink} to={`/manipulations/${m.id}`} key={`plateau-manipulations-${i}`}>
+                                            {m.name}
+                                        </Link>
+                                    )).reduce((prev, curr) => [prev, ', ', curr])
+                                }
+                            </Typography>
+                        </Grid>
+                    </>
                 )}
                 <Grid item xs={12} className={classes.buttonRow}>
                     <Button
