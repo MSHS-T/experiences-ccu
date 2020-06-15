@@ -10,6 +10,7 @@ import ShutterSpeedIcon from '@material-ui/icons/ShutterSpeed';
 
 import LandingPage from '../pages/Landing';
 import LoginPage from '../pages/Login';
+import ProfilePage from '../pages/Profile';
 import DashboardPage from '../pages/Dashboard';
 
 import UsersList from '../pages/users/List';
@@ -42,12 +43,21 @@ const SiteMap = [
         authenticated: false
     },
     {
-        title:         'Login',
+        title:         'Connexion',
         icon:          false,
         url:           '/login',
         exactPath:     false,
         showInMenu:    false,
         component:     LoginPage,
+        authenticated: false
+    },
+    {
+        title:         'Profil',
+        icon:          false,
+        url:           '/profile',
+        exactPath:     false,
+        showInMenu:    false,
+        component:     ProfilePage,
         authenticated: false
     },
     {

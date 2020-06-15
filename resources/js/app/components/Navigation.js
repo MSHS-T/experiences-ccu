@@ -22,6 +22,8 @@ import IconButton from '@material-ui/core/IconButton';
 
 import RouterLink from './RouterLink';
 import { useAuthContext } from '../context/Auth';
+import { Avatar, MenuItem, Menu } from '@material-ui/core';
+import PersonIcon from '@material-ui/icons/Person';
 
 function Navigation(props) {
     const { user, logoutUser } = useAuthContext();
@@ -51,11 +53,16 @@ function Navigation(props) {
                 display: 'none',
             },
         },
-        toolbarTitle: {
+        toolbarDivider: {
             flexGrow: 1,
         },
         drawerPaper: {
             width: drawerWidth,
+        },
+        avatar: {
+            border: `1px solid ${theme.palette.divider}`,
+            margin: theme.spacing(0, 3),
+            cursor: 'pointer'
         },
         button: {
             margin: theme.spacing(1, 1.5),
@@ -65,6 +72,19 @@ function Navigation(props) {
     const classes = useStyles();
     const theme = useTheme();
     const [mobileOpen, setMobileOpen] = useState(false);
+
+    // User menu
+    const [anchorEl, setAnchorEl] = useState(null);
+    const userMenuOpen = Boolean(anchorEl);
+
+    const handleUserMenu = event => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleUserMenuClose = () => {
+        setAnchorEl(null);
+    };
+
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
@@ -117,38 +137,68 @@ function Navigation(props) {
                     }
                     <img src="/favicon.png" alt="Logo" height="22" />
                     &nbsp;
-                    <Link component={RouterLink} to="/" color="inherit" underline="none" className={classes.toolbarTitle}>
+                    <Link component={RouterLink} to="/" color="inherit" underline="none">
                         <Typography component="h1" variant="h6" color="inherit" noWrap>
                             Expériences CCU
                         </Typography>
                     </Link>
+                    <div className={classes.toolbarDivider}> </div>
                     <>
-                        {/* TODO : Replace logout button with user menu */}
-                        {
-                            user ?
-                                (
-                                    <Button
-                                        onClick={handleLogout}
-                                        color="inherit"
-                                        variant="outlined"
-                                        className={classes.button}
-                                    >
-                                        Logout
-                                    </Button>
-                                ) :
-                                (
-                                    <Button
-                                        component={RouterLink}
-                                        to="/login"
-                                        color="inherit"
-                                        variant="outlined"
-                                        className={classes.button}
-                                    >
-                                        Login
-                                    </Button>
-                                )
-                        }
-
+                        {!!user && (
+                            <Avatar
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleUserMenu}
+                                color="inherit"
+                                className={classes.avatar}
+                            >
+                                <PersonIcon />
+                            </Avatar>
+                        )}
+                        {!!user && (
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorEl}
+                                anchorOrigin={{
+                                    vertical:   'bottom',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical:   'top',
+                                    horizontal: 'right',
+                                }}
+                                open={userMenuOpen}
+                                onClose={handleUserMenuClose}
+                                getContentAnchorEl={null}
+                            >
+                                <MenuItem
+                                    onClick={handleUserMenuClose}
+                                    component={RouterLink}
+                                    to="/profile"
+                                >
+                                    Profil
+                                </MenuItem>
+                                <Divider />
+                                <MenuItem
+                                    onClick={handleLogout}
+                                >
+                                    Déconnexion
+                                </MenuItem>
+                            </Menu>
+                        )}
+                        {!user && (
+                            <Button
+                                component={RouterLink}
+                                to="/login"
+                                color="inherit"
+                                variant="outlined"
+                                className={classes.button}
+                            >
+                            Connexion
+                            </Button>
+                        )}
                     </>
                 </Toolbar>
             </AppBar>
