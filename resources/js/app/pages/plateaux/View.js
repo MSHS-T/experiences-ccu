@@ -17,6 +17,8 @@ import { useAuthContext } from '../../context/Auth';
 import * as Constants from '../../data/Constants';
 import ErrorPage from '../Error';
 import Loading from '../Loading';
+import { Link } from '@material-ui/core';
+import RouterLink from '../../components/RouterLink';
 
 const useStyles = makeStyles(theme => ({
     label: {
@@ -130,7 +132,13 @@ export default function PlateauView(props) {
                 </Grid>
                 <Grid item xs={12}>
                     <Typography className={classes.label}>Responsable :</Typography>
-                    <Typography className={classes.value}>{plateauData && plateauData.manager.name}</Typography>
+                    <Typography className={classes.value}>
+                        {plateauData && (
+                            <Link component={RouterLink} to={`/users/${plateauData.manager.id}`}>
+                                {plateauData.manager.name}
+                            </Link>
+                        )}
+                    </Typography>
                 </Grid>
                 <Grid item xs={12}>
                     <Typography className={classes.label}>Description :</Typography>
@@ -138,6 +146,20 @@ export default function PlateauView(props) {
                 <Grid item xs={12}>
                     <Typography component="div" className={classes.wysiwygvalue}>{plateauData && ReactHtmlParser(plateauData.description)}</Typography>
                 </Grid>
+                {plateauData && plateauData.manipulations.length > 0 && (
+                    <Grid item xs={12}>
+                        <Typography className={classes.label}>Manipulations :</Typography>
+                        <Typography className={classes.value}>
+                            {
+                                plateauData.manipulations.map((m, i) => (
+                                    <Link component={RouterLink} to={`/manipulations/${m.id}`} key={`plateau-manipulations-${i}`}>
+                                        {m.name}
+                                    </Link>
+                                )).reduce((prev, curr) => [prev, ', ', curr])
+                            }
+                        </Typography>
+                    </Grid>
+                )}
                 <Grid item xs={12} className={classes.buttonRow}>
                     <Button
                         variant="contained"

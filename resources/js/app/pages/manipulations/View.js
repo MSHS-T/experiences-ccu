@@ -19,6 +19,8 @@ import { useAuthContext } from '../../context/Auth';
 import * as Constants from '../../data/Constants';
 import ErrorPage from '../Error';
 import Loading from '../Loading';
+import { Link } from '@material-ui/core';
+import RouterLink from '../../components/RouterLink';
 
 const useStyles = makeStyles(theme => ({
     label: {
@@ -143,9 +145,11 @@ export default function ManipulationView(props) {
                 <Grid item xs={12}>
                     <Typography className={classes.label}>Plateau :</Typography>
                     <Typography className={classes.value}>
-                        {
-                            manipulationData && (<a href={'/plateaux/' + manipulationData.plateau.id}>{manipulationData.plateau.name}</a>)
-                        }
+                        { manipulationData && (
+                            <Link component={RouterLink} to={`/plateaux/${manipulationData.plateau.id}`}>
+                                {manipulationData.plateau.name}
+                            </Link>
+                        )}
                     </Typography>
                 </Grid>
                 <Grid item xs={12}>
@@ -166,7 +170,11 @@ export default function ManipulationView(props) {
                         {
                             manipulationData && manipulationData.managers
                                 .sort((a, b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0))
-                                .map(m => (<a href={'/users/' + m.id} key={`user-${m.id}`}>{m.name}</a>))
+                                .map((m, i) => (
+                                    <Link component={RouterLink} to={`/users/${m.id}`} key={`plateau-manager-${i}`}>
+                                        {m.name}
+                                    </Link>
+                                ))
                                 .reduce((prev, curr) => [prev, ', ', curr])
                         }
                     </Typography>
