@@ -122,11 +122,11 @@ export default function UserView(props) {
             </Typography>
             <hr />
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                     <Typography className={classes.label}>Prénom :</Typography>
                     <Typography className={classes.value}>{userData && userData.first_name}</Typography>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                     <Typography className={classes.label}>Nom :</Typography>
                     <Typography className={classes.value}>{userData && userData.last_name}</Typography>
                 </Grid>
@@ -142,12 +142,13 @@ export default function UserView(props) {
                     <Grid item xs={12}>
                         <Typography className={classes.label}>Plateaux :</Typography>
                         <Typography className={classes.value}>
-                            {userData.plateaux.map((p, i, arr) => (
-                                <React.Fragment key={`user-plateaux-${i}`}>
-                                    <Link component={RouterLink} to={`/plateaux/${p.id}`}>{p.name}</Link>
-                                    {(i < arr.length - 1) && ', '}
-                                </React.Fragment>
-                            ))}
+                            {
+                                userData.plateaux.map((p, i) => (
+                                    <Link component={RouterLink} to={`/plateaux/${p.id}`} key={`user-plateaux-${i}`}>
+                                        {p.name}
+                                    </Link>
+                                )).reduce((prev, curr) => [prev, ', ', curr])
+                            }
                         </Typography>
                     </Grid>
                 )}
@@ -155,12 +156,13 @@ export default function UserView(props) {
                     <Grid item xs={12}>
                         <Typography className={classes.label}>Manipulations :</Typography>
                         <Typography className={classes.value}>
-                            {userData.manipulations.map((m, i, arr) => (
-                                <React.Fragment key={`user-manipulations-${i}`}>
-                                    <Link component={RouterLink} to={`/manipulations/${m.id}`}>{m.name}</Link>
-                                    {(i < arr.length - 1) && ', '}
-                                </React.Fragment>
-                            ))}
+                            {
+                                userData.manipulations.map((m, i) => (
+                                    <Link component={RouterLink} to={`/manipulations/${m.id}`} key={`user-manipulations-${i}`}>
+                                        {m.name}
+                                    </Link>
+                                )).reduce((prev, curr) => [prev, ', ', curr])
+                            }
                         </Typography>
                     </Grid>
                 )}

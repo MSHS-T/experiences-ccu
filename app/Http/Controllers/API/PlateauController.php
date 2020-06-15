@@ -50,7 +50,7 @@ class PlateauController extends Controller
                 'integer',
                 'exists:App\User,id',
                 function ($attribute, $value, $fail) {
-                    $manager = User::where('id', $value)->whereHas('roles', function(Builder $query){
+                    $manager = User::where('id', $value)->whereHas('roles', function (Builder $query) {
                         $query->where('key', 'PLAT');
                     })->first();
                     if (is_null($manager)) {
@@ -72,7 +72,7 @@ class PlateauController extends Controller
      */
     public function show($id)
     {
-        return Plateau::findOrFail($id);
+        return Plateau::with('manipulations')->findOrFail($id);
     }
 
     /**
@@ -93,7 +93,7 @@ class PlateauController extends Controller
                 'integer',
                 'exists:App\User,id',
                 function ($attribute, $value, $fail) {
-                    $manager = User::where('id', $value)->whereHas('roles', function(Builder $query){
+                    $manager = User::where('id', $value)->whereHas('roles', function (Builder $query) {
                         $query->where('key', 'PLAT');
                     })->first();
                     if (is_null($manager)) {
