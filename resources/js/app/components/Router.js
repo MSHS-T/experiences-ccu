@@ -7,6 +7,7 @@ import SiteMap from '../data/SiteMap';
 
 import LoginPage from '../pages/Login';
 import ErrorPage from '../pages/Error';
+import { Helmet } from 'react-helmet';
 
 const PrivateRoute = ({ component, roles, ...options }) => {
     // Fetch user
@@ -32,20 +33,30 @@ const PrivateRoute = ({ component, roles, ...options }) => {
         }
     }
 
-    return <Route {...options} component={finalComponent} />;
+    return <TitledRoute {...options} component={finalComponent} />;
 };
+
+const TitledRoute = ({ title, ...props }) => (
+    <>
+        <Helmet>
+            <title>{title}</title>
+        </Helmet>
+        <Route {...props} />
+    </>
+);
 
 const Router = () => (
     <Switch>
         {/* We filter the dividers out */}
         {SiteMap.filter(link => link !== '---').map((link, index) => {
-            const RouteType = link.authenticated ? PrivateRoute : Route;
+            const RouteType = link.authenticated ? PrivateRoute : TitledRoute;
             return (
                 <RouteType
                     key={index}
                     path={link.url}
                     exact={link.exactPath}
                     roles={link.roles}
+                    title={link.title}
                     component={link.component}
                 />
             );
