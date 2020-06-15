@@ -16,6 +16,8 @@ import { useAuthContext } from '../../context/Auth';
 import * as Constants from '../../data/Constants';
 import ErrorPage from '../Error';
 import Loading from '../Loading';
+import RouterLink from '../../components/RouterLink';
+import { Link } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
     label: {
@@ -136,6 +138,32 @@ export default function UserView(props) {
                     <Typography className={classes.label}>Rôles :</Typography>
                     <Typography className={classes.value}>{userData && userData.roles.join(', ')}</Typography>
                 </Grid>
+                {userData && userData.plateaux.length > 0 && (
+                    <Grid item xs={12}>
+                        <Typography className={classes.label}>Plateaux :</Typography>
+                        <Typography className={classes.value}>
+                            {userData.plateaux.map((p, i, arr) => (
+                                <React.Fragment key={`user-plateaux-${i}`}>
+                                    <Link component={RouterLink} to={`/plateaux/${p.id}`}>{p.name}</Link>
+                                    {(i < arr.length - 1) && ', '}
+                                </React.Fragment>
+                            ))}
+                        </Typography>
+                    </Grid>
+                )}
+                {userData && userData.manipulations.length > 0 && (
+                    <Grid item xs={12}>
+                        <Typography className={classes.label}>Manipulations :</Typography>
+                        <Typography className={classes.value}>
+                            {userData.manipulations.map((m, i, arr) => (
+                                <React.Fragment key={`user-manipulations-${i}`}>
+                                    <Link component={RouterLink} to={`/manipulations/${m.id}`}>{m.name}</Link>
+                                    {(i < arr.length - 1) && ', '}
+                                </React.Fragment>
+                            ))}
+                        </Typography>
+                    </Grid>
+                )}
                 <Grid item xs={12} className={classes.buttonRow}>
                     <Button
                         variant="contained"

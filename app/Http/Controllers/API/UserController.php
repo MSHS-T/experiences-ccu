@@ -54,9 +54,11 @@ class UserController extends Controller
 
         // Set roles
         $allRoles = Role::all();
-        $userRoles = $allRoles->reject(function($r) use ($data){
+        $userRoles = $allRoles->reject(function ($r) use ($data) {
             return !in_array($r->key, $data["roles"]);
-        })->map(function($r){ return $r->id; });
+        })->map(function ($r) {
+            return $r->id;
+        });
         $user->roles()->sync($userRoles->toArray());
 
         $user->save();
@@ -74,7 +76,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return User::with('roles')->findOrFail($id);
+        return User::with(['roles', 'manipulations', 'plateaux'])->findOrFail($id);
     }
 
     /**
@@ -103,9 +105,11 @@ class UserController extends Controller
 
         // Set roles
         $allRoles = Role::all();
-        $userRoles = $allRoles->reject(function($r) use ($data){
+        $userRoles = $allRoles->reject(function ($r) use ($data) {
             return !in_array($r->key, $data["roles"]);
-        })->map(function($r){ return $r->id; });
+        })->map(function ($r) {
+            return $r->id;
+        });
         $user->roles()->sync($userRoles->toArray());
 
         $user->save();
