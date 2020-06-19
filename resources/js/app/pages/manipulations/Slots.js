@@ -573,8 +573,7 @@ export default function ManipulationSlots(props) {
         max = momentToTime(momentTime(max).add(2 * manipulationData.duration, 'minutes'));
         var data = getCalendarData();
 
-        // TODO : Get real overbooking setting
-        var overbooking = 110;
+        var overbooking = APP_SETTINGS.manipulation_overbooking;
         var slotCountProgress = (slotData.length / manipulationData.target_slots)*100;
 
         // Store next availability
@@ -681,13 +680,12 @@ export default function ManipulationSlots(props) {
                             </Typography>
                         </Grid>
                         <Grid item xs={4}>
-                            <Typography component="p" variant="body1" align="right" color="textPrimary">
+                            <Typography component="p" variant="body1" align="center" color="textPrimary">
                                 {'Nombre de créneaux créés :'} <strong>{slotData.length}</strong>
                             </Typography>
                         </Grid>
                         <Grid item xs={4}>
-                            <Typography component="p" variant="body1" align="center" color="textPrimary">
-                                {/* // TODO : Fetch real overbooking setting */}
+                            <Typography component="p" variant="body1" align="right" color="textPrimary">
                                 {'Paramétrage de surréservation :'} <strong>{overbooking+'%'}</strong>
                             </Typography>
                         </Grid>
