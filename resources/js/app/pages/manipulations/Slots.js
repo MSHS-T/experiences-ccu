@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
@@ -130,7 +130,7 @@ export default function ManipulationSlots(props) {
     const [manipulationData, setManipulationData] = useState(null);
     const [slotData, setSlotData] = useState([]);
     // Secondary data states
-    const [calendarBounds, setCalendarBounds] = useState([]);
+    // const [calendarBounds, setCalendarBounds] = useState([]);
     const [currentMonday, setCurrentMonday] = useState(null);
     // CRUD loading states
     const [isGenerateLoading, setGenerateLoading] = useState(false);
@@ -153,10 +153,10 @@ export default function ManipulationSlots(props) {
 
         if(data.length > 0){
             // Process data to get the calendar bounds
-            setCalendarBounds([
-                moment(data[0].start).format('YYYY-MM-DD'),
-                moment(data[data.length-1].end).format('YYYY-MM-DD')
-            ]);
+            // setCalendarBounds([
+            //     moment(data[0].start).format('YYYY-MM-DD'),
+            //     moment(data[data.length-1].end).format('YYYY-MM-DD')
+            // ]);
             // Deduce the first monday from the bounds (or the hash if filled)
             if(currentMonday === null){
                 const hash = location.hash.slice(1);
@@ -573,6 +573,7 @@ export default function ManipulationSlots(props) {
         max = momentToTime(momentTime(max).add(2 * manipulationData.duration, 'minutes'));
         var data = getCalendarData();
 
+        // eslint-disable-next-line no-undef
         var overbooking = APP_SETTINGS.manipulation_overbooking;
         var slotCountProgress = (slotData.length / manipulationData.target_slots)*100;
 

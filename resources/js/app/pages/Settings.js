@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function Settings(props) {
+export default function Settings() {
 
     const classes = useStyles();
     const { accessToken } = useAuthContext();
@@ -65,8 +65,6 @@ export default function Settings(props) {
             body: JSON.stringify(data)
         });
     };
-
-    const meProps = props;
 
     return (
         <>
