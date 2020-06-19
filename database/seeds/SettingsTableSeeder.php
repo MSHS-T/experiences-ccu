@@ -14,6 +14,8 @@ class SettingsTableSeeder extends Seeder
     {
         DB::table('settings')->insertOrIgnore([
             ['name' => 'manipulation_overbooking', 'value' => '120'],
+            ['name' => 'booking_cancellation_delay', 'value' => '1'],
+            ['name' => 'booking_opening_delay', 'value' => '15'],
         ]);
     }
 }
