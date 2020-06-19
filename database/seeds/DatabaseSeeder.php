@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call(SettingsTableSeeder::class);
         $this->call(RolesTableSeeder::class);
         // Insert admin user
         $adminId = DB::table('users')->insertGetId([

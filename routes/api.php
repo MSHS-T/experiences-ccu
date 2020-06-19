@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,4 +32,6 @@ Route::group(['middleware' => 'apiheader'], function ($router) {
         Route::put('{slot}', 'API\SlotController@update');
         Route::delete('{slot}', 'API\SlotController@destroy');
     });
+    Route::get('settings', 'API\SettingController@index');
+    Route::post('settings', 'API\SettingController@store');
 });
