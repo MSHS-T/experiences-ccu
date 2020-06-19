@@ -15,6 +15,10 @@
 
 <body>
     <div id="app"></div>
+    <script type="text/javascript">
+        // Pass settings from Laravel
+        APP_SETTINGS = JSON.parse('{!! json_encode($settings) !!}');
+    </script>
     <script src="{{ mix('/js/app.js') }}"></script>
 </body>
 
