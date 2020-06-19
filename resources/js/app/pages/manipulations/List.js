@@ -85,7 +85,8 @@ export default function ManipulationList(props) {
         const slotsPercent = slots / target * 100;
         const signedupPercent = signedup / target * 100;
 
-        const colorPercent = (percent) => (percent < 100 ? classes.statusDanger : (percent >= 110 ? classes.statusOk : classes.statusWarning));
+        // eslint-disable-next-line no-undef
+        const colorPercent = (percent) => (percent < 100 ? classes.statusDanger : (percent >= APP_SETTINGS.manipulation_overbooking ? classes.statusOk : classes.statusWarning));
 
         return (
             <>
