@@ -40,4 +40,17 @@ class Setting extends Model
      * @var array
      */
     protected $fillable = ['name', 'value'];
+
+    /**
+     * Get all of the models from the database.
+     *
+     * @param  array|mixed  $columns
+     * @return array()
+     */
+    public static function all($columns = ['*'])
+    {
+        return parent::all()->mapWithKeys(function ($item) {
+            return [$item['name'] => $item['value']];
+        })->toArray();
+    }
 }
