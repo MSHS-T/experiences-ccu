@@ -80,6 +80,9 @@ export default function Settings() {
                         booking_cancellation_delay: Yup.number().round()
                             .min(0, 'Minimum autorisé : 0')
                             .required('Requis'),
+                        booking_confirmation_delay: Yup.number().round()
+                            .min(0, 'Minimum autorisé : 0')
+                            .required('Requis'),
                         booking_opening_delay: Yup.number().round()
                             .min(0, 'Minimum autorisé : 0')
                             .required('Requis'),
@@ -135,6 +138,29 @@ export default function Settings() {
                                         }}
                                         InputProps={{
                                             endAdornment: <InputAdornment position="end">Jours</InputAdornment>,
+                                        }}
+                                        fullWidth
+                                        autoFocus
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="booking_confirmation_delay"
+                                        name="booking_confirmation_delay"
+                                        label="Délai maximal pour la confirmation d'une réservation"
+                                        type="number"
+                                        autoComplete="booking_confirmation_delay"
+                                        value={values.booking_confirmation_delay}
+                                        onChange={handleChange}
+                                        error={errors.booking_confirmation_delay && touched.booking_confirmation_delay}
+                                        helperText={(touched.booking_confirmation_delay && errors.booking_confirmation_delay || '') + ' (via le lien envoyé par mail au participant)'}
+                                        variant="outlined"
+                                        inputProps={{
+                                            min:  '0',
+                                            step: '1',
+                                        }}
+                                        InputProps={{
+                                            endAdornment: <InputAdornment position="end">Heures</InputAdornment>,
                                         }}
                                         fullWidth
                                         autoFocus
