@@ -63,7 +63,7 @@ export default function PlateauList(props) {
                 title="Plateaux"
                 isLoading={isLoading}
                 columns={[
-                    { title: 'ID', field: 'id', defaultSort: 'desc' },
+                    { title: 'ID', field: 'id', defaultSort: 'desc', width: 100 },
                     { title: 'Nom', field: 'name' },
                     { title: 'Responsable', field: 'manager.name' }
                 ]}
