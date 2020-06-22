@@ -62,7 +62,7 @@ export default function EquipmentList(props) {
                 title="Matériel"
                 isLoading={isLoading}
                 columns={[
-                    { title: 'ID', field: 'id', defaultSort: 'desc' },
+                    { title: 'ID', field: 'id', defaultSort: 'desc', width: 100 },
                     { title: 'Nom', field: 'name' },
                     { title: 'Type', field: 'type' },
                     { title: 'Quantité', field: 'quantity' }

@@ -69,7 +69,7 @@ export default function UserList(props) {
                 title="Utilisateurs"
                 isLoading={isLoading}
                 columns={[
-                    { title: 'ID', field: 'id', defaultSort: 'desc' },
+                    { title: 'ID', field: 'id', defaultSort: 'desc', width: 100 },
                     { title: 'Prénom', field: 'first_name' },
                     { title: 'Nom', field: 'last_name' },
                     { title: 'Email', field: 'email' },

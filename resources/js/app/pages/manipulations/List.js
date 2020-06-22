@@ -108,9 +108,11 @@ export default function ManipulationList(props) {
                 title="Manipulations"
                 isLoading={isLoading}
                 columns={[
-                    { title: 'ID', field: 'id', defaultSort: 'desc' },
+                    { title: 'ID', field: 'id', defaultSort: 'desc', width: 100 },
                     { title: 'Nom', field: 'name' },
-                    { title: 'Date de début', field: 'start_date', type: 'date' },
+                    { title: 'Date de début', field: 'start_date', type: 'date', width: 200 },
+                    // TODO : Change datepicker format (see PR https://github.com/mbrn/material-table/pull/2082)
+                    { title: 'Durée', field: 'duration', type: 'int', width: 100 },
                     { title: 'Statistiques', field: 'target_slots', render: Stats },
                     { title: 'Responsables', field: 'manager_names' }
                 ]}
@@ -149,7 +151,7 @@ export default function ManipulationList(props) {
                     }
                 ]}
                 options={{
-                    actionsColumnIndex:  5,
+                    actionsColumnIndex:  -1,
                     filtering:           true,
                     pageSize:            25,
                     pageSizeOptions:     [10, 25, 50],
