@@ -105,11 +105,12 @@ class TestManipulationsTableSeeder extends Seeder
                 $confirmed = random_int(1, 4) > 1;
 
                 $slot->fill([
-                    'subject_first_name' => $firstName,
-                    'subject_last_name' => $lastName,
-                    'subject_email' => $email,
-                    'subject_confirmed' => $confirmed,
-                    'subject_confirmation_code' => $confirmed ? null : Str::uuid()
+                    'subject_first_name'        => $firstName,
+                    'subject_last_name'         => $lastName,
+                    'subject_email'             => $email,
+                    'subject_confirmed'         => $confirmed,
+                    'subject_confirmation_code' => $confirmed ? null : Str::uuid(),
+                    'subject_confirm_before'    => $confirmed ? null : $faker->dateTimeBetween('-1 days', '+1 days')
                 ]);
                 $slot->save();
             });

@@ -23,6 +23,7 @@ class CreateSlotsTable extends Migration
             $table->string('subject_email')->nullable(true)->default(null);
             $table->boolean('subject_confirmed')->nullable(true)->default(null);
             $table->string('subject_confirmation_code')->nullable(true)->default(null);
+            $table->dateTime('subject_confirm_before')->nullable(true)->default(null);
 
             $table->foreign('manipulation_id')->references('id')->on('manipulations')->onDelete('cascade');
         });
