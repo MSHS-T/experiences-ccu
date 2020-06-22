@@ -53,4 +53,10 @@ class Setting extends Model
             return [$item['name'] => $item['value']];
         })->toArray();
     }
+
+    public static function get($name)
+    {
+        $setting = parent::findOrFail($name);
+        return $setting->value;
+    }
 }
