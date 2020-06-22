@@ -54,9 +54,14 @@ class Setting extends Model
         })->toArray();
     }
 
-    public static function get($name)
+    public static function get($name, $defaultValue = null)
     {
-        $setting = parent::findOrFail($name);
-        return $setting->value;
+        try {
+            $setting = parent::findOrFail($name);
+            $value = $setting->value;
+        } catch (\Exception $e) {
+            $value = $defaultValue;
+        }
+        return $value;
     }
 }
