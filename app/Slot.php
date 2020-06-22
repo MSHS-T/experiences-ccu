@@ -25,7 +25,8 @@ class Slot extends Model
         'subject_last_name',
         'subject_email',
         'subject_confirmed',
-        'subject_confirmation_code'
+        'subject_confirmation_code',
+        'subject_confirm_before'
     ];
 
     /**
@@ -35,7 +36,8 @@ class Slot extends Model
      */
     protected $dates = [
         'start',
-        'end'
+        'end',
+        'subject_confirm_before'
     ];
 
     /**
