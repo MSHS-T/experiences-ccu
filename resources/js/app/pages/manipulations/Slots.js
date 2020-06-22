@@ -387,7 +387,7 @@ export default function ManipulationSlots(props) {
                             end:   momentToTime(s.end),
                             text:  (
                                 <div>
-                                    <Card style={{ backgroundColor: s.subject_email !== null ? 'lightGreen' : 'orange' }}>
+                                    <Card style={{ backgroundColor: s.subject_email === null ? '#ddd' : (s.subject_confirmed ? 'lightGreen' : 'orange') }}>
                                         <CardHeader
                                             className={classes.cardHeader}
                                             action={
@@ -434,6 +434,12 @@ export default function ManipulationSlots(props) {
                                                     <a href={'mailto:'+s.subject_email} title={s.subject_email}>
                                                         {truncate(s.subject_email, { length: 20 })}
                                                     </a>
+                                                    {!s.subject_confirmed && (
+                                                        <>
+                                                            <br/>
+                                                            <em>Non confirmé</em>
+                                                        </>
+                                                    )}
                                                 </>
                                             )}
                                         </CardContent>
@@ -569,8 +575,8 @@ export default function ManipulationSlots(props) {
         var min = slotData.reduce((best, slot) => momentToTime(slot.start) < best ? momentToTime(slot.start) : best, defaultMin);
         var max = slotData.reduce((best, slot) => momentToTime(slot.start) > best ? momentToTime(slot.end) : best, defaultMax);
 
-        min = momentToTime(momentTime(min).subtract(2 * manipulationData.duration, 'minutes'));
-        max = momentToTime(momentTime(max).add(2 * manipulationData.duration, 'minutes'));
+        min = momentToTime(momentTime(min).subtract(2 * interval, 'minutes'));
+        max = momentToTime(momentTime(max).add(2 * interval, 'minutes'));
         var data = getCalendarData();
 
         // eslint-disable-next-line no-undef

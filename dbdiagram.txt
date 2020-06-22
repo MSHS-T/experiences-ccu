@@ -76,4 +76,6 @@ Table slots {
   subject_first_name varchar [null]
   subject_last_name varchar [null]
   subject_email varchar [null]
+  subject_confirmed boolean [null]
+  subject_confirmation_code varchar [null]
 }
