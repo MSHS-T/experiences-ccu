@@ -23,7 +23,9 @@ class Slot extends Model
         'end',
         'subject_first_name',
         'subject_last_name',
-        'subject_email'
+        'subject_email',
+        'subject_confirmed',
+        'subject_confirmation_code'
     ];
 
     /**

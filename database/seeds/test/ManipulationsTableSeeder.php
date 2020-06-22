@@ -101,10 +101,15 @@ class TestManipulationsTableSeeder extends Seeder
                 $lastName = $faker->lastName;
                 $email = strtolower(Str::slug($firstName) . "." . Str::slug($lastName) . "@" . $faker->freeEmailDomain);
 
+                // 75% chance to be confirmed
+                $confirmed = random_int(1, 4) > 1;
+
                 $slot->fill([
                     'subject_first_name' => $firstName,
                     'subject_last_name' => $lastName,
                     'subject_email' => $email,
+                    'subject_confirmed' => $confirmed,
+                    'subject_confirmation_code' => $confirmed ? null : Str::uuid()
                 ]);
                 $slot->save();
             });

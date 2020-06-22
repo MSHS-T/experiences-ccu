@@ -81,7 +81,7 @@ export default function ManipulationList(props) {
     const Stats = (rowData) => {
         const target = rowData.target_slots;
         const slots = rowData.slots.length || 0;
-        const signedup = rowData.slots.filter(s => !!s.subject_email).length || 0;
+        const signedup = rowData.slots.filter(s => (!!s.subject_email && !!s.subject_confirmed)).length || 0;
         const slotsPercent = slots / target * 100;
         const signedupPercent = signedup / target * 100;
 
