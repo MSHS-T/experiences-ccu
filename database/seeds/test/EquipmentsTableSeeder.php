@@ -26,6 +26,10 @@ class TestEquipmentsTableSeeder extends Seeder
             'Microphone' => 'Enregistrement'
         ];
         $faker = Faker::create('fr_FR');
+
+        $this->command->info("Seeding test equipments.");
+        $bar = $this->command->getOutput()->createProgressBar(count($names));
+        $bar->start();
         foreach ($names as $name => $type) {
             $description = array_map(function ($p) {
                 return '<p>' . $p . '</p>';
@@ -38,6 +42,10 @@ class TestEquipmentsTableSeeder extends Seeder
                 'created_at' => '2019-12-12 12:00',
                 'updated_at' => '2019-12-12 12:00'
             ]);
+            $bar->advance();
         }
+        $bar->finish();
+        $this->command->line("");
+        $this->command->info("Test equipments seeded.");
     }
 }

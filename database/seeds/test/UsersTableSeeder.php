@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
 
@@ -19,10 +20,14 @@ class TestUsersTableSeeder extends Seeder
             'MANIP'
         ];
         $faker = Faker::create('fr_FR');
-        foreach (range(1, 10) as $index) {
+        $this->command->info("Seeding test users with randomized roles.");
+        $nbUsers = 10;
+        $bar = $this->command->getOutput()->createProgressBar($nbUsers);
+        $bar->start();
+        foreach (range(1, $nbUsers) as $index) {
             $firstName = $faker->firstName;
             $lastName = $faker->lastName;
-            $email = strtolower("$firstName.$lastName@" . $faker->freeEmailDomain);
+            $email = strtolower(Str::slug($firstName) . "." . Str::slug($lastName) . "@" . $faker->freeEmailDomain);
             $userId = DB::table('users')->insertGetId([
                 'first_name' => $firstName,
                 'last_name' => $lastName,
@@ -36,6 +41,10 @@ class TestUsersTableSeeder extends Seeder
                 'user_id' => $userId,
                 'role_id' => DB::table('roles')->where('key', $roles[array_rand($roles)])->first()->id
             ]);
+            $bar->advance();
         }
+        $bar->finish();
+        $this->command->line("");
+        $this->command->info("Test users seeded.");
     }
 }

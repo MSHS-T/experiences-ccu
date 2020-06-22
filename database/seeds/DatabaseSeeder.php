@@ -13,9 +13,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->command->info("Starting database Seed...");
+
         $this->call(SettingsTableSeeder::class);
         $this->call(RolesTableSeeder::class);
+
         // Insert admin user
+        $this->command->info("Creating Admin user...");
         $adminId = DB::table('users')->insertGetId([
             'first_name' => 'Administrateur',
             'last_name' => 'CCU',
@@ -30,6 +34,7 @@ class DatabaseSeeder extends Seeder
             'user_id' => $adminId,
             'role_id' => DB::table('roles')->where('name', 'Administrateur')->first()->id
         ]);
+        $this->command->info("Admin user created.");
 
         if (env('APP_ENV', 'production') !== 'production') {
             $this->call(TestDatabaseSeeder::class);

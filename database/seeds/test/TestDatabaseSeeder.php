@@ -11,6 +11,7 @@ class TestDatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->command->info("Current environment is not production, seeding test data.");
         $this->call(TestUsersTableSeeder::class);
         $this->call(TestEquipmentsTableSeeder::class);
         $this->call(TestPlateauxTableSeeder::class);
