@@ -75,6 +75,12 @@ class Manipulation extends Model
         $hours = $this->available_hours;
         $duration = $this->duration;
 
+        // Compute target slot count based on manipulation data and overbooking setting
+        // Overbooking setting will be a numeric percentage string => we need to cast it as int and then divide by 100 to get a multiplier
+        $overbooking_multiplier = (intval(Setting::get('manipulation_overbooking')) / 100);
+        // Round the number up
+        $target_slots = ceil($this->target_slots * $overbooking_multiplier);
+
         $current_date = new Carbon($fromDate);
         $current_date->startOfDay();
         $slots = [];
@@ -99,7 +105,7 @@ class Manipulation extends Model
             if ($toDate !== false && $current_date->greaterThan(Carbon::create($toDate)->endOfDay())) {
                 break;
             }
-        } while ((count($slots) + count($existingSlots)) < $this->target_slots); // TODO : Use overbooking percentage from settings
+        } while ((count($slots) + count($existingSlots)) < $target_slots);
 
         // Filter slots against existing ones (if any) to avoid duplicates
         $slots = array_filter($slots, function ($s) use ($existingSlots) {
