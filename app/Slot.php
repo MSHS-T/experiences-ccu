@@ -72,8 +72,8 @@ class Slot extends Model
 
     public function clearBooking(bool $sendNotification = true)
     {
-        // Keep email if we need to send a notification
-        $email = $this->subject_email;
+        // Keep backup data if we need to send a notification
+        $data = $this->attributesToArray();
         // Clear data
         $this->subject_email = null;
         $this->subject_first_name = null;
