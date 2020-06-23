@@ -167,6 +167,9 @@ export default function ManipulationList(props) {
                     pageSize:            25,
                     pageSizeOptions:     [10, 25, 50],
                     emptyRowsWhenPaging: false,
+                    rowStyle:            rowData => ({
+                        backgroundColor: (rowData.deleted_at !== null) ? '#CCC' : '#FFF'
+                    })
                 }}
                 localization={{
                     pagination: {
