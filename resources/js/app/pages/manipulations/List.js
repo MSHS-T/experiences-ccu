@@ -8,8 +8,10 @@ import Typography from '@material-ui/core/Typography';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import ViewIcon from '@material-ui/icons/Visibility';
+import ArchiveIcon from '@material-ui/icons/Archive';
 import TodayIcon from '@material-ui/icons/Today';
+import UnarchiveIcon from '@material-ui/icons/Unarchive';
+import ViewIcon from '@material-ui/icons/Visibility';
 
 import { useAuthContext } from '../../context/Auth';
 import * as Constants from '../../data/Constants';
@@ -28,6 +30,12 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
+const emptyAction = {
+    icon:     '',
+    tooltip:  '',
+    disabled: true
+};
+
 export default function ManipulationList(props) {
     const classes = useStyles();
     const { accessToken } = useAuthContext();
@@ -41,7 +49,7 @@ export default function ManipulationList(props) {
         setLoading(true);
         setTableData([]);
 
-        fetch(Constants.API_MANIPULATIONS_ENDPOINT, { headers: { 'Authorization': 'bearer ' + accessToken }})
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT + 'all', { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(data => data.json())
             // Reprocess data :
@@ -82,8 +90,11 @@ export default function ManipulationList(props) {
         const target = rowData.target_slots;
         const slots = rowData.slots.length || 0;
         const signedup = rowData.slots.filter(s => (!!s.subject_email && !!s.subject_confirmed)).length || 0;
+        const signedupNotConfirmed = rowData.slots.filter(s => (!!s.subject_email && !s.subject_confirmed)).length || 0;
         const slotsPercent = slots / target * 100;
         const signedupPercent = signedup / target * 100;
+
+        const signedupText = signedup + (signedupNotConfirmed > 0 ? ` (+ ${signedupNotConfirmed})` : '');
 
         // eslint-disable-next-line no-undef
         const colorPercent = (percent) => (percent < 100 ? classes.statusDanger : (percent >= APP_SETTINGS.manipulation_overbooking ? classes.statusOk : classes.statusWarning));
@@ -92,7 +103,7 @@ export default function ManipulationList(props) {
             <>
                 <Typography variant="inherit" display="inline" className={colorPercent(slotsPercent)}>{slots} Créneaux</Typography>
                 <span> | </span>
-                <Typography variant="inherit" display="inline" className={colorPercent(signedupPercent)}>{signedup} Inscrits</Typography>
+                <Typography variant="inherit" display="inline" className={colorPercent(signedupPercent)}>{signedupText} Inscrits</Typography>
                 <span> | </span>
                 <Typography variant="inherit" display="inline">{target} Cible</Typography>
             </>
@@ -112,7 +123,7 @@ export default function ManipulationList(props) {
                     { title: 'Nom', field: 'name' },
                     { title: 'Date de début', field: 'start_date', type: 'date', width: 200 },
                     // TODO : Change datepicker format (see PR https://github.com/mbrn/material-table/pull/2082)
-                    { title: 'Durée', field: 'duration', type: 'int', width: 100 },
+                    { title: 'Durée', field: 'duration', type: 'numeric', width: 100 },
                     { title: 'Statistiques', field: 'target_slots', render: Stats },
                     { title: 'Responsables', field: 'manager_names' }
                 ]}
@@ -134,21 +145,21 @@ export default function ManipulationList(props) {
                         tooltip: 'Visualiser',
                         onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id)
                     },
-                    {
+                    rowData => (rowData.deleted_at === null ? {
                         icon:    () => <TodayIcon />,
                         tooltip: 'Créneaux',
                         onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id + '/slots')
-                    },
-                    {
+                    } : emptyAction),
+                    rowData => (rowData.deleted_at === null ? {
                         icon:    'edit',
                         tooltip: 'Modifier',
                         onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id + '/edit')
-                    },
-                    {
-                        icon:    'delete',
-                        tooltip: 'Supprimer',
+                    } : emptyAction),
+                    rowData => ({
+                        icon:    () => rowData.deleted_at === null ? <ArchiveIcon/> : <UnarchiveIcon />,
+                        tooltip: rowData.deleted_at === null ? 'Archiver' : 'Désarchiver',
                         onClick: (event, rowData) => setDeleteEntry(rowData)
-                    }
+                    })
                 ]}
                 options={{
                     actionsColumnIndex:  -1,
@@ -185,7 +196,9 @@ export default function ManipulationList(props) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {deleteEntry ? ('Supprimer la manipulation ' + deleteEntry.name + ' ?') : ''}
+                    {deleteEntry ? (
+                        deleteEntry.deleted_at === null ? 'Archiver la manipulation ' + deleteEntry.name + ' ?' : 'Restaurer la manipulation ' + deleteEntry.name + ' ?'
+                    ) : ''}
                     {deleteError ? ('Erreur lors de la suppression : ' + deleteError) : ''}
                 </DialogTitle>
                 {deleteEntry && (

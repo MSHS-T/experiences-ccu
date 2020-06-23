@@ -25,13 +25,24 @@ class ManipulationController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource for anonymous users.
+     * (Exclude archived entries and entries without available slots)
      *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
     {
-        return Manipulation::with('slots')->get();
+        return Manipulation::withCount('slots', 'availableSlots')->whereHasAvailableSlots()->orderBy('available_slots_count', 'ASC')->get();
+    }
+
+    /**
+     * Display a listing of the resource including deleted resources.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function all(Request $request)
+    {
+        return Manipulation::withTrashed()->with('slots')->get();
     }
 
     /**
@@ -96,7 +107,7 @@ class ManipulationController extends Controller
      */
     public function show($id)
     {
-        return Manipulation::with('plateau')->findOrFail($id);
+        return Manipulation::withTrashed()->with('plateau')->findOrFail($id);
     }
 
     /**
@@ -108,7 +119,7 @@ class ManipulationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $manipulation = Manipulation::findOrFail($id);
+        $manipulation = Manipulation::withTrashed()->findOrFail($id);
         // TODO : Prevent duration and start_date change if slots already exist
         $data = $request->validate([
             'name'                       => 'required|string',
@@ -157,14 +168,19 @@ class ManipulationController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Soft-deletes/restores the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        Manipulation::findOrFail($id)->delete();
+        $manip = Manipulation::withTrashed()->findOrFail($id);
+        if ($manip->trashed()) {
+            $manip->restore();
+        } else {
+            $manip->delete();
+        }
         return 204;
     }
 }

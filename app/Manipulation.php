@@ -4,9 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Manipulation extends Model
 {
+    use SoftDeletes;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -52,6 +56,22 @@ class Manipulation extends Model
     public function slots()
     {
         return $this->hasMany('App\Slot');
+    }
+
+    public function availableSlots()
+    {
+        return $this->slots()->whereNull('subject_email');
+    }
+
+    /**
+     * Scope a query to only include manipulations with available slots.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWhereHasAvailableSlots($query)
+    {
+        return $query->whereHas('availableSlots');
     }
 
     public function generateSlots($fromDate = false, $toDate = false)
