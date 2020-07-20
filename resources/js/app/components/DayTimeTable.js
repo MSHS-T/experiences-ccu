@@ -16,6 +16,7 @@ class DayTimeTable extends Component {
             cellKey,
             cellStyle,
             data,
+            headerStyle,
             hideHeaders,
             hideTimes,
             isActive,
@@ -32,7 +33,7 @@ class DayTimeTable extends Component {
         } = this.props;
 
         var headers = data.map((day, ii) => (
-            <TableCell key={ii} style={{ borderBottom: '1px solid rgb(180, 180, 180)' }}>{showHeader(day)}</TableCell>
+            <TableCell key={ii} style={headerStyle(day, ii)}>{showHeader(day)}</TableCell>
         ));
         var footers = data.map((day, ii) => (
             <TableCell key={ii}>{showFooter(day)}</TableCell>
@@ -69,9 +70,9 @@ class DayTimeTable extends Component {
         };
 
         const defaultTimeCellStyle = {
-            height:      'auto !important',
-            border:      'none',
-            borderRight: '1px solid rgb(180, 180, 180)',
+            height: 'auto !important',
+            border: 'none',
+            // borderRight: '1px solid rgb(180, 180, 180)',
         };
 
         return (
@@ -102,16 +103,16 @@ class DayTimeTable extends Component {
                     </TableHead>
                 )}
                 <TableBody>
-                    {grid.map((row, ii) => {
+                    {grid.map((row, ii, _grid) => {
                         return (
                             <TableRow key={ii} style={rowStyle}>
                                 {!hideTimes && (
-                                    <TableCell style={{ ...cellStyle(ii, -1, null, row), ...defaultTimeCellStyle }}>
+                                    <TableCell style={{ ...defaultTimeCellStyle, ...cellStyle(ii, -1, null, row, null, ii == _grid.length - 1) }}>
                                         {showTime(ii)}
                                     </TableCell>
                                 )}
                                 {row.map((xx, jj) => {
-                                    const computedCellStyle = { ...cellStyle(ii, jj, xx, row), ...defaultCellStyle };
+                                    const computedCellStyle = { ...defaultCellStyle, ...cellStyle(ii, jj, xx, row, data[jj], ii == _grid.length - 1) };
                                     if (!xx.info) {
                                         return (
                                             <TableCell key={`${ii}-${jj}`} style={computedCellStyle} />

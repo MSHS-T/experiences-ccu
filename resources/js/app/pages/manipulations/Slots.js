@@ -371,13 +371,14 @@ export default function ManipulationSlots(props) {
         if(slotData !== null && slotData.length > 0 && currentMonday !== null){
             for(let i = 0; i < 7; i++){
                 let day = moment(currentMonday).add(i, 'days');
+                const isToday = day.isSame(moment(), 'day');
                 data.push({
                     name: (
-                        <>
+                        <Typography color={ isToday ? 'error' : 'inherit' }>
                             {capitalize(day.format('dddd'))}
                             <br/>
                             {day.format('D')} {capitalize(day.format('MMMM'))}
-                        </>
+                        </Typography>
                     ),
                     date: day.format('YYYY-MM-DD'),
                     info: slotData.filter((s) => moment(s.start).isSame(day, 'day')).map((s) => {
@@ -620,21 +621,35 @@ export default function ManipulationSlots(props) {
                         <DayTimeTable
                             caption={createTableCaption(currentMonday)}
                             cellKey={cell => cell.id}
-                            cellStyle={(rowIndex, colIndex,) => {
+                            cellStyle={(rowIndex, colIndex, data, rowData, dayData, lastRow) => {
                                 if(colIndex < 0){ return {}; }
                                 const day = Object.values(manipulationData.available_hours)[colIndex];
                                 const cellTime = momentToTime(momentTime(min).add(interval * rowIndex, 'minutes'));
+
+                                const isToday = moment(currentMonday).add(colIndex, 'days').isSame(moment(), 'day');
 
                                 const isGreyed = !day.enabled
                                     || (!day.am && (cellTime < day.start_pm || cellTime >= day.end_pm))
                                     || (!day.pm && (cellTime < day.start_am || cellTime >= day.end_am))
                                     || (cellTime < day.start_am || (cellTime >= day.end_am && cellTime < day.start_pm) || cellTime >= day.end_pm);
 
-                                return isGreyed ? {
+                                const borders = {
+                                    borderLeftColor:   isToday ? 'red' : 'inherit',
+                                    borderRightColor:  isToday ? 'red' : 'inherit',
+                                    borderBottomColor: lastRow && isToday ? 'red' : 'inherit',
+                                };
+
+                                const bg = isGreyed ? {
                                     background: 'repeating-linear-gradient( -55deg, #ddd, #ddd 10px, #fff 10px, #fff 20px )'
                                 } : {};
+
+                                return { ...borders, ...bg };
                             }}
                             calcCellHeight={cell => Math.ceil(diffMinutes(cell.start, cell.end)/interval) }
+                            headerStyle={(day, colIndex) => {
+                                const isToday = moment(currentMonday).add(colIndex, 'days').isSame(moment(), 'day');
+                                return { borderColor: isToday ? 'red' : 'rgb(180, 180, 180)' };
+                            }}
                             showHeader={col => (
                                 <Typography component="h3" variant="h6" align="center" color="textPrimary">
                                     {col.name}
