@@ -212,18 +212,18 @@ export default function ManipulationView(props) {
                 <Grid item xs={8} sm={6}>
                     <div className={classes.value}>
                         <dl className={classes.noMargin}>
-                            {manipulationData && Object.values(manipulationData.available_hours)
-                                .filter((d) => d.enabled && (d.am || d.pm))
-                                .map((d) => {
+                            {manipulationData && Object.entries(manipulationData.available_hours)
+                                .filter(([k, d]) => d.enabled && (d.am || d.pm))
+                                .map(([day, d]) => {
                                     const hours = [];
                                     if (d.am) { hours.push(d.start_am + '-' + d.end_am); }
                                     if (d.pm) { hours.push(d.start_pm + '-' + d.end_pm); }
                                     return (
-                                        <React.Fragment key={`frag-${d.day}`}>
-                                            <dt key={`label-${d.day}`}>
-                                                {Constants.DAYS_LABELS[d.day]}
+                                        <React.Fragment key={`frag-${day}`}>
+                                            <dt key={`label-${day}`}>
+                                                {Constants.DAYS_LABELS[day]}
                                             </dt>
-                                            <dd key={`hours-${d.day}`}>
+                                            <dd key={`hours-${day}`}>
                                                 {hours.reduce((prev, curr, i) => [prev, <br key={i} />, curr])}
                                             </dd>
                                         </React.Fragment>
