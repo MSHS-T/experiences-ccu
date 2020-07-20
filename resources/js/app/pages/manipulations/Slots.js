@@ -326,7 +326,7 @@ export default function ManipulationSlots(props) {
 
     const deleteSlotsForDay = (day) => {
         const slots = slotData.filter((s) => moment(s.start).isSame(moment(day), 'day'));
-        const hasReservations = slots.filter(s => s.subject_email !== null).length > 0;
+        const hasReservations = slots.filter(s => s.booking.email !== null).length > 0;
 
         confirm({
             title:       'Confirmation de suppression',
@@ -388,7 +388,7 @@ export default function ManipulationSlots(props) {
                             end:   momentToTime(s.end),
                             text:  (
                                 <div>
-                                    <Card style={{ backgroundColor: s.subject_email === null ? '#ddd' : (s.subject_confirmed ? 'lightGreen' : 'orange') }}>
+                                    <Card style={{ backgroundColor: !s.booking ? '#ddd' : (s.booking.confirmed ? 'lightGreen' : 'orange') }}>
                                         <CardHeader
                                             className={classes.cardHeader}
                                             action={
@@ -402,7 +402,7 @@ export default function ManipulationSlots(props) {
                                                             description: (
                                                                 <>
                                                                     {'Êtes-vous sûr de vouloir supprimer ce créneau ? Cette action est irréversible.'}
-                                                                    {s.subject_email !== null
+                                                                    {s.booking !== null
                                                                         ? (
                                                                             <>
                                                                                 <br/>
@@ -428,14 +428,14 @@ export default function ManipulationSlots(props) {
                                             disableTypography
                                         />
                                         <CardContent className={classes.cardContent}>
-                                            {s.subject_email !== null && (
+                                            {s.booking !== null && (
                                                 <>
-                                                    {s.subject_first_name} {s.subject_last_name}
+                                                    {s.booking.first_name} {s.booking.last_name}
                                                     <br />
-                                                    <a href={'mailto:'+s.subject_email} title={s.subject_email}>
-                                                        {truncate(s.subject_email, { length: 20 })}
+                                                    <a href={'mailto:'+s.booking.email} title={s.booking.email}>
+                                                        {truncate(s.booking.email, { length: 20 })}
                                                     </a>
-                                                    {!s.subject_confirmed && (
+                                                    {!s.booking.confirmed && (
                                                         <>
                                                             <br/>
                                                             <em>Non confirmé</em>

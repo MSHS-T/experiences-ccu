@@ -60,7 +60,7 @@ class Manipulation extends Model
 
     public function availableSlots()
     {
-        return $this->slots()->whereNull('subject_email');
+        return $this->slots()->doesntHave('booking');
     }
 
     /**

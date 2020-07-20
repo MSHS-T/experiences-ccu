@@ -2,6 +2,7 @@
 
 use App\Manipulation;
 use App\Slot;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +29,8 @@ class TestManipulationsTableSeeder extends Seeder
 
         $this->command->info("Seeding $nbManipulations test manipulations with randomized hours and slot count");
         $this->command->info("Each manipulation will have a random number of slots booked (50-100%)");
+        $this->command->info("Each booking will have a 75% chance to be confirmed");
+        $this->command->info("Each confirmed booking before the current day will have a 90% chance to be honored");
         $bar = $this->command->getOutput()->createProgressBar($nbManipulations);
         $bar->start();
         foreach (range(1, $nbManipulations) as $i) {
@@ -77,7 +80,7 @@ class TestManipulationsTableSeeder extends Seeder
             ]);
 
             $nbManagers = random_int(1, 2);
-            $managers->random($nbManagers)->each(function ($managerId) use ($manipId) {
+            $managers->random(min(count($managers), $nbManagers))->each(function ($managerId) use ($manipId) {
                 DB::table('manipulation_user')->insert([
                     'user_id'         => $managerId,
                     'manipulation_id' => $manipId
@@ -104,15 +107,19 @@ class TestManipulationsTableSeeder extends Seeder
                 // 75% chance to be confirmed
                 $confirmed = random_int(1, 4) > 1;
 
-                $slot->fill([
-                    'subject_first_name'        => $firstName,
-                    'subject_last_name'         => $lastName,
-                    'subject_email'             => $email,
-                    'subject_confirmed'         => $confirmed,
-                    'subject_confirmation_code' => $confirmed ? null : Str::uuid(),
-                    'subject_confirm_before'    => $confirmed ? null : $faker->dateTimeBetween('-1 days', '+1 days')
+                // 90% chance to be honored if before today and confirmed
+                // If slot is unconfirmed, or dated today or after, keep null
+                $honored = ($slot->start->setTime(0, 0, 0) < Carbon::now()->setTime(0, 0, 0) && $confirmed) ? (random_int(1, 10) > 1) : null;
+
+                $slot->booking()->create([
+                    'first_name'        => $firstName,
+                    'last_name'         => $lastName,
+                    'email'             => $email,
+                    'confirmed'         => $confirmed,
+                    'confirmation_code' => $confirmed ? null : Str::uuid(),
+                    'confirm_before'    => $confirmed ? null : $faker->dateTimeBetween('-1 days', '+1 days'),
+                    'honored'           => $honored
                 ]);
-                $slot->save();
             });
 
             $bar->advance();

@@ -25,11 +25,12 @@ class CreateManipulationsTable extends Migration
             $table->text('available_hours');
             $table->text('requirements');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('plateau_id')->references('id')->on('plateaux')->onDelete('cascade');
         });
 
-        Schema::create('manipulation_user', function(Blueprint $table) {
+        Schema::create('manipulation_user', function (Blueprint $table) {
             $table->increments('id');
             $table->bigInteger('manipulation_id')->unsigned();
             $table->integer('user_id')->unsigned();

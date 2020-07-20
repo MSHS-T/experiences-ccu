@@ -81,27 +81,6 @@ class SlotController extends Controller
         return Response::json(['message' => 'Impossible de chevaucher plusieurs créneaux'], 400);
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Slot                 $slot
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Slot $slot, Request $request)
-    {
-        // Validate data
-        $data = $request->validate([
-            'subject_first_name' => 'required|string',
-            'subject_last_name'  => 'required|string',
-            'subject_email'      => 'required|email'
-        ]);
-        $slot->fill($data);
-        $slot->save();
-        return $slot;
-    }
-
     /**
      * Remove the specified resource from storage.
      *
