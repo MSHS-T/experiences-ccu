@@ -162,7 +162,7 @@ export default function UserView(props) {
                                         <Link component={RouterLink} to={`/plateaux/${p.id}`} key={`user-plateaux-${i}`}>
                                             {p.name}
                                         </Link>
-                                    )).reduce((prev, curr) => [prev, ', ', curr])
+                                    )).reduce((prev, curr) => [prev, <><br/></>, curr])
                                 }
                             </Typography>
                         </Grid>
@@ -180,7 +180,7 @@ export default function UserView(props) {
                                         <Link component={RouterLink} to={`/manipulations/${m.id}`} key={`user-manipulations-${i}`}>
                                             {m.name}
                                         </Link>
-                                    )).reduce((prev, curr) => [prev, ', ', curr])
+                                    )).reduce((prev, curr) => [prev, <><br/></>, curr])
                                 }
                             </Typography>
                         </Grid>
