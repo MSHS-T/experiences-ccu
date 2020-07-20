@@ -30,7 +30,6 @@ Route::group(['middleware' => 'apiheader'], function ($router) {
         Route::get('{manipulation}', 'API\SlotController@index');
         Route::post('{manipulation}/generate', 'API\SlotController@generate');
         Route::post('{manipulation}', 'API\SlotController@store');
-        Route::put('{slot}', 'API\SlotController@update');
         Route::delete('{slot}', 'API\SlotController@destroy');
     });
     Route::get('settings', 'API\SettingController@index');

@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Slot;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 
 class FreeUnconfirmedSlots extends Command
 {
@@ -39,10 +40,11 @@ class FreeUnconfirmedSlots extends Command
      */
     public function handle()
     {
-        $slots = Slot::whereNotNull('subject_email')
-            ->where('subject_confirmed', '!=', true)
-            ->where('subject_confirm_before', '<', Carbon::now())
-            ->get();
+        $slots = Slot::whereHas('booking', function (Builder $query) {
+            $query->whereNotNull('email')
+                ->where('confirmed', '!=', true)
+                ->where('confirm_before', '<', Carbon::now());
+        });
 
         $total = $slots->count();
         $this->line("Cleaning booking information for $total slots that have not been confirmed.");

@@ -22,13 +22,7 @@ class Slot extends Model
      */
     protected $fillable = [
         'start',
-        'end',
-        'subject_first_name',
-        'subject_last_name',
-        'subject_email',
-        'subject_confirmed',
-        'subject_confirmation_code',
-        'subject_confirm_before'
+        'end'
     ];
 
     /**
@@ -38,33 +32,34 @@ class Slot extends Model
      */
     protected $dates = [
         'start',
-        'end',
-        'subject_confirm_before'
+        'end'
     ];
 
     /**
-     * Indicates if the model should be timestamped.
-     *
-     * @var bool
+     * The relationships that should always be included
      */
+    protected $with = ['booking'];
 
     public function manipulation()
     {
         return $this->belongsTo('App\Manipulation', 'manipulation_id');
     }
 
+    public function booking()
+    {
+        return $this->hasOne('App\Booking');
+    }
+
     public function book(string $email, string $firstName, string $lastName)
     {
-        // Fill data
-        $this->subject_email = $email;
-        $this->subject_first_name = $firstName;
-        $this->subject_last_name = $lastName;
-        // Add confirmation data
-        $this->subject_confirmed = false;
-        $this->subject_confirmation_code = Str::uuid();
-        $this->subject_confirm_before = Carbon::now()->addHours(Setting::get('booking_confirmation_delay', 24));
-
-        $this->save();
+        $this->booking()->create([
+            'first_name'        => $firstName,
+            'last_name'         => $lastName,
+            'email'             => $email,
+            'confirmed'         => false,
+            'confirmation_code' => Str::uuid(),
+            'confirm_before'    => Carbon::now()->addHours(Setting::get('booking_confirmation_delay', 24)),
+        ]);
 
         // TODO : send email to ask for confirmation
 
@@ -75,13 +70,7 @@ class Slot extends Model
         // Keep backup data if we need to send a notification
         $data = $this->attributesToArray();
         // Clear data
-        $this->subject_email = null;
-        $this->subject_first_name = null;
-        $this->subject_last_name = null;
-        $this->subject_confirmed = null;
-        $this->subject_confirmation_code = null;
-        $this->subject_confirm_before = null;
-        $this->save();
+        $this->booking->delete();
 
         if ($sendNotification) {
             // TODO : send email notification
