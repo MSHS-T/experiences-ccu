@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
 import ArchiveIcon from '@material-ui/icons/Archive';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import TodayIcon from '@material-ui/icons/Today';
 import UnarchiveIcon from '@material-ui/icons/Unarchive';
 import ViewIcon from '@material-ui/icons/Visibility';
@@ -149,6 +150,11 @@ export default function ManipulationList(props) {
                         icon:    () => <TodayIcon />,
                         tooltip: 'Créneaux',
                         onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id + '/slots')
+                    } : emptyAction),
+                    rowData => (rowData.deleted_at === null ? {
+                        icon:    () => <AssignmentTurnedInIcon />,
+                        tooltip: 'Présence',
+                        onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id + '/attendance')
                     } : emptyAction),
                     rowData => (rowData.deleted_at === null ? {
                         icon:    'edit',
