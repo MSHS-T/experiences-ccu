@@ -165,6 +165,9 @@ export default function ManipulationAttendance(props) {
 
     const navigateWeek = (direction) => {
         const newMonday = moment(currentMonday)[direction == 1 ? 'add' : 'subtract'](7, 'days');
+        if(newMonday.isAfter(moment(), 'day')){
+            return false;
+        }
         setCurrentMonday(newMonday.format('YYYY-MM-DD'));
         location.hash = newMonday.format(moment.HTML5_FMT.WEEK);
     };
