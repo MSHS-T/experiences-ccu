@@ -37,25 +37,38 @@ export default function AttendanceDay({ dayLabel, daySlots, handleSave, ...other
     };
 
     const handleSaveButtonClick = () => {
+        if(isSaving){
+            return false;
+        }
         setIsSaving(true);
 
         const data = Object.fromEntries(daySlots.map(s => [s.id, checked.includes(s.id)]));
-        handleSave(data).always(() => setIsSaving(false));
+        handleSave(data).finally(() => setIsSaving(false));
     };
 
     return (
-        <List {...otherProps} >
+        <List dense {...otherProps} >
             <ListItem>
                 <ListItemText primary={dayLabel} primaryTypographyProps={{ className: classes.dayLabel }} />
+                {daySlots.length > 0 && (
+                    <ListItemSecondaryAction>
+                        <IconButton edge="end" aria-label="delete" onClick={handleSaveButtonClick}>
+                            {!!isSaving && (<CircularProgress size={20} />)}
+                            {!isSaving && (<SaveIcon />)}
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                )}
             </ListItem>
             {daySlots.map((slot) => {
                 const labelId = `checkbox-list-secondary-label-${slot.id}`;
-                const itemText = `${momentToTime(slot.start)}-${momentToTime(slot.end)} : ${slot.booking.first_name} ${slot.booking.last_name.toUpperCase()}`;
                 return (
                     <ListItem key={slot.id} button onClick={handleToggle(slot.id)}>
-                        <ListItemText id={labelId} primary={itemText} primaryTypographyProps={{
-                            color: initialEnabled.includes(slot.id) ? 'initial' : 'textSecondary'
-                        }}/>
+                        <ListItemText
+                            id={labelId}
+                            primary={`${momentToTime(slot.start)}-${momentToTime(slot.end)}`}
+                            secondary={`${slot.booking.first_name} ${slot.booking.last_name.toUpperCase()}`}
+                            secondaryTypographyProps={{ color: initialEnabled.includes(slot.id) ? 'initial' : 'textSecondary' }}
+                        />
                         <ListItemSecondaryAction>
                             <Checkbox
                                 edge="end"
@@ -67,17 +80,6 @@ export default function AttendanceDay({ dayLabel, daySlots, handleSave, ...other
                     </ListItem>
                 );
             })}
-            {daySlots.length > 0 && (
-                <ListItem>
-                    <ListItemText primary="" />
-                    <ListItemSecondaryAction>
-                        <IconButton edge="end" aria-label="delete" onClick={handleSaveButtonClick}>
-                            {!!isSaving && (<CircularProgress />)}
-                            {!isSaving && (<SaveIcon />)}
-                        </IconButton>
-                    </ListItemSecondaryAction>
-                </ListItem>
-            )}
             {daySlots.length == 0 && (
                 <ListItem>
                     <ListItemText primary={'Aucune réservation ce jour'} />

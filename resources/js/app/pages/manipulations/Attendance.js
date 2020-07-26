@@ -31,8 +31,9 @@ const useStyles = makeStyles(theme => ({
         alignItems: 'stretch',
     },
     dayItem: {
-        margin: theme.spacing(1),
-        border: `1px solid ${theme.palette.divider}`,
+        flexBasis: '100%',
+        margin:    theme.spacing(1),
+        border:    `1px solid ${theme.palette.divider}`,
     },
     buttonWrapper: {
         margin:         theme.spacing(2),
@@ -65,12 +66,8 @@ export default function ManipulationAttendance(props) {
     const [currentMonday, setCurrentMonday] = useState(null);
     // CRUD loading states
     const [isSaveLoading, setSaveLoading] = useState(false);
-    // CRUD success states
-    const [saveSuccess, setSaveSuccess] = useState(null);
-
     // Misc states
     const [error, setError] = useState(null);
-    const [saveError, setSaveError] = useState(null);
 
     const storeSlotData = (data) => {
         setSlotData(data);
@@ -143,52 +140,20 @@ export default function ManipulationAttendance(props) {
             });
     };
 
-    const saveSlot = (start, fromInput) => {
-        setSaveLoading(fromInput);
-        setSaveSuccess(null);
-
-        fetch(Constants.API_SLOTS_ENDPOINT + props.match.params.id, {
-            method:  'POST',
+    const onDaySave = (dayData) => {
+        const attendance = Object.entries(dayData).map(([slot, honored]) => ({ slot, honored }));
+        return fetch(Constants.API_BOOKINGS_ENDPOINT, {
+            method:  'PUT',
             headers: {
                 'Accept':        'application/json',
                 'Authorization': 'bearer ' + accessToken,
                 'Content-Type':  'application/json'
             },
-            body: JSON.stringify({
-                start: start.format('YYYY-MM-DD HH:mm:ss'),
-                end:   start.clone().add(interval, 'minutes').format('YYYY-MM-DD HH:mm:ss')
-            })
+            body: JSON.stringify({ attendance })
         })
-            // Parse JSON response
-            .then(response => {
-                if(response.ok){
-                    return response.json();
-                }
-                if(response.status == 400){
-                    response.json().then((data) => {
-                        setSaveError(data.message);
-                    });
-                } else {
-                    setSaveError(`${response.status} (${response.statusText})`);
-                }
-                setSaveLoading(false);
-                throw new Error();
-            })
-            // Set data in state
             .then(() => {
-                setSaveError(null);
                 setSaveLoading(false);
-                setSaveSuccess(fromInput);
-                setTimeout(() => {
-                    setSaveSuccess(null);
-                    loadSlotData(props.match.params.id);
-                }, 1000);
-            })
-            .catch(() => {});
-    };
-
-    const onDaySave = (dayData) => {
-        console.log(dayData);
+            });
     };
 
     useEffect(() => {
@@ -197,11 +162,6 @@ export default function ManipulationAttendance(props) {
             loadSlotData(props.match.params.id);
         }
     }, []); // Empty array means useEffect will only be called on first render
-
-
-    const momentTime = (time) => moment(time, moment.HTML5_FMT.TIME);
-    const momentToTime = (date) => moment(date).format(moment.HTML5_FMT.TIME);
-    const diffMinutes = (a, b) => momentTime(b).diff(momentTime(a), 'minutes', true);
 
     const navigateWeek = (direction) => {
         const newMonday = moment(currentMonday)[direction == 1 ? 'add' : 'subtract'](7, 'days');
