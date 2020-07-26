@@ -25,6 +25,7 @@ import ManipulationsList from '../pages/manipulations/List';
 import ManipulationsView from '../pages/manipulations/View';
 import ManipulationsForm from '../pages/manipulations/Form';
 import ManipulationsSlots from '../pages/manipulations/Slots';
+import ManipulationsAttendance from '../pages/manipulations/Attendance';
 
 import PlateauxList from '../pages/plateaux/List';
 import PlateauxView from '../pages/plateaux/View';
@@ -154,6 +155,16 @@ const SiteMap = [
         exactPath:     true,
         showInMenu:    false,
         component:     ManipulationsSlots,
+        authenticated: true,
+        roles:         ['ADMIN', 'MANIP']
+    },
+    {
+        title:         'Gérer la présence',
+        icon:          false,
+        url:           '/manipulations/:id/attendance',
+        exactPath:     true,
+        showInMenu:    false,
+        component:     ManipulationsAttendance,
         authenticated: true,
         roles:         ['ADMIN', 'MANIP']
     },
