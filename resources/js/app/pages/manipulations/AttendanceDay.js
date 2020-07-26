@@ -46,11 +46,13 @@ export default function AttendanceDay({ dayLabel, daySlots, handleSave, ...other
         handleSave(data).finally(() => setIsSaving(false));
     };
 
+    const isAfterToday = daySlots.length > 0 && moment(daySlots[0].start).isAfter(moment(), 'day');
+
     return (
         <List dense {...otherProps} >
             <ListItem>
                 <ListItemText primary={dayLabel} primaryTypographyProps={{ className: classes.dayLabel }} />
-                {daySlots.length > 0 && (
+                {daySlots.length > 0 && !isAfterToday && (
                     <ListItemSecondaryAction>
                         <IconButton edge="end" aria-label="delete" onClick={handleSaveButtonClick}>
                             {!!isSaving && (<CircularProgress size={20} />)}
@@ -59,7 +61,7 @@ export default function AttendanceDay({ dayLabel, daySlots, handleSave, ...other
                     </ListItemSecondaryAction>
                 )}
             </ListItem>
-            {daySlots.map((slot) => {
+            {!isAfterToday && daySlots.map((slot) => {
                 const labelId = `checkbox-list-secondary-label-${slot.id}`;
                 return (
                     <ListItem key={slot.id} button onClick={handleToggle(slot.id)}>
@@ -80,9 +82,14 @@ export default function AttendanceDay({ dayLabel, daySlots, handleSave, ...other
                     </ListItem>
                 );
             })}
-            {daySlots.length == 0 && (
+            {!isAfterToday && daySlots.length == 0 && (
                 <ListItem>
                     <ListItemText primary={'Aucune réservation ce jour'} />
+                </ListItem>
+            )}
+            {isAfterToday && (
+                <ListItem>
+                    <ListItemText primary={'Impossible de saisir la présence sur une date future'} />
                 </ListItem>
             )}
         </List>
