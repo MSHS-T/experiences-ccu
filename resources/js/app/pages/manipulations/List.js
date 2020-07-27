@@ -10,12 +10,17 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import ArchiveIcon from '@material-ui/icons/Archive';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import CloseIcon from '@material-ui/icons/Close';
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import TodayIcon from '@material-ui/icons/Today';
 import UnarchiveIcon from '@material-ui/icons/Unarchive';
 import ViewIcon from '@material-ui/icons/Visibility';
 
 import { useAuthContext } from '../../context/Auth';
 import * as Constants from '../../data/Constants';
+import { List, ListItem, IconButton } from '@material-ui/core';
+import moment from 'moment';
+import { capitalize } from 'lodash';
 
 const useStyles = makeStyles(theme => ({
     statusDanger: {
@@ -45,6 +50,7 @@ export default function ManipulationList(props) {
     const [tableData, setTableData] = useState([]);
     const [deleteEntry, setDeleteEntry] = useState(null);
     const [deleteError, setDeleteError] = useState(null);
+    const [callSheet, setCallSheet] = useState(null);
 
     const loadData = () => {
         setLoading(true);
@@ -152,6 +158,11 @@ export default function ManipulationList(props) {
                         onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id + '/slots')
                     } : emptyAction),
                     rowData => (rowData.deleted_at === null ? {
+                        icon:    () => <PlaylistAddCheckIcon />,
+                        tooltip: 'Feuilles d\'Appel',
+                        onClick: (event, rowData) => setCallSheet(rowData)
+                    } : emptyAction),
+                    rowData => (rowData.deleted_at === null ? {
                         icon:    () => <AssignmentTurnedInIcon />,
                         tooltip: 'Présence',
                         onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id + '/attendance')
@@ -195,6 +206,50 @@ export default function ManipulationList(props) {
                 }}
                 data={tableData}
             />
+            <Dialog
+                open={!!callSheet}
+                onClose={() => {
+                    setCallSheet(null);
+                }}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {'Télécharger les Feuilles d\'Appel'}
+                    <IconButton aria-label="close" className={classes.closeButton} onClick={() => setCallSheet(null)}>
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                {callSheet && (
+                    <List dense>
+                        {
+                            callSheet.slots
+                                .filter(s => {
+                                    const diff = moment(s.start).diff(moment().startOf('day'), 'days', true);
+                                    return diff > 0 && diff < 7;
+                                })
+                                .reduce((all, s) => {
+                                    const day = moment(s.start).format('YYYY-MM-DD');
+                                    if(!all.includes(day)){
+                                        all.push(day);
+                                    }
+                                    return all.sort();
+                                }, [])
+                                .map(day => (
+                                    <ListItem button onClick={() => {
+                                        window.open(
+                                            Constants.API_SLOTS_ENDPOINT + callSheet.id + '/call_sheet?date='+day,
+                                            '_blank'
+                                        );
+                                        setCallSheet(null);
+                                    }} key={day}>
+                                        {`${capitalize(moment(day).format('dddd'))} ${moment(day).format('D')} ${capitalize(moment(day).format('MMMM'))} ${moment(day).format('YYYY')}`}
+                                    </ListItem>
+                                ))
+                        }
+                    </List>
+                )}
+            </Dialog>
             <Dialog
                 open={!!deleteEntry || !!deleteError}
                 onClose={() => {
