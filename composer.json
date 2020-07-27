@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
+        "barryvdh/laravel-dompdf": "^0.8.6",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.2",
         "laravel/tinker": "^1.0",
@@ -59,7 +60,7 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
         ],
-        "clear-cache": [
+        "clear-all-cache": [
             "@php artisan cache:clear",
             "@php artisan route:clear",
             "@php artisan config:clear",
