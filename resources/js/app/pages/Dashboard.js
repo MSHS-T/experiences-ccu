@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { GridList, Typography, Card, CardContent, Grid, Chip, Box, CircularProgress, withStyles } from '@material-ui/core';
+import { Typography, Card, CardContent, Grid, Box, CircularProgress, withStyles, Button } from '@material-ui/core';
 import * as moment from 'moment';
 import { useAuthContext } from '../context/Auth';
 import * as Constants from '../data/Constants';
 import Loading from './Loading';
 import { grey } from '@material-ui/core/colors';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
+import { capitalize } from 'lodash';
+import DropdownButton from '../components/DropdownButton';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -14,10 +18,21 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'space-around',
     },
     card: {
-        width:  350,
-        height: 300,
+        width:  400,
+        // height: 350,
         margin: theme.spacing(2)
-    }
+    },
+    buttonCaption: {
+        textAlign: 'center',
+        fontStyle: 'italic'
+    },
+    buttonContainer: {
+        marginTop:      theme.spacing(2),
+        display:        'flex',
+        flexDirection:  'column',
+        justifyContent: 'start',
+        alignItems:     'center'
+    },
 }));
 
 const OutlinedCircularProgress = withStyles(() => ({
@@ -26,7 +41,7 @@ const OutlinedCircularProgress = withStyles(() => ({
     },
 }))(CircularProgress);
 
-export default function Dashboard() {
+export default function Dashboard(props) {
     const classes = useStyles();
     const { accessToken } = useAuthContext();
 
@@ -41,15 +56,19 @@ export default function Dashboard() {
             // Parse JSON response
             .then(data => data.json())
             // Reprocess data :
+            //  - remove archived manipulations
+            //  - remove inactive manipulations (without slots in the future)
             //  - get manager names from nested objects
-            .then(data => data.map(row => ({
-                ...row,
-                manager_names: row.managers.map(u => u.name).sort().join(', ')
-            })))
+            .then(data => data
+                .filter(row => row.deleted_at === null)
+                .filter(row => row.slots.filter(s => moment(s.start).isAfter(moment(), 'day')).length > 0)
+                .map(row => ({
+                    ...row,
+                    manager_names: row.managers.map(u => u.name).sort().join(', ')
+                }))
+            )
             // Set data in state
             .then(data => {
-                // Filter data to remove manipulations without slots in the future
-                data = data.filter(manipulation => manipulation.slots.filter(s => moment(s.start).isAfter(moment(), 'day')).length > 0);
                 setData(data);
                 setLoading(false);
             });
@@ -87,14 +106,33 @@ export default function Dashboard() {
                     const slotsBookedUnconfirmed = manipulation.slots.filter(s => s.booking !== null && !s.booking.confirmed).length;
                     const honoredBookings = manipulation.slots.filter(s => s.booking !== null && s.booking.honored).length;
                     const progress = Math.floor(Math.min(honoredBookings, manipulation.target_slots) / manipulation.target_slots * 100);
+
+                    const attendanceStatus = manipulation.slots.filter(s => moment(s.start).isBefore(moment(), 'day') && s.booking !== null && s.booking.honored === null);
+                    const callSheets = manipulation.slots
+                        .filter(s => {
+                            const diff = moment(s.start).diff(moment().startOf('day'), 'days', true);
+                            return diff > 0 && diff < 7;
+                        })
+                        .reduce((all, s) => {
+                            const day = moment(s.start).format('YYYY-MM-DD');
+                            if(!all.includes(day)){
+                                all.push(day);
+                            }
+                            return all.sort();
+                        }, [])
+                        .reduce((obj, day) => {
+                            obj[day] = `${capitalize(moment(day).format('dddd'))} ${moment(day).format('D')} ${capitalize(moment(day).format('MMMM'))} ${moment(day).format('YYYY')}`;
+                            return obj;
+                        }, {});
+
                     return (
                         <Card className={classes.card} key={manipulation.id}>
                             <CardContent>
-                                <Typography variant="h5" component="h2">
+                                <Typography variant="h5" component="h2" align="center">
                                     {manipulation.name}
                                 </Typography>
-                                <Typography variant="body1" component="div">
-                                Ouvert depuis le {moment(manipulation.start_date).format('DD/MM/YYYY')} ({moment().diff(manipulation.start_date, 'days')} jours)
+                                <Typography variant="body1" component="div" align="center" gutterBottom>
+                                Ouverte depuis le {moment(manipulation.start_date).format('DD/MM/YYYY')} ({moment().diff(manipulation.start_date, 'days')} jours)
                                 </Typography>
                                 <Box width={'100%'} display="flex" alignItems="center" justifyContent="center">
                                     <Box position="relative" display="inline-flex">
@@ -129,6 +167,50 @@ export default function Dashboard() {
                                         </Box>
                                     </Box>
                                 </Box>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={5} className={classes.buttonContainer}>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            size="small"
+                                            startIcon={<AssignmentTurnedInIcon />}
+                                            onClick={() => {
+                                                var week = '';
+                                                if(attendanceStatus.length > 0){
+                                                    week = '#' + moment(attendanceStatus[0].start).format(moment.HTML5_FMT.WEEK);
+                                                }
+                                                props.history.push('/manipulations/' + manipulation.id + '/attendance' + week);
+                                            }}
+                                        >
+                                        Présence
+                                        </Button>
+                                        <Typography
+                                            variant="caption"
+                                            className={classes.buttonCaption}
+                                            component="div"
+                                            color={attendanceStatus.length > 0 ? 'error' : 'textSecondary'}
+                                        >
+                                            {attendanceStatus.length > 0 ? 'Action requise' : 'A jour'}
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item xs={7} className={classes.buttonContainer}>
+                                        <DropdownButton
+                                            variant="contained"
+                                            color="primary"
+                                            size="small"
+                                            startIcon={<PlaylistAddCheckIcon />}
+                                            onClick={(chosenDay) => {
+                                                window.open(
+                                                    Constants.API_SLOTS_ENDPOINT + manipulation.id + '/call_sheet?date='+chosenDay,
+                                                    '_blank'
+                                                );
+                                            }}
+                                            options={callSheets}
+                                        >
+                                            {'Feuille d\'Appel'}
+                                        </DropdownButton>
+                                    </Grid>
+                                </Grid>
                             </CardContent>
                         </Card>
                     ); })}
