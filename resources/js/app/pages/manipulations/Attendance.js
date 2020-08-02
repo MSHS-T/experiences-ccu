@@ -153,6 +153,7 @@ export default function ManipulationAttendance(props) {
         })
             .then(() => {
                 setSaveLoading(false);
+                loadSlotData(props.match.params.id);
             });
     };
 

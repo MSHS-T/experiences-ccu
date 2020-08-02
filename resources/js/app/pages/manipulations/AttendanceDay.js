@@ -25,7 +25,7 @@ const momentToTime = (date) => moment(date).format(moment.HTML5_FMT.TIME);
 
 export default function AttendanceDay({ dayLabel, daySlots, handleSave, className, ...otherProps }) {
 
-    const initialChecked = daySlots.filter(s => s.booking.confirmed && s.booking.honored).map(s => s.id);
+    const initialChecked = daySlots.filter(s => s.booking.honored).map(s => s.id);
     const initialEnabled = daySlots.filter(s => s.booking.confirmed).map(s => s.id);
 
     const classes = useStyles();
@@ -45,6 +45,7 @@ export default function AttendanceDay({ dayLabel, daySlots, handleSave, classNam
         setChecked(newChecked);
     };
 
+
     const handleSaveButtonClick = () => {
         if(isSaving){
             return false;
@@ -55,8 +56,8 @@ export default function AttendanceDay({ dayLabel, daySlots, handleSave, classNam
         handleSave(data).finally(() => setIsSaving(false));
     };
 
+    const isAlreadyDone = daySlots.filter(s => s.booking.honored === null).length == 0;
     const isAfterToday = daySlots.length > 0 && moment(daySlots[0].start).isAfter(moment(), 'day');
-    const isAlreadyDone = initialChecked.length > 0;
     const isEmpty = daySlots.length == 0;
 
     const allClasses = [
