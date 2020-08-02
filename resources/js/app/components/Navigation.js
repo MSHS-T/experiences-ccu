@@ -113,6 +113,7 @@ function Navigation(props) {
 
     const handleLogout = e => {
         e.preventDefault();
+        setAnchorEl(null);
 
         let promise = logoutUser();
         promise.then(() => {
