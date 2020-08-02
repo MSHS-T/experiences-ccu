@@ -3,20 +3,29 @@ import { List, ListItem, ListItemText, Checkbox, ListItemSecondaryAction, IconBu
 import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
 import * as moment from 'moment';
-import capitalize from 'lodash/capitalize';
+import { grey, green, orange } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
     dayLabel: {
         fontWeight:   'bold',
         borderBottom: `1px solid ${theme.palette.divider}`,
+    },
+    alreadyDone: {
+        backgroundColor: green[50]
+    },
+    notDone: {
+        backgroundColor: orange[50]
+    },
+    disabled: {
+        backgroundColor: grey[200]
     }
 }));
 
 const momentToTime = (date) => moment(date).format(moment.HTML5_FMT.TIME);
 
-export default function AttendanceDay({ dayLabel, daySlots, handleSave, ...otherProps }) {
+export default function AttendanceDay({ dayLabel, daySlots, handleSave, className, ...otherProps }) {
 
-    const initialChecked = daySlots.filter(s => s.booking.confirmed && s.booking.honored).map(s => s.id);
+    const initialChecked = daySlots.filter(s => s.booking.honored).map(s => s.id);
     const initialEnabled = daySlots.filter(s => s.booking.confirmed).map(s => s.id);
 
     const classes = useStyles();
@@ -36,6 +45,7 @@ export default function AttendanceDay({ dayLabel, daySlots, handleSave, ...other
         setChecked(newChecked);
     };
 
+
     const handleSaveButtonClick = () => {
         if(isSaving){
             return false;
@@ -46,10 +56,18 @@ export default function AttendanceDay({ dayLabel, daySlots, handleSave, ...other
         handleSave(data).finally(() => setIsSaving(false));
     };
 
+    const isAlreadyDone = daySlots.filter(s => s.booking.honored === null).length == 0;
     const isAfterToday = daySlots.length > 0 && moment(daySlots[0].start).isAfter(moment(), 'day');
+    const isEmpty = daySlots.length == 0;
+
+    const allClasses = [
+        className,
+        isAlreadyDone ? classes.alreadyDone : classes.notDone,
+        (isAfterToday || isEmpty) ? classes.disabled : ''
+    ].join(' ');
 
     return (
-        <List dense {...otherProps} >
+        <List dense className={allClasses} {...otherProps} >
             <ListItem>
                 <ListItemText primary={dayLabel} primaryTypographyProps={{ className: classes.dayLabel }} />
                 {daySlots.length > 0 && !isAfterToday && (
@@ -82,7 +100,7 @@ export default function AttendanceDay({ dayLabel, daySlots, handleSave, ...other
                     </ListItem>
                 );
             })}
-            {!isAfterToday && daySlots.length == 0 && (
+            {!isAfterToday && isEmpty && (
                 <ListItem>
                     <ListItemText primary={'Aucune réservation ce jour'} />
                 </ListItem>
@@ -92,6 +110,13 @@ export default function AttendanceDay({ dayLabel, daySlots, handleSave, ...other
                     <ListItemText primary={'Impossible de saisir la présence sur une date future'} />
                 </ListItem>
             )}
+            <ListItem>
+                <ListItemText secondary={
+                    (isAfterToday || isEmpty) ? 'Aucune action requise' : (
+                        isAlreadyDone ? 'Saisie déjà effectuée, modification possible' : 'Saisie à faire'
+                    )
+                } secondaryTypographyProps={{ variant: 'caption', style: { fontStyle: 'italic' }}} />
+            </ListItem>
         </List>
     );
 }
