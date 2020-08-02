@@ -9,6 +9,7 @@ const initialAccessToken = '';
 const AuthProvider = props => {
     const [authData, setAuthData] = useState(initialAuthData);
     const [accessToken, setAccessToken] = useState(initialAccessToken);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         // Check if we have a stored state
@@ -24,9 +25,35 @@ const AuthProvider = props => {
                 setAuthData({ user: appState.user });
                 setAccessToken(appState.token);
             }
-
+            setIsLoading(false);
         }
     }, []); // Empty array means useEffect will only be called on first render
+
+    const storeUserData = (access_token, expires_at) => {
+        // Send /me query to get user information
+        // eslint-disable-next-line no-undef
+        axios.post(Constants.API_URL + 'auth/me/', {}, {
+            headers: { 'Authorization': 'bearer ' + access_token }
+        }).then(json_me => {
+            let user = {
+                id:         json_me.data.id,
+                first_name: json_me.data.first_name,
+                last_name:  json_me.data.last_name,
+                email:      json_me.data.email,
+                auth_token: json_me.data.auth_token,
+                timestamp:  new Date().toString(),
+                roles:      json_me.data.roles.map(r => r.key),
+            };
+            // Store user data in state
+            setAuthData({ user });
+            // Store user data, token and expiration date in local storage
+            localStorage['appState'] = JSON.stringify({
+                user,
+                token:           access_token,
+                tokenExpiration: expires_at
+            });
+        });
+    };
 
     const loginUser = (email, password, remember_me) => {
         // Build form data
@@ -42,31 +69,19 @@ const AuthProvider = props => {
             .then(json_token => {
                 // Store access token
                 setAccessToken(json_token.data.access_token);
-
-                // Send /me query to get user information
-                // eslint-disable-next-line no-undef
-                axios.post(Constants.API_URL + 'auth/me/', {}, {
-                    headers: { 'Authorization': 'bearer ' + json_token.data.access_token }
-                }).then(json_me => {
-                    let user = {
-                        id:         json_me.data.id,
-                        first_name: json_me.data.first_name,
-                        last_name:  json_me.data.last_name,
-                        email:      json_me.data.email,
-                        auth_token: json_me.data.auth_token,
-                        timestamp:  new Date().toString(),
-                        roles:      json_me.data.roles.map(r => r.key),
-                    };
-                    // Store user data in state
-                    setAuthData({ user });
-                    // Store user data, token and expiration date in local storage
-                    localStorage['appState'] = JSON.stringify({
-                        user,
-                        token:           json_token.data.access_token,
-                        tokenExpiration: json_token.data.expires_at * 1000
-                    });
-                });
+                storeUserData(json_token.data.access_token, json_token.data.expires_at * 1000);
             });
+    };
+
+    const refreshToken = () => {
+        // eslint-disable-next-line no-undef
+        return axios.post(Constants.API_URL + 'auth/refresh/', {}, {
+            headers: { 'Authorization': 'bearer ' + accessToken }
+        }).then(json_token => {
+            // Store access token
+            setAccessToken(json_token.data.access_token);
+            storeUserData(json_token.data.access_token, json_token.data.expires_at * 1000);
+        });
     };
 
     const logoutUser = () => {
@@ -90,7 +105,7 @@ const AuthProvider = props => {
     };
 
     // Memoize given object as long as authData does not change
-    const authDataValue = useMemo(() => ({ ...authData, accessToken, loginUser, logoutUser }), [authData]);
+    const authDataValue = useMemo(() => ({ ...authData, accessToken, isContextLoading: isLoading, loginUser, refreshToken, logoutUser }), [authData]);
 
     return <AuthContext.Provider value={authDataValue} {...props} />;
 };

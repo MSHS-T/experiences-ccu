@@ -8,6 +8,7 @@ export const API_PLATEAUX_ENDPOINT = API_URL + 'plateau/';
 export const API_SLOTS_ENDPOINT = API_URL + 'slot/';
 export const API_BOOKINGS_ENDPOINT = API_URL + 'booking/';
 export const API_SETTINGS_ENDPOINT = API_URL + 'settings/';
+export const API_PROFILE_ENDPOINT = API_URL + 'profile/';
 
 // UI
 export const FORM_REDIRECT_TIMEOUT = 2000;
