@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { Formik, connect } from 'formik';
+import { Formik } from 'formik';
 import * as Yup from 'yup';
 
 import Button from '@material-ui/core/Button';
@@ -24,9 +24,6 @@ const useStyles = makeStyles(theme => ({
     form: {
         width:     '100%', // Fix IE 11 issue.
         marginTop: theme.spacing(3),
-    },
-    formControl: {
-        width: '100%',
     },
     buttonRow: {
         display:        'flex',
