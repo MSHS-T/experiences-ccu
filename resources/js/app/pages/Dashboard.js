@@ -35,11 +35,11 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const OutlinedCircularProgress = withStyles(() => ({
+const OutlinedCircularProgress = withStyles(theme => ({
     circleStatic: {
-        fill: grey[200],
-    },
-}))(CircularProgress);
+        fill: theme.palette.background.default,
+    }
+}), { withTheme: true })(CircularProgress);
 
 export default function Dashboard(props) {
     const classes = useStyles();
