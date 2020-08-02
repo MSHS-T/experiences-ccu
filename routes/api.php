@@ -38,4 +38,9 @@ Route::group(['middleware' => 'apiheader'], function ($router) {
 
     Route::get('settings', 'API\SettingController@index');
     Route::post('settings', 'API\SettingController@store');
+
+    Route::prefix('profile')->group(function () {
+        Route::get('/', 'API\ProfileController@index');
+        Route::put('/', 'API\ProfileController@update');
+    });
 });
