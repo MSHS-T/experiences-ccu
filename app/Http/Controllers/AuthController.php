@@ -25,18 +25,37 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(Request $request)
     {
+        $captcha_token = request('g-recaptcha-response');
+        if (empty($captcha_token)) {
+            return response()->json(['error' => 'Missing captcha content'], 400);
+        }
+
+        $client = new \GuzzleHttp\Client();
+
+        $response = $client->post('https://www.google.com/recaptcha/api/siteverify', [
+            'form_params' => [
+                'secret' => env('RECAPTCHA_SECRET'),
+                'response' => $captcha_token,
+                'remoteip' => $request->ip()
+            ]
+        ]);
+        $responseBody = json_decode((string) $response->getBody());
+        if (!$responseBody->success) {
+            return response()->json(['error' => 'Captcha validation failed'], 400);
+        }
+
         $credentials = request(['email', 'password']);
         $rememberMe = boolval(request('remember_me', 0));
 
         $auth = auth();
-        if($rememberMe){
+        if ($rememberMe) {
             // Session will expire in 30 days if remember me is checked (1 hour otherwise)
             $auth = $auth->setTTL(60 * 24 * 30);
         }
 
-        if (! $token = $auth->attempt($credentials)) {
+        if (!$token = $auth->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 

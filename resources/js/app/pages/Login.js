@@ -11,9 +11,13 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
+import ReCAPTCHA from 'react-google-recaptcha';
+
 import Footer from '../components/Footer';
 import RouterLink from '../components/RouterLink';
 import { useAuthContext } from '../context/Auth';
+import { CircularProgress } from '@material-ui/core';
+import { green } from '@material-ui/core/colors';
 
 const useStyles = makeStyles(theme => ({
     '@global': {
@@ -38,26 +42,64 @@ const useStyles = makeStyles(theme => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    buttonWrapper: {
+        margin:         theme.spacing(2),
+        position:       'relative',
+        display:        'flex',
+        flexDirection:  'column',
+        justifyContent: 'center'
+    },
+    buttonProgress: {
+        color:      green[500],
+        position:   'absolute',
+        top:        '50%',
+        left:       '50%',
+        marginTop:  -12,
+        marginLeft: -12,
+    },
 }));
 
 export default function Login(props) {
     const classes = useStyles();
     const { loginUser } = useAuthContext();
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    let _email, _password, _remember;
+    const [data, setData] = useState({});
+    const recaptchaRef = React.useRef();
 
     const handleLogin = e => {
         setError(null);
+        setIsLoading(true);
         e.preventDefault();
-        let promise = loginUser(_email.value, _password.value, _remember.checked ? 1 : 0);
-        promise
-            .then(() => {
-                props.history.push('/dashboard');
-            })
-            .catch(error => {
-                console.error(error);
-                setError('Votre connexion a échoué. Veuillez vérifier vos identifiants et réessayer.');
-            });
+
+        // Fetch recaptcha token before logging in
+        recaptchaRef.current.executeAsync().then(token => {
+            let promise = loginUser(data.email, data.password, data.remember_me ? 1 : 0, token);
+            promise
+                .then(() => {
+                    props.history.push('/dashboard');
+                })
+                .catch(error => {
+                    setIsLoading(false);
+
+                    // Reset Captcha
+                    recaptchaRef.current.reset();
+
+                    switch(error.response.status){
+                    case 401:
+                        setError('Votre connexion a échoué. Veuillez vérifier vos identifiants et réessayer.');
+                        break;
+                    case 400:
+                        setError('Le système anti-robots a rejeté votre action. Veuillez actualiser la page et réessayer.');
+                        break;
+                    default:
+                        console.error(JSON.stringify(error));
+                        setError('Erreur inconnue. Veuillez actualiser la page et réessayer. Si le problème persiste, merci de contacter un administrateur.');
+                        break;
+                    }
+                });
+        });
+
     };
 
     return (
@@ -83,7 +125,7 @@ export default function Login(props) {
                         id="email"
                         name="email"
                         label="Adresse E-Mail"
-                        inputRef={input => (_email = input)}
+                        onChange={e => { setData({ ...data, email: e.target.value }); }}
                         autoComplete="email"
                         autoFocus
                     />
@@ -96,11 +138,17 @@ export default function Login(props) {
                         id="password"
                         name="password"
                         label="Mot de Passe"
-                        inputRef={input => (_password = input)}
+                        onChange={e => { setData({ ...data, password: e.target.value }); }}
                         autoComplete="current-password"
                     />
                     <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" inputRef={input => (_remember = input)} />}
+                        control={
+                            <Checkbox
+                                value="remember"
+                                color="primary"
+                                onChange={e => { setData({ ...data, remember_me: e.target.checked }); }}
+                            />
+                        }
                         label="Se souvenir de moi"
                     />
                     {!!error && (
@@ -108,15 +156,26 @@ export default function Login(props) {
                             {error}
                         </Typography>
                     )}
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
+                    <ReCAPTCHA
+                        ref={recaptchaRef}
+                        size="invisible"
+                        theme="dark"
+                        // eslint-disable-next-line no-undef
+                        sitekey={RECAPTCHA_KEY}
+                    />
+                    <div className={classes.buttonWrapper}>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            disabled={isLoading}
+                            className={classes.submit}
+                        >
                         Connexion
-                    </Button>
+                        </Button>
+                        {isLoading && <CircularProgress size={24} className={classes.buttonProgress} />}
+                    </div>
                     <Grid container>
                         <Grid item xs>
                             {/* TODO : Add link to forgot password page */}

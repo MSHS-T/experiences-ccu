@@ -55,12 +55,13 @@ const AuthProvider = props => {
         });
     };
 
-    const loginUser = (email, password, remember_me) => {
+    const loginUser = (email, password, remember_me, captcha) => {
         // Build form data
         var formData = new FormData();
         formData.append('email', email);
         formData.append('password', password);
         formData.append('remember_me', remember_me);
+        formData.append('g-recaptcha-response', captcha || '');
 
         // Send login query
         // eslint-disable-next-line no-undef
