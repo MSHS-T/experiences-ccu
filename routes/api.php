@@ -19,6 +19,8 @@ Route::group(['middleware' => 'apiheader'], function ($router) {
         Route::post('logout', 'AuthController@logout');
         Route::post('refresh', 'AuthController@refresh');
         Route::post('me', 'AuthController@me');
+        Route::post('forgotpassword', 'AuthController@sendPasswordResetEmail');
+        Route::post('resetpassword', 'AuthController@doReset');
     });
     Route::apiResource('user', 'API\UserController');
     Route::apiResource('equipment', 'API\EquipmentController');

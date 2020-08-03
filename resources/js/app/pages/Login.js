@@ -178,9 +178,10 @@ export default function Login(props) {
                     </div>
                     <Grid container>
                         <Grid item xs>
-                            {/* TODO : Add link to forgot password page */}
-                            <Link href="#" variant="body2">
-                                {'Mot de passe oublié?'}
+                            <Link component={RouterLink} to="/forgotpassword">
+                                <Typography component="div" variant="body2" align="center" color="textPrimary">
+                                    {'Mot de passe oublié?'}
+                                </Typography>
                             </Link>
                         </Grid>
                     </Grid>
