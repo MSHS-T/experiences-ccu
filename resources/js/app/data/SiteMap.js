@@ -11,6 +11,8 @@ import ShutterSpeedIcon from '@material-ui/icons/ShutterSpeed';
 import LandingPage from '../pages/Landing';
 import LoginPage from '../pages/Login';
 import ProfilePage from '../pages/Profile';
+import ForgotPasswordPage from '../pages/ForgotPassword';
+import ResetPasswordPage from '../pages/ResetPassword';
 import DashboardPage from '../pages/Dashboard';
 
 import UsersList from '../pages/users/List';
@@ -50,6 +52,24 @@ const SiteMap = [
         exactPath:     false,
         showInMenu:    false,
         component:     LoginPage,
+        authenticated: false
+    },
+    {
+        title:         'Mot de passe oublié',
+        icon:          false,
+        url:           '/forgotpassword',
+        exactPath:     false,
+        showInMenu:    false,
+        component:     ForgotPasswordPage,
+        authenticated: false
+    },
+    {
+        title:         'Réinitialisation du mot de passe',
+        icon:          false,
+        url:           '/resetpassword',
+        exactPath:     false,
+        showInMenu:    false,
+        component:     ResetPasswordPage,
         authenticated: false
     },
     {

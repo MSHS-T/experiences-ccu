@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Notifications\ResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -69,19 +70,34 @@ class User extends Authenticatable implements JWTSubject
         $this->attributes['password'] = bcrypt($value);
     }
 
-    public function getNameAttribute(){
+    public function getNameAttribute()
+    {
         return ucfirst($this->first_name) . " " . strtoupper($this->last_name);
     }
 
-    public function roles(){
+    public function roles()
+    {
         return $this->belongsToMany('App\Role');
     }
 
-    public function plateaux(){
+    public function plateaux()
+    {
         return $this->hasMany('App\Plateau', 'manager_id');
     }
 
-    public function manipulations(){
+    public function manipulations()
+    {
         return $this->belongsToMany('App\Manipulation');
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token));
     }
 }
