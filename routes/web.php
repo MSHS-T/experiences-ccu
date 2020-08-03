@@ -19,6 +19,7 @@ Route::group(['prefix' => 'api'], function () {
 
 Route::get('{reactRoute}', function () {
     return view('web', [
-        'settings' => \App\Setting::all()
+        'settings'      => \App\Setting::all(),
+        'recaptcha_key' => env('RECAPTCHA_KEY')
     ]); // your start view
 })->where('reactRoute', '^((?!api).)*$');
