@@ -42,7 +42,7 @@ class ManipulationController extends Controller
      */
     public function all(Request $request)
     {
-        return Manipulation::withTrashed()->with('slots')->get();
+        return Manipulation::withTrashed()->with('slots', 'statistics')->get();
     }
 
     /**
@@ -176,11 +176,11 @@ class ManipulationController extends Controller
     public function destroy($id)
     {
         $manip = Manipulation::withTrashed()->findOrFail($id);
-        if ($manip->trashed()) {
-            $manip->restore();
-        } else {
+        try {
             $manip->delete();
+        } catch (\UnexpectedValueException $e) {
+            return response($e->getMessage(), 422);
         }
-        return 204;
+        return response('', 204);
     }
 }

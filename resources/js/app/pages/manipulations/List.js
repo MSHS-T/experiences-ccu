@@ -88,33 +88,58 @@ export default function ManipulationList(props) {
                 loadData();
             })
             .catch(err => {
-                setDeleteError(err.message);
                 setDeleteEntry(null);
+                const status = parseInt(err.message.split(' ').shift(), 10);
+                switch(status){
+                case 422:
+                    setDeleteError('Cette manipulation ne peut pas être supprimée, car elle contient des créneaux réservés à une date future.');
+                    break;
+                default:
+                    console.error(JSON.stringify(err));
+                    setDeleteError(err.message);
+                    break;
+                }
             });
     };
 
     const Stats = (rowData) => {
         const target = rowData.target_slots;
-        const slots = rowData.slots.length || 0;
-        const signedup = rowData.slots.filter(s => (!!s.booking && !!s.booking.confirmed)).length || 0;
-        const signedupNotConfirmed = rowData.slots.filter(s => (!!s.booking && !s.booking.confirmed)).length || 0;
-        const slotsPercent = slots / target * 100;
-        const signedupPercent = signedup / target * 100;
 
-        const signedupText = signedup + (signedupNotConfirmed > 0 ? ` (+ ${signedupNotConfirmed})` : '');
+        if(rowData.deleted_at === null)
+        {
+            const slots = rowData.slots.length || 0;
+            const signedup = rowData.slots.filter(s => (!!s.booking && !!s.booking.confirmed)).length || 0;
+            const signedupNotConfirmed = rowData.slots.filter(s => (!!s.booking && !s.booking.confirmed)).length || 0;
+            const slotsPercent = slots / target * 100;
+            const signedupPercent = signedup / target * 100;
 
-        // eslint-disable-next-line no-undef
-        const colorPercent = (percent) => (percent < 100 ? classes.statusDanger : (percent >= APP_SETTINGS.manipulation_overbooking ? classes.statusOk : classes.statusWarning));
+            const signedupText = signedup + (signedupNotConfirmed > 0 ? ` (+ ${signedupNotConfirmed})` : '');
 
-        return (
-            <>
-                <Typography variant="inherit" display="inline" className={colorPercent(slotsPercent)}>{slots} Créneaux</Typography>
-                <span> | </span>
-                <Typography variant="inherit" display="inline" className={colorPercent(signedupPercent)}>{signedupText} Inscrits</Typography>
-                <span> | </span>
-                <Typography variant="inherit" display="inline">{target} Cible</Typography>
-            </>
-        );
+            // eslint-disable-next-line no-undef
+            const colorPercent = (percent) => (percent < 100 ? classes.statusDanger : (percent >= APP_SETTINGS.manipulation_overbooking ? classes.statusOk : classes.statusWarning));
+
+            return (
+                <>
+                    <Typography variant="inherit" display="inline">{target} Cible</Typography>
+                    <span> | </span>
+                    <Typography variant="inherit" display="inline" className={colorPercent(slotsPercent)}>{slots} Créneaux</Typography>
+                    <span> | </span>
+                    <Typography variant="inherit" display="inline" className={colorPercent(signedupPercent)}>{signedupText} Inscrits</Typography>
+                </>
+            );
+        } else {
+            const slots = rowData.statistics.slot_count;
+            const honored = rowData.statistics.booking_confirmed_honored + rowData.statistics.booking_unconfirmed_honored;
+            return (
+                <>
+                    <Typography variant="inherit" display="inline">{target} Cible</Typography>
+                    <span> | </span>
+                    <Typography variant="inherit" display="inline">{slots} Créneaux</Typography>
+                    <span> | </span>
+                    <Typography variant="inherit" display="inline">{honored} Participants</Typography>
+                </>
+            );
+        }
     };
 
 
@@ -261,7 +286,7 @@ export default function ManipulationList(props) {
             >
                 <DialogTitle id="alert-dialog-title">
                     {deleteEntry ? (
-                        deleteEntry.deleted_at === null ? 'Archiver la manipulation ' + deleteEntry.name + ' ?' : 'Restaurer la manipulation ' + deleteEntry.name + ' ?'
+                        'Archiver la manipulation ' + deleteEntry.name + ' ? Cette action est irréversible.'
                     ) : ''}
                     {deleteError ? ('Erreur lors de la suppression : ' + deleteError) : ''}
                 </DialogTitle>

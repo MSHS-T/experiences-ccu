@@ -49,14 +49,15 @@ class TestManipulationsTableSeeder extends Seeder
                     'start_pm' => '14:00',
                     'end_pm'   => '17:00'
                 ];
-                $hours[$day]['enabled'] = boolval(random_int(0, 1));
+                // 2 chances out of 3 to enable a day (and each half day)
+                $hours[$day]['enabled'] = random_int(0, 2) > 0;
                 if ($hours[$day]['enabled']) {
-                    $hours[$day]['am'] = boolval(random_int(0, 1));
+                    $hours[$day]['am'] = random_int(0, 2) > 0;
                     if ($hours[$day]['am']) {
                         $hours[$day]['start_am'] = collect(['08:00', '08:30', '09:00', '09:30', '10:00'])->random();
                         $hours[$day]['end_am'] = collect(['11:00', '11:30', '12:00', '12:30'])->random();
                     }
-                    $hours[$day]['pm'] = boolval(random_int(0, 1));
+                    $hours[$day]['pm'] = random_int(0, 2) > 0;
                     if ($hours[$day]['pm']) {
                         $hours[$day]['start_pm'] = collect(['13:00', '13:30', '14:00', '14:30', '15:00'])->random();
                         $hours[$day]['end_pm'] = collect(['16:00', '16:30', '17:00', '17:30', '18:00'])->random();
@@ -108,8 +109,9 @@ class TestManipulationsTableSeeder extends Seeder
                 $confirmed = random_int(1, 4) > 1;
 
                 // 90% chance to be honored if before today and confirmed
-                // If slot is unconfirmed, or dated today or after, keep null
-                $honored = ($slot->start->setTime(0, 0, 0) < Carbon::now()->setTime(0, 0, 0) && $confirmed) ? (random_int(1, 10) > 1) : null;
+                // If slot is unconfirmed, 50% chance to be honored
+                // If slot is dated today or after, keep null
+                $honored = ($slot->start->setTime(0, 0, 0) < Carbon::now()->setTime(0, 0, 0)) ? ($confirmed ? random_int(1, 10) > 1 : boolval(random_int(0, 1))) : null;
 
                 $slot->booking()->create([
                     'first_name'        => $firstName,
