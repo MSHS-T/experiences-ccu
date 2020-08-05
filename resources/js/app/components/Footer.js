@@ -15,7 +15,10 @@ export default function Footer() {
                 </Link>
                 {' '}
                 {new Date().getFullYear()}
-                {'.'}
+                {'. - '}
+                <Link component={RouterLink} to="/legal" color="inherit">
+                    Mentions Légales
+                </Link>
             </Typography>
         </Box>
     );
