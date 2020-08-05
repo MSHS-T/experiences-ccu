@@ -86,6 +86,9 @@ export default function Settings() {
                         booking_opening_delay: Yup.number().round()
                             .min(0, 'Minimum autorisé : 0')
                             .required('Requis'),
+                        email_reminder_delay: Yup.number().round()
+                            .min(0, 'Minimum autorisé : 0')
+                            .required('Requis'),
                         manipulation_overbooking: Yup.number().round()
                             .min(100, 'Minimum autorisé : 100')
                             .required('Requis'),
@@ -178,6 +181,29 @@ export default function Settings() {
                                         onChange={handleChange}
                                         error={errors.booking_opening_delay && touched.booking_opening_delay}
                                         helperText={touched.booking_opening_delay && errors.booking_opening_delay}
+                                        variant="outlined"
+                                        inputProps={{
+                                            min:  '0',
+                                            step: '1',
+                                        }}
+                                        InputProps={{
+                                            endAdornment: <InputAdornment position="end">Jours</InputAdornment>,
+                                        }}
+                                        fullWidth
+                                        autoFocus
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="email_reminder_delay"
+                                        name="email_reminder_delay"
+                                        label="Délai avant réservation pour envoi du premier rappel par e-mail"
+                                        type="number"
+                                        autoComplete="email_reminder_delay"
+                                        value={values.email_reminder_delay}
+                                        onChange={handleChange}
+                                        error={errors.email_reminder_delay && touched.email_reminder_delay}
+                                        helperText={(touched.email_reminder_delay && errors.email_reminder_delay || '') + (' (un rappel sera envoyé la veille dans tous les cas)')}
                                         variant="outlined"
                                         inputProps={{
                                             min:  '0',
