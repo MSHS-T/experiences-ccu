@@ -87,3 +87,22 @@ Table bookings {
   confirm_before datetime [null]
   honored boolean [null]
 }
+
+Table manipulation_statistics {
+  id int [pk, increment]
+  manipulation_id int [not null, ref: > manipulations.id]
+  slot_count int [not null]
+  booking_made int [not null]
+  booking_confirmed int [not null]
+  booking_confirmed_honored int [not null]
+  booking_unconfirmed_honored int [not null]
+}
+
+Table booking_history {
+  id int [pk, increment]
+  crypted_email string [not null, unique]
+  booking_made int [not null]
+  booking_confirmed int [not null]
+  booking_confirmed_honored int [not null]
+  booking_unconfirmed_honored int [not null]
+}
