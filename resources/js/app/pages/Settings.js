@@ -88,7 +88,8 @@ export default function Settings() {
                             .required('Requis'),
                         manipulation_overbooking: Yup.number().round()
                             .min(100, 'Minimum autorisé : 100')
-                            .required('Requis')
+                            .required('Requis'),
+                        presentation_text: Yup.string().required('Requis')
                     };
                     return Yup.object().shape(schema);
                 }}
@@ -208,6 +209,23 @@ export default function Settings() {
                                         InputProps={{
                                             endAdornment: <InputAdornment position="end">%</InputAdornment>,
                                         }}
+                                        fullWidth
+                                        autoFocus
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="presentation_text"
+                                        name="presentation_text"
+                                        label="Texte de présentation du site (visible sur la page d'accueil)"
+                                        autoComplete="presentation_text"
+                                        value={values.presentation_text.replace(/<\s*\/?br\s*[/]?>/gi, '\n')}
+                                        onChange={handleChange}
+                                        error={errors.presentation_text && touched.presentation_text}
+                                        helperText={touched.presentation_text && errors.presentation_text}
+                                        variant="outlined"
+                                        multiline
+                                        rows={5}
                                         fullWidth
                                         autoFocus
                                     />

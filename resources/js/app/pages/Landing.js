@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(1, 1.5),
     },
     heroContent: {
-        padding: theme.spacing(8, 0, 6),
+        padding: theme.spacing(6, 0, 6),
     },
     cardHeader: {
         backgroundColor: theme.palette.grey[200],
@@ -82,6 +82,9 @@ const experiences = [
 export default function Landing() {
     const classes = useStyles();
 
+    // eslint-disable-next-line no-undef
+    const presentation_text = { __html: APP_SETTINGS.presentation_text };
+
     return (
         <div className={classes.root}>
             {/* Hero unit */}
@@ -90,8 +93,7 @@ export default function Landing() {
                     Expériences CCU
                 </Typography>
                 <Typography variant="h5" align="center" color="textSecondary" component="p">
-                    {/* TODO : Add website description */}
-                    Magna tempor amet ut proident nostrud cillum aute commodo. Veniam dolore non velit adipisicing incididunt eu excepteur incididunt consectetur. Deserunt eiusmod dolore tempor incididunt sit officia velit enim sit ullamco dolor. Adipisicing incididunt veniam exercitation mollit ea pariatur cillum.
+                    <div dangerouslySetInnerHTML={presentation_text}></div>
                 </Typography>
             </Container>
             {/* End hero unit */}
