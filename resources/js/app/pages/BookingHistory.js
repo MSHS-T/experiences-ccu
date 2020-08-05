@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, makeStyles, Grid, TextField, Button, CircularProgress, InputAdornment, Fab } from '@material-ui/core';
+import { Typography, makeStyles, Grid, TextField, Button, CircularProgress, Fab } from '@material-ui/core';
 import { green, blue } from '@material-ui/core/colors';
 import { useAuthContext } from '../context/Auth';
 import * as Constants from '../data/Constants';
@@ -78,7 +78,7 @@ export default function BookingHistory() {
                 setData(data);
                 setLoading(false);
             })
-            .catch(err => {
+            .catch(() => {
                 setData(null);
                 setLoading(false);
             });
