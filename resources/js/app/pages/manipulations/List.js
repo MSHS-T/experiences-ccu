@@ -11,6 +11,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import CloseIcon from '@material-ui/icons/Close';
+import PieChartIcon from '@material-ui/icons/PieChart';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import TodayIcon from '@material-ui/icons/Today';
 import UnarchiveIcon from '@material-ui/icons/Unarchive';
@@ -18,7 +19,7 @@ import ViewIcon from '@material-ui/icons/Visibility';
 
 import { useAuthContext } from '../../context/Auth';
 import * as Constants from '../../data/Constants';
-import { List, ListItem, IconButton } from '@material-ui/core';
+import { List, ListItem, IconButton, DialogContent, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
 import moment from 'moment';
 import { capitalize } from 'lodash';
 
@@ -33,7 +34,26 @@ const useStyles = makeStyles(theme => ({
     },
     statusOk: {
         color: theme.palette.success.main
-    }
+    },
+    closeButton: {
+        position: 'absolute',
+        right:    theme.spacing(1),
+        top:      theme.spacing(1),
+        color:    theme.palette.grey[500],
+    },
+    statsCell: {
+        borderWidth: 1,
+        borderStyle: 'solid',
+        borderColor: theme.palette.grey[500]
+    },
+    statsNumber: {
+        fontSize:   '1.2rem',
+        textAlign:  'center',
+        fontWeight: 'bold'
+    },
+    statsLegend: {
+        textAlign: 'center',
+    },
 }));
 
 const emptyAction = {
@@ -51,6 +71,7 @@ export default function ManipulationList(props) {
     const [deleteEntry, setDeleteEntry] = useState(null);
     const [deleteError, setDeleteError] = useState(null);
     const [callSheet, setCallSheet] = useState(null);
+    const [stats, setStats] = useState(null);
 
     const loadData = () => {
         setLoading(true);
@@ -181,7 +202,11 @@ export default function ManipulationList(props) {
                         icon:    () => <TodayIcon />,
                         tooltip: 'Créneaux',
                         onClick: (event, rowData) => props.history.push('/manipulations/' + rowData.id + '/slots')
-                    } : emptyAction),
+                    } : {
+                        icon:    () => <PieChartIcon />,
+                        tooltip: 'Statistiques',
+                        onClick: (event, rowData) => setStats(rowData)
+                    }),
                     rowData => (rowData.deleted_at === null ? {
                         icon:    () => <PlaylistAddCheckIcon />,
                         tooltip: 'Feuilles d\'Appel',
@@ -306,6 +331,85 @@ export default function ManipulationList(props) {
                             Fermer
                         </Button>
                     </DialogActions>
+                )}
+            </Dialog>
+            <Dialog
+                open={!!stats}
+                onClose={() => {
+                    setStats(null);
+                }}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {`Statistiques de la manipulation ${stats ? stats.name : ''}`}
+                    <IconButton aria-label="close" className={classes.closeButton} onClick={() => setStats(null)}>
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                {stats && (
+                    <DialogContent dividers>
+                        <Table>
+                            <TableBody>
+                                <TableRow>
+                                    <TableCell className={classes.statsCell} colSpan={2}>
+                                        <div className={classes.statsNumber}>
+                                            {stats.statistics.slot_count}
+                                        </div>
+                                        <div className={classes.statsLegend}>
+                                            {'Créneaux'}
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell className={classes.statsCell} colSpan={2}>
+                                        <div className={classes.statsNumber}>
+                                            {stats.statistics.booking_made}
+                                        </div>
+                                        <div className={classes.statsLegend}>
+                                            {'Réservations'}
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell className={classes.statsCell}>
+                                        <div className={classes.statsNumber}>
+                                            {stats.statistics.booking_confirmed}
+                                        </div>
+                                        <div className={classes.statsLegend}>
+                                            {'Réservations Confirmées'}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className={classes.statsCell}>
+                                        <div className={classes.statsNumber}>
+                                            {stats.statistics.booking_made - stats.statistics.booking_confirmed}
+                                        </div>
+                                        <div className={classes.statsLegend}>
+                                            {'Réservations Non Confirmées'}
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                    <TableCell className={classes.statsCell}>
+                                        <div className={classes.statsNumber}>
+                                            {stats.statistics.booking_confirmed_honored}
+                                        </div>
+                                        <div className={classes.statsLegend}>
+                                            {'Réservations Confirmées & Honorées'}
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className={classes.statsCell}>
+                                        <div className={classes.statsNumber}>
+                                            {stats.statistics.booking_unconfirmed_honored}
+                                        </div>
+                                        <div className={classes.statsLegend}>
+                                            {'Réservations Non Confirmées & Honorées'}
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
+                    </DialogContent>
                 )}
             </Dialog>
         </>
