@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { List, ListItem, ListItemText, Checkbox, ListItemSecondaryAction, IconButton, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SaveIcon from '@material-ui/icons/Save';
@@ -24,13 +24,16 @@ const useStyles = makeStyles((theme) => ({
 const momentToTime = (date) => moment(date).format(moment.HTML5_FMT.TIME);
 
 export default function AttendanceDay({ dayLabel, daySlots, handleSave, className, ...otherProps }) {
-
-    const initialChecked = daySlots.filter(s => s.booking.honored).map(s => s.id);
     const initialEnabled = daySlots.filter(s => s.booking.confirmed).map(s => s.id);
 
     const classes = useStyles();
-    const [checked, setChecked] = useState(initialChecked);
+    const [checked, setChecked] = useState([]);
     const [isSaving, setIsSaving] = useState(false);
+
+    useEffect(() => {
+        const initialChecked = daySlots.filter(s => s.booking.honored).map(s => s.id);
+        setChecked(initialChecked);
+    }, [daySlots]);
 
     const handleToggle = (value) => () => {
         const currentIndex = checked.indexOf(value);
@@ -66,6 +69,7 @@ export default function AttendanceDay({ dayLabel, daySlots, handleSave, classNam
         (isAfterToday || isEmpty) ? classes.disabled : ''
     ].join(' ');
 
+
     return (
         <List dense className={allClasses} {...otherProps} >
             <ListItem>
@@ -93,7 +97,7 @@ export default function AttendanceDay({ dayLabel, daySlots, handleSave, classNam
                             <Checkbox
                                 edge="end"
                                 onChange={handleToggle(slot.id)}
-                                checked={checked.indexOf(slot.id) !== -1}
+                                checked={checked.includes(slot.id)}
                                 inputProps={{ 'aria-labelledby': labelId }}
                             />
                         </ListItemSecondaryAction>
