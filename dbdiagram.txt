@@ -100,9 +100,10 @@ Table manipulation_statistics {
 
 Table booking_history {
   id int [pk, increment]
-  crypted_email string [not null, unique]
+  hashed_email string [not null, unique]
   booking_made int [not null]
   booking_confirmed int [not null]
   booking_confirmed_honored int [not null]
   booking_unconfirmed_honored int [not null]
+  blocked boolean
 }

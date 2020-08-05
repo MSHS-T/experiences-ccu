@@ -19,9 +19,10 @@ import ViewIcon from '@material-ui/icons/Visibility';
 
 import { useAuthContext } from '../../context/Auth';
 import * as Constants from '../../data/Constants';
-import { List, ListItem, IconButton, DialogContent, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { List, ListItem, IconButton, DialogContent } from '@material-ui/core';
 import moment from 'moment';
 import { capitalize } from 'lodash';
+import BookingStats from '../../components/BookingStats';
 
 const useStyles = makeStyles(theme => ({
     statusDanger: {
@@ -40,20 +41,7 @@ const useStyles = makeStyles(theme => ({
         right:    theme.spacing(1),
         top:      theme.spacing(1),
         color:    theme.palette.grey[500],
-    },
-    statsCell: {
-        borderWidth: 1,
-        borderStyle: 'solid',
-        borderColor: theme.palette.grey[500]
-    },
-    statsNumber: {
-        fontSize:   '1.2rem',
-        textAlign:  'center',
-        fontWeight: 'bold'
-    },
-    statsLegend: {
-        textAlign: 'center',
-    },
+    }
 }));
 
 const emptyAction = {
@@ -116,7 +104,7 @@ export default function ManipulationList(props) {
                     setDeleteError('Cette manipulation ne peut pas être supprimée, car elle contient des créneaux réservés à une date future.');
                     break;
                 default:
-                    console.error(JSON.stringify(err));
+                    console.error(err);
                     setDeleteError(err.message);
                     break;
                 }
@@ -349,66 +337,7 @@ export default function ManipulationList(props) {
                 </DialogTitle>
                 {stats && (
                     <DialogContent dividers>
-                        <Table>
-                            <TableBody>
-                                <TableRow>
-                                    <TableCell className={classes.statsCell} colSpan={2}>
-                                        <div className={classes.statsNumber}>
-                                            {stats.statistics.slot_count}
-                                        </div>
-                                        <div className={classes.statsLegend}>
-                                            {'Créneaux'}
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell className={classes.statsCell} colSpan={2}>
-                                        <div className={classes.statsNumber}>
-                                            {stats.statistics.booking_made}
-                                        </div>
-                                        <div className={classes.statsLegend}>
-                                            {'Réservations'}
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell className={classes.statsCell}>
-                                        <div className={classes.statsNumber}>
-                                            {stats.statistics.booking_confirmed}
-                                        </div>
-                                        <div className={classes.statsLegend}>
-                                            {'Réservations Confirmées'}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell className={classes.statsCell}>
-                                        <div className={classes.statsNumber}>
-                                            {stats.statistics.booking_made - stats.statistics.booking_confirmed}
-                                        </div>
-                                        <div className={classes.statsLegend}>
-                                            {'Réservations Non Confirmées'}
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                                <TableRow>
-                                    <TableCell className={classes.statsCell}>
-                                        <div className={classes.statsNumber}>
-                                            {stats.statistics.booking_confirmed_honored}
-                                        </div>
-                                        <div className={classes.statsLegend}>
-                                            {'Réservations Confirmées & Honorées'}
-                                        </div>
-                                    </TableCell>
-                                    <TableCell className={classes.statsCell}>
-                                        <div className={classes.statsNumber}>
-                                            {stats.statistics.booking_unconfirmed_honored}
-                                        </div>
-                                        <div className={classes.statsLegend}>
-                                            {'Réservations Non Confirmées & Honorées'}
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
+                        <BookingStats data={stats.statistics} />
                     </DialogContent>
                 )}
             </Dialog>

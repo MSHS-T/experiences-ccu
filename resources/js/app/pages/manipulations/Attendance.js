@@ -213,6 +213,15 @@ export default function ManipulationAttendance(props) {
         );
     }
 
+    if(manipulationData){
+        var daySlots = [...Array(7).keys()].map(i => {
+            const day = moment(currentMonday).add(i, 'days');
+            const slots = slotData.filter(s => moment(s.start).isSame(day, 'day') && s.booking !== null);
+            return [day, slots];
+        });
+    }
+
+
     return (
         <>
             <Typography component="h1" variant="h4" align="center" color="textPrimary" gutterBottom>
@@ -225,9 +234,7 @@ export default function ManipulationAttendance(props) {
                         <>
                             {tableCaption(currentMonday)}
                             <div className={classes.daysWrapper}>
-                                {[...Array(7).keys()].map(i => {
-                                    const day = moment(currentMonday).add(i, 'days');
-                                    const daySlots = slotData.filter(s => moment(s.start).isSame(day, 'day') && s.booking !== null);
+                                {daySlots.map(([day, daySlots], i) => {
                                     return (
                                         <AttendanceDay
                                             key={`day-${i}`}

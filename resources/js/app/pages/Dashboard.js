@@ -5,7 +5,6 @@ import * as moment from 'moment';
 import { useAuthContext } from '../context/Auth';
 import * as Constants from '../data/Constants';
 import Loading from './Loading';
-import { grey } from '@material-ui/core/colors';
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import { capitalize } from 'lodash';

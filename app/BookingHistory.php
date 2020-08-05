@@ -28,7 +28,7 @@ class BookingHistory extends Model
      * @var array
      */
     protected $fillable = [
-        'crypted_email'
+        'hashed_email'
     ];
 
     /**
@@ -40,17 +40,19 @@ class BookingHistory extends Model
         'booking_made'                => 0,
         'booking_confirmed'           => 0,
         'booking_confirmed_honored'   => 0,
-        'booking_unconfirmed_honored' => 0
+        'booking_unconfirmed_honored' => 0,
+        'blocked'                     => false,
     ];
+
+    public static function findByEmailOrFail(string $email): ?BookingHistory
+    {
+        $hashed_email = md5($email);
+        return parent::where('hashed_email', $hashed_email)->firstOrFail();
+    }
 
     public static function findByEmailOrCreate(string $email): ?BookingHistory
     {
-        $encrypted_email = Crypt::encrypt($email);
-        return parent::firstOrCreate(['crypted_email' => $encrypted_email]);
-    }
-
-    public function setEmailAttribute($value)
-    {
-        $this->attributes['crypted_email'] = Crypt::encrypt($value);
+        $hashed_email = md5($email);
+        return parent::firstOrCreate(['hashed_email' => $hashed_email]);
     }
 }

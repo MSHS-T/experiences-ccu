@@ -38,6 +38,9 @@ Route::group(['middleware' => 'apiheader'], function ($router) {
 
     Route::put('booking', 'API\BookingController@update');
 
+    Route::get('bookinghistory', 'API\BookingHistoryController@index');
+    Route::put('bookinghistory', 'API\BookingHistoryController@update');
+
     Route::get('settings', 'API\SettingController@index');
     Route::post('settings', 'API\SettingController@store');
 

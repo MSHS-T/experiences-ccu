@@ -2,6 +2,7 @@ import React from 'react';
 
 import BuildIcon from '@material-ui/icons/Build';
 import DashboardIcon from '@material-ui/icons/Dashboard';
+import EqualizerIcon from '@material-ui/icons/Equalizer';
 import HomeIcon from '@material-ui/icons/Home';
 import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import PeopleIcon from '@material-ui/icons/People';
@@ -33,6 +34,7 @@ import PlateauxList from '../pages/plateaux/List';
 import PlateauxView from '../pages/plateaux/View';
 import PlateauxForm from '../pages/plateaux/Form';
 
+import BookingHistoryPage from '../pages/BookingHistory';
 import SettingsPage from '../pages/Settings';
 
 const SiteMap = [
@@ -288,6 +290,16 @@ const SiteMap = [
     //////////////////
     /// PARAMETRES ///
     //////////////////
+    {
+        title:         'Historique',
+        icon:          (<EqualizerIcon />),
+        url:           '/bookinghistory',
+        exactPath:     false,
+        showInMenu:    true,
+        component:     BookingHistoryPage,
+        authenticated: true,
+        roles:         ['ADMIN']
+    },
     {
         title:         'Paramètres',
         icon:          (<SettingsIcon />),
