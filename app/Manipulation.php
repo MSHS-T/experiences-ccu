@@ -142,4 +142,70 @@ class Manipulation extends Model
 
         $this->slots()->createMany($slots);
     }
+
+    /**
+     * Delete the model from the database.
+     *
+     * @return bool|null
+     *
+     * @throws \Exception
+     * @throws \UnexpectedValueException
+     */
+    public function delete()
+    {
+        // Check for booked slots in the future
+        // If it has any, throw an exception
+        $hasFutureBookedSlots = $this->slots->contains(function ($slot) {
+            return $slot->start > Carbon::now() && $slot->booking !== null;
+        });
+        if ($hasFutureBookedSlots) {
+            throw new \UnexpectedValueException("Manipulation cannot be deleted because it has booked slots in the future.");
+        }
+
+        // Create stats model
+        $stats = new ManipulationStatistics();
+
+        // Arrays to keep track of all bookings to delete them later without looping again
+        $bookingsToDelete = [];
+
+        // Loop on slots, and feed data into ManipulationStatistics and BookingHistory
+        foreach ($this->slots as $slot) {
+            $stats->slot_count++;
+            if (null !== ($booking = $slot->booking)) {
+                $bookingHistory = BookingHistory::findByEmailOrCreate($booking->email);
+                $bookingHistory->booking_made++;
+                $stats->booking_made++;
+
+                if ($booking->confirmed) {
+                    $bookingHistory->booking_confirmed++;
+                    $stats->booking_confirmed++;
+
+                    if ($booking->honored) {
+                        $bookingHistory->booking_confirmed_honored++;
+                        $stats->booking_confirmed_honored++;
+                    }
+                } else {
+                    if ($booking->honored) {
+                        $bookingHistory->booking_unconfirmed_honored++;
+                        $stats->booking_unconfirmed_honored++;
+                    }
+                }
+
+                $bookingHistory->save();
+                $bookingsToDelete[] = $booking;
+            }
+        }
+
+        $this->statistics()->save($stats);
+
+        // Delete bookings then slots
+        array_map(function ($booking) {
+            $booking->delete();
+        }, $bookingsToDelete);
+        $this->slots->each(function ($slot) {
+            $slot->delete();
+        });
+        // Delete (soft) the manipulation
+        parent::delete();
+    }
 }
