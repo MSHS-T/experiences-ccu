@@ -17,7 +17,7 @@
     <div id="app"></div>
     <script type="text/javascript">
         // Pass settings from Laravel
-        APP_SETTINGS = JSON.parse('{!! json_encode($settings) !!}');
+        APP_SETTINGS = {!! json_encode($settings, JSON_INVALID_UTF8_SUBSTITUTE) !!};
         RECAPTCHA_KEY = '{{ $recaptcha_key }}';
     </script>
     <script src="{{ mix('/js/app.js') }}"></script>

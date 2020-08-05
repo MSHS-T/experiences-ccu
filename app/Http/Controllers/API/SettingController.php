@@ -41,10 +41,15 @@ class SettingController extends Controller
     {
         $data = $request->validate([
             'booking_cancellation_delay' => 'required|integer|min:0',
+            'booking_confirmation_delay' => 'required|integer|min:0',
             'booking_opening_delay'      => 'required|integer|min:0',
             'manipulation_overbooking'   => 'required|integer|min:100',
+            'presentation_text'          => 'required|string'
         ]);
         foreach ($data as $name => $value) {
+            if ($name == 'presentation_text') {
+                $value = nl2br($value);
+            }
             Setting::updateOrCreate(['name' => $name], ['value' => $value]);
         }
 
