@@ -36,6 +36,7 @@ import PlateauxForm from '../pages/plateaux/Form';
 
 import BookingHistoryPage from '../pages/BookingHistory';
 import SettingsPage from '../pages/Settings';
+import LegalPage from '../pages/Legal';
 
 const SiteMap = [
     {
@@ -309,6 +310,15 @@ const SiteMap = [
         component:     SettingsPage,
         authenticated: true,
         roles:         ['ADMIN']
+    },
+    {
+        title:         'Mentions Légales',
+        icon:          false,
+        url:           '/legal',
+        exactPath:     true,
+        showInMenu:    false,
+        component:     LegalPage,
+        authenticated: false
     },
     '---',
 ];
