@@ -63,6 +63,11 @@ class Manipulation extends Model
         return $this->slots()->doesntHave('booking');
     }
 
+    public function statistics()
+    {
+        return $this->hasOne('App\ManipulationStatistics');
+    }
+
     /**
      * Scope a query to only include manipulations with available slots.
      *

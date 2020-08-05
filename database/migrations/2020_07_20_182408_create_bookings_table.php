@@ -28,7 +28,13 @@ class CreateBookingsTable extends Migration
             $table->foreign('slot_id')->references('id')->on('slots')->onDelete('cascade');
         });
 
-        Schema::table('manipulations', function (Blueprint $table) {
+        Schema::table('slots', function (Blueprint $table) {
+            $table->dropColumn('subject_first_name');
+            $table->dropColumn('subject_last_name');
+            $table->dropColumn('subject_email');
+            $table->dropColumn('subject_confirmed');
+            $table->dropColumn('subject_confirmation_code');
+            $table->dropColumn('subject_confirm_before');
         });
     }
 
@@ -39,9 +45,13 @@ class CreateBookingsTable extends Migration
      */
     public function down()
     {
-        Schema::table('manipulations', function (Blueprint $table) {
-            $table->dropForeign('manipulations_booking_id_foreign');
-            $table->dropColumn('booking_id');
+        Schema::table('slots', function (Blueprint $table) {
+            $table->string('subject_first_name');
+            $table->string('subject_last_name');
+            $table->string('subject_email');
+            $table->boolean('subject_confirmed');
+            $table->string('subject_confirmation_code');
+            $table->dateTime('subject_confirm_before');
         });
 
         Schema::dropIfExists('bookings');
