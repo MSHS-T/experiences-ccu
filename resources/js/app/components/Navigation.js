@@ -162,7 +162,7 @@ function Navigation(props) {
                     &nbsp;
                         <Link component={RouterLink} to="/" color="inherit" underline="none">
                             <Typography component="h1" variant="h6" color="inherit" noWrap>
-                            Expériences CCU
+                                {'Expériences CCU'}
                             </Typography>
                         </Link>
                         <div className={classes.toolbarDivider}> </div>

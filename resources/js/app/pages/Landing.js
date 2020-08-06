@@ -12,12 +12,12 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Footer from '../components/Footer';
+import { Avatar } from '@material-ui/core';
+
+const isDarkMode = window.localStorage.getItem('theme') === 'dark';
 
 const useStyles = makeStyles(theme => ({
     '@global': {
-        body: {
-            backgroundColor: theme.palette.common.white,
-        },
         ul: {
             margin:  0,
             padding: 0,
@@ -26,14 +26,23 @@ const useStyles = makeStyles(theme => ({
             listStyle: 'none',
         },
     },
+    avatar: {
+        margin:          theme.spacing(1),
+        backgroundColor: theme.palette.grey[isDarkMode ? 800 : 200],
+        width:           60,
+        height:          60
+    },
     button: {
         margin: theme.spacing(1, 1.5),
     },
     heroContent: {
-        padding: theme.spacing(6, 0, 6),
+        padding:       theme.spacing(6, 0, 6),
+        display:       'flex',
+        flexDirection: 'column',
+        alignItems:    'center',
     },
     cardHeader: {
-        backgroundColor: theme.palette.grey[200],
+        backgroundColor: theme.palette.action.disabledBackground,
     },
     cardExperience: {
         display:        'flex',
@@ -89,10 +98,13 @@ export default function Landing() {
         <div className={classes.root}>
             {/* Hero unit */}
             <Container maxWidth="sm" component="main" className={classes.heroContent}>
+                <Avatar className={classes.avatar}>
+                    <img src={`/favicon${isDarkMode ? '-dark-mode' : ''}.png`} alt="Logo" height="45" />
+                </Avatar>
                 <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
                     Expériences CCU
                 </Typography>
-                <Typography variant="h5" align="center" color="textSecondary" component="p">
+                <Typography variant="h5" align="center" color="textSecondary" component="div">
                     <div dangerouslySetInnerHTML={presentation_text}></div>
                 </Typography>
             </Container>
