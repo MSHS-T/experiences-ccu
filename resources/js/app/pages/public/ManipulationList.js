@@ -48,6 +48,11 @@ const useStyles = makeStyles(theme => ({
         '& hr':         {
             width: '100%'
         }
+    },
+    cardActions: {
+        padding:        theme.spacing(0, 2, 1),
+        display:        'flex',
+        justifyContent: 'center'
     }
 }));
 
@@ -148,9 +153,9 @@ export default function ManipulationList(props) {
                                     </Grid>
                                 </Grid>
                             </CardContent>
-                            <CardActions>
-                                <Button fullWidth variant="contained" color="primary">
-                                            Rejoindre
+                            <CardActions className={classes.cardActions}>
+                                <Button variant="contained" color="primary">
+                                    Rejoindre
                                 </Button>
                             </CardActions>
                         </Card>
