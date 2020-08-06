@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
         margin:  theme.spacing(1)
     },
     ampmCell: {
-        width: 110
+        width: '16%'
     }
 }));
 
@@ -146,7 +146,7 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell className={classes.cell}>
+                            <TableCell className={classes.ampmCell}>
                                 <strong>Horaires</strong>
                             </TableCell>
                             {Object.keys(days).map(d => (
@@ -169,7 +169,7 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                                 Matin
                             </TableCell>
                             {Object.keys(days).map(d => {
-                                const rootCls = data[d].enabled ? '' : classes.disabledDay;
+                                const rootCls = classes.cell + ' ' + (data[d].enabled ? '' : classes.disabledDay);
                                 const cls = data[d].am ? classes.enabledArea : classes.disabledArea;
                                 return (
                                     <TableCell align="center" key={`am-${d}`} className={rootCls}>
@@ -186,8 +186,7 @@ export default function AvailableHours({ dayLabels, duration, onChange, value, e
                                                 className={classes.timePicker}
                                                 disabled={!data[d].am}
                                                 ampm={false}
-                                                format="DD/MM/YYYY HH:mm"
-                                                mask="__/__/____ __:__"
+                                                mask="__:__"
                                                 name={`${d}-start_am`}
                                                 value={data[d].start_am}
                                                 minutesStep={5}
