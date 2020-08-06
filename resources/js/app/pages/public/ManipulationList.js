@@ -10,7 +10,7 @@ import { useAuthContext } from '../../context/Auth';
 import * as Constants from '../../data/Constants';
 import ErrorPage from '../Error';
 import Loading from '../Loading';
-import { Container, Card, CardHeader, CardContent, CardActions, Divider, Badge, Chip, useMediaQuery } from '@material-ui/core';
+import { Container, Card, CardHeader, CardContent, CardActions, Chip, useMediaQuery } from '@material-ui/core';
 import RouterLink from '../../components/RouterLink';
 
 import * as moment from 'moment';
