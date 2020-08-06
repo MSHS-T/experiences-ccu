@@ -25,6 +25,7 @@ import { useAuthContext } from '../context/Auth';
 import { Avatar, MenuItem, Menu, createMuiTheme, ThemeProvider, Switch } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
 import NightsStayIcon from '@material-ui/icons/NightsStay';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import WbSunnyIcon from '@material-ui/icons/WbSunny';
 
 function Navigation(props) {
@@ -230,15 +231,28 @@ function Navigation(props) {
                                 </Menu>
                             )}
                             {!user && (
-                                <Button
-                                    component={RouterLink}
-                                    to="/login"
-                                    color="inherit"
-                                    variant="outlined"
-                                    className={classes.button}
-                                >
-                            Connexion
-                                </Button>
+                                <>
+                                    <Hidden xsDown>
+                                        <Button
+                                            component={RouterLink}
+                                            to="/login"
+                                            color="inherit"
+                                            variant="outlined"
+                                            className={classes.button}
+                                        >
+                                            Connexion
+                                        </Button>
+                                    </Hidden>
+                                    <Hidden smUp>
+                                        <IconButton
+                                            component={RouterLink}
+                                            to="/login"
+                                            color="inherit"
+                                        >
+                                            <VpnKeyIcon />
+                                        </IconButton>
+                                    </Hidden>
+                                </>
                             )}
                         </>
                     </Toolbar>
