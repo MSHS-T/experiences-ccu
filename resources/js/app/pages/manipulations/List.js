@@ -60,6 +60,7 @@ export default function ManipulationList(props) {
     const [deleteError, setDeleteError] = useState(null);
     const [callSheet, setCallSheet] = useState(null);
     const [stats, setStats] = useState(null);
+    const isDarkMode = window.localStorage.getItem('theme') === 'dark';
 
     const loadData = () => {
         setLoading(true);
@@ -223,7 +224,9 @@ export default function ManipulationList(props) {
                     pageSizeOptions:     [10, 25, 50],
                     emptyRowsWhenPaging: false,
                     rowStyle:            rowData => ({
-                        backgroundColor: (rowData.deleted_at !== null) ? '#CCC' : '#FFF'
+                        backgroundColor: (rowData.deleted_at !== null)
+                            ? (isDarkMode ? '#111' : '#CCC')
+                            : (isDarkMode ? '#333' : '#FFF')
                     })
                 }}
                 localization={{

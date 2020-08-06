@@ -11,13 +11,13 @@ const useStyles = makeStyles((theme) => ({
         borderBottom: `1px solid ${theme.palette.divider}`,
     },
     alreadyDone: {
-        backgroundColor: green[50]
+        backgroundColor: green[600]+'88',
     },
     notDone: {
-        backgroundColor: orange[50]
+        backgroundColor: orange[600]+'88',
     },
     disabled: {
-        backgroundColor: grey[200]
+        backgroundColor: grey[600]+'88',
     }
 }));
 

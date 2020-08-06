@@ -33,12 +33,14 @@ import MomentUtils from '@date-io/moment';
 
 const useStyles = makeStyles(theme => ({
     cardHeader: {
+        color:         'rgba(0, 0, 0, 0.87)', // theme.palette.text.primary,
         padding:       theme.spacing(1),
         paddingBottom: theme.spacing(0.5),
         fontWeight:    'bold',
         fontSize:      '1rem'
     },
     cardContent: {
+        color:          'rgba(0, 0, 0, 0.87)', // theme.palette.text.primary,
         padding:        theme.spacing(1),
         paddingTop:     theme.spacing(0),
         paddingBottom:  theme.spacing(0.5),
@@ -122,6 +124,7 @@ export default function ManipulationSlots(props) {
     const classes = useStyles();
     const { accessToken } = useAuthContext();
     const confirm = useConfirm();
+    const isDarkMode = window.localStorage.getItem('theme') === 'dark';
 
     // Data loading states
     const [isDataLoading, setDataLoading] = useState(false);
@@ -640,8 +643,10 @@ export default function ManipulationSlots(props) {
                                     borderBottomColor: lastRow && isToday ? 'red' : 'inherit',
                                 };
 
+                                const gc = isDarkMode ? ['#666', '#333'] : ['#ddd', '#fff'];
+
                                 const bg = isGreyed ? {
-                                    background: 'repeating-linear-gradient( -55deg, #ddd, #ddd 10px, #fff 10px, #fff 20px )'
+                                    background: `repeating-linear-gradient( -55deg, ${gc[0]}, ${gc[0]} 10px, ${gc[1]} 10px, ${gc[1]} 20px )`
                                 } : {};
 
                                 return { ...borders, ...bg };
