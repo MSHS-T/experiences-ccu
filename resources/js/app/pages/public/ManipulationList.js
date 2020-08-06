@@ -4,13 +4,13 @@ import ReactHtmlParser from 'react-html-parser';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 
 import { useAuthContext } from '../../context/Auth';
 import * as Constants from '../../data/Constants';
 import ErrorPage from '../Error';
 import Loading from '../Loading';
-import { Container, Card, CardHeader, CardContent, CardActions, Divider, Badge, Chip } from '@material-ui/core';
+import { Container, Card, CardHeader, CardContent, CardActions, Divider, Badge, Chip, useMediaQuery } from '@material-ui/core';
 import RouterLink from '../../components/RouterLink';
 
 import * as moment from 'moment';
@@ -56,8 +56,10 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function ManipulationList(props) {
+export default function ManipulationList() {
     const classes = useStyles();
+    const theme = useTheme();
+    const xsDown = useMediaQuery(theme.breakpoints.down('xs'));
     const { accessToken } = useAuthContext();
 
     const [isDataLoading, setDataLoading] = useState(true);
@@ -154,7 +156,7 @@ export default function ManipulationList(props) {
                                 </Grid>
                             </CardContent>
                             <CardActions className={classes.cardActions}>
-                                <Button variant="contained" color="primary">
+                                <Button variant="contained" color="primary" fullWidth={xsDown}>
                                     Rejoindre
                                 </Button>
                             </CardActions>
