@@ -32,7 +32,13 @@ class ManipulationController extends Controller
      */
     public function index(Request $request)
     {
-        return Manipulation::withCount('slots', 'availableSlots')->whereHasAvailableSlots()->orderBy('available_slots_count', 'ASC')->get();
+        return Manipulation::withCount('slots', 'availableSlots')
+            ->with(['availableSlots' => function ($query) {
+                $query->orderBy('start', 'ASC');
+            }])
+            ->whereHasAvailableSlots()
+            ->orderBy('available_slots_count', 'ASC')
+            ->get();
     }
 
     /**
