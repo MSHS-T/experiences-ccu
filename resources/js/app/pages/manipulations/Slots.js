@@ -627,6 +627,7 @@ export default function ManipulationSlots(props) {
                                 const cellTime = momentToTime(momentTime(min).add(interval * rowIndex, 'minutes'));
 
                                 const isToday = moment(currentMonday).add(colIndex, 'days').isSame(moment(), 'day');
+                                const isYesterday = colIndex < 6 && moment(currentMonday).add(colIndex + 1, 'days').isSame(moment(), 'day');
 
                                 const isGreyed = !day.enabled
                                     || (!day.am && (cellTime < day.start_pm || cellTime >= day.end_pm))
@@ -635,7 +636,7 @@ export default function ManipulationSlots(props) {
 
                                 const borders = {
                                     borderLeftColor:   isToday ? 'red' : 'inherit',
-                                    borderRightColor:  isToday ? 'red' : 'inherit',
+                                    borderRightColor:  (isToday || isYesterday) ? 'red' : 'inherit',
                                     borderBottomColor: lastRow && isToday ? 'red' : 'inherit',
                                 };
 
