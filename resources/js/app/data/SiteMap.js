@@ -9,7 +9,6 @@ import PeopleIcon from '@material-ui/icons/People';
 import SettingsIcon from '@material-ui/icons/Settings';
 import ShutterSpeedIcon from '@material-ui/icons/ShutterSpeed';
 
-import LandingPage from '../pages/Landing';
 import LoginPage from '../pages/Login';
 import ProfilePage from '../pages/Profile';
 import ForgotPasswordPage from '../pages/ForgotPassword';
@@ -38,7 +37,14 @@ import BookingHistoryPage from '../pages/BookingHistory';
 import SettingsPage from '../pages/Settings';
 import LegalPage from '../pages/Legal';
 
+// Public pages
+import LandingPage from '../pages/public/Landing';
+import ManipulationListPage from '../pages/public/ManipulationList';
+
 const SiteMap = [
+    ////////////////////
+    /// PUBLIC PAGES ///
+    ////////////////////
     {
         title:         'Accueil',
         icon:          (<HomeIcon />),
@@ -48,6 +54,18 @@ const SiteMap = [
         component:     LandingPage,
         authenticated: false
     },
+    {
+        title:         'Liste des manipulations',
+        icon:          false,
+        url:           '/liste-manipulations',
+        exactPath:     true,
+        showInMenu:    false,
+        component:     ManipulationListPage,
+        authenticated: false
+    },
+    ////////////
+    /// AUTH ///
+    ////////////
     {
         title:         'Connexion',
         icon:          false,

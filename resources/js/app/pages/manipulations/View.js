@@ -213,7 +213,7 @@ export default function ManipulationView(props) {
                     <div className={classes.value}>
                         <dl className={classes.noMargin}>
                             {manipulationData && Object.entries(manipulationData.available_hours)
-                                .filter(([k, d]) => d.enabled && (d.am || d.pm))
+                                .filter(([, d]) => d.enabled && (d.am || d.pm))
                                 .map(([day, d]) => {
                                     const hours = [];
                                     if (d.am) { hours.push(d.start_am + '-' + d.end_am); }
