@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Badge from '@material-ui/core/Badge';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -11,6 +11,9 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
+import * as Constants from '../data/Constants';
+
+import Loading from './Loading';
 import Footer from '../components/Footer';
 import { Avatar } from '@material-ui/core';
 
@@ -45,48 +48,16 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: theme.palette.action.disabledBackground,
     },
     cardExperience: {
+        height:         '100%',
         display:        'flex',
-        justifyContent: 'center',
-        alignItems:     'baseline',
-        marginBottom:   theme.spacing(2),
+        flexDirection:  'column',
+        alignItems:     'stretch',
+        justifyContent: 'start'
+    },
+    cardContent: {
+        flexGrow: 1
     }
 }));
-
-const experiences = [
-    {
-        title:       'Cillum veniam id in',
-        enddate:     '12/03/2020',
-        slots:       95,
-        description: [
-            '10 users included',
-            '2 GB of storage',
-            'Help center access',
-            'Email support'
-        ],
-    },
-    {
-        title:       'Pariatur eu velit',
-        enddate:     '19/07/2020',
-        slots:       11,
-        description: [
-            '20 users included',
-            '10 GB of storage',
-            'Help center access',
-            'Priority email support',
-        ],
-    },
-    {
-        title:       'Quis culpa sint ad',
-        enddate:     '20/06/2020',
-        slots:       59,
-        description: [
-            '50 users included',
-            '30 GB of storage',
-            'Help center access',
-            'Phone & email support',
-        ],
-    },
-];
 
 export default function Landing() {
     const classes = useStyles();
@@ -94,8 +65,29 @@ export default function Landing() {
     // eslint-disable-next-line no-undef
     const presentation_text = { __html: APP_SETTINGS.presentation_text };
 
+    const [isLoading, setLoading] = useState(true);
+    const [data, setData] = useState([]);
+
+    const loadData = () => {
+        setLoading(true);
+        setData([]);
+
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT)
+            // Parse JSON response
+            .then(data => data.json())
+            // Set data in state
+            .then(data => {
+                setData(data);
+                console.log(data);
+                setLoading(false);
+            });
+    };
+
+    useEffect(loadData, []);
+
+
     return (
-        <div className={classes.root}>
+        <div>
             {/* Hero unit */}
             <Container maxWidth="sm" component="main" className={classes.heroContent}>
                 <Avatar className={classes.avatar}>
@@ -109,43 +101,38 @@ export default function Landing() {
                 </Typography>
             </Container>
             {/* End hero unit */}
-            <Container maxWidth="md" component="main">
-                <Grid container spacing={5} alignItems="flex-end">
-                    {experiences.map(exp => {
-                        const badge = (<Badge>{exp.slots}</Badge>);
-                        return (
-                            <Grid item key={exp.title} xs={12} sm={6} md={4}>
-                                <Card>
-                                    <CardHeader
-                                        title={exp.title}
-                                        titleTypographyProps={{ align: 'center', component: 'h3', variant: 'h5' }}
-                                        action={badge}
-                                        className={classes.cardHeader}
-                                    />
-                                    <CardContent>
-                                        <div className={classes.cardExperience}>
-                                            <Typography component="h4" variant="h6" color="textPrimary">
-                                                {exp.enddate}
+            <Container maxWidth="lg" component="main">
+                { isLoading && (<Loading />)}
+                { !isLoading && (
+                    <Grid container spacing={5}>
+                        {data.slice(0, 3).map(manip => {
+                            return (
+                                <Grid item key={manip.id} xs={12} sm={6} md={4}>
+                                    <Card className={classes.cardExperience}>
+                                        <CardHeader
+                                            title={manip.name}
+                                            titleTypographyProps={{ align: 'center', component: 'h3', variant: 'h5' }}
+                                            className={classes.cardHeader}
+                                        />
+                                        <CardContent className={classes.cardContent}>
+                                            <Typography component="h4" variant="h6" color="textPrimary" align="center">
+                                                {`${manip.available_slots_count} créneau${manip.available_slots_count > 0 ? 'x' : ''} disponibles`}
                                             </Typography>
-                                        </div>
-                                        <ul>
-                                            {exp.description.map(line => (
-                                                <Typography component="li" variant="subtitle1" align="center" key={line}>
-                                                    {line}
-                                                </Typography>
-                                            ))}
-                                        </ul>
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button fullWidth variant="contained" color="primary">
+                                            <Typography component="div" variant="subtitle1" align="justify">
+                                                <div dangerouslySetInnerHTML={{ __html: manip.description }}></div>
+                                            </Typography>
+                                        </CardContent>
+                                        <CardActions>
+                                            <Button fullWidth variant="contained" color="primary">
                                             Rejoindre
-                                        </Button>
-                                    </CardActions>
-                                </Card>
-                            </Grid>
-                        );
-                    })}
-                </Grid>
+                                            </Button>
+                                        </CardActions>
+                                    </Card>
+                                </Grid>
+                            );
+                        })}
+                    </Grid>
+                )}
                 <Box my={2}>
                     <Grid container spacing={5} alignItems="center" justify="center">
                         <Button variant="outlined" color="secondary">

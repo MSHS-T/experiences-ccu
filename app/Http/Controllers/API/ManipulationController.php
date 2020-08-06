@@ -19,7 +19,7 @@ class ManipulationController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('jwtauth');
+        $this->middleware('jwtauth')->except('index');
 
         // TODO : add authorization gates (https://laravel.com/docs/6.x/authorization)
     }
