@@ -22,8 +22,10 @@ import IconButton from '@material-ui/core/IconButton';
 
 import RouterLink from './RouterLink';
 import { useAuthContext } from '../context/Auth';
-import { Avatar, MenuItem, Menu, createMuiTheme, ThemeProvider } from '@material-ui/core';
+import { Avatar, MenuItem, Menu, createMuiTheme, ThemeProvider, Switch } from '@material-ui/core';
 import PersonIcon from '@material-ui/icons/Person';
+import NightsStayIcon from '@material-ui/icons/NightsStay';
+import WbSunnyIcon from '@material-ui/icons/WbSunny';
 
 function Navigation(props) {
     const { user, logoutUser } = useAuthContext();
@@ -84,6 +86,15 @@ function Navigation(props) {
         } else {
             setIsDarkMode(true);
             window.localStorage.setItem('theme', 'dark');
+        }
+    };
+    const changeTheme = (dark) => {
+        if(dark) {
+            setIsDarkMode(true);
+            window.localStorage.setItem('theme', 'dark');
+        } else {
+            setIsDarkMode(false);
+            window.localStorage.setItem('theme', 'light');
         }
     };
     useEffect(() => {
@@ -167,6 +178,13 @@ function Navigation(props) {
                         </Link>
                         <div className={classes.toolbarDivider}> </div>
                         <>
+                            <IconButton size="small" aria-label="set theme to light" onClick={() => changeTheme(false)}>
+                                <WbSunnyIcon />
+                            </IconButton>
+                            <Switch checked={isDarkMode} onChange={toggleTheme} color="default" />
+                            <IconButton size="small" aria-label="set theme to dark" onClick={() => changeTheme(true)}>
+                                <NightsStayIcon />
+                            </IconButton>
                             {!!user && (
                                 <Avatar
                                     aria-label="account of current user"
@@ -202,11 +220,6 @@ function Navigation(props) {
                                         to="/profile"
                                     >
                                         Profil
-                                    </MenuItem>
-                                    <MenuItem
-                                        onClick={toggleTheme}
-                                    >
-                                        {isDarkMode ? 'Thème Clair' : 'Thème sombre'}
                                     </MenuItem>
                                     <Divider />
                                     <MenuItem
