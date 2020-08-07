@@ -64,7 +64,7 @@ export default function PlateauView(props) {
         setDataLoading(true);
         setPlateauData(null);
 
-        fetch(Constants.API_PLATEAUX_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
+        fetch(Constants.API_PLATEAUX_ENDPOINT + '/' + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -87,7 +87,7 @@ export default function PlateauView(props) {
 
     const handleDelete = () => {
         setDeleteError(null);
-        fetch(Constants.API_PLATEAUX_ENDPOINT + plateauData.id, {
+        fetch(Constants.API_PLATEAUX_ENDPOINT + '/' + plateauData.id, {
             method:  'DELETE',
             headers: {
                 'Authorization': 'bearer ' + accessToken,

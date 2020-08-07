@@ -78,7 +78,7 @@ export default function UserForm(props) {
         setDataLoading(true);
         setUserData(null);
 
-        fetch(Constants.API_USERS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
+        fetch(Constants.API_USERS_ENDPOINT + '/' + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -114,7 +114,7 @@ export default function UserForm(props) {
                 body: JSON.stringify(data)
             });
         } else {
-            return fetch(Constants.API_USERS_ENDPOINT + props.match.params.id, {
+            return fetch(Constants.API_USERS_ENDPOINT + '/' + props.match.params.id, {
                 method:  'PUT',
                 headers: {
                     'Accept':        'application/json',
@@ -342,4 +342,3 @@ export default function UserForm(props) {
         </>
     );
 }
-

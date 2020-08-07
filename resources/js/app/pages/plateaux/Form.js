@@ -99,7 +99,7 @@ export default function PlateauForm(props) {
         setDataLoading(dataLoading + 1);
         setPlateauData(null);
 
-        fetch(Constants.API_PLATEAUX_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
+        fetch(Constants.API_PLATEAUX_ENDPOINT + '/' + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -132,7 +132,7 @@ export default function PlateauForm(props) {
                 body: JSON.stringify(data)
             });
         } else {
-            return fetch(Constants.API_PLATEAUX_ENDPOINT + props.match.params.id, {
+            return fetch(Constants.API_PLATEAUX_ENDPOINT + '/' + props.match.params.id, {
                 method:  'PUT',
                 headers: {
                     'Accept':        'application/json',
@@ -331,4 +331,3 @@ export default function PlateauForm(props) {
         </>
     );
 }
-

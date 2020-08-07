@@ -51,7 +51,7 @@ export default function Dashboard(props) {
         setLoading(true);
         setData([]);
 
-        fetch(Constants.API_MANIPULATIONS_ENDPOINT + 'all', { headers: { 'Authorization': 'bearer ' + accessToken }})
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT + '/all', { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(data => data.json())
             // Reprocess data :
@@ -200,7 +200,7 @@ export default function Dashboard(props) {
                                             startIcon={<PlaylistAddCheckIcon />}
                                             onClick={(chosenDay) => {
                                                 window.open(
-                                                    Constants.API_SLOTS_ENDPOINT + manipulation.id + '/call_sheet?date='+chosenDay,
+                                                    Constants.API_SLOTS_ENDPOINT + '/' + manipulation.id + '/call_sheet?date='+chosenDay,
                                                     '_blank'
                                                 );
                                             }}

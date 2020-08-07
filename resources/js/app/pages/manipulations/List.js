@@ -66,7 +66,7 @@ export default function ManipulationList(props) {
         setLoading(true);
         setTableData([]);
 
-        fetch(Constants.API_MANIPULATIONS_ENDPOINT + 'all', { headers: { 'Authorization': 'bearer ' + accessToken }})
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT + '/all', { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(data => data.json())
             // Reprocess data :
@@ -84,7 +84,7 @@ export default function ManipulationList(props) {
 
     const handleDelete = (entry) => {
         setDeleteError(null);
-        fetch(Constants.API_MANIPULATIONS_ENDPOINT + entry.id, {
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT + '/' + entry.id, {
             method:  'DELETE',
             headers: {
                 'Authorization': 'bearer ' + accessToken,
@@ -279,7 +279,7 @@ export default function ManipulationList(props) {
                                 .map(day => (
                                     <ListItem button onClick={() => {
                                         window.open(
-                                            Constants.API_SLOTS_ENDPOINT + callSheet.id + '/call_sheet?date='+day,
+                                            Constants.API_SLOTS_ENDPOINT + '/' + callSheet.id + '/call_sheet?date='+day,
                                             '_blank'
                                         );
                                         setCallSheet(null);

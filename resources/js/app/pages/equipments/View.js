@@ -62,7 +62,7 @@ export default function EquipmentView(props) {
         setDataLoading(true);
         setEquipmentData(null);
 
-        fetch(Constants.API_EQUIPMENTS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
+        fetch(Constants.API_EQUIPMENTS_ENDPOINT + '/' + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -85,7 +85,7 @@ export default function EquipmentView(props) {
 
     const handleDelete = () => {
         setDeleteError(null);
-        fetch(Constants.API_EQUIPMENTS_ENDPOINT + equipmentData.id, {
+        fetch(Constants.API_EQUIPMENTS_ENDPOINT + '/' + equipmentData.id, {
             method:  'DELETE',
             headers: {
                 'Authorization': 'bearer ' + accessToken,
