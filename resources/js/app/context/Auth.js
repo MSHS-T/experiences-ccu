@@ -32,7 +32,7 @@ const AuthProvider = props => {
     const storeUserData = (access_token, expires_at) => {
         // Send /me query to get user information
         // eslint-disable-next-line no-undef
-        axios.post(Constants.API_URL + 'auth/me/', {}, {
+        axios.post(Constants.API_URL + 'auth/me', {}, {
             headers: { 'Authorization': 'bearer ' + access_token }
         }).then(json_me => {
             let user = {
@@ -66,7 +66,7 @@ const AuthProvider = props => {
         // Send login query
         // eslint-disable-next-line no-undef
         return axios
-            .post(Constants.API_URL + 'auth/login/', formData)
+            .post(Constants.API_URL + 'auth/login', formData)
             .then(json_token => {
                 // Store access token
                 setAccessToken(json_token.data.access_token);
@@ -76,7 +76,7 @@ const AuthProvider = props => {
 
     const refreshToken = () => {
         // eslint-disable-next-line no-undef
-        return axios.post(Constants.API_URL + 'auth/refresh/', {}, {
+        return axios.post(Constants.API_URL + 'auth/refresh', {}, {
             headers: { 'Authorization': 'bearer ' + accessToken }
         }).then(json_token => {
             // Store access token
@@ -88,7 +88,7 @@ const AuthProvider = props => {
     const logoutUser = () => {
         // Send logout query
         // eslint-disable-next-line no-undef
-        return axios.post(Constants.API_URL + 'auth/logout/', {}, {
+        return axios.post(Constants.API_URL + 'auth/logout', {}, {
             headers: { 'Authorization': 'bearer ' + accessToken }
         }).then(() => {
             // Once it's done, clear user data
