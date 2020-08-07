@@ -57,7 +57,7 @@ export default function UserView(props) {
         setDataLoading(true);
         setUserData(null);
 
-        fetch(Constants.API_USERS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
+        fetch(Constants.API_USERS_ENDPOINT + '/' + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -83,7 +83,7 @@ export default function UserView(props) {
 
     const handleDelete = () => {
         setDeleteError(null);
-        fetch(Constants.API_USERS_ENDPOINT + userData.id, {
+        fetch(Constants.API_USERS_ENDPOINT + '/' + userData.id, {
             method:  'DELETE',
             headers: {
                 'Authorization': 'bearer ' + accessToken,

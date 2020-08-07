@@ -127,7 +127,7 @@ export default function ManipulationForm(props) {
         setDataLoading(dataLoading + 1);
         setManipulationData(null);
 
-        fetch(Constants.API_MANIPULATIONS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT + '/' + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -172,7 +172,7 @@ export default function ManipulationForm(props) {
                 body: JSON.stringify(data)
             });
         } else {
-            return fetch(Constants.API_MANIPULATIONS_ENDPOINT + props.match.params.id, {
+            return fetch(Constants.API_MANIPULATIONS_ENDPOINT + '/' + props.match.params.id, {
                 method:  'PUT',
                 headers: {
                     'Accept':        'application/json',

@@ -35,7 +35,7 @@ export default function PlateauList(props) {
 
     const handleDelete = (entry) => {
         setDeleteError(null);
-        fetch(Constants.API_PLATEAUX_ENDPOINT + entry.id, {
+        fetch(Constants.API_PLATEAUX_ENDPOINT + '/' + entry.id, {
             method:  'DELETE',
             headers: {
                 'Authorization': 'bearer ' + accessToken,

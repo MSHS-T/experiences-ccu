@@ -176,7 +176,7 @@ export default function ManipulationSlots(props) {
         setManipulationLoading(true);
         setManipulationData(null);
 
-        fetch(Constants.API_MANIPULATIONS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT + '/' + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -201,7 +201,7 @@ export default function ManipulationSlots(props) {
         setDataLoading(true);
         setSlotData([]);
 
-        fetch(Constants.API_SLOTS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
+        fetch(Constants.API_SLOTS_ENDPOINT + '/' + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -226,7 +226,7 @@ export default function ManipulationSlots(props) {
         setCreateLoading(fromInput);
         setCreateSuccess(null);
 
-        fetch(Constants.API_SLOTS_ENDPOINT + props.match.params.id, {
+        fetch(Constants.API_SLOTS_ENDPOINT + '/' + props.match.params.id, {
             method:  'POST',
             headers: {
                 'Accept':        'application/json',
@@ -270,7 +270,7 @@ export default function ManipulationSlots(props) {
         setGenerateLoading(fromInput);
         setGenerateSuccess(null);
 
-        fetch(Constants.API_SLOTS_ENDPOINT + props.match.params.id + '/generate', {
+        fetch(Constants.API_SLOTS_ENDPOINT + '/' + props.match.params.id + '/generate', {
             method:  'POST',
             headers: {
                 'Authorization': 'bearer ' + accessToken,
@@ -304,7 +304,7 @@ export default function ManipulationSlots(props) {
     const deleteSlot = (id, enableEvents = true) => {
         enableEvents && setDeleteLoading(id);
         enableEvents && setDeleteSuccess(null);
-        return fetch(Constants.API_SLOTS_ENDPOINT + id, {
+        return fetch(Constants.API_SLOTS_ENDPOINT + '/' + id, {
             method:  'DELETE',
             headers: { 'Authorization': 'bearer ' + accessToken }
         })

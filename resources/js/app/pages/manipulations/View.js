@@ -71,7 +71,7 @@ export default function ManipulationView(props) {
         setDataLoading(true);
         setManipulationData(null);
 
-        fetch(Constants.API_MANIPULATIONS_ENDPOINT + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT + '/' + id, { headers: { 'Authorization': 'bearer ' + accessToken }})
             // Parse JSON response
             .then(response => {
                 if (!response.ok) {
@@ -94,7 +94,7 @@ export default function ManipulationView(props) {
 
     const handleDelete = () => {
         setDeleteError(null);
-        fetch(Constants.API_MANIPULATIONS_ENDPOINT + manipulationData.id, {
+        fetch(Constants.API_MANIPULATIONS_ENDPOINT + '/' + manipulationData.id, {
             method:  'DELETE',
             headers: {
                 'Authorization': 'bearer ' + accessToken,
