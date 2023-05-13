@@ -16,7 +16,7 @@ class RolesPermissionsSeeder extends Seeder
     public function run()
     {
         $roles = [];
-        foreach (config('collabccu.roles') as $roleName => $canRegister) {
+        foreach (config('collabccu.roles') as $roleName) {
             $roles[$roleName] = Role::firstOrCreate(['name' => $roleName]);
         }
         foreach (config('collabccu.permissions') as $permissionGroup => $permissions) {
