@@ -1,0 +1,54 @@
+models:
+  Equipment:
+    name: string
+    type: string
+    description: text
+    quantity: unsignedInteger
+  Plateau:
+    name: string
+    description: text
+    manager_id: id foreign:users
+    relationships:
+      belongsToMany: Equipment
+  Manipulation:
+    name: string
+    description: text
+    duration: unsignedInteger
+    target_slots: unsignedInteger
+    start_date: date
+    location: string
+    available_hours: json
+    requirements: json
+    relationships:
+      belongsTo: Plateau
+      belongsToMany: User
+  ManipulationStatistics:
+    slot_count: unsignedInteger
+    booking_made: unsignedInteger
+    booking_confirmed: unsignedInteger
+    booking_confirmed_honored: unsignedInteger
+    booking_unconfirmed_honored: unsignedInteger
+    relationships:
+      belongsTo: Manipulation
+  BookingHistory:
+    hashed_email: string
+    booking_made: unsignedInteger
+    booking_confirmed: unsignedInteger
+    booking_confirmed_honored: unsignedInteger
+    booking_unconfirmed_honored: unsignedInteger
+    blocked: boolean
+  Slot:
+    start: datetime
+    end: datetime
+    relationships:
+      belongsTo: Manipulation
+  Booking:
+    first_name: string
+    last_name: string
+    email: string
+    confirmed: boolean
+    confirmation_code: string
+    confirm_before: datetime
+    honored: boolean
+    relationships:
+      belongsTo: Slot
