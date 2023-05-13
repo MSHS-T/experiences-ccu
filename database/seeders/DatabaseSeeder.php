@@ -3,7 +3,12 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,11 +17,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        $this->command->info("Starting database Seed...");
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->call(RolesPermissionsSeeder::class);
+        // $this->call(SettingsTableSeeder::class);
+
+        $this->command->info('Creating Admin user');
+        $owner = User::create([
+            'first_name'        => 'Administrateur',
+            'last_name'         => 'CCU',
+            'email'             => (App::isLocal() ? 'romain@3rgo.tech' : 'julien.tardieu@univ-tlse2.fr'),
+            'email_verified_at' => Carbon::now(),
+            'password'          => Hash::make('password'),
+        ]);
+        $owner->assignRole('administrator');
     }
 }

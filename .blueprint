@@ -1,0 +1,33 @@
+created:
+    - database/factories/EquipmentFactory.php
+    - database/factories/PlateauFactory.php
+    - database/factories/ManipulationFactory.php
+    - database/factories/ManipulationStatisticsFactory.php
+    - database/factories/BookingHistoryFactory.php
+    - database/factories/SlotFactory.php
+    - database/factories/BookingFactory.php
+    - database/migrations/2023_05_13_114331_create_equipment_table.php
+    - database/migrations/2023_05_13_114332_create_plateaux_table.php
+    - database/migrations/2023_05_13_114333_create_manipulations_table.php
+    - database/migrations/2023_05_13_114334_create_manipulation_statistics_table.php
+    - database/migrations/2023_05_13_114335_create_booking_histories_table.php
+    - database/migrations/2023_05_13_114336_create_slots_table.php
+    - database/migrations/2023_05_13_114337_create_bookings_table.php
+    - database/migrations/2023_05_13_114338_create_equipment_plateau_table.php
+    - database/migrations/2023_05_13_114339_create_manipulation_user_table.php
+    - app/Models/Equipment.php
+    - app/Models/Plateau.php
+    - app/Models/Manipulation.php
+    - app/Models/ManipulationStatistics.php
+    - app/Models/BookingHistory.php
+    - app/Models/Slot.php
+    - app/Models/Booking.php
+models:
+    User: { first_name: string, last_name: string, email: string, email_verified_at: 'datetime nullable', password: string, remember_token: 'string:100 nullable' }
+    Equipment: { name: string, type: string, description: text, quantity: unsignedInteger }
+    Plateau: { name: string, description: text, manager_id: 'id foreign:users', relationships: { belongsToMany: Equipment } }
+    Manipulation: { name: string, description: text, duration: unsignedInteger, target_slots: unsignedInteger, start_date: date, location: string, available_hours: json, requirements: json, relationships: { belongsTo: Plateau, belongsToMany: User } }
+    ManipulationStatistics: { slot_count: unsignedInteger, booking_made: unsignedInteger, booking_confirmed: unsignedInteger, booking_confirmed_honored: unsignedInteger, booking_unconfirmed_honored: unsignedInteger, relationships: { belongsTo: Manipulation } }
+    BookingHistory: { hashed_email: string, booking_made: unsignedInteger, booking_confirmed: unsignedInteger, booking_confirmed_honored: unsignedInteger, booking_unconfirmed_honored: unsignedInteger, blocked: boolean }
+    Slot: { start: datetime, end: datetime, relationships: { belongsTo: Manipulation } }
+    Booking: { first_name: string, last_name: string, email: string, confirmed: boolean, confirmation_code: string, confirm_before: datetime, honored: boolean, relationships: { belongsTo: Slot } }
