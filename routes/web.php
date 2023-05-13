@@ -8,18 +8,11 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
 |
 */
 
-Route::group(['prefix' => 'api'], function () {
-    // all routes that don't need to go to react-router
+Route::get('/', function () {
+    return view('welcome');
 });
-
-Route::get('{reactRoute}', function () {
-    return view('web', [
-        'settings'      => \App\Setting::all(),
-        'recaptcha_key' => env('RECAPTCHA_KEY')
-    ]); // your start view
-})->where('reactRoute', '^((?!api).)*$');
