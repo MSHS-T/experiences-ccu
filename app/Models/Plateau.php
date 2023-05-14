@@ -28,7 +28,7 @@ class Plateau extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
+        'id'         => 'integer',
         'manager_id' => 'integer',
     ];
 
@@ -39,6 +39,6 @@ class Plateau extends Model
 
     public function manager(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'manager_id', 'id');
     }
 }

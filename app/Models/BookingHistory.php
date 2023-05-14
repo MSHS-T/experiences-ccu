@@ -29,11 +29,11 @@ class BookingHistory extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'booking_made' => 'integer',
-        'booking_confirmed' => 'integer',
-        'booking_confirmed_honored' => 'integer',
+        'id'                          => 'integer',
+        'booking_made'                => 'integer',
+        'booking_confirmed'           => 'integer',
+        'booking_confirmed_honored'   => 'integer',
         'booking_unconfirmed_honored' => 'integer',
-        'blocked' => 'boolean',
+        'blocked'                     => 'boolean',
     ];
 }

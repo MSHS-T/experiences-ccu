@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Slot extends Model
 {
@@ -26,13 +27,18 @@ class Slot extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
+        'id'    => 'integer',
         'start' => 'datetime',
-        'end' => 'datetime',
+        'end'   => 'datetime',
     ];
 
     public function manipulation(): BelongsTo
     {
         return $this->belongsTo(Manipulation::class);
+    }
+
+    public function booking(): HasOne
+    {
+        return $this->hasOne(Booking::class);
     }
 }

@@ -31,10 +31,10 @@ class Booking extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'confirmed' => 'boolean',
+        'id'             => 'integer',
+        'confirmed'      => 'boolean',
         'confirm_before' => 'datetime',
-        'honored' => 'boolean',
+        'honored'        => 'boolean',
     ];
 
     public function slot(): BelongsTo

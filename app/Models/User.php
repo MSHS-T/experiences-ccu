@@ -6,6 +6,8 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use JeffGreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
@@ -53,5 +55,15 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
     public function getFilamentName(): string
     {
         return $this->first_name . " " . strtoupper($this->last_name);
+    }
+
+    public function plateaux(): HasMany
+    {
+        return $this->hasMany(Plateau::class, 'manager_id', 'id');
+    }
+
+    public function manipulations(): BelongsToMany
+    {
+        return $this->belongsToMany(Manipulation::class);
     }
 }
