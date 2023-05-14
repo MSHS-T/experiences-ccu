@@ -29,11 +29,11 @@ class ManipulationStatistics extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'slot_count' => 'integer',
-        'booking_made' => 'integer',
-        'booking_confirmed' => 'integer',
-        'booking_confirmed_honored' => 'integer',
+        'id'                          => 'integer',
+        'slot_count'                  => 'integer',
+        'booking_made'                => 'integer',
+        'booking_confirmed'           => 'integer',
+        'booking_confirmed_honored'   => 'integer',
         'booking_unconfirmed_honored' => 'integer',
     ];
 

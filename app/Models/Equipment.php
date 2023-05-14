@@ -28,7 +28,7 @@ class Equipment extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
+        'id'       => 'integer',
         'quantity' => 'integer',
     ];
 
