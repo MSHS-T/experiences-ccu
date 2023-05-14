@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description');
+            $table->foreignId('plateau_id')->constrained('plateaux');
             $table->unsignedInteger('duration');
             $table->unsignedInteger('target_slots');
             $table->date('start_date');

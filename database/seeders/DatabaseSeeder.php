@@ -2,10 +2,9 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-
 use App\Models\User;
 use Carbon\Carbon;
+use Database\Seeders\Test\TestDatabaseSeeder;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
@@ -31,5 +30,10 @@ class DatabaseSeeder extends Seeder
             'password'          => Hash::make('password'),
         ]);
         $owner->assignRole('administrator');
+
+
+        if (!App::isProduction()) {
+            $this->call(TestDatabaseSeeder::class);
+        }
     }
 }

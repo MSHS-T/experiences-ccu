@@ -13,15 +13,15 @@ class MyProfile extends BreezyMyProfile
         return [
             TextInput::make('last_name')
                 ->required()
-                ->label(__('user.last_name')),
+                ->label(__('attributes.last_name')),
             TextInput::make('first_name')
                 ->required()
-                ->label(__('user.first_name')),
+                ->label(__('attributes.first_name')),
             TextInput::make($this->loginColumn)
                 ->required()
                 ->email(fn () => $this->loginColumn === 'email')
                 ->unique(config('filament-breezy.user_model'), ignorable: $this->user)
-                ->label(__('filament-breezy::default.fields.email')),
+                ->label(__('attributes.email')),
         ];
     }
 }
