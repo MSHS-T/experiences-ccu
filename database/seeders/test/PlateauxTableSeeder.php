@@ -2,6 +2,7 @@
 
 namespace Database\Seeders\Test;
 
+use App\Models\Equipment;
 use App\Models\Plateau;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -18,6 +19,7 @@ class PlateauxTableSeeder extends Seeder
     public function run()
     {
         $managers = User::role('plateau_manager')->get();
+        $equipments = Equipment::all();
         $faker = Faker::create('fr_FR');
 
         $this->command->info("Seeding test plateaux with randomized manager.");
@@ -32,8 +34,15 @@ class PlateauxTableSeeder extends Seeder
                 'name'        => "Plateau $index",
                 'description' => implode('', $description)
             ]);
+            /** @var Plateau $plateau */
             $plateau->manager()->associate($managers->random());
             $plateau->save();
+
+            $plateau_equipments = $equipments->random(random_int(1, 3))
+                ->mapWithKeys(fn (Equipment $equipment) => [$equipment->id => ['quantity' => random_int(1, $equipment->quantity)]])
+                ->all();
+
+            $plateau->equipments()->sync($plateau_equipments);
             $bar->advance();
         }
         $bar->finish();
