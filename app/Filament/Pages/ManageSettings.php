@@ -12,13 +12,11 @@ use Filament\Pages\SettingsPage;
 
 class ManageSettings extends SettingsPage
 {
-    protected static ?string $navigationIcon = 'fas-cog';
-
-    protected static string $settings = GeneralSettings::class;
-
+    protected static string $settings         = GeneralSettings::class;
+    protected static ?string $navigationIcon  = 'fas-cog';
     protected static ?string $navigationLabel = 'Réglages';
-
-    protected ?string $heading = 'Réglages';
+    protected static ?int $navigationSort     = 50;
+    protected ?string $heading                = 'Réglages';
 
     protected function getFormSchema(): array
     {

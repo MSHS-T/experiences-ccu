@@ -5,6 +5,9 @@ return [
     'name'        => 'Nom',
     'type'        => 'Type',
     'description' => 'Description',
+    'photos'      => 'Photos',
+    'created_at'  => 'Création',
+    'updated_at'  => 'Modification',
 
     // User
     'first_name' => 'Prénom',
@@ -13,6 +16,10 @@ return [
 
     // Equipment
     'quantity' => 'Quantité',
+
+    // Plateau
+    'manager'    => 'Gestionnaire',
+    'equipments' => 'Équipements',
 
     // Settings
     'booking_cancellation_delay' => 'Délai de prévenance pour l\'annulation d\'une réservation',

@@ -28,5 +28,17 @@ return [
             'edit'   => ['administrator'],
             'delete' => ['administrator'],
         ],
+        'equipment' => [
+            'list'   => ['administrator', 'plateau_manager'],
+            'create' => ['administrator', 'plateau_manager'],
+            'edit'   => ['administrator', 'plateau_manager'],
+            'delete' => ['administrator', 'plateau_manager'],
+        ],
+        'plateau' => [
+            'list'   => ['administrator', 'plateau_manager'],
+            'create' => ['administrator', 'plateau_manager'],
+            'edit'   => ['administrator', 'plateau_manager'],
+            'delete' => ['administrator', 'plateau_manager'],
+        ],
     ]
 ];
