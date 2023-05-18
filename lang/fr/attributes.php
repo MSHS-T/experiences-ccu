@@ -21,6 +21,15 @@ return [
     'manager'    => 'Gestionnaire',
     'equipments' => 'Équipements',
 
+    // Manipulation
+    'plateau'         => 'Plateau',
+    'duration'        => 'Durée',
+    'target_slots'    => 'Créneaux',
+    'start_date'      => 'Date de début',
+    'location'        => 'Emplacement',
+    'available_hours' => 'Horaires',
+    'requirements'    => 'Pré-requis',
+
     // Settings
     'booking_cancellation_delay' => 'Délai de prévenance pour l\'annulation d\'une réservation',
     'booking_confirmation_delay' => 'Délai maximal pour la confirmation d\'une réservation',

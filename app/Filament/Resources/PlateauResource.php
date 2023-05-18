@@ -75,11 +75,11 @@ class PlateauResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('attributes.created_at'))
                     ->sortable()
-                    ->dateTime(),
+                    ->dateTime('d/m/Y H:i:s'),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label(__('attributes.updated_at'))
                     ->sortable()
-                    ->dateTime(),
+                    ->dateTime('d/m/Y H:i:s'),
             ])
             ->filters(
                 [
