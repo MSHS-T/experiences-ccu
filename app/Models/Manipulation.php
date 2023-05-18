@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Arr;
 
 /**
  * App\Models\Manipulation
@@ -72,12 +74,12 @@ class Manipulation extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'duration' => 'integer',
-        'target_slots' => 'integer',
-        'start_date' => 'date',
+        'id'              => 'integer',
+        'duration'        => 'integer',
+        'target_slots'    => 'integer',
+        'start_date'      => 'date',
         'available_hours' => 'array',
-        'requirements' => 'array',
+        'requirements'    => 'array',
     ];
 
     public function plateau(): BelongsTo
@@ -93,5 +95,10 @@ class Manipulation extends Model
     public function slots(): HasMany
     {
         return $this->hasMany(Slot::class);
+    }
+
+    public function getOpeningHoursDisplay(): string
+    {
+        return '';
     }
 }

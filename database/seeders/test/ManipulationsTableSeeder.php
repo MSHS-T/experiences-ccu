@@ -76,8 +76,8 @@ class ManipulationsTableSeeder extends Seeder
                 'target_slots'    => $nbSlots,
                 'start_date'      => '2020-07-01',
                 'location'        => 'Toulouse',
-                'requirements'    => json_encode($faker->sentences(random_int(1, 5))),
-                'available_hours' => json_encode($hours)
+                'requirements'    => $faker->sentences(random_int(1, 5)),
+                'available_hours' => $hours
             ]);
 
             $nbManagers = random_int(1, 2);
