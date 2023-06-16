@@ -22,32 +22,38 @@ class ManageSettings extends SettingsPage
     {
         return [
             Grid::make()
+                ->maxWidth('lg')
                 ->columns(1)
                 ->schema([
                     TextInput::make('booking_cancellation_delay')
                         ->label(__('attributes.booking_cancellation_delay'))
                         ->integer()
                         ->minValue(0)
+                        ->suffix('jours')
                         ->required(),
                     TextInput::make('booking_confirmation_delay')
                         ->label(__('attributes.booking_confirmation_delay'))
                         ->integer()
                         ->minValue(0)
+                        ->suffix('jours')
                         ->required(),
                     TextInput::make('booking_opening_delay')
                         ->label(__('attributes.booking_opening_delay'))
                         ->integer()
                         ->minValue(0)
+                        ->suffix('jours')
                         ->required(),
                     TextInput::make('manipulation_overbooking')
                         ->label(__('attributes.manipulation_overbooking'))
                         ->integer()
                         ->minValue(0)
+                        ->suffix('%')
                         ->required(),
                     TextInput::make('email_reminder_delay')
                         ->label(__('attributes.email_reminder_delay'))
                         ->integer()
                         ->minValue(0)
+                        ->suffix('jours')
                         ->required(),
                     RichEditor::make('presentation_text')
                         ->label(__('attributes.presentation_text'))
