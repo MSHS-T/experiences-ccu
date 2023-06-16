@@ -23,7 +23,11 @@ class ManipulationResource extends Resource
 {
     protected static ?string $model = Manipulation::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon   = 'fas-flask-vial';
+    protected static ?string $navigationLabel  = 'Manipulations';
+    protected static ?int $navigationSort      = 10;
+    protected static ?string $modelLabel       = 'Manipulation';
+    protected static ?string $pluralModelLabel = 'Manipulations';
 
     public static function form(Form $form): Form
     {
@@ -110,14 +114,14 @@ class ManipulationResource extends Resource
                     ->label(__('attributes.location'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('xxx')
+                Tables\Columns\TextColumn::make('available_hours_str')
                     ->label(__('attributes.available_hours'))
                     ->formatStateUsing(
                         fn (Manipulation $record): string => $record->getOpeningHoursDisplay()
                     )
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
-                Tables\Columns\TextColumn::make('zzz')
+                Tables\Columns\TextColumn::make('requirements_str')
                     ->label(__('attributes.requirements'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->formatStateUsing(
@@ -173,5 +177,10 @@ class ManipulationResource extends Resource
             'view'   => Pages\ViewManipulation::route('/{record}'),
             'edit'   => Pages\EditManipulation::route('/{record}/edit'),
         ];
+    }
+
+    protected static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
     }
 }
