@@ -17,6 +17,7 @@ use Filament\Tables\Filters\Layout;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ManipulationResource extends Resource
@@ -61,6 +62,8 @@ class ManipulationResource extends Resource
                 Forms\Components\TextInput::make('duration')
                     ->label(__('attributes.duration'))
                     ->suffix('minutes')
+                    ->integer()
+                    ->minValue(1)
                     ->required(),
                 Forms\Components\TextInput::make('target_slots')
                     ->label(__('attributes.target_slots'))
@@ -169,7 +172,9 @@ class ManipulationResource extends Resource
                     ->icon(fn (Manipulation $record) => $record->published ? 'fas-calendar-xmark' : 'fas-calendar-check')
                     ->action(fn (Manipulation $record) => $record->togglePublished())
                     ->requiresConfirmation()
-                    ->color(fn (Manipulation $record) => $record->published ? 'warning' : 'success'),
+                    ->color(fn (Manipulation $record) => $record->published ? 'warning' : 'success')
+                    ->hidden(fn (Manipulation $record) => !Auth::user()->hasRole('administrator') && $record->plateau->manager_id !== Auth::id())
+                    ->disabled(fn (Manipulation $record) => !Auth::user()->hasRole('administrator') && $record->plateau->manager_id !== Auth::id()),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
