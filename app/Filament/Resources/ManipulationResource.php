@@ -32,13 +32,16 @@ class ManipulationResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
+            ->columns(4)
             ->schema([
                 Forms\Components\Select::make('plateau_id')
                     ->label(__('attributes.plateau'))
+                    ->columnSpan(2)
                     ->relationship('plateau', 'name')
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->label(__('attributes.name'))
+                    ->columnSpan(2)
                     ->required()
                     ->maxLength(255),
                 Forms\Components\RichEditor::make('description')
@@ -46,10 +49,10 @@ class ManipulationResource extends Resource
                     ->required()
                     ->disableAllToolbarButtons()
                     ->enableToolbarButtons(['bold', 'italic', 'strike', 'link', 'bulletList', 'orderedList'])
-                    ->columnSpan(2),
+                    ->columnSpan(4),
                 Forms\Components\DatePicker::make('start_date')
                     ->label(__('attributes.start_date'))
-                    ->format('d/m/Y')
+                    ->displayFormat('d/m/Y')
                     ->required(),
                 Forms\Components\TextInput::make('location')
                     ->label(__('attributes.location'))
@@ -57,17 +60,19 @@ class ManipulationResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('duration')
                     ->label(__('attributes.duration'))
+                    ->suffix('minutes')
                     ->required(),
                 Forms\Components\TextInput::make('target_slots')
                     ->label(__('attributes.target_slots'))
                     ->required(),
                 TableRepeater::make('requirements')
+                    ->label(__('attributes.requirements'))
+                    ->emptyLabel(__('messages.no_requirement'))
+                    ->createItemButtonLabel(__('messages.add_requirement'))
+                    ->columnSpan(4)
                     ->hideLabels()
                     ->defaultItems(1)
                     ->withoutHeader()
-                    ->createItemButtonLabel(__('messages.add_requirement'))
-                    ->emptyLabel(__('messages.no_requirement'))
-                    ->label(__('attributes.requirements'))
                     ->formatStateUsing(
                         fn (?Manipulation $record) => collect($record?->requirements ?? [])->map(fn ($r) => ['text' => $r])->all()
                     )
@@ -114,6 +119,9 @@ class ManipulationResource extends Resource
                     ->label(__('attributes.location'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable(),
+                Tables\Columns\IconColumn::make('published')
+                    ->label(__('attributes.published'))
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('available_hours_str')
                     ->label(__('attributes.available_hours'))
                     ->formatStateUsing(
@@ -156,6 +164,12 @@ class ManipulationResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('toggle_enabled')
+                    ->label(fn (Manipulation $record) => $record->published ? __('actions.unpublish') : __('actions.publish'))
+                    ->icon(fn (Manipulation $record) => $record->published ? 'fas-calendar-xmark' : 'fas-calendar-check')
+                    ->action(fn (Manipulation $record) => $record->togglePublished())
+                    ->requiresConfirmation()
+                    ->color(fn (Manipulation $record) => $record->published ? 'warning' : 'success'),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
