@@ -80,6 +80,16 @@ class Manipulation extends Model
         'start_date'      => 'date',
         'available_hours' => 'array',
         'requirements'    => 'array',
+        'published'       => 'boolean',
+    ];
+
+    /**
+     * The model's default values for attributes.
+     *
+     * @var array
+     */
+    protected $attributes = [
+        'published' => false,
     ];
 
     public function plateau(): BelongsTo
@@ -100,5 +110,11 @@ class Manipulation extends Model
     public function getOpeningHoursDisplay(): string
     {
         return '';
+    }
+
+    public function togglePublished()
+    {
+        $this->published = !$this->published;
+        $this->save();
     }
 }

@@ -29,6 +29,7 @@ return [
     'location'        => 'Emplacement',
     'available_hours' => 'Horaires',
     'requirements'    => 'Pré-requis',
+    'published'       => 'Publié ?',
 
     // Settings
     'booking_cancellation_delay' => 'Délai de prévenance pour l\'annulation d\'une réservation',
