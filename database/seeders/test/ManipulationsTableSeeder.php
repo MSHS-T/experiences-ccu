@@ -57,8 +57,8 @@ class ManipulationsTableSeeder extends Seeder
                 'name'            => "Manipulation $i",
                 'description'     => implode('', $description),
                 'duration'        => 15 * random_int(1, 6),
-                'start_date'      => $startDate,
-                'end_date'        => $startDate->add(new \DateInterval('P' . random_int(1, 3) . 'W')),
+                'start_date'      => $startDate->format('Y-m-d'),
+                'end_date'        => $startDate->add(new \DateInterval('P' . random_int(2, 6) * 7 . 'D'))->format('Y-m-d'),
                 'location'        => 'Toulouse',
                 'requirements'    => $faker->sentences(random_int(1, 5)),
                 'available_hours' => $hours

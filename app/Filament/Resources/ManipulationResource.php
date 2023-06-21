@@ -202,11 +202,16 @@ class ManipulationResource extends Resource
                         fn (Manipulation $record): string => $record->duration . ' min'
                     )
                     ->sortable(),
-                Tables\Columns\TextColumn::make('target_slots')
-                    ->label(__('attributes.target_slots'))
+                Tables\Columns\TextColumn::make('slots_count')
+                    ->counts('slots')
+                    ->label(__('attributes.slot_count'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('start_date')
                     ->label(__('attributes.start_date'))
+                    ->sortable()
+                    ->date('d/m/Y'),
+                Tables\Columns\TextColumn::make('end_date')
+                    ->label(__('attributes.end_date'))
                     ->sortable()
                     ->date('d/m/Y'),
                 Tables\Columns\TextColumn::make('location')
