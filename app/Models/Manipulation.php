@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Utils\SlotGenerator;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +10,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Illuminate\Support\Stringable;
 
 /**
  * App\Models\Manipulation
@@ -18,7 +22,6 @@ use Illuminate\Support\Arr;
  * @property string $description
  * @property int $plateau_id
  * @property int $duration
- * @property int $target_slots
  * @property \Illuminate\Support\Carbon $start_date
  * @property string $location
  * @property array $available_hours
@@ -58,11 +61,12 @@ class Manipulation extends Model
      * @var array
      */
     protected $fillable = [
+        'plateau_id',
         'name',
         'description',
         'duration',
-        'target_slots',
         'start_date',
+        'end_date',
         'location',
         'available_hours',
         'requirements',
@@ -76,8 +80,8 @@ class Manipulation extends Model
     protected $casts = [
         'id'              => 'integer',
         'duration'        => 'integer',
-        'target_slots'    => 'integer',
         'start_date'      => 'date',
+        'end_date'        => 'date',
         'available_hours' => 'array',
         'requirements'    => 'array',
         'published'       => 'boolean',
@@ -91,6 +95,24 @@ class Manipulation extends Model
     protected $attributes = [
         'published' => false,
     ];
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::created(function (Manipulation $manipulation) {
+            $manipulation->slots()->createMany(SlotGenerator::makeFromManipulation($manipulation));
+        });
+        static::updated(function (Manipulation $manipulation) {
+            if ($manipulation->published) {
+                // TODO : Determine what to do
+            } else {
+                $manipulation->slots->each(fn (Slot $s) => $s->delete());
+                $manipulation->slots()->createMany(SlotGenerator::makeFromManipulation($manipulation));
+            }
+        });
+    }
 
     public function plateau(): BelongsTo
     {
@@ -107,9 +129,25 @@ class Manipulation extends Model
         return $this->hasMany(Slot::class);
     }
 
-    public function getOpeningHoursDisplay(): string
+    public function getAvailableHoursDisplay(): array
     {
-        return '';
+        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+
+        return collect($this->available_hours)->map(function ($hours, $day) {
+            if (collect($hours)->filter()->isEmpty()) {
+                return null;
+            }
+            return __('attributes.' . $day)
+                . ' : '
+                . collect([
+                    collect([$hours['start_am'], $hours['end_am']])->filter()->join('-'),
+                    collect([$hours['start_pm'], $hours['end_pm']])->filter()->join('-')
+                ])
+                ->filter(fn ($s) => strlen($s) > 0)
+                ->join(' &amp; ');
+        })->filter()
+            ->sortKeysUsing(fn ($a, $b) => array_search($a, $days) <=> array_search($b, $days))
+            ->all();
     }
 
     public function togglePublished()
