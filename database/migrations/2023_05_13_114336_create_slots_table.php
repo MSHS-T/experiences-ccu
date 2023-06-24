@@ -15,7 +15,7 @@ return new class extends Migration
 
         Schema::create('slots', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('manipulation_id')->constrained('plateaux');
+            $table->foreignId('manipulation_id')->constrained('manipulations');
             $table->dateTime('start');
             $table->dateTime('end');
             $table->timestamps();

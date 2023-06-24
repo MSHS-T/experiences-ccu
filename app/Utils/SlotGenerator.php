@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class SlotGenerator
 {
-    public static function estimateCount(?string $startDate, ?string $endDate, ?array $availableHours, ?int $duration): ?int
+    public static function estimateCount(?string $startDate, ?string $endDate, ?array $availableHours, int|string|null $duration): ?int
     {
         if (blank($startDate)) return null;
         if (blank($endDate) || $endDate < $startDate) return null;
