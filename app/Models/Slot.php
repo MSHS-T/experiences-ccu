@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Booking|null $booking
+ * @property int $manipulation_id
  * @property-read \App\Models\Manipulation|null $manipulation
  * @method static \Database\Factories\SlotFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Slot newModelQuery()
@@ -26,6 +27,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|Slot whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Slot whereStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Slot whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Slot whereManipulationId($value)
  * @mixin \Eloquent
  */
 class Slot extends Model
