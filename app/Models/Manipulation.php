@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
@@ -23,9 +24,12 @@ use Illuminate\Support\Stringable;
  * @property int $plateau_id
  * @property int $duration
  * @property \Illuminate\Support\Carbon $start_date
+ * @property \Illuminate\Support\Carbon $end_date
  * @property string $location
  * @property array $available_hours
  * @property array $requirements
+ * @property bool $published
+ * @property bool $archived
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Plateau $plateau
@@ -33,6 +37,7 @@ use Illuminate\Support\Stringable;
  * @property-read int|null $slots_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
+ * @property-read Manipulation|null $statistics
  * @method static \Database\Factories\ManipulationFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation newQuery()
@@ -47,8 +52,11 @@ use Illuminate\Support\Stringable;
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation wherePlateauId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereRequirements($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereStartDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereEndDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereTargetSlots($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Manipulation wherePublished($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereArchived($value)
  * @mixin \Eloquent
  */
 class Manipulation extends Model
@@ -85,6 +93,7 @@ class Manipulation extends Model
         'available_hours' => 'array',
         'requirements'    => 'array',
         'published'       => 'boolean',
+        'archived'        => 'boolean',
     ];
 
     /**
@@ -94,6 +103,7 @@ class Manipulation extends Model
      */
     protected $attributes = [
         'published' => false,
+        'archived' => false,
     ];
 
     /**
@@ -158,6 +168,18 @@ class Manipulation extends Model
     public function togglePublished()
     {
         $this->published = !$this->published;
+        $this->save();
+    }
+
+    public function archive()
+    {
+        if ($this->end_date->isBefore(Carbon::now())) {
+            return false;
+        }
+        $this->archived = true;
+        // TODO : store slots statistics
+        // TODO : store booking statistics
+        // TODO : delete slots and bookings
         $this->save();
     }
 }

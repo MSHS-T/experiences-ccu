@@ -24,6 +24,8 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property-read \App\Models\User $manager
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Manipulation> $manipulations
  * @property-read int|null $manipulations_count
+ * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection<int, \Spatie\MediaLibrary\MediaCollections\Models\Media> $media
+ * @property-read int|null $media_count
  * @method static \Database\Factories\PlateauFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Plateau newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Plateau newQuery()

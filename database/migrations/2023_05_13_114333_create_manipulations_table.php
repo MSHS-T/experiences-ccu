@@ -25,6 +25,7 @@ return new class extends Migration
             $table->json('available_hours');
             $table->json('requirements');
             $table->boolean('published')->default(false);
+            $table->boolean('archived')->default(false);
             $table->timestamps();
         });
 
