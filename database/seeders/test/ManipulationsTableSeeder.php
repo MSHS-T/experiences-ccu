@@ -36,7 +36,7 @@ class ManipulationsTableSeeder extends Seeder
         foreach (range(1, $nbManipulations) as $i) {
             $description = array_map(function ($p) {
                 return '<p>' . $p . '</p>';
-            }, $faker->paragraphs(3));
+            }, $faker->paragraphs(1));
 
             $hours = [];
             foreach ($days as $day) {
@@ -54,6 +54,9 @@ class ManipulationsTableSeeder extends Seeder
             if ($i === 1) {
                 $startDate = fake()->dateTimeBetween('-4 months', '-2 months');
                 $endDate = fake()->dateTimeBetween('-2 months', 'now');
+            } else if ($i <= 3) {
+                $startDate = fake()->dateTimeBetween('-2 months', 'now');
+                $endDate = fake()->dateTimeBetween('now', '+2 months');
             } else {
                 $startDate = fake()->dateTimeBetween('now', '+2 months');
                 $endDate = $startDate->add(new \DateInterval('P' . random_int(2, 6) * 7 . 'D'));
@@ -70,7 +73,7 @@ class ManipulationsTableSeeder extends Seeder
                 'available_hours' => $hours
             ]);
 
-            if ($i === 1) {
+            if ($i <= 3) {
                 $manip->published = true;
                 $manip->save();
             }

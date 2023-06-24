@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Settings\GeneralSettings;
 use App\Utils\SlotGenerator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -115,11 +117,14 @@ class Manipulation extends Model
             $manipulation->slots()->createMany(SlotGenerator::makeFromManipulation($manipulation));
         });
         static::updated(function (Manipulation $manipulation) {
+            dd($manipulation->getChanges());
             if ($manipulation->published) {
                 // TODO : Determine what to do
+                // Add more slots at the end ?
             } else {
-                $manipulation->slots->each(fn (Slot $s) => $s->delete());
-                $manipulation->slots()->createMany(SlotGenerator::makeFromManipulation($manipulation));
+                // TODO : Delete slots ?
+                // $manipulation->slots->each(fn (Slot $s) => $s->delete());
+                // $manipulation->slots()->createMany(SlotGenerator::makeFromManipulation($manipulation));
             }
         });
     }
@@ -181,5 +186,18 @@ class Manipulation extends Model
         // TODO : store booking statistics
         // TODO : delete slots and bookings
         $this->save();
+    }
+
+    /**
+     * Scope a query to only include manipulations visible for the public.
+     */
+    public function scopeVisibleForParticipants(Builder $query): void
+    {
+        $booking_opening_delay = app(GeneralSettings::class)->booking_opening_delay;
+        $query->where('published', true)
+            ->where('archived', false)
+            ->where('start_date', '<=', Carbon::today()->addDays($booking_opening_delay))
+            ->where('end_date', '>', Carbon::today())
+            ->orderBy('end_date', 'asc');
     }
 }

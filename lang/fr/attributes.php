@@ -29,6 +29,7 @@ return [
     'slot_count'      => 'Nombre de créneaux',
     'start_date'      => 'Date de début',
     'end_date'        => 'Date de fin',
+    'dates'           => 'Dates',
     'location'        => 'Emplacement',
     'available_hours' => 'Horaires',
     'requirements'    => 'Pré-requis',

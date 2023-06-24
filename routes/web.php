@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ManipulationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', HomeController::class)->name('home');
+Route::get('/manipulations', ManipulationController::class)->name('manipulations');
+
+Route::view('/mentions-legales', 'legal')->name('legal');
+Route::view('/politique-cookies', 'cookies')->name('cookies');
