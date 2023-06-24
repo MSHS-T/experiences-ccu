@@ -270,14 +270,30 @@ class ManipulationResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('toggle_enabled')
+                Tables\Actions\Action::make('toggle_published')
                     ->label(fn (Manipulation $record) => $record->published ? __('actions.unpublish') : __('actions.publish'))
                     ->icon(fn (Manipulation $record) => $record->published ? 'fas-calendar-xmark' : 'fas-calendar-check')
                     ->action(fn (Manipulation $record) => $record->togglePublished())
                     ->requiresConfirmation()
                     ->color(fn (Manipulation $record) => $record->published ? 'warning' : 'success')
-                    ->hidden(fn (Manipulation $record) => !Auth::user()->hasRole('administrator') && $record->plateau->manager_id !== Auth::id())
-                    ->disabled(fn (Manipulation $record) => !Auth::user()->hasRole('administrator') && $record->plateau->manager_id !== Auth::id()),
+                    ->hidden(
+                        fn (Manipulation $record) => !(Auth::user()->hasRole('administrator')
+                            || (Auth::user()->can('manipulation.publish') && $record->plateau->manager_id !== Auth::id())
+                        )
+                    )
+                    ->disabled(
+                        fn (Manipulation $record) => !(Auth::user()->hasRole('administrator')
+                            || (Auth::user()->can('manipulation.publish') && $record->plateau->manager_id !== Auth::id())
+                        )
+                    ),
+                Tables\Actions\Action::make('archive')
+                    ->label(__('actions.archive'))
+                    ->icon('fas-calendar-check')
+                    ->action(fn (Manipulation $record) => $record->archive())
+                    ->requiresConfirmation()
+                    ->color('danger')
+                    ->hidden(fn (Manipulation $record) => !Auth::user()->can('manipulation.archive') || $record->end_date->isAfter(Carbon::now()))
+                    ->disabled(fn (Manipulation $record) => !Auth::user()->can('manipulation.archive') || $record->end_date->isAfter(Carbon::now())),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

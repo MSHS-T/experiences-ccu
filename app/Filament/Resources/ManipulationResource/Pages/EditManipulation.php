@@ -3,9 +3,11 @@
 namespace App\Filament\Resources\ManipulationResource\Pages;
 
 use App\Filament\Resources\ManipulationResource;
+use App\Models\Manipulation;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class EditManipulation extends EditRecord
 {
@@ -37,7 +39,9 @@ class EditManipulation extends EditRecord
     {
         return [
             Actions\ViewAction::make(),
-            Actions\DeleteAction::make(),
+            Actions\DeleteAction::make()
+                ->hidden(fn (Manipulation $record) => !Auth::user()->can('manipulation.delete'))
+                ->disabled(fn (Manipulation $record) => !Auth::user()->can('manipulation.delete') || $record->published),
         ];
     }
 }
