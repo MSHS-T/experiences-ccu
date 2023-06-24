@@ -16,6 +16,7 @@ class ManageSettings extends SettingsPage
     protected static ?string $navigationIcon  = 'fas-cog';
     protected static ?string $navigationLabel = 'Réglages';
     protected static ?int $navigationSort     = 50;
+    protected static ?string $navigationGroup = 'Administration';
     protected ?string $heading                = 'Réglages';
 
     protected function getFormSchema(): array

@@ -21,7 +21,8 @@ class PlateauResource extends Resource
 
     protected static ?string $navigationIcon   = 'fas-border-all';
     protected static ?string $navigationLabel  = 'Plateaux';
-    protected static ?int $navigationSort      = 12;
+    protected static ?int $navigationSort      = 20;
+    protected static ?string $navigationGroup  = 'Gestion';
     protected static ?string $modelLabel       = 'Plateau';
     protected static ?string $pluralModelLabel = 'Plateaux';
 
@@ -118,11 +119,6 @@ class PlateauResource extends Resource
             'view'   => Pages\ViewPlateau::route('/{record}'),
             'edit'   => Pages\EditPlateau::route('/{record}/edit'),
         ];
-    }
-
-    protected static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
     }
 
     protected function getDefaultTableSortColumn(): ?string

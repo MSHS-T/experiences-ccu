@@ -13,6 +13,7 @@ return [
     'first_name' => 'Prénom',
     'last_name'  => 'Nom',
     'email'      => 'Adresse e-mail',
+    'role'       => 'Rôle',
 
     // Equipment
     'quantity' => 'Quantité',
@@ -51,4 +52,11 @@ return [
     'email_reminder_delay'       => 'Délai avant réservation pour envoi du premier rappel par e-mail',
     'manipulation_overbooking'   => 'Pourcentage de surréservation des créneaux de manipulation',
     'presentation_text'          => 'Texte de présentation du site (visible sur la page d\'accueil)',
+
+    // Roles
+    'roles' => [
+        'administrator'        => 'Administrateur',
+        'plateau_manager'      => 'Responsable Plateau',
+        'manipulation_manager' => 'Responsable Manipulation',
+    ],
 ];

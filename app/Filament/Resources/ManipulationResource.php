@@ -3,8 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\ManipulationResource\Pages;
-use App\Filament\Resources\ManipulationResource\RelationManagers;
-use App\Forms\Components\SimpleRepeater;
 use App\Models\Manipulation;
 use App\Models\Plateau;
 use App\Utils\SlotGenerator;
@@ -34,6 +32,7 @@ class ManipulationResource extends Resource
     protected static ?string $navigationIcon   = 'fas-flask-vial';
     protected static ?string $navigationLabel  = 'Manipulations';
     protected static ?int $navigationSort      = 10;
+    protected static ?string $navigationGroup  = 'Administration';
     protected static ?string $modelLabel       = 'Manipulation';
     protected static ?string $pluralModelLabel = 'Manipulations';
 
