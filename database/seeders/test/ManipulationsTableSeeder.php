@@ -70,6 +70,11 @@ class ManipulationsTableSeeder extends Seeder
                 'available_hours' => $hours
             ]);
 
+            if ($i === 1) {
+                $manip->published = true;
+                $manip->save();
+            }
+
             $nbManagers = random_int(1, 2);
             $managersId = $managers->random(min(count($managers), $nbManagers))->pluck('id');
             $manip->users()->sync($managersId);

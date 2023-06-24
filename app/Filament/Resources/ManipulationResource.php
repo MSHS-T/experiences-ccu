@@ -323,7 +323,7 @@ class ManipulationResource extends Resource
 
     protected static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return static::getModel()::wherePublished(true)->whereArchived(false)->count();
     }
 
     protected function getDefaultTableSortColumn(): ?string
