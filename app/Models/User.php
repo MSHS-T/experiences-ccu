@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Notifications\AccountCreated as AccountCreatedNotification;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
+use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use JeffGreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
@@ -108,6 +111,9 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
                 $user->password = Hash::make(fake()->asciify(Str::repeat('*', 10)));
             }
         });
+        static::created(function (User $user) {
+            Password::sendResetLink(['email' => $user->email]);
+        });
     }
 
     public function canAccessFilament(): bool
@@ -138,5 +144,21 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
     public function manipulations(): BelongsToMany
     {
         return $this->belongsToMany(Manipulation::class);
+    }
+
+    /**
+     * Send the password reset notification.
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        if (!$this->email_verified_at) {
+            // New user : send a specific email
+            $this->notify(new AccountCreatedNotification($token));
+        } else {
+            $this->notify(new ResetPasswordNotification($token));
+        }
     }
 }
