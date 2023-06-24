@@ -40,5 +40,13 @@ return [
             'edit'   => ['administrator', 'plateau_manager'],
             'delete' => ['administrator', 'plateau_manager'],
         ],
+        'manipulation' => [
+            'list'    => ['administrator', 'plateau_manager', 'manipulation_manager'],
+            'edit'    => ['administrator', 'plateau_manager', 'manipulation_manager'],
+            'create'  => ['administrator', 'plateau_manager', 'manipulation_manager'],
+            'delete'  => ['administrator', 'plateau_manager', 'manipulation_manager'],
+            'archive' => ['administrator', 'plateau_manager'],
+            'publish' => ['administrator', 'plateau_manager'],
+        ],
     ]
 ];
