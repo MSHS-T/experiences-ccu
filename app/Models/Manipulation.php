@@ -129,6 +129,11 @@ class Manipulation extends Model
         return $this->hasMany(Slot::class);
     }
 
+    public function statistics(): BelongsTo
+    {
+        return $this->belongsTo(Manipulation::class);
+    }
+
     public function getAvailableHoursDisplay(): array
     {
         $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
