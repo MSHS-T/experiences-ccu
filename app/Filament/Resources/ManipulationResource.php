@@ -16,6 +16,7 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Filters\Layout;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -187,6 +188,9 @@ class ManipulationResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label('#')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('plateau_id')
                     ->label(__('attributes.plateau'))
                     ->formatStateUsing(
@@ -320,5 +324,20 @@ class ManipulationResource extends Resource
     protected static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
+    }
+
+    protected function getDefaultTableSortColumn(): ?string
+    {
+        return 'id';
+    }
+
+    protected function getDefaultTableSortDirection(): ?string
+    {
+        return 'desc';
+    }
+
+    protected function shouldPersistTableSortInSession(): bool
+    {
+        return true;
     }
 }
