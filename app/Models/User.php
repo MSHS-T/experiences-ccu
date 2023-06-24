@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use JeffGreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -71,7 +73,8 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
     ];
@@ -94,6 +97,18 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (User $user) {
+            if (blank($user->password)) {
+                $user->password = Hash::make(fake()->asciify(Str::repeat('*', 10)));
+            }
+        });
+    }
 
     public function canAccessFilament(): bool
     {

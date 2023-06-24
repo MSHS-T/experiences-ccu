@@ -22,7 +22,8 @@ class EquipmentResource extends Resource
 
     protected static ?string $navigationIcon   = 'fas-screwdriver-wrench';
     protected static ?string $navigationLabel  = 'Équipements';
-    protected static ?int $navigationSort      = 15;
+    protected static ?int $navigationSort      = 30;
+    protected static ?string $navigationGroup  = 'Gestion';
     protected static ?string $modelLabel       = 'Équipement';
     protected static ?string $pluralModelLabel = 'Équipements';
 
@@ -123,11 +124,6 @@ class EquipmentResource extends Resource
             'view'   => Pages\ViewEquipment::route('/{record}'),
             'edit'   => Pages\EditEquipment::route('/{record}/edit'),
         ];
-    }
-
-    protected static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
     }
 
     protected function getDefaultTableSortColumn(): ?string
