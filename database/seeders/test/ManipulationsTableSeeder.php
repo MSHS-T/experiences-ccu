@@ -51,14 +51,20 @@ class ManipulationsTableSeeder extends Seeder
                 }
             }
 
-            $startDate = fake()->dateTimeBetween('now', '+2 months');
+            if ($i === 1) {
+                $startDate = fake()->dateTimeBetween('-4 months', '-2 months');
+                $endDate = fake()->dateTimeBetween('-2 months', 'now');
+            } else {
+                $startDate = fake()->dateTimeBetween('now', '+2 months');
+                $endDate = $startDate->add(new \DateInterval('P' . random_int(2, 6) * 7 . 'D'));
+            }
 
             $manip = $plateaux->random()->manipulations()->create([
                 'name'            => "Manipulation $i",
                 'description'     => implode('', $description),
                 'duration'        => 15 * random_int(1, 6),
                 'start_date'      => $startDate->format('Y-m-d'),
-                'end_date'        => $startDate->add(new \DateInterval('P' . random_int(2, 6) * 7 . 'D'))->format('Y-m-d'),
+                'end_date'        => $endDate->format('Y-m-d'),
                 'location'        => 'Toulouse',
                 'requirements'    => $faker->sentences(random_int(1, 5)),
                 'available_hours' => $hours
