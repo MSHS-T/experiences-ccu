@@ -4,7 +4,8 @@
 
 @section('content')
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 text-center lg:pt-32 lg:h-screen">
-        <h1 class="mx-auto max-w-5xl font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-7xl">
+        <h1
+            class="mx-auto max-w-5xl font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-5xl lg:text-7xl">
             Plateforme expérimentale dédiée à la recherche sur le
             <span class="relative text-blue-600 whitespace-nowrap">
                 <svg aria-hidden="true" viewBox="0 0 418 42" class="absolute left-0 top-2/3 h-[0.58em] w-full fill-blue-300/70"
@@ -71,7 +72,7 @@
             @else
                 <div class="mt-16 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-20 lg:grid-cols-9 lg:pt-0"
                     x-data="{ selected: {{ $selectedManipulation }} }">
-                    <div class="-mx-4 flex overflow-x-auto pb-4 sm:mx-0 sm:overflow-visible sm:pb-0 lg:col-span-3">
+                    <div class="-mx-4 flex overflow-x-auto pb-4 sm:mx-0 lg:overflow-visible lg:pb-0 lg:col-span-3">
                         <div class="relative w-full z-10 flex space-x-4 whitespace-nowrap px-4 sm:mx-auto sm:px-0 lg:mx-0 lg:block lg:space-x-0 lg:space-y-4 lg:whitespace-normal"
                             role="tablist" aria-orientation="vertical">
                             @foreach ($manipulations as $m)
@@ -108,7 +109,7 @@
                                         </span>
                                     </h3>
                                     <div
-                                        class="rounded-2xl bg-slate-100 px-3 py-2 sm:px-6 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
+                                        class="rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
                                         {!! $m->description !!}
                                     </div>
                                 </div>
@@ -121,7 +122,7 @@
                                         </span>
                                     </h3>
                                     <div
-                                        class="rounded-2xl bg-slate-100 px-3 py-2 sm:px-6 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
+                                        class="rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
                                         {{ $m->location }}
                                     </div>
                                 </div>
@@ -134,7 +135,7 @@
                                         </span>
                                     </h3>
                                     <div
-                                        class="rounded-2xl bg-slate-100 px-3 py-2 sm:px-6 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
+                                        class="rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
                                         {{ $m->duration }} minutes
                                     </div>
                                 </div>
@@ -147,9 +148,9 @@
                                         </span>
                                     </h3>
                                     <div
-                                        class="rounded-2xl bg-slate-100 px-3 py-2 sm:px-6 sm:py-3 text-base font-medium text-slate-700 tracking-tight flex items-center">
+                                        class="rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight flex items-center">
                                         {{ $m->start_date->format('d/m/Y') }}
-                                        <x-fas-arrow-right-long class="h-3 w-3 mx-1" />
+                                        <x-fas-arrow-right class="h-3 w-3 mx-1" />
                                         {{ $m->end_date->format('d/m/Y') }}
                                     </div>
                                 </div>
@@ -162,7 +163,7 @@
                                         </span>
                                     </h3>
                                     <ol role="list"
-                                        class="divide-y divide-slate-300/30 rounded-2xl bg-slate-100 px-3 py-2 sm:px-6 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
+                                        class="divide-y divide-slate-300/30 rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
                                         @foreach ($m->requirements as $r)
                                             <li class="flex justify-between py-1 sm:py-3"
                                                 aria-label="Strokes and fills on page 21">
