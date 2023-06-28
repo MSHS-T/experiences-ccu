@@ -49,6 +49,7 @@ class Booking extends Model
         'first_name',
         'last_name',
         'email',
+        'birthdate',
         'confirmed',
         'confirmation_code',
         'confirm_before',
@@ -62,6 +63,7 @@ class Booking extends Model
      */
     protected $casts = [
         'id'             => 'integer',
+        'birthdate'      => 'date',
         'confirmed'      => 'boolean',
         'confirm_before' => 'datetime',
         'honored'        => 'boolean',
