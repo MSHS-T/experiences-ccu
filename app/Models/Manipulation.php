@@ -117,7 +117,8 @@ class Manipulation extends Model
             $manipulation->slots()->createMany(SlotGenerator::makeFromManipulation($manipulation));
         });
         static::updated(function (Manipulation $manipulation) {
-            dd($manipulation->getChanges());
+            $changes = $manipulation->getChanges();
+
             if ($manipulation->published) {
                 // TODO : Determine what to do
                 // Add more slots at the end ?
