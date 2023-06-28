@@ -54,7 +54,7 @@ class ManipulationsTableSeeder extends Seeder
             if ($i === 1) {
                 $startDate = fake()->dateTimeBetween('-4 months', '-2 months');
                 $endDate = fake()->dateTimeBetween('-2 months', 'now');
-            } else if ($i <= 3) {
+            } else if ($i <= 4) {
                 $startDate = fake()->dateTimeBetween('-2 months', 'now');
                 $endDate = fake()->dateTimeBetween('now', '+2 months');
             } else {
@@ -73,7 +73,7 @@ class ManipulationsTableSeeder extends Seeder
                 'available_hours' => $hours
             ]);
 
-            if ($i <= 3) {
+            if ($i <= 4) {
                 $manip->published = true;
                 $manip->save();
             }
