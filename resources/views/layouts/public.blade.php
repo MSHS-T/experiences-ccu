@@ -14,9 +14,9 @@
 
 <body class="flex flex-col h-full min-h-screen">
 
-    <header class="py-4 lg:py-10">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <nav class="relative z-50 flex justify-between">
+    <header class="py-4 h-[10vh]">
+        <div class="">
+            <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-50 flex justify-between items-center">
                 <div class="flex items-center md:gap-x-12 font-bold tracking-wide text-xl">
                     <a aria-label="Home" href="{{ route('home') }}">
                         {{ config('app.name') }}
@@ -43,7 +43,7 @@
                 <img alt="Université Toulouse-Jean Jaurès" class="h-36 w-auto mx-auto block"
                     src="{{ Vite::asset('resources/images/logo-ccu.png') }}">
             </div>
-            <div class="grid sm:grid-cols-3 items-center border-t border-slate-400/10 py-4 space-y-4 sm:space-y-0">
+            <div class="grid lg:grid-cols-3 items-center border-t border-slate-400/10 py-4 space-y-4 lg:space-y-0">
                 <p class="text-center sm:text-left text-sm text-slate-500 sm:mt-0">
                     Copyright © 2023 Expériences CCU
                 </p>

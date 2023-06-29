@@ -19,22 +19,19 @@
                         {{ __('public.slots.no_slots') }}
                     </p>
                 @else
-                    <div class="mt-16 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-20 lg:pt-0">
+                    <div class="mt-8 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-16 lg:pt-0">
                         <a href="#details" class="hidden" x-ref="nextSectionLink"></a>
                         {{-- {{ dump($slots) }} --}}
                         <template x-for="dayIndex in daysDisplayed">
                             <div class="rounded-xl divide-y divide-white/10"
                                 x-bind:class="selectedDate === Object.keys(slots)[dayIndex - 1] ?
-                                    'bg-white lg:bg-white/10 lg:ring-1 lg:ring-inset lg:ring-white/10' :
-                                    'hover:bg-white/10 lg:hover:bg-white/5'">
+                                    'bg-white/10 ring-1 ring-inset ring-white/10' :
+                                    'hover:bg-white/5'">
                                 <div class="group relative px-4 py-1 lg:p-3">
                                     <h2>
                                         <button
                                             class="font-display text-lg [&:not(:focus-visible)]:focus:outline-none
-                                        flex items-center justify-between w-full p-1 font-medium text-left"
-                                            x-bind:class="selectedDate === Object.keys(slots)[dayIndex - 1] ?
-                                                'text-blue-600 lg:text-white' :
-                                                'text-blue-100 hover:text-white lg:text-white'"
+                                        flex items-center justify-between w-full p-1 font-medium text-left text-white"
                                             x-on:click="selectedDate = Object.keys(slots)[dayIndex - 1]" type="button">
                                             <span class="absolute inset-0 rounded-xl"></span>
                                             <span x-text="Object.keys(slots)[dayIndex - 1]"></span>
@@ -71,12 +68,12 @@
                 @endif
             </div>
         </section>
-        <section id="details" class="relative overflow-hidden bg-white pb-28 pt-20 sm:py-32 lg:h-screen">
+        <section id="details" class="relative overflow-hidden bg-white pb-28 pt-20 sm:py-32 min-h-screen">
             <h2 class="font-display text-3xl tracking-tight text-slate-900 text-center sm:text-4xl md:text-5xl">
                 {{ __('public.slots.details') }}
             </h2>
-            <form class="mt-20 mx-auto max-w-5xl grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6" method="POST"
-                x-bind:action="'{{ route('book_slot', ['slot' => 'XX']) }}'.replace('XX', selectedSlot)">
+            <form class="mt-8 md:mt-20 px-4 mx-auto max-w-5xl grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
+                method="POST" x-bind:action="'{{ route('book_slot', ['slot' => 'XX']) }}'.replace('XX', selectedSlot)">
                 @csrf
                 <input type="hidden" name="slot_id" x-bind:value="selectedSlot">
                 <div class="sm:col-span-3">
@@ -140,10 +137,10 @@
                     </div>
                 </fieldset>
 
-                <div class="sm:col-span-6 pt-4">
+                <div class="sm:col-span-6 pt-4 flex items-start">
+                    <input id="commitment" name="commitment" type="checkbox"
+                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 mr-3">
                     <label for="commitment" class="block text-sm font-medium leading-6 text-gray-900">
-                        <input id="commitment" name="commitment" type="checkbox"
-                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 mr-3">
                         {{ __('public.slots.commitment') }}
                     </label>
                 </div>
