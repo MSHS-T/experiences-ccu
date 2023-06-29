@@ -114,7 +114,7 @@ class Manipulation extends Model
     protected static function booted(): void
     {
         static::created(function (Manipulation $manipulation) {
-            $manipulation->slots()->createMany(SlotGenerator::makeFromManipulation($manipulation));
+            $manipulation->createOrUpdateSlots();
         });
         static::updated(function (Manipulation $manipulation) {
             $changes = $manipulation->getChanges();
@@ -187,6 +187,11 @@ class Manipulation extends Model
         // TODO : store booking statistics
         // TODO : delete slots and bookings
         $this->save();
+    }
+
+    public function createOrUpdateSlots()
+    {
+        $this->slots()->createMany(SlotGenerator::makeFromManipulation($this));
     }
 
     /**
