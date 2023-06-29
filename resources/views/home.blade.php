@@ -3,7 +3,7 @@
 @section('title', __('public.home.page_title'))
 
 @section('content')
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center lg:pt-32 min-h-[95vh] flex flex-col items-center">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center lg:pt-8 min-h-[95vh] flex flex-col items-center">
         <div class="flex-grow pt-8">
             <h1
                 class="mx-auto max-w-5xl font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-5xl lg:text-7xl">
