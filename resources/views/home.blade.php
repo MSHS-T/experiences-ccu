@@ -1,12 +1,12 @@
 @extends('layouts.public')
 
-@section('title', 'Accueil')
+@section('title', __('public.home.page_title'))
 
 @section('content')
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 text-center lg:pt-32 lg:h-screen">
         <h1
             class="mx-auto max-w-5xl font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-5xl lg:text-7xl">
-            Plateforme expérimentale dédiée à la recherche sur le
+            {{ __('public.home.title1') }}
             <span class="relative text-blue-600 whitespace-nowrap">
                 <svg aria-hidden="true" viewBox="0 0 418 42" class="absolute left-0 top-2/3 h-[0.58em] w-full fill-blue-300/70"
                     preserveAspectRatio="none">
@@ -15,7 +15,7 @@
                     </path>
                 </svg>
                 <span class="relative">
-                    comportement humain
+                    {{ __('public.home.title2') }}
                 </span>
             </span>
         </h1>
@@ -26,11 +26,11 @@
             <a class="group inline-flex ring-1 items-center justify-center rounded-full py-2 px-4 text-sm focus:outline-none ring-slate-200 text-slate-700 hover:text-slate-900 hover:ring-slate-300 active:bg-slate-100 active:text-slate-600 focus-visible:outline-blue-600 focus-visible:ring-slate-300"
                 href="#manipulations">
                 <x-fas-arrow-down class="h-4 w-4 fill-blue-600" />
-                <span class="ml-3">Voir les manipulations</span>
+                <span class="ml-3">{{ __('public.home.show_manips') }}</span>
             </a>
         </div>
         <div class="mt-12 lg:mt-24">
-            <p class="font-display text-lg text-slate-900">Financé par</p>
+            <p class="font-display text-lg text-slate-900">{{ __('public.home.funded_by') }}</p>
             <ul role="list"
                 class="mt-8 sm:mx-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-center gap-y-8 sm:gap-x-10">
                 <img alt="Université Toulouse-Jean Jaurès" class="h-12 sm:h-20"
@@ -62,12 +62,12 @@
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
             <div class="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
                 <h2 class="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
-                    Liste des manipulations
+                    {{ __('public.home.manip_list') }}
                 </h2>
             </div>
             @if ($manipulations->isEmpty())
                 <p class="mt-32 text-xl text-center tracking-tight text-blue-100">
-                    Aucune manipulation disponible en ce moment, revenez plus tard.
+                    {{ __('public.home.no_manips') }}
                 </p>
             @else
                 <div class="mt-16 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-20 lg:grid-cols-9 lg:pt-0"
@@ -175,9 +175,9 @@
                                 </div>
                                 <div class="lg:col-span-3 flex justify-end items-end">
                                     <a class="group inline-flex items-center justify-center space-x-2 rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600"
-                                        href="/mes-inscriptions">
+                                        href="{{ route('manipulation_slots', ['manipulation' => $m]) }}">
                                         <span>
-                                            Voir les créneaux
+                                            {{ __('public.home.show_slots') }}
                                         </span>
                                         <x-fas-arrow-right class="h-5 w-5" />
                                     </a>

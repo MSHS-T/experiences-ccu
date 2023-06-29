@@ -11,7 +11,7 @@ return [
 
     // User
     'first_name' => 'Prénom',
-    'last_name'  => 'Nom',
+    'last_name'  => 'Nom de famille',
     'email'      => 'Adresse e-mail',
     'role'       => 'Rôle',
 
@@ -34,6 +34,9 @@ return [
     'available_hours' => 'Horaires',
     'requirements'    => 'Pré-requis',
     'published'       => 'Publié ?',
+
+    // Booking
+    'birthdate' => 'Date de Naissance',
 
     // Hours
     'monday'    => 'Lundi',

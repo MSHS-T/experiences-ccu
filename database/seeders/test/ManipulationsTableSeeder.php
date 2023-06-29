@@ -76,6 +76,7 @@ class ManipulationsTableSeeder extends Seeder
             if ($i <= 4) {
                 $manip->published = true;
                 $manip->save();
+                $manip->createOrUpdateSlots();
             }
 
             $nbManagers = random_int(1, 2);
