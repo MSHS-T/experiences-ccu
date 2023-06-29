@@ -35,16 +35,16 @@
             <p class="font-display text-lg text-slate-900">{{ __('public.home.funded_by') }}</p>
             <ul role="list"
                 class="mt-8 sm:mx-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-center gap-y-8 sm:gap-x-10">
-                <img alt="Université Toulouse-Jean Jaurès" class="h-12 sm:h-20"
+                <img alt="Université Toulouse-Jean Jaurès" class="h-12 lg:h-16"
                     src="{{ Vite::asset('resources/images/ut2j.png') }}">
-                <img alt="Maison des Sciences Humaines et de la Société de Toulouse" class="h-12 sm:h-20"
+                <img alt="Maison des Sciences Humaines et de la Société de Toulouse" class="h-12 lg:h-16"
                     src="{{ Vite::asset('resources/images/mshs-toulouse.png') }}">
-                <img alt="Centre National de la Recherche Scientifique" class="h-12 sm:h-20"
+                <img alt="Centre National de la Recherche Scientifique" class="h-12 lg:h-16"
                     src="{{ Vite::asset('resources/images/logo-cnrs.png') }}">
-                <img alt="Région Occitanie" class="h-12 sm:h-20" src="{{ Vite::asset('resources/images/occitanie.png') }}">
-                <img alt="Toulouse Métropole" class="h-12 sm:h-20"
+                <img alt="Région Occitanie" class="h-12 lg:h-16" src="{{ Vite::asset('resources/images/occitanie.png') }}">
+                <img alt="Toulouse Métropole" class="h-12 lg:h-16"
                     src="{{ Vite::asset('resources/images/toulouse-metropole.png') }}">
-                <img alt="Programme Initiatives d'Excellence" class="h-12 sm:h-20"
+                <img alt="Programme Initiatives d'Excellence" class="h-12 lg:h-16"
                     src="{{ Vite::asset('resources/images/idex.png') }}">
                 <li>
                     <ul role="list" class="flex flex-col items-center gap-y-8 sm:flex-row sm:gap-x-12 sm:gap-y-0">
