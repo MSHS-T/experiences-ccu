@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property string $first_name
  * @property string $last_name
  * @property string $email
+ * @property \Illuminate\Support\Carbon $birthdate
  * @property bool $confirmed
  * @property string $confirmation_code
  * @property \Illuminate\Support\Carbon $confirm_before

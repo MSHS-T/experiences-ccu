@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id
  * @property string $hashed_email
+ * @property \Illuminate\Support\Carbon $birthdate
  * @property int $booking_made
  * @property int $booking_confirmed
  * @property int $booking_confirmed_honored
@@ -43,6 +44,7 @@ class BookingHistory extends Model
      */
     protected $fillable = [
         'hashed_email',
+        'birthdate',
         'booking_made',
         'booking_confirmed',
         'booking_confirmed_honored',
@@ -57,6 +59,7 @@ class BookingHistory extends Model
      */
     protected $casts = [
         'id'                          => 'integer',
+        'birthdate'                   => 'date',
         'booking_made'                => 'integer',
         'booking_confirmed'           => 'integer',
         'booking_confirmed_honored'   => 'integer',
