@@ -3,33 +3,35 @@
 @section('title', __('public.home.page_title'))
 
 @section('content')
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 text-center lg:pt-32 lg:h-screen">
-        <h1
-            class="mx-auto max-w-5xl font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-5xl lg:text-7xl">
-            {{ __('public.home.title1') }}
-            <span class="relative text-blue-600 whitespace-nowrap">
-                <svg aria-hidden="true" viewBox="0 0 418 42" class="absolute left-0 top-2/3 h-[0.58em] w-full fill-blue-300/70"
-                    preserveAspectRatio="none">
-                    <path
-                        d="M203.371.916c-26.013-2.078-76.686 1.963-124.73 9.946L67.3 12.749C35.421 18.062 18.2 21.766 6.004 25.934 1.244 27.561.828 27.778.874 28.61c.07 1.214.828 1.121 9.595-1.176 9.072-2.377 17.15-3.92 39.246-7.496C123.565 7.986 157.869 4.492 195.942 5.046c7.461.108 19.25 1.696 19.17 2.582-.107 1.183-7.874 4.31-25.75 10.366-21.992 7.45-35.43 12.534-36.701 13.884-2.173 2.308-.202 4.407 4.442 4.734 2.654.187 3.263.157 15.593-.78 35.401-2.686 57.944-3.488 88.365-3.143 46.327.526 75.721 2.23 130.788 7.584 19.787 1.924 20.814 1.98 24.557 1.332l.066-.011c1.201-.203 1.53-1.825.399-2.335-2.911-1.31-4.893-1.604-22.048-3.261-57.509-5.556-87.871-7.36-132.059-7.842-23.239-.254-33.617-.116-50.627.674-11.629.54-42.371 2.494-46.696 2.967-2.359.259 8.133-3.625 26.504-9.81 23.239-7.825 27.934-10.149 28.304-14.005.417-4.348-3.529-6-16.878-7.066Z">
-                    </path>
-                </svg>
-                <span class="relative">
-                    {{ __('public.home.title2') }}
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center lg:pt-32 min-h-[95vh] flex flex-col items-center">
+        <div class="flex-grow pt-8">
+            <h1
+                class="mx-auto max-w-5xl font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-5xl lg:text-7xl">
+                {{ __('public.home.title1') }}
+                <span class="relative text-blue-600 whitespace-nowrap">
+                    <svg aria-hidden="true" viewBox="0 0 418 42"
+                        class="absolute left-0 top-2/3 h-[0.58em] w-full fill-blue-300/70" preserveAspectRatio="none">
+                        <path
+                            d="M203.371.916c-26.013-2.078-76.686 1.963-124.73 9.946L67.3 12.749C35.421 18.062 18.2 21.766 6.004 25.934 1.244 27.561.828 27.778.874 28.61c.07 1.214.828 1.121 9.595-1.176 9.072-2.377 17.15-3.92 39.246-7.496C123.565 7.986 157.869 4.492 195.942 5.046c7.461.108 19.25 1.696 19.17 2.582-.107 1.183-7.874 4.31-25.75 10.366-21.992 7.45-35.43 12.534-36.701 13.884-2.173 2.308-.202 4.407 4.442 4.734 2.654.187 3.263.157 15.593-.78 35.401-2.686 57.944-3.488 88.365-3.143 46.327.526 75.721 2.23 130.788 7.584 19.787 1.924 20.814 1.98 24.557 1.332l.066-.011c1.201-.203 1.53-1.825.399-2.335-2.911-1.31-4.893-1.604-22.048-3.261-57.509-5.556-87.871-7.36-132.059-7.842-23.239-.254-33.617-.116-50.627.674-11.629.54-42.371 2.494-46.696 2.967-2.359.259 8.133-3.625 26.504-9.81 23.239-7.825 27.934-10.149 28.304-14.005.417-4.348-3.529-6-16.878-7.066Z">
+                        </path>
+                    </svg>
+                    <span class="relative">
+                        {{ __('public.home.title2') }}
+                    </span>
                 </span>
-            </span>
-        </h1>
-        <div class="mx-auto mt-6 max-w-3xl taxt-base lg:text-lg tracking-tight text-slate-700 text-justify">
-            {!! $presentation_text !!}
+            </h1>
+            <div class="mx-auto mt-6 max-w-3xl taxt-base lg:text-lg tracking-tight text-slate-700 text-justify">
+                {!! $presentation_text !!}
+            </div>
+            <div class="mt-10 flex justify-center gap-x-6">
+                <a class="group inline-flex ring-1 items-center justify-center rounded-full py-2 px-4 text-sm focus:outline-none ring-slate-200 text-slate-700 hover:text-slate-900 hover:ring-slate-300 active:bg-slate-100 active:text-slate-600 focus-visible:outline-blue-600 focus-visible:ring-slate-300"
+                    href="#manipulations">
+                    <x-fas-arrow-down class="h-4 w-4 fill-blue-600" />
+                    <span class="ml-3">{{ __('public.home.show_manips') }}</span>
+                </a>
+            </div>
         </div>
-        <div class="mt-10 flex justify-center gap-x-6">
-            <a class="group inline-flex ring-1 items-center justify-center rounded-full py-2 px-4 text-sm focus:outline-none ring-slate-200 text-slate-700 hover:text-slate-900 hover:ring-slate-300 active:bg-slate-100 active:text-slate-600 focus-visible:outline-blue-600 focus-visible:ring-slate-300"
-                href="#manipulations">
-                <x-fas-arrow-down class="h-4 w-4 fill-blue-600" />
-                <span class="ml-3">{{ __('public.home.show_manips') }}</span>
-            </a>
-        </div>
-        <div class="mt-12 lg:mt-24">
+        <div class="pt-8 mb-8">
             <p class="font-display text-lg text-slate-900">{{ __('public.home.funded_by') }}</p>
             <ul role="list"
                 class="mt-8 sm:mx-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-center gap-y-8 sm:gap-x-10">
@@ -55,7 +57,7 @@
             </ul>
         </div>
     </div>
-    <section id="manipulations" class="relative overflow-hidden bg-blue-600 pb-28 pt-20 sm:py-32 lg:h-screen">
+    <section id="manipulations" class="relative overflow-hidden bg-blue-600 pb-28 pt-20 sm:py-32 min-h-screen">
         <img alt="" loading="lazy" width="2245" height="1636" decoding="async" data-nimg="1"
             class="absolute left-1/2 top-1/2 max-w-none translate-x-[-44%] translate-y-[-42%]" style="color:transparent"
             src="{{ Vite::asset('resources/images/background-features.jpg') }}">
@@ -70,7 +72,7 @@
                     {{ __('public.home.no_manips') }}
                 </p>
             @else
-                <div class="mt-16 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-20 lg:grid-cols-9 lg:pt-0"
+                <div class="mt-8 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-16 lg:mt-24 lg:grid-cols-9 lg:pt-0"
                     x-data="{ selected: {{ $selectedManipulation }} }">
                     <div class="-mx-4 flex overflow-x-auto pb-4 sm:mx-0 lg:overflow-visible lg:pb-0 lg:col-span-3">
                         <div class="relative w-full z-10 flex space-x-4 whitespace-nowrap px-4 sm:mx-auto sm:px-0 lg:mx-0 lg:block lg:space-x-0 lg:space-y-4 lg:whitespace-normal"
