@@ -68,7 +68,6 @@ class ManipulationsTableSeeder extends Seeder
                 'duration'        => 15 * random_int(1, 6),
                 'start_date'      => $startDate->format('Y-m-d'),
                 'end_date'        => $endDate->format('Y-m-d'),
-                'location'        => 'Toulouse',
                 'requirements'    => $faker->sentences(random_int(1, 5)),
                 'available_hours' => $hours
             ]);

@@ -60,6 +60,11 @@ class ManageSettings extends SettingsPage
                         ->label(__('attributes.presentation_text'))
                         ->disableAllToolbarButtons()
                         ->enableToolbarButtons(['bold', 'italic', 'strike', 'link', 'bulletList', 'orderedList'])
+                        ->required(),
+                    RichEditor::make('access_instructions')
+                        ->label(__('attributes.access_instructions'))
+                        ->disableAllToolbarButtons()
+                        ->enableToolbarButtons(['bold', 'italic', 'strike', 'link', 'bulletList', 'orderedList'])
                         ->required()
                 ])
         ];

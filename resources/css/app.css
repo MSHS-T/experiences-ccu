@@ -5,3 +5,7 @@
 html {
     scroll-behavior: smooth;
 }
+
+.access_instructions ul {
+    @apply list-disc pl-2;
+}

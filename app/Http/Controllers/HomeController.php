@@ -20,7 +20,8 @@ class HomeController extends Controller
         return view('home', [
             'manipulations'        => $manipulations,
             'selectedManipulation' => $manipulations->first()?->id,
-            'presentation_text'    => $settings->presentation_text
+            'presentation_text'    => $settings->presentation_text,
+            'access_instructions'  => $settings->access_instructions,
         ]);
     }
 }

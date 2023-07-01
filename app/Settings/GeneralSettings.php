@@ -12,6 +12,7 @@ class GeneralSettings extends Settings
     public int $manipulation_overbooking;
     public int $email_reminder_delay;
     public string $presentation_text;
+    public string $access_instructions;
 
     public static function group(): string
     {
