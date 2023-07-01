@@ -22,7 +22,7 @@ class CreateManipulation extends CreateRecord
         return $data;
     }
 
-    protected function mutateFormDataBeforeSave(array $data): array
+    protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['requirements'] = collect($data['requirements'])
             ->map(fn ($r) => array_values(Arr::wrap($r)))
