@@ -18,21 +18,29 @@ class PlateauxTableSeeder extends Seeder
      */
     public function run()
     {
+        $names = [
+            'BabyLab'     => 'recherches sur le développement, les capacités sensori-motrices, cognitives et communicatives des enfants',
+            'CLOE'        => 'plateforme de mesures comportementales liées à la perception de productions langagières',
+            'PACOMP'      => 'système d’acquisition de données physiologiques',
+            'ImNum'       => 'Composante portative d’acquisition d’images numériques',
+            'OCULOMÉTRIE' => 'systèmes d’analyse de mouvements oculaires',
+            'PETRA'       => 'recherche sur la perception du son',
+            'ROB'         => 'étude de l’interaction Homme-Robot',
+            'SIMULAUTO'   => 'simulateur de conduite automobile',
+            'TAB'         => 'étude des réponses comportementales au niveau des apprentissages scolaires et au niveau des processus cognitifs liée au vieillissement',
+        ];
+
         $managers = User::role('plateau_manager')->get();
         $equipments = Equipment::all();
         $faker = Faker::create('fr_FR');
 
-        $this->command->info("Seeding test plateaux with randomized manager.");
-        $nbPlateaux = 10;
-        $bar = $this->command->getOutput()->createProgressBar($nbPlateaux);
+        $this->command->info("Seeding plateaux with randomized manager.");
+        $bar = $this->command->getOutput()->createProgressBar(count($names));
         $bar->start();
-        foreach (range(1, $nbPlateaux) as $index) {
-            $description = array_map(function ($p) {
-                return '<p>' . $p . '</p>';
-            }, $faker->paragraphs(3));
+        foreach ($names as $name => $description) {
             $plateau = Plateau::make([
-                'name'        => "Plateau $index",
-                'description' => implode('', $description)
+                'name'        => $name,
+                'description' => '<p>' . $description . '</p>'
             ]);
             /** @var Plateau $plateau */
             $plateau->manager()->associate($managers->random());
