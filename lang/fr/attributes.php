@@ -35,6 +35,11 @@ return [
     'requirements'    => 'Critères d\'inclusion',
     'published'       => 'Publié ?',
 
+    // Attribution
+    'manipulation_manager' => 'Responsable de manipulation',
+    'allowed_halfdays'     => 'Demi-journées autorisées',
+    'creator'              => 'Créateur',
+
     // Booking
     'birthdate' => 'Date de Naissance',
 
@@ -44,6 +49,8 @@ return [
     'wednesday' => 'Mercredi',
     'thursday'  => 'Jeudi',
     'friday'    => 'Vendredi',
+    'am'        => 'Matin',
+    'pm'        => 'Après-midi',
     'start_am'  => 'Début de matinée',
     'end_am'    => 'Fin de matinée',
     'start_pm'  => 'Début d\'après-midi',
