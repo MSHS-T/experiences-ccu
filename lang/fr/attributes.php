@@ -32,7 +32,7 @@ return [
     'dates'           => 'Dates',
     'location'        => 'Emplacement',
     'available_hours' => 'Horaires',
-    'requirements'    => 'Pré-requis',
+    'requirements'    => 'Critères d\'inclusion',
     'published'       => 'Publié ?',
 
     // Booking

@@ -13,6 +13,9 @@
                     <h2 class="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
                         {{ __('public.slots.page_title', ['manipulation' => $manipulationName]) }}
                     </h2>
+                    <h3 class="font-display text-2xl tracking-tight text-white sm:text-3xl md:text-4xl">
+                        {{ $manipulationName }}
+                    </h3>
                 </div>
                 @if ($slots->isEmpty())
                     <p class="mt-32 text-xl text-center tracking-tight text-blue-100">
