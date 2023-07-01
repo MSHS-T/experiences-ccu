@@ -21,7 +21,6 @@ return new class extends Migration
             $table->unsignedInteger('duration');
             $table->date('start_date');
             $table->date('end_date');
-            $table->string('location');
             $table->json('available_hours');
             $table->json('requirements');
             $table->boolean('published')->default(false);

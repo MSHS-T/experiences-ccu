@@ -58,7 +58,7 @@ class ManipulationResource extends Resource
                     ->label(__('attributes.plateau'))
                     ->columnSpan([
                         'default' => 1,
-                        'md'      => 1
+                        'md'      => 2
                     ])
                     ->relationship('plateau', 'name')
                     ->required(),
@@ -70,10 +70,6 @@ class ManipulationResource extends Resource
                     ])
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('location')
-                    ->label(__('attributes.location'))
-                    ->maxLength(255)
-                    ->required(),
                 Forms\Components\RichEditor::make('description')
                     ->label(__('attributes.description'))
                     ->required()
@@ -217,10 +213,6 @@ class ManipulationResource extends Resource
                     ->label(__('attributes.end_date'))
                     ->sortable()
                     ->date('d/m/Y'),
-                Tables\Columns\TextColumn::make('location')
-                    ->label(__('attributes.location'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->sortable(),
                 Tables\Columns\IconColumn::make('published')
                     ->label(__('attributes.published'))
                     ->boolean(),

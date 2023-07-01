@@ -2,14 +2,15 @@
 
 return [
     'home' => [
-        'page_title'  => 'Accueil',
-        'title1'      => 'Plateforme expérimentale dédiée à la recherche sur le',
-        'title2'      => 'comportement humain',
-        'show_manips' => 'Voir les manipulations',
-        'funded_by'   => 'Financé par',
-        'manip_list'  => 'Liste des manipulations',
-        'no_manips'   => 'Aucune manipulation disponible en ce moment, revenez plus tard.',
-        'show_slots'  => 'Voir les créneaux',
+        'page_title'          => 'Accueil',
+        'title1'              => 'Plateforme expérimentale dédiée à la recherche sur le',
+        'title2'              => 'comportement humain',
+        'show_manips'         => 'Voir les manipulations',
+        'funded_by'           => 'Financé par',
+        'manip_list'          => 'Liste des manipulations',
+        'no_manips'           => 'Aucune manipulation disponible en ce moment, revenez plus tard.',
+        'show_slots'          => 'Voir les créneaux',
+        'access_instructions' => 'Plan d\'accès',
     ],
     'slots' => [
         'page_title'         => 'Liste des créneaux',

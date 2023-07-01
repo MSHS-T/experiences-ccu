@@ -27,7 +27,6 @@ use Illuminate\Support\Stringable;
  * @property int $duration
  * @property \Illuminate\Support\Carbon $start_date
  * @property \Illuminate\Support\Carbon $end_date
- * @property string $location
  * @property array $available_hours
  * @property array $requirements
  * @property bool $published
@@ -49,7 +48,6 @@ use Illuminate\Support\Stringable;
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereDuration($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereLocation($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation wherePlateauId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereRequirements($value)
@@ -77,7 +75,6 @@ class Manipulation extends Model
         'duration',
         'start_date',
         'end_date',
-        'location',
         'available_hours',
         'requirements',
     ];
