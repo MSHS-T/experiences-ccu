@@ -14,23 +14,21 @@
 
 <body class="flex flex-col h-full min-h-screen">
 
-    <header class="py-4 h-[10vh]">
-        <div class="">
-            <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-50 flex justify-between items-center">
-                <div class="flex items-center md:gap-x-12 font-bold tracking-wide text-xl">
-                    <a aria-label="Home" href="{{ route('home') }}">
-                        {{ config('app.name') }}
-                    </a>
-                </div>
-                <div class="flex items-center gap-x-5 md:gap-x-8">
+    <header class="py-4 h-[5vh]">
+        <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-50 flex justify-between items-center">
+            <div class="flex items-center md:gap-x-12 font-bold tracking-wide text-xl">
+                <a aria-label="Home" href="{{ route('home') }}">
+                    {{ config('app.name') }}
+                </a>
+            </div>
+            <div class="flex items-center gap-x-5 md:gap-x-8">
 
-                    <a class="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600"
-                        href="/mes-inscriptions">
-                        Mes inscriptions
-                    </a>
-                </div>
-            </nav>
-        </div>
+                <a class="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600"
+                    href="/mes-inscriptions">
+                    Mes inscriptions
+                </a>
+            </div>
+        </nav>
     </header>
 
     <main class="flex-grow">

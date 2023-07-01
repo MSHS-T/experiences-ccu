@@ -3,10 +3,12 @@
 @section('title', __('public.home.page_title'))
 
 @section('content')
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center lg:pt-8 min-h-[95vh] flex flex-col items-center">
-        <div class="flex-grow pt-8">
+    <div
+        class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center lg:pt-8 min-h-[95vh] flex flex-col justify-between items-center">
+        <div class="h-12 lg:h-16"></div>
+        <div class="">
             <h1
-                class="mx-auto max-w-5xl font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-5xl lg:text-7xl">
+                class="mx-auto max-w-5xl font-display text-3xl font-medium tracking-tight text-slate-900 sm:text-5xl md:text-6xl">
                 {{ __('public.home.title1') }}
                 <span class="relative text-blue-600 whitespace-nowrap">
                     <svg aria-hidden="true" viewBox="0 0 418 42"
@@ -20,7 +22,7 @@
                     </span>
                 </span>
             </h1>
-            <div class="mx-auto mt-6 max-w-3xl taxt-base lg:text-lg tracking-tight text-slate-700 text-justify">
+            <div class="mx-auto pt-6 max-w-3xl taxt-base lg:text-lg tracking-tight text-slate-700 text-justify">
                 {!! $presentation_text !!}
             </div>
             <div class="mt-10 flex justify-center gap-x-6">
@@ -31,30 +33,9 @@
                 </a>
             </div>
         </div>
-        <div class="pt-8 mb-8">
-            <p class="font-display text-lg text-slate-900">{{ __('public.home.funded_by') }}</p>
-            <ul role="list"
-                class="mt-8 sm:mx-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 place-items-center gap-y-8 sm:gap-x-10">
-                <img alt="Université Toulouse-Jean Jaurès" class="h-12 lg:h-16"
-                    src="{{ Vite::asset('resources/images/ut2j.png') }}">
-                <img alt="Maison des Sciences Humaines et de la Société de Toulouse" class="h-12 lg:h-16"
-                    src="{{ Vite::asset('resources/images/mshs-toulouse.png') }}">
-                <img alt="Centre National de la Recherche Scientifique" class="h-12 lg:h-16"
-                    src="{{ Vite::asset('resources/images/logo-cnrs.png') }}">
-                <img alt="Région Occitanie" class="h-12 lg:h-16" src="{{ Vite::asset('resources/images/occitanie.png') }}">
-                <img alt="Toulouse Métropole" class="h-12 lg:h-16"
-                    src="{{ Vite::asset('resources/images/toulouse-metropole.png') }}">
-                <img alt="Programme Initiatives d'Excellence" class="h-12 lg:h-16"
-                    src="{{ Vite::asset('resources/images/idex.png') }}">
-                <li>
-                    <ul role="list" class="flex flex-col items-center gap-y-8 sm:flex-row sm:gap-x-12 sm:gap-y-0">
-                    </ul>
-                </li>
-                <li>
-                    <ul role="list" class="flex flex-col items-center gap-y-8 sm:flex-row sm:gap-x-12 sm:gap-y-0">
-                    </ul>
-                </li>
-            </ul>
+        <div class="pt-8 mb-8 flex justify-center">
+            <img alt="Maison des Sciences Humaines et de la Société de Toulouse" class="h-12 lg:h-16"
+                src="{{ Vite::asset('resources/images/mshs-toulouse.png') }}">
         </div>
     </div>
     <section id="manipulations" class="relative overflow-hidden bg-blue-600 pb-28 pt-20 sm:py-32 min-h-screen">
