@@ -35,7 +35,7 @@ class EquipmentsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('attributes.name'))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('quantity')
+                Tables\Columns\TextColumn::make('pivot.quantity')
                     ->label(__('attributes.quantity'))
                     ->sortable(),
             ])
