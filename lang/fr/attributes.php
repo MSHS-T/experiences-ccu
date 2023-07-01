@@ -56,6 +56,7 @@ return [
     'email_reminder_delay'       => 'Délai avant réservation pour envoi du premier rappel par e-mail',
     'manipulation_overbooking'   => 'Pourcentage de surréservation des créneaux de manipulation',
     'presentation_text'          => 'Texte de présentation du site (visible sur la page d\'accueil)',
+    'access_instructions'        => 'Instructions d\'accès',
 
     // Roles
     'roles' => [
