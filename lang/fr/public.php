@@ -12,10 +12,10 @@ return [
         'show_slots'  => 'Voir les créneaux',
     ],
     'slots' => [
-        'page_title'         => 'Créneaux :manipulation',
+        'page_title'         => 'Liste des créneaux',
         'show_more_dates'    => 'Voir plus de dates',
         'details'            => 'Vos coordonnées',
-        'check_requirements' => 'Vérification des pré-requis',
+        'check_requirements' => 'Vérification des critères d\'inclusion',
         'commitment'         => 'En vous inscrivant sur ce créneau, vous attestez que les informations fournies sont vraies, et vous engagez à honorer le rendez-vous.',
         'confirm_booking'    => 'Confirmer mon inscription'
     ]
