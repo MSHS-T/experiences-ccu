@@ -156,7 +156,7 @@
                                         class="flex-grow rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight space-y-4 access_instructions">
                                         {!! $access_instructions !!}
                                         <div class="flex justify-center">
-                                            <a href="{{ config('collabccu.access_map') }}" target="_blank"
+                                            <a href="{{ asset(config('collabccu.access_map')) }}" target="_blank"
                                                 class="inline-flex items-center gap-x-1.5 rounded-full px-4 py-2 text-sm font-medium text-blue-700 ring-1 ring-inset ring-blue-200">
                                                 <x-fas-route class="h-3 w-3" />
                                                 {{ __('public.home.access_instructions') }}
