@@ -10,6 +10,7 @@ use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Support\Arr;
+use STS\FilamentImpersonate\Tables\Actions\Impersonate;
 
 class UserResource extends Resource
 {
@@ -80,6 +81,7 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
+                Impersonate::make()->redirectTo(route('filament.admin.pages.dashboard')),
                 Tables\Actions\EditAction::make()
                     ->using(function (User $record, array $data): User {
                         $role = Arr::get($data, 'role', null);
