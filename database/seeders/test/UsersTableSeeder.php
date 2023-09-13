@@ -20,8 +20,6 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $roles = config('collabccu.roles');
-        $faker = Faker::create('fr_FR');
         $this->command->info("Seeding test users");
         $nbRespPlateau = 3;
         $nbRespManip = 5;
