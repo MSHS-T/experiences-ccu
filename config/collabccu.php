@@ -33,21 +33,27 @@ return [
             'list'   => ['administrator', 'plateau_manager'],
             'create' => ['administrator', 'plateau_manager'],
             'edit'   => ['administrator', 'plateau_manager'],
-            'delete' => ['administrator', 'plateau_manager'],
+            'delete' => ['administrator'],
         ],
         'plateau' => [
             'list'   => ['administrator', 'plateau_manager'],
             'create' => ['administrator', 'plateau_manager'],
             'edit'   => ['administrator', 'plateau_manager'],
-            'delete' => ['administrator', 'plateau_manager'],
+            'delete' => ['administrator'],
+        ],
+        'attribution' => [
+            'list'    => ['administrator', 'plateau_manager', 'manipulation_manager'],
+            'edit'    => ['administrator', 'plateau_manager'],
+            'create'  => ['administrator', 'plateau_manager'],
+            'delete'  => ['administrator', 'plateau_manager'],
         ],
         'manipulation' => [
             'list'    => ['administrator', 'plateau_manager', 'manipulation_manager'],
-            'edit'    => ['administrator', 'plateau_manager', 'manipulation_manager'],
-            'create'  => ['administrator', 'plateau_manager', 'manipulation_manager'],
-            'delete'  => ['administrator', 'plateau_manager', 'manipulation_manager'],
-            'archive' => ['administrator', 'plateau_manager'],
+            'edit'    => ['administrator', 'manipulation_manager'],
+            'create'  => ['administrator', 'manipulation_manager'],
             'publish' => ['administrator', 'plateau_manager'],
+            'archive' => ['administrator',],
+            'delete'  => ['administrator'],
         ],
     ]
 ];

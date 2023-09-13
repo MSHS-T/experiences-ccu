@@ -11,6 +11,7 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
+use Illuminate\Support\Facades\Auth;
 
 class ManageSettings extends SettingsPage
 {
@@ -20,6 +21,16 @@ class ManageSettings extends SettingsPage
     protected static ?int $navigationSort     = 50;
     protected static ?string $navigationGroup = 'Administration';
     protected ?string $heading                = 'Réglages';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return Auth::user()->hasRole('administrator');
+    }
+
+    public function mount(): void
+    {
+        abort_unless(Auth::user()->hasRole('administrator'), 403);
+    }
 
     public function form(Form $form): Form
     {

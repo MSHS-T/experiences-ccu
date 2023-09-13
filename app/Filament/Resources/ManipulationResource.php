@@ -296,24 +296,16 @@ class ManipulationResource extends Resource
                     ->action(fn (Manipulation $record) => $record->togglePublished())
                     ->requiresConfirmation()
                     ->color(fn (Manipulation $record) => $record->published ? 'warning' : 'success')
-                    ->hidden(
-                        fn (Manipulation $record) => !(Auth::user()->hasRole('administrator')
-                            || (Auth::user()->can('manipulation.publish') && $record->plateau->manager_id !== Auth::id())
-                        )
-                    )
-                    ->disabled(
-                        fn (Manipulation $record) => !(Auth::user()->hasRole('administrator')
-                            || (Auth::user()->can('manipulation.publish') && $record->plateau->manager_id !== Auth::id())
-                        )
-                    ),
+                    ->hidden(fn (Manipulation $record) => !Auth::user()->can('publish', $record))
+                    ->disabled(fn (Manipulation $record) => !Auth::user()->can('publish', $record)),
                 Tables\Actions\Action::make('archive')
                     ->label(__('actions.archive'))
                     ->icon('fas-calendar-check')
                     ->action(fn (Manipulation $record) => $record->archive())
                     ->requiresConfirmation()
                     ->color('danger')
-                    ->hidden(fn (Manipulation $record) => !Auth::user()->can('manipulation.archive') || $record->end_date->isAfter(Carbon::now()))
-                    ->disabled(fn (Manipulation $record) => !Auth::user()->can('manipulation.archive') || $record->end_date->isAfter(Carbon::now())),
+                    ->hidden(fn (Manipulation $record) => !Auth::user()->can('archive', $record))
+                    ->disabled(fn (Manipulation $record) => !Auth::user()->can('archive', $record)),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
