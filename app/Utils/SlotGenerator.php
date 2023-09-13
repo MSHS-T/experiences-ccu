@@ -96,8 +96,8 @@ class SlotGenerator
             $cursorDate->addDay()->startOfDay();
         }
 
-        ray($otherSlots->map(fn ($s) => $s['start']->format('Y-m-d') . ':' . $s['start']->format('H:i') . '-' . $s['end']->format('H:i')));
-        ray($slots->map(fn ($s) => $s['start']->format('Y-m-d') . ':' . $s['start']->format('H:i') . '-' . $s['end']->format('H:i')));
+        // ray($otherSlots->map(fn ($s) => $s['start']->format('Y-m-d') . ':' . $s['start']->format('H:i') . '-' . $s['end']->format('H:i')));
+        // ray($slots->map(fn ($s) => $s['start']->format('Y-m-d') . ':' . $s['start']->format('H:i') . '-' . $s['end']->format('H:i')));
 
         return $slots;
     }
