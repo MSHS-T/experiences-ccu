@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Carbon\Carbon;
-use Database\Seeders\Test\TestDatabaseSeeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
@@ -36,7 +35,7 @@ class DatabaseSeeder extends Seeder
 
 
         if (!App::isProduction()) {
-            $this->call(TestDatabaseSeeder::class);
+            $this->call(Test\TestDatabaseSeeder::class);
         }
     }
 }
