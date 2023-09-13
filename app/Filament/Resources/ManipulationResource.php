@@ -8,8 +8,11 @@ use App\Models\Plateau;
 use App\Utils\SlotGenerator;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
 use Filament\Forms;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
+use Filament\Support\Enums\ActionSize;
 use Filament\Tables\Table;
 use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
@@ -46,6 +49,11 @@ class ManipulationResource extends Resource
                 $get('duration'),
             )
         );
+        $clearHalfDayAction = fn (string $fieldName) => Action::make('emptyHalfDay')
+            ->icon('fas-eraser')
+            ->label(__('actions.clear'))
+            ->action(fn (Set $set) => $set($fieldName, null));
+
         return $form
             ->columns([
                 'default' => 1,
@@ -104,7 +112,7 @@ class ManipulationResource extends Resource
                 TableRepeater::make('requirements')
                     ->label(__('attributes.requirements'))
                     ->emptyLabel(__('messages.no_requirement'))
-                    ->createItemButtonLabel(__('messages.add_requirement'))
+                    ->addActionLabel(__('messages.add_requirement'))
                     ->columnSpan('full')
                     ->hideLabels()
                     ->defaultItems(1)
@@ -112,12 +120,12 @@ class ManipulationResource extends Resource
                     ->formatStateUsing(
                         fn (?Manipulation $record) => collect($record?->requirements ?? [])->map(fn ($r) => ['text' => $r])->all()
                     )
-                    ->disableItemMovement()
+                    ->reorderable(false)
                     ->schema([
                         Forms\Components\TextInput::make('text')
                             ->required()
                             ->columnSpan('full')
-                            ->disableLabel()
+                            ->hiddenLabel()
                             ->maxLength(255)
                     ]),
                 Forms\Components\Section::make('available_hours')
@@ -140,36 +148,54 @@ class ManipulationResource extends Resource
                                 fn ($day) => Forms\Components\Fieldset::make('available_hours.monday')
                                     ->label(__('attributes.' . $day))
                                     ->columnSpan(1)
-                                    ->columns(2)
+                                    ->columns(1)
+                                    ->visible()
                                     ->schema([
                                         Forms\Components\TimePicker::make("available_hours.$day.start_am")
                                             ->label(__('attributes.start_am'))
                                             ->default(self::DEFAULT_HOURS['start_am'])
-                                            ->withoutSeconds()
+                                            ->seconds(false)
                                             ->format('H:i')
-                                            ->displayFormat('H:i'),
+                                            ->displayFormat('H:i')
+                                            ->hintAction($clearHalfDayAction("available_hours.$day.start_am")),
                                         Forms\Components\TimePicker::make("available_hours.$day.end_am")
                                             ->label(__('attributes.end_am'))
                                             ->default(self::DEFAULT_HOURS['end_am'])
-                                            ->withoutSeconds()
+                                            ->seconds(false)
                                             ->format('H:i')
                                             ->displayFormat('H:i')
+                                            ->hintAction($clearHalfDayAction("available_hours.$day.end_am"))
                                             ->requiredWith("available_hours.$day.start_am"),
                                         Forms\Components\TimePicker::make("available_hours.$day.start_pm")
                                             ->label(__('attributes.start_pm'))
                                             ->default(self::DEFAULT_HOURS['start_pm'])
-                                            ->withoutSeconds()
+                                            ->seconds(false)
                                             ->format('H:i')
                                             ->displayFormat('H:i')
+                                            ->hintAction($clearHalfDayAction("available_hours.$day.start_pm"))
                                             ->nullable()
                                             ->after("available_hours.$day.end_am"),
                                         Forms\Components\TimePicker::make("available_hours.$day.end_pm")
                                             ->label(__('attributes.end_pm'))
                                             ->default(self::DEFAULT_HOURS['end_pm'])
-                                            ->withoutSeconds()
+                                            ->seconds(false)
                                             ->format('H:i')
                                             ->displayFormat('H:i')
+                                            ->hintAction($clearHalfDayAction("available_hours.$day.end_pm"))
                                             ->requiredWith("available_hours.$day.start_pm"),
+                                        Forms\Components\Actions::make([
+                                            Action::make('clearDay' . $day)
+                                                ->label(__('actions.clear_day'))
+                                                ->icon('fas-eraser')
+                                                ->color('warning')
+                                                ->size(ActionSize::ExtraSmall)
+                                                ->action(function (Set $set) use ($day) {
+                                                    $set("available_hours.$day.start_am", null);
+                                                    $set("available_hours.$day.end_am", null);
+                                                    $set("available_hours.$day.start_pm", null);
+                                                    $set("available_hours.$day.end_pm", null);
+                                                })
+                                        ])->alignCenter()
                                     ])
                             )
                             ->all()
