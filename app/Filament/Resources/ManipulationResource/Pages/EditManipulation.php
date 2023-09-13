@@ -4,7 +4,7 @@ namespace App\Filament\Resources\ManipulationResource\Pages;
 
 use App\Filament\Resources\ManipulationResource;
 use App\Models\Manipulation;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +35,7 @@ class EditManipulation extends EditRecord
         return $data;
     }
 
-    protected function getActions(): array
+    protected function getHeaderActions(): array
     {
         return [
             Actions\ViewAction::make(),

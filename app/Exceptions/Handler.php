@@ -33,6 +33,6 @@ class Handler extends ExceptionHandler
     {
         return $this->shouldReturnJson($request, $exception)
             ? response()->json(['message' => $exception->getMessage()], 401)
-            : redirect()->guest($exception->redirectTo() ?? route('filament.auth.login'));
+            : redirect()->guest($exception->redirectTo() ?? route('filament.admin.auth.login'));
     }
 }

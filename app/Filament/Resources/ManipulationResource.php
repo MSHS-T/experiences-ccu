@@ -8,11 +8,10 @@ use App\Models\Plateau;
 use App\Utils\SlotGenerator;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
-use Filament\Tables\Filters\Layout;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -260,7 +259,7 @@ class ManipulationResource extends Resource
                             Plateau::all()->pluck('name', 'id')->unique()->all()
                         )
                 ],
-                layout: Layout::AboveContentCollapsible
+                layout: \Filament\Tables\Enums\FiltersLayout::AboveContentCollapsible
             )
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -312,7 +311,7 @@ class ManipulationResource extends Resource
         ];
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return static::getModel()::wherePublished(true)->whereArchived(false)->count();
     }
