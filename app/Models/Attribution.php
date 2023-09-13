@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -68,6 +70,14 @@ class Attribution extends Model
         return $this->belongsTo(User::class, 'creator_id', 'id');
     }
 
+    /**
+     * Scope a query to only include attributions where end_date is in the future
+     */
+    public function scopeNotFinished(Builder $query): void
+    {
+        $query->where('end_date', '>=', now());
+    }
+
     public function getAllowedHalfdaysDisplay(): array
     {
         $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
@@ -84,5 +94,27 @@ class Attribution extends Model
                 return __('attributes.' . $day) . ' ' . __('attributes.' . $halfday);
             })
             ->all();
+    }
+
+    public function getSimplifiedAllowedHalfdaysDisplay(): array
+    {
+        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+        $halfdays = ['am', 'pm'];
+
+        $result = collect();
+        foreach ($days as $day) {
+            $am = $day . '_am';
+            $pm = $day . '_pm';
+            if (in_array($am, $this->allowed_halfdays) && in_array($pm, $this->allowed_halfdays)) {
+                $result->push(__('attributes.' . $day));
+            } else {
+                foreach ($halfdays as $halfday) {
+                    if (in_array($$halfday, $this->allowed_halfdays)) {
+                        $result->push(__('attributes.' . $day) . ' ' . __('attributes.' . $halfday));
+                    }
+                }
+            }
+        }
+        return $result->all();
     }
 }

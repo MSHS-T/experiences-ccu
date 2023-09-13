@@ -39,6 +39,7 @@ return [
     'manipulation_manager' => 'Responsable de manipulation',
     'allowed_halfdays'     => 'Demi-journées autorisées',
     'creator'              => 'Créateur',
+    'attributions'         => 'Attributions',
 
     // Booking
     'birthdate' => 'Date de Naissance',

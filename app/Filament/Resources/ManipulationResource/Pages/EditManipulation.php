@@ -13,6 +13,13 @@ class EditManipulation extends EditRecord
 {
     protected static string $resource = ManipulationResource::class;
 
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            ManipulationResource\Widgets\AttributionOverview::class,
+        ];
+    }
+
     protected function mutateFormDataBeforeFill(array $data): array
     {
         if (filled($data['requirements'])) {
