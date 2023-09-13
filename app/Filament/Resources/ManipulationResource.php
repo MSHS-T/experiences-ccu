@@ -23,10 +23,10 @@ use Illuminate\Support\Str;
 class ManipulationResource extends Resource
 {
     const DEFAULT_HOURS = [
-        'start_am' => '09:00',
+        'start_am' => '08:00',
         'end_am'   => '12:00',
-        'start_pm' => '14:00',
-        'end_pm'   => '17:00',
+        'start_pm' => '13:00',
+        'end_pm'   => '18:00',
     ];
 
     protected static ?string $model = Manipulation::class;
@@ -43,6 +43,7 @@ class ManipulationResource extends Resource
         $computeSlotCount = fn (callable $set, callable $get) => $set(
             'slot_count',
             SlotGenerator::estimateCount(
+                Plateau::find(intval($get('plateau_id'))),
                 $get('start_date'),
                 $get('end_date'),
                 $get('available_hours'),
@@ -108,7 +109,12 @@ class ManipulationResource extends Resource
                     ->label(__('attributes.slot_count'))
                     ->disabled()
                     ->required()
-                    ->minValue(1),
+                    ->minValue(1)
+                    ->suffixAction(
+                        Action::make('refreshSlotCount')
+                            ->icon('fas-arrows-rotate')
+                            ->action($computeSlotCount)
+                    ),
                 TableRepeater::make('requirements')
                     ->label(__('attributes.requirements'))
                     ->emptyLabel(__('messages.no_requirement'))
