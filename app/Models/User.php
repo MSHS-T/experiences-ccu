@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Notifications\AccountCreated as AccountCreatedNotification;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasName;
 use Filament\Panel;
+use Filament\Support\Colors\Color;
 use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -17,6 +19,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Spatie\Color\Hex;
+use Spatie\Color\Rgb;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -66,7 +70,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
  */
-class User extends Authenticatable implements MustVerifyEmail, FilamentUser, HasName
+class User extends Authenticatable implements MustVerifyEmail, FilamentUser, HasName, HasAvatar
 {
     use HasFactory, Notifiable, HasRoles;
 
@@ -124,6 +128,18 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
     public function getFilamentName(): string
     {
         return $this->name;
+    }
+
+    public function getFilamentAvatarUrl(): string
+    {
+        $color = match ($this->roles->first()->name) {
+            'plateau_manager'      => Color::Cyan[900],
+            'manipulation_manager' => Color::Lime[900],
+            default                => Color::Fuchsia[900]
+        };
+        $color = ltrim(Rgb::fromString('rgb(' . $color . ')')->toHex(), '#');
+        $initials = collect(explode(' ', $this->name))->map(fn ($str) => substr($str, 0, 1))->join('+');
+        return "https://ui-avatars.com/api/?name=$initials&color=FFFFFF&background=$color&length=3";
     }
 
     /**

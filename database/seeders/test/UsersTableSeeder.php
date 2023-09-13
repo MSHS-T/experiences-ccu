@@ -22,14 +22,15 @@ class UsersTableSeeder extends Seeder
     {
         $roles = config('collabccu.roles');
         $faker = Faker::create('fr_FR');
-        $this->command->info("Seeding test users with randomized roles.");
-        $nbUsers = 10;
-        $bar = $this->command->getOutput()->createProgressBar($nbUsers);
+        $this->command->info("Seeding test users");
+        $nbRespPlateau = 3;
+        $nbRespManip = 5;
+        $bar = $this->command->getOutput()->createProgressBar($nbRespPlateau + $nbRespManip);
         $bar->start();
-        foreach (range(1, $nbUsers) as $index) {
-            $firstName = $faker->firstName;
-            $lastName = $faker->lastName;
-            $email = strtolower(Str::slug($firstName) . "." . Str::slug($lastName) . "@" . $faker->freeEmailDomain);
+        foreach (range(1, $nbRespPlateau) as $index) {
+            $firstName = 'Resp';
+            $lastName = 'Plateau ' . ($index);
+            $email = strtolower(Str::slug($firstName) . "." . Str::slug($lastName) . "@univ-tlse2.fr");
             $user = User::create([
                 'first_name'        => $firstName,
                 'last_name'         => $lastName,
@@ -37,7 +38,21 @@ class UsersTableSeeder extends Seeder
                 'email_verified_at' => Carbon::now(),
                 'password'          => bcrypt('password')
             ]);
-            $user->assignRole(collect($roles)->random());
+            $user->assignRole('plateau_manager');
+            $bar->advance();
+        }
+        foreach (range(1, $nbRespManip) as $index) {
+            $firstName = 'Resp';
+            $lastName = 'Manip ' . ($index);
+            $email = strtolower(Str::slug($firstName) . "." . Str::slug($lastName) . "@univ-tlse2.fr");
+            $user = User::create([
+                'first_name'        => $firstName,
+                'last_name'         => $lastName,
+                'email'             => $email,
+                'email_verified_at' => Carbon::now(),
+                'password'          => bcrypt('password')
+            ]);
+            $user->assignRole('manipulation_manager');
             $bar->advance();
         }
         $bar->finish();
