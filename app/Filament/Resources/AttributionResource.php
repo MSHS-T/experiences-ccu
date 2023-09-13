@@ -36,7 +36,7 @@ class AttributionResource extends Resource
                 Forms\Components\Select::make('manipulation_manager_id')
                     ->label(__('attributes.manipulation_manager'))
                     ->options(
-                        User::role('plateau_manager')
+                        User::role('manipulation_manager')
                             ->get()
                             ->pluck('name', 'id')
                             ->all()
@@ -107,7 +107,7 @@ class AttributionResource extends Resource
                         fn (Attribution $record) => Str::of(
                             sprintf(
                                 '<ul class="list-disc">%s</ul>',
-                                collect($record->getAllowedHalfdaysDisplay())
+                                collect($record->getSimplifiedAllowedHalfdaysDisplay())
                                     ->map(fn ($r) => '<li>' . $r . '</li>')
                                     ->join('')
                             )

@@ -329,6 +329,13 @@ class ManipulationResource extends Resource
         ];
     }
 
+    public static function getWidgets(): array
+    {
+        return [
+            ManipulationResource\Widgets\AttributionOverview::class,
+        ];
+    }
+
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::wherePublished(true)->whereArchived(false)->count();
