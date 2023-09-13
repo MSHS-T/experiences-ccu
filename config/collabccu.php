@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'access_map' => 'storage/UT2J-plan-campus-2020.pdf',
+    'access_map' => 'storage/plan-acces-ccu.jpg',
     /**
      * Role list
      */

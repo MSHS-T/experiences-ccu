@@ -35,11 +35,11 @@
         @yield('content')
     </main>
 
-    <footer class="bg-slate-50">
+    <footer class="bg-white">
         <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div class="py-4">
                 <img alt="Université Toulouse-Jean Jaurès" class="h-36 w-auto mx-auto block"
-                    src="{{ Vite::asset('resources/images/logo-ccu.png') }}">
+                    src="{{ Vite::asset('resources/images/logo-ccu-horizontal.jpg') }}">
             </div>
             <div class="grid lg:grid-cols-3 items-center border-t border-slate-400/10 py-4 space-y-4 lg:space-y-0">
                 <p class="text-center sm:text-left text-sm text-slate-500 sm:mt-0">
