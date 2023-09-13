@@ -20,7 +20,8 @@
         "owenvoke/blade-fontawesome": "^2.2",
         "spatie/laravel-medialibrary": "^10.0.0",
         "spatie/laravel-permission": "^5.10",
-        "spatie/laravel-settings": "^2.8"
+        "spatie/laravel-settings": "^2.8",
+        "stechstudio/filament-impersonate": "^3.5"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.13",
