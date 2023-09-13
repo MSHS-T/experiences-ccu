@@ -4,15 +4,13 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PlateauResource\Pages;
 use App\Filament\Resources\PlateauResource\RelationManagers;
-use App\Models\Equipment;
 use App\Models\Plateau;
 use App\Models\User;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
-use Filament\Tables\Filters\Layout;
 use Filament\Tables\Filters\SelectFilter;
 
 class PlateauResource extends Resource
@@ -93,7 +91,7 @@ class PlateauResource extends Resource
                             User::all()->pluck('name', 'id')->unique()->all()
                         )
                 ],
-                layout: Layout::AboveContentCollapsible
+                layout: \Filament\Tables\Enums\FiltersLayout::AboveContentCollapsible
             )
             ->actions([
                 Tables\Actions\ViewAction::make(),

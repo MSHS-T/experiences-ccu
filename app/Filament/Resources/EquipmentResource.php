@@ -7,14 +7,11 @@ use App\Filament\Resources\EquipmentResource\RelationManagers;
 use App\Models\Equipment;
 use Filament\Forms;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
+use Filament\Tables\Table;
 use Filament\Tables;
-use Filament\Tables\Filters\Layout;
 use Filament\Tables\Filters\SelectFilter;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class EquipmentResource extends Resource
 {
@@ -97,7 +94,7 @@ class EquipmentResource extends Resource
                             Equipment::all()->pluck('type', 'type')->unique()->all()
                         )
                 ],
-                layout: Layout::AboveContentCollapsible
+                layout: \Filament\Tables\Enums\FiltersLayout::AboveContentCollapsible
             )
             ->actions([
                 Tables\Actions\ViewAction::make(),
