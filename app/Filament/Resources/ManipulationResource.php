@@ -28,11 +28,11 @@ class ManipulationResource extends Resource
     protected static ?string $model = Manipulation::class;
 
     protected static ?string $navigationIcon   = 'fas-flask-vial';
-    protected static ?string $navigationLabel  = 'Manipulations';
+    protected static ?string $navigationLabel  = 'Expériences';
     protected static ?int $navigationSort      = 10;
     protected static ?string $navigationGroup  = 'Plateforme';
-    protected static ?string $modelLabel       = 'Manipulation';
-    protected static ?string $pluralModelLabel = 'Manipulations';
+    protected static ?string $modelLabel       = 'Expérience';
+    protected static ?string $pluralModelLabel = 'Expériences';
 
     public static function form(Form $form): Form
     {

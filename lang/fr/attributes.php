@@ -61,9 +61,8 @@ return [
     // Settings
     'booking_cancellation_delay' => 'Délai de prévenance pour l\'annulation d\'une réservation',
     'booking_confirmation_delay' => 'Délai maximal pour la confirmation d\'une réservation',
-    'booking_opening_delay'      => 'Délai d\'ouverture des inscriptions avant début de la manipulation',
+    'booking_opening_delay'      => 'Délai d\'ouverture des inscriptions avant début de l\'expérience',
     'email_reminder_delay'       => 'Délai avant réservation pour envoi du premier rappel par e-mail',
-    'manipulation_overbooking'   => 'Pourcentage de surréservation des créneaux de manipulation',
     'presentation_text'          => 'Texte de présentation du site (visible sur la page d\'accueil)',
     'access_instructions'        => 'Instructions d\'accès',
 
