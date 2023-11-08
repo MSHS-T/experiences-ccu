@@ -11,6 +11,7 @@ use Awcodes\FilamentTableRepeater\Components\TableRepeater;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Support\Enums\ActionSize;
@@ -39,7 +40,7 @@ class ManipulationResource extends Resource
         $computeSlotCount = fn (callable $set, callable $get) => $set(
             'slot_count',
             SlotGenerator::estimateCount(
-                $get('users'),
+                $get('users') ?? [],
                 Plateau::find(intval($get('plateau_id'))),
                 $get('start_date'),
                 $get('end_date'),
@@ -56,36 +57,40 @@ class ManipulationResource extends Resource
             ->columns([
                 'default' => 1,
                 'md'      => 2,
-                'lg'      => 4
+                'lg'      => 3
             ])
             ->schema([
                 Forms\Components\Select::make('plateau_id')
                     ->label(__('attributes.plateau'))
                     ->columnSpan([
                         'default' => 1,
-                        'md'      => 2
+                        'md'      => 2,
+                        'lg'      => 1,
                     ])
                     ->relationship('plateau', 'name')
+                    ->required(),
+                Forms\Components\Select::make('users')
+                    ->label(__('attributes.manipulation_managers'))
+                    ->columnSpan([
+                        'default' => 1,
+                        'md'      => 2,
+                        'lg'      => 1,
+                    ])
+                    ->relationship('users', 'id')
+                    ->reactive()
+                    ->afterStateUpdated($computeSlotCount)
+                    ->multiple()
+                    ->options(User::role('manipulation_manager')->get()->pluck('name', 'id')->unique()->all())
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->label(__('attributes.name'))
                     ->columnSpan([
                         'default' => 1,
-                        'md'      => 2
+                        'md'      => 2,
+                        'lg'      => 1,
                     ])
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Select::make('users')
-                    ->label(__('attributes.manipulation_managers'))
-                    ->columnSpan([
-                        'default' => 1,
-                        'md'      => 2
-                    ])
-                    ->relationship('users', 'id')
-                    // ->formatStateUsing()
-                    ->multiple()
-                    ->options(User::role('manipulation_manager')->get()->pluck('name', 'id')->unique()->all())
-                    ->required(),
                 Forms\Components\RichEditor::make('description')
                     ->label(__('attributes.description'))
                     ->required()
@@ -113,16 +118,6 @@ class ManipulationResource extends Resource
                     ->reactive()
                     ->afterStateUpdated($computeSlotCount)
                     ->required(),
-                Forms\Components\TextInput::make('slot_count')
-                    ->label(__('attributes.slot_count'))
-                    ->disabled()
-                    // ->required()
-                    ->minValue(1)
-                    ->suffixAction(
-                        Action::make('refreshSlotCount')
-                            ->icon('fas-arrows-rotate')
-                            ->action($computeSlotCount)
-                    ),
                 TableRepeater::make('requirements')
                     ->label(__('attributes.requirements'))
                     ->emptyLabel(__('messages.no_requirement'))
@@ -147,22 +142,37 @@ class ManipulationResource extends Resource
                     ->description(Str::of(__('messages.available_hours_description'))->sanitizeHtml()->toHtmlString())
                     ->extraAttributes(['class' => '!bg-gray-100 dark:!bg-gray-800'])
                     ->compact()
+                    ->collapsible()
                     ->columnSpan([
                         'default' => 1,
                         'md'      => 'full'
                     ])
                     ->columns([
                         'default' => 1,
-                        'md'      => 3,
+                        'md'      => 1,
                         'xl'      => 5
                     ])
                     ->schema(
                         collect(['monday', 'tuesday', 'wednesday', 'thursday', 'friday'])
                             ->map(
-                                fn ($day) => Forms\Components\Fieldset::make('available_hours.monday')
-                                    ->label(__('attributes.' . $day))
+                                fn ($day) => Forms\Components\Section::make(function (Get $get) use ($day) {
+                                    $hours = [];
+                                    foreach (['am', 'pm'] as $halfday) {
+                                        $start = $get("available_hours.$day.start_$halfday");
+                                        $end   = $get("available_hours.$day.end_$halfday");
+                                        if (filled($start) && filled($end)) {
+                                            $hours[] = $start . '-' . $end;
+                                        }
+                                    }
+                                    if (filled($hours)) {
+                                        return Str::of(__('attributes.' . $day) . ' <i><small>(' . implode(' & ', $hours) . ')</small></i>')->toHtmlString();
+                                    }
+                                    return __('attributes.' . $day);
+                                })
                                     ->columnSpan(1)
                                     ->columns(1)
+                                    ->collapsible()
+                                    ->collapsed(/* $day !== 'monday' */)
                                     ->visible()
                                     ->schema([
                                         Forms\Components\TimePicker::make("available_hours.$day.start_am")
@@ -214,7 +224,16 @@ class ManipulationResource extends Resource
                             )
                             ->all()
                     ),
-
+                Forms\Components\TextInput::make('slot_count')
+                    ->label(__('attributes.generated_slot_count'))
+                    ->disabled()
+                    // ->required()
+                    ->minValue(1)
+                    ->suffixAction(
+                        Action::make('refreshSlotCount')
+                            ->icon('fas-arrows-rotate')
+                            ->action($computeSlotCount)
+                    ),
             ]);
     }
 

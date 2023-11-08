@@ -6,7 +6,7 @@ return [
     'no_plateaux_title'            => 'Aucun Plateau',
     'add_requirement'              => 'Ajouter un critère d\'inclusion',
     'no_requirement'               => 'Aucun critère d\'inclusion',
-    'available_hours_description'  => 'Pour ne pas positionner de créneaux sur une demi-journée, laissez les heures de début et de fin vide.<br/>Pour faire journée continue, saisir les heures dans la matinée et laisse l\'après-midi vide.',
+    'available_hours_description'  => 'Pour ne pas positionner de créneaux sur une demi-journée, laissez les heures de début et de fin vide.<br/>Pour faire journée continue, saisir les heures dans la matinée et laisser l\'après-midi vide.',
     'no_allowed_halfdays_selected' => 'Au minimum une demi-journée doit être sélectionnée',
     'allowed_halfdays_help'        => 'Matin : 8h-13h ; Après-midi : 13h-18h',
 ];
