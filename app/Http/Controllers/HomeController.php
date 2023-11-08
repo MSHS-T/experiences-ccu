@@ -15,7 +15,7 @@ class HomeController extends Controller
     {
         $manipulations = Manipulation::with(['slots', 'slots.booking'])
             ->visibleForParticipants()
-            ->limit(6)
+            // ->limit(6)
             ->get();
         return view('home', [
             'manipulations'        => $manipulations,

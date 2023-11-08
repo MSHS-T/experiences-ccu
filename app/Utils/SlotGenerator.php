@@ -66,7 +66,7 @@ class SlotGenerator
                     // check attribution
                     if (!self::hasAttributionForHalfDay($attributions, $cursorDate, $halfDay)) continue;
 
-                    if (filled($dowHours['start_' . $halfDay]) && filled($dowHours['end_' . $halfDay])) {
+                    if (filled($dowHours['start_' . $halfDay] ?? []) && filled($dowHours['end_' . $halfDay] ?? [])) {
                         $startHalfDay = self::parseTime($dowHours['start_' . $halfDay]);
                         $endHalfDay   = self::parseTime($dowHours['end_' . $halfDay]);
                         if (is_null($startHalfDay) || is_null($endHalfDay)) {
