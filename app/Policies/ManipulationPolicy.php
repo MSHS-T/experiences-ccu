@@ -38,6 +38,7 @@ class ManipulationPolicy
     public function update(User $user, Manipulation $manipulation): bool
     {
         return $user->hasRole('administrator')
+            || ($user->hasRole('plateau_manager') && $manipulation->plateau->manager->id === $user->id)
             || ($user->can('manipulation.edit') && $manipulation->users->pluck('id')->contains($user->id));
     }
 
