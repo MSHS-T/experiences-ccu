@@ -10,6 +10,7 @@ use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
 use Illuminate\Support\Arr;
+use Spatie\Permission\Models\Role;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
 
 class UserResource extends Resource
@@ -41,9 +42,12 @@ class UserResource extends Resource
                     ->required()
                     ->unique(ignoreRecord: true)
                     ->maxLength(255),
-                Forms\Components\Select::make('role')
+                Forms\Components\Select::make('roles')
                     ->label(__('attributes.role'))
-                    ->options(__('attributes.roles'))
+                    ->relationship('roles', 'name')
+                    ->getOptionLabelFromRecordUsing(fn (Role $record) => __('attributes.roles.' . $record->name))
+                    ->preload()
+                    ->multiple()
                     ->required(),
             ]);
     }
@@ -66,7 +70,13 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('roles.name')
                     ->label(__('attributes.role'))
-                    ->formatStateUsing(fn (User $record) => $record->roles->isNotEmpty() ? __('attributes.roles.' . $record->roles->first()->name) : '')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'administrator'        => 'danger',
+                        'plateau_manager'      => 'warning',
+                        'manipulation_manager' => 'primary',
+                    })
+                    ->formatStateUsing(fn (string $state) => __('attributes.roles.' . $state))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('attributes.created_at'))
