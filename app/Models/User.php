@@ -3,12 +3,13 @@
 namespace App\Models;
 
 use App\Notifications\AccountCreated as AccountCreatedNotification;
+use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasName;
+use Filament\Notifications\Auth\ResetPassword as ResetPasswordNotification;
 use Filament\Panel;
 use Filament\Support\Colors\Color;
-use Illuminate\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -112,7 +113,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
     {
         static::creating(function (User $user) {
             if (blank($user->password)) {
-                $user->password = Hash::make(fake()->asciify(Str::repeat('*', 10)));
+                $user->password = Hash::make(Str::random(16));
             }
         });
         static::created(function (User $user) {
@@ -170,11 +171,13 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
      */
     public function sendPasswordResetNotification($token)
     {
-        if (!$this->email_verified_at) {
+        if ($this->created_at->timestamp === $this->updated_at->timestamp) {
             // New user : send a specific email
-            $this->notify(new AccountCreatedNotification($token));
+            $notification = new AccountCreatedNotification($token);
         } else {
-            $this->notify(new ResetPasswordNotification($token));
+            $notification = new ResetPasswordNotification($token);
         }
+        $notification->url = Filament::getResetPasswordUrl($token, $this);
+        $this->notify($notification);
     }
 }
