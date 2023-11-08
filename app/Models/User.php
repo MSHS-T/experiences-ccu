@@ -133,7 +133,8 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
 
     public function getFilamentAvatarUrl(): string
     {
-        $color = match ($this->roles->first()->name) {
+        $bestRole = array_intersect(config('collabccu.roles'), $this->roles->pluck('name')->all());
+        $color = match ($bestRole) {
             'plateau_manager'      => Color::Cyan[900],
             'manipulation_manager' => Color::Lime[900],
             default                => Color::Fuchsia[900]

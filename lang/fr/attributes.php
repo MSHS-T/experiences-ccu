@@ -13,7 +13,7 @@ return [
     'first_name' => 'Prénom',
     'last_name'  => 'Nom de famille',
     'email'      => 'Adresse e-mail',
-    'role'       => 'Rôle',
+    'role'       => 'Rôles',
 
     // Equipment
     'quantity' => 'Quantité',

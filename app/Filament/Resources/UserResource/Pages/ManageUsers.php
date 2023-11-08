@@ -17,10 +17,10 @@ class ManageUsers extends ManageRecords
         return [
             Actions\CreateAction::make()
                 ->using(function (array $data): User {
-                    $role = Arr::get($data, 'role', null);
-                    $record = static::getModel()::create(Arr::except($data, 'role'));
-                    if ($role !== null) {
-                        $record->syncRoles($role);
+                    $roles = Arr::get($data, 'roles', null);
+                    $record = static::getModel()::create(Arr::except($data, 'roles'));
+                    if (filled($roles)) {
+                        $record->syncRoles($roles);
                     }
 
                     return $record;
