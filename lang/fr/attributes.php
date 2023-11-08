@@ -36,10 +36,11 @@ return [
     'published'       => 'Publié ?',
 
     // Attribution
-    'manipulation_manager' => 'Responsable de manipulation',
-    'allowed_halfdays'     => 'Demi-journées autorisées',
-    'creator'              => 'Créateur',
-    'attributions'         => 'Attributions',
+    'manipulation_manager'  => 'Responsable de manipulation',
+    'manipulation_managers' => 'Responsables de manipulation',
+    'allowed_halfdays'      => 'Demi-journées autorisées',
+    'creator'               => 'Créateur',
+    'attributions'          => 'Attributions',
 
     // Booking
     'birthdate' => 'Date de Naissance',
