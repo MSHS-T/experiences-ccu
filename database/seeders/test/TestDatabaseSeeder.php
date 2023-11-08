@@ -6,6 +6,7 @@ use App\Models\Manipulation;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 
 class TestDatabaseSeeder extends Seeder
@@ -22,6 +23,19 @@ class TestDatabaseSeeder extends Seeder
         $this->call(EquipmentsTableSeeder::class);
         $this->call(PlateauxTableSeeder::class);
 
+        $start = now()->startOfWeek(1)->addWeek();
+        $end   = $start->clone()->addWeeks(2);
+        $this->createManipulation($start, $end);
+
+        foreach (range(1, 10) as $i) {
+            $start = new Carbon(fake()->dateTimeBetween('now', '+1 month'));
+            $end   = $start->clone()->addWeeks(3);
+            $this->createManipulation($start, $end);
+        }
+    }
+
+    protected function createManipulation(Carbon $start, Carbon $end)
+    {
         $respPlateau = User::role('plateau_manager')
             ->get()
             ->filter(fn (User $user) => $user->plateaux->isNotEmpty())
@@ -30,8 +44,6 @@ class TestDatabaseSeeder extends Seeder
             ->get()
             ->random();
         $plateau  = $respPlateau->plateaux->random();
-        $start    = now()->startOfWeek(1)->addWeek();
-        $end      = $start->clone()->addWeeks(2);
         $halfDays = collect(['monday', 'tuesday', 'wednesday', 'thursday', 'friday'])
             ->crossJoin(['am', 'pm'])
             ->map(fn ($item) => $item[0] . '_' . $item[1])
