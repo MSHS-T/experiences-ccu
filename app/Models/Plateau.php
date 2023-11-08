@@ -78,4 +78,9 @@ class Plateau extends Model implements HasMedia
     {
         return $this->hasMany(Manipulation::class);
     }
+
+    public function attributions(): HasMany
+    {
+        return $this->hasMany(Attribution::class);
+    }
 }
