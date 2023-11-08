@@ -26,39 +26,43 @@
                         <a href="#details" class="hidden" x-ref="nextSectionLink"></a>
                         {{-- {{ dump($slots) }} --}}
                         <template x-for="dayIndex in daysDisplayed">
-                            <div class="rounded-xl divide-y divide-white/10"
-                                x-bind:class="selectedDate === Object.keys(slots)[dayIndex - 1] ?
-                                    'bg-white/10 ring-1 ring-inset ring-white/10' :
-                                    'hover:bg-white/5'">
-                                <div class="group relative px-4 py-1 lg:p-3">
-                                    <h2>
-                                        <button
-                                            class="font-display text-lg [&:not(:focus-visible)]:focus:outline-none
+                            <template x-if="dayIndex <= Object.keys(slots).length">
+                                <div class="rounded-xl divide-y divide-white/10"
+                                    x-bind:class="selectedDate === Object.keys(slots)[dayIndex - 1] ?
+                                        'bg-white/10 ring-1 ring-inset ring-white/10' :
+                                        'hover:bg-white/5'">
+                                    <div class="group relative px-4 py-1 lg:p-3">
+                                        <h2>
+                                            <button
+                                                class="font-display text-lg [&:not(:focus-visible)]:focus:outline-none
                                         flex items-center justify-between w-full p-1 font-medium text-left text-white"
-                                            x-on:click="selectedDate = Object.keys(slots)[dayIndex - 1]" type="button">
-                                            <span class="absolute inset-0 rounded-xl"></span>
-                                            <span x-text="Object.keys(slots)[dayIndex - 1]"></span>
+                                                x-on:click="selectedDate = Object.keys(slots)[dayIndex - 1]" type="button">
+                                                <span class="absolute inset-0 rounded-xl"></span>
+                                                <span class="capitalize"
+                                                    x-text="dayjs(Object.keys(slots)[dayIndex - 1]).format('dddd DD MMMM YYYY')"></span>
 
-                                            <x-fas-caret-down class="h-5 w-5 transition"
-                                                x-bind:class="selectedDate === Object.keys(slots)[dayIndex - 1] && 'rotate-180'" />
-                                        </button>
-                                        </h3>
-                                </div>
-                                <div x-bind:class="selectedDate === Object.keys(slots)[dayIndex - 1] ? 'block' : 'hidden'">
-                                    <div class="p-5 flex items-center flex-wrap space-x-2">
-                                        <template x-for="slot in Object.values(slots)[dayIndex-1]">
-                                            <button type="button"
-                                                class="inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold"
-                                                x-key="slot.id" x-on:click="selectSlot(slot.id)"
-                                                x-bind:class="selectedSlot === slot.id ?
-                                                    'bg-green-600 text-white hover:text-slate-100 hover:bg-green-500 border-2 border-green-500' :
-                                                    'bg-white text-blue-600 hover:text-blue-500 hover:bg-slate-100'"
-                                                href="/mes-inscriptions" x-text="slot.start">
+                                                <x-fas-caret-down class="h-5 w-5 transition"
+                                                    x-bind:class="selectedDate === Object.keys(slots)[dayIndex - 1] && 'rotate-180'" />
                                             </button>
-                                        </template>
+                                            </h3>
+                                    </div>
+                                    <div
+                                        x-bind:class="selectedDate === Object.keys(slots)[dayIndex - 1] ? 'block' : 'hidden'">
+                                        <div class="p-5 flex items-center flex-wrap space-x-2">
+                                            <template x-for="slot in Object.values(slots)[dayIndex-1]">
+                                                <button type="button"
+                                                    class="inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold"
+                                                    x-key="slot.id" x-on:click="selectSlot(slot.id)"
+                                                    x-bind:class="selectedSlot === slot.id ?
+                                                        'bg-green-600 text-white hover:text-slate-100 hover:bg-green-500 border-2 border-green-500' :
+                                                        'bg-white text-blue-600 hover:text-blue-500 hover:bg-slate-100'"
+                                                    href="/mes-inscriptions" x-text="slot.start">
+                                                </button>
+                                            </template>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </template>
                         </template>
                         <div class="flex justify-center" x-show="daysDisplayed < Object.keys(slots).length">
                             <button
