@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class AttributionResource extends Resource
@@ -27,11 +28,14 @@ class AttributionResource extends Resource
 
     public static function form(Form $form): Form
     {
+        $user = Auth::user();
+        $plateaux = $user->hasRole('administrator') ? Plateau::all() : $user->plateaux;
         return $form
             ->schema([
                 Forms\Components\Select::make('plateau_id')
                     ->label(__('attributes.plateau'))
                     ->relationship('plateau', 'name')
+                    ->options($plateaux->pluck('name', 'id'))
                     ->required(),
                 Forms\Components\Select::make('manipulation_manager_id')
                     ->label(__('attributes.manipulation_manager'))
