@@ -55,5 +55,12 @@ return [
             'archive' => ['administrator',],
             'delete'  => ['administrator'],
         ],
+    ],
+
+    'default_hours' => [
+        'start_am' => '08:00',
+        'end_am'   => '12:00',
+        'start_pm' => '13:00',
+        'end_pm'   => '18:00',
     ]
 ];

@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ManipulationResource\Pages;
 use App\Models\Manipulation;
 use App\Models\Plateau;
+use App\Models\User;
 use App\Utils\SlotGenerator;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
 use Filament\Forms;
@@ -15,20 +16,15 @@ use Filament\Resources\Resource;
 use Filament\Support\Enums\ActionSize;
 use Filament\Tables\Table;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ManipulationResource extends Resource
 {
-    const DEFAULT_HOURS = [
-        'start_am' => '08:00',
-        'end_am'   => '12:00',
-        'start_pm' => '13:00',
-        'end_pm'   => '18:00',
-    ];
-
     protected static ?string $model = Manipulation::class;
 
     protected static ?string $navigationIcon   = 'fas-flask-vial';
@@ -78,6 +74,17 @@ class ManipulationResource extends Resource
                     ])
                     ->required()
                     ->maxLength(255),
+                Forms\Components\Select::make('users')
+                    ->label(__('attributes.manipulation_managers'))
+                    ->columnSpan([
+                        'default' => 1,
+                        'md'      => 2
+                    ])
+                    ->relationship('users', 'id')
+                    // ->formatStateUsing()
+                    ->multiple()
+                    ->options(User::role('manipulation_manager')->get()->pluck('name', 'id')->unique()->all())
+                    ->required(),
                 Forms\Components\RichEditor::make('description')
                     ->label(__('attributes.description'))
                     ->required()
@@ -108,7 +115,7 @@ class ManipulationResource extends Resource
                 Forms\Components\TextInput::make('slot_count')
                     ->label(__('attributes.slot_count'))
                     ->disabled()
-                    ->required()
+                    // ->required()
                     ->minValue(1)
                     ->suffixAction(
                         Action::make('refreshSlotCount')
@@ -159,14 +166,14 @@ class ManipulationResource extends Resource
                                     ->schema([
                                         Forms\Components\TimePicker::make("available_hours.$day.start_am")
                                             ->label(__('attributes.start_am'))
-                                            ->default(self::DEFAULT_HOURS['start_am'])
+                                            ->default(config('collabccu.default_hours.start_am'))
                                             ->seconds(false)
                                             ->format('H:i')
                                             ->displayFormat('H:i')
                                             ->hintAction($clearHalfDayAction("available_hours.$day.start_am")),
                                         Forms\Components\TimePicker::make("available_hours.$day.end_am")
                                             ->label(__('attributes.end_am'))
-                                            ->default(self::DEFAULT_HOURS['end_am'])
+                                            ->default(config('collabccu.default_hours.end_am'))
                                             ->seconds(false)
                                             ->format('H:i')
                                             ->displayFormat('H:i')
@@ -174,7 +181,7 @@ class ManipulationResource extends Resource
                                             ->requiredWith("available_hours.$day.start_am"),
                                         Forms\Components\TimePicker::make("available_hours.$day.start_pm")
                                             ->label(__('attributes.start_pm'))
-                                            ->default(self::DEFAULT_HOURS['start_pm'])
+                                            ->default(config('collabccu.default_hours.start_pm'))
                                             ->seconds(false)
                                             ->format('H:i')
                                             ->displayFormat('H:i')
@@ -183,7 +190,7 @@ class ManipulationResource extends Resource
                                             ->after("available_hours.$day.end_am"),
                                         Forms\Components\TimePicker::make("available_hours.$day.end_pm")
                                             ->label(__('attributes.end_pm'))
-                                            ->default(self::DEFAULT_HOURS['end_pm'])
+                                            ->default(config('collabccu.default_hours.end_pm'))
                                             ->seconds(false)
                                             ->format('H:i')
                                             ->displayFormat('H:i')
@@ -217,10 +224,23 @@ class ManipulationResource extends Resource
                 Tables\Columns\TextColumn::make('id')
                     ->label('#')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('plateau_id')
+                Tables\Columns\TextColumn::make('plateau.name')
                     ->label(__('attributes.plateau'))
+                    // ->formatStateUsing(
+                    //     fn (Manipulation $record): string => $record->plateau->name
+                    // )
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('users.id')
+                    ->label(__('attributes.manipulation_managers'))
                     ->formatStateUsing(
-                        fn (Manipulation $record): string => $record->plateau->name
+                        fn (Manipulation $record) => Str::of(
+                            sprintf(
+                                '<ul class="list-disc">%s</ul>',
+                                $record->users->map(fn (User $u) => $u->name)
+                                    ->map(fn ($d) => '<li>' . $d . '</li>')
+                                    ->join('')
+                            )
+                        )->sanitizeHtml()->toHtmlString()
                     )
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
@@ -289,9 +309,27 @@ class ManipulationResource extends Resource
                         ->label(__('attributes.plateau'))
                         ->options(
                             Plateau::all()->pluck('name', 'id')->unique()->all()
-                        )
+                        ),
+                    Filter::make('users')
+                        ->form([
+                            Forms\Components\Select::make('user_id')
+                                ->label(__('attributes.manipulation_managers'))
+                                ->options(
+                                    User::role('manipulation_manager')->get()->pluck('name', 'id')->unique()->all()
+                                ),
+                        ])
+                        ->query(function (Builder $query, array $data): Builder {
+                            return $query
+                                ->when(
+                                    $data['user_id'],
+                                    fn (Builder $query): Builder => $query->whereHas(
+                                        'users',
+                                        fn (Builder $query) => $query->where('id', $data['user_id'])
+                                    ),
+                                );
+                        })
                 ],
-                layout: \Filament\Tables\Enums\FiltersLayout::AboveContentCollapsible
+                layout: \Filament\Tables\Enums\FiltersLayout::AboveContent
             )
             ->actions([
                 Tables\Actions\ViewAction::make(),
