@@ -56,7 +56,7 @@
                 <div class="mt-8 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-16 lg:mt-24 lg:grid-cols-9 lg:pt-0"
                     x-data="{ selected: {{ $selectedManipulation }} }">
                     <div class="-mx-4 flex overflow-x-auto pb-4 sm:mx-0 lg:overflow-visible lg:pb-0 lg:col-span-3">
-                        <div class="relative w-full z-10 flex space-x-4 whitespace-nowrap px-4 sm:mx-auto sm:px-0 lg:mx-0 lg:block lg:space-x-0 lg:space-y-4 lg:whitespace-normal"
+                        <div class="relative w-full z-10 flex space-x-4 whitespace-nowrap px-4 sm:mx-auto sm:px-0 lg:mx-0 lg:block lg:space-x-0 lg:space-y-2 lg:whitespace-normal lg:py-12"
                             role="tablist" aria-orientation="vertical">
                             @foreach ($manipulations as $m)
                                 <div class="group relative rounded-full px-4 py-1 lg:rounded-l-xl lg:rounded-r-none lg:p-6"
@@ -64,7 +64,8 @@
                                         'bg-white lg:bg-white/10 lg:ring-1 lg:ring-inset lg:ring-white/10' :
                                         'hover:bg-white/10 lg:hover:bg-white/5'">
                                     <h3>
-                                        <button class="font-display text-lg [&:not(:focus-visible)]:focus:outline-none"
+                                        <button
+                                            class="font-display text-lg [&:not(:focus-visible)]:focus:outline-none whitespace-normal text-start"
                                             x-bind:class="selected === {{ $m->id }} ?
                                                 'text-blue-600 lg:text-white' :
                                                 'text-blue-100 hover:text-white lg:text-white'"
@@ -82,85 +83,92 @@
                         @foreach ($manipulations as $i => $m)
                             <div role="tabpanel" tabindex="{{ $i }}"
                                 x-bind:class="selected === {{ $m->id }} ? 'block' : 'hidden'"
-                                class="p-4 sm:p-10 rounded-xl grid grid-cols-1 lg:grid-cols-6 items-start bg-white shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 gap-x-8 gap-y-4 h-full w-full">
-                                <div class="lg:col-span-6">
-                                    <h3
-                                        class="font-display text-2xl font-bold tracking-tight text-slate-900 flex items-center px-3 space-x-2">
-                                        <x-fas-circle-info class="h-5 w-5" />
-                                        <span>
-                                            @lang('attributes.description')
-                                        </span>
-                                    </h3>
-                                    <div
-                                        class="rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
-                                        {!! $m->description !!}
+                                class="h-full w-full flex flex-col items-stretch justify-center p-4 sm:p-10 rounded-xl bg-white shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 space-y-4">
+                                {{-- <div class=" grid grid-cols-1 lg:grid-cols-6 items-start gap-x-8 gap-y-4"> --}}
+                                <div class="flex flex-col lg:flex-row items-stretch lg:space-x-8">
+                                    <div class="lg:col-span-6">
+                                        <h3
+                                            class="font-display text-2xl font-bold tracking-tight text-slate-900 flex items-center px-3 space-x-2">
+                                            <x-fas-circle-info class="h-5 w-5" />
+                                            <span>
+                                                @lang('attributes.description')
+                                            </span>
+                                        </h3>
+                                        <div
+                                            class="rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
+                                            {!! $m->description !!}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="lg:col-span-3">
-                                    <h3
-                                        class="font-display text-2xl font-bold tracking-tight text-slate-900 flex items-center px-3 space-x-2">
-                                        <x-fas-stopwatch class="h-5 w-5" />
-                                        <span>
-                                            @lang('attributes.duration')
-                                        </span>
-                                    </h3>
-                                    <div
-                                        class="rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
-                                        {{ $m->duration }} minutes
+                                <div class="flex flex-col lg:flex-row items-stretch lg:space-x-8">
+                                    <div class="lg:basis-1/2">
+                                        <h3
+                                            class="font-display text-2xl font-bold tracking-tight text-slate-900 flex items-center px-3 space-x-2">
+                                            <x-fas-stopwatch class="h-5 w-5" />
+                                            <span>
+                                                @lang('attributes.duration')
+                                            </span>
+                                        </h3>
+                                        <div
+                                            class="rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
+                                            {{ $m->duration }} minutes
+                                        </div>
+                                    </div>
+                                    <div class="lg:basis-1/2">
+                                        <h3
+                                            class="font-display text-2xl font-bold tracking-tight text-slate-900 flex items-center px-3 space-x-2">
+                                            <x-fas-calendar-days class="h-5 w-5" />
+                                            <span>
+                                                @lang('attributes.dates')
+                                            </span>
+                                        </h3>
+                                        <div
+                                            class="rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight flex items-center">
+                                            {{ $m->start_date->format('d/m/Y') }}
+                                            <x-fas-arrow-right class="h-3 w-3 mx-1" />
+                                            {{ $m->end_date->format('d/m/Y') }}
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="lg:col-span-3">
-                                    <h3
-                                        class="font-display text-2xl font-bold tracking-tight text-slate-900 flex items-center px-3 space-x-2">
-                                        <x-fas-calendar-days class="h-5 w-5" />
-                                        <span>
-                                            @lang('attributes.dates')
-                                        </span>
-                                    </h3>
-                                    <div
-                                        class="rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight flex items-center">
-                                        {{ $m->start_date->format('d/m/Y') }}
-                                        <x-fas-arrow-right class="h-3 w-3 mx-1" />
-                                        {{ $m->end_date->format('d/m/Y') }}
+                                <div class="flex flex-col lg:flex-row items-stretch lg:space-x-8">
+                                    <div class="lg:basis-2/3 h-full flex flex-col">
+                                        <h3
+                                            class="font-display text-2xl font-bold tracking-tight text-slate-900 flex items-center px-3 space-x-2">
+                                            <x-fas-list-check class="h-5 w-5" />
+                                            <span>
+                                                @lang('attributes.requirements')
+                                            </span>
+                                        </h3>
+                                        <ol role="list"
+                                            class="flex-grow divide-y divide-slate-300/30 rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
+                                            @foreach ($m->requirements as $r)
+                                                <li class="flex justify-between py-1 sm:py-3"
+                                                    aria-label="Strokes and fills on page 21">
+                                                    <span class="font-medium text-slate-900"
+                                                        aria-hidden="true">{{ $r }}</span>
+                                                </li>
+                                            @endforeach
+                                        </ol>
                                     </div>
-                                </div>
-                                <div class="lg:col-span-4 h-full flex flex-col">
-                                    <h3
-                                        class="font-display text-2xl font-bold tracking-tight text-slate-900 flex items-center px-3 space-x-2">
-                                        <x-fas-list-check class="h-5 w-5" />
-                                        <span>
-                                            @lang('attributes.requirements')
-                                        </span>
-                                    </h3>
-                                    <ol role="list"
-                                        class="flex-grow divide-y divide-slate-300/30 rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
-                                        @foreach ($m->requirements as $r)
-                                            <li class="flex justify-between py-1 sm:py-3"
-                                                aria-label="Strokes and fills on page 21">
-                                                <span class="font-medium text-slate-900"
-                                                    aria-hidden="true">{{ $r }}</span>
-                                            </li>
-                                        @endforeach
-                                    </ol>
-                                </div>
-                                <div class="lg:col-span-2 h-full flex flex-col">
-                                    <h3
-                                        class="font-display text-2xl font-bold tracking-tight text-slate-900 flex items-center px-3 space-x-2">
-                                        <x-fas-location-dot class="h-5 w-5" />
-                                        <span>
-                                            @lang('attributes.location')
-                                        </span>
-                                    </h3>
-                                    <div
-                                        class="flex-grow rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight space-y-4 access_instructions">
-                                        {!! $access_instructions !!}
-                                        <div class="flex justify-center">
-                                            <a href="{{ asset(config('collabccu.access_map')) }}" target="_blank"
-                                                class="inline-flex items-center gap-x-1.5 rounded-full px-4 py-2 text-sm font-medium text-blue-700 ring-1 ring-inset ring-blue-200">
-                                                <x-fas-route class="h-3 w-3" />
-                                                {{ __('public.home.access_instructions') }}
-                                            </a>
+                                    <div class="lg:basis-1/3 h-full flex flex-col">
+                                        <h3
+                                            class="font-display text-2xl font-bold tracking-tight text-slate-900 flex items-center px-3 space-x-2">
+                                            <x-fas-location-dot class="h-5 w-5" />
+                                            <span>
+                                                @lang('attributes.location')
+                                            </span>
+                                        </h3>
+                                        <div
+                                            class="flex-grow rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight space-y-4 access_instructions">
+                                            {!! $access_instructions !!}
+                                            <div class="flex justify-center">
+                                                <a href="{{ asset(config('collabccu.access_map')) }}" target="_blank"
+                                                    class="inline-flex items-center gap-x-1.5 rounded-full px-4 py-2 text-sm font-medium text-blue-700 ring-1 ring-inset ring-blue-200">
+                                                    <x-fas-route class="h-3 w-3" />
+                                                    {{ __('public.home.access_instructions') }}
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -173,6 +181,7 @@
                                         <x-fas-arrow-right class="h-5 w-5" />
                                     </a>
                                 </div>
+                                {{-- </div> --}}
                             </div>
                         @endforeach
                     </div>
