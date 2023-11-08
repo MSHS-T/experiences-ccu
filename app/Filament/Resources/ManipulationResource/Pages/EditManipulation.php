@@ -15,9 +15,13 @@ class EditManipulation extends EditRecord
 
     protected function getHeaderWidgets(): array
     {
-        return [
-            ManipulationResource\Widgets\AttributionOverview::class,
-        ];
+        if (Auth::user()->hasRole('administrator')) {
+            return [];
+        } else {
+            return [
+                ManipulationResource\Widgets\AttributionOverview::class,
+            ];
+        }
     }
 
     protected function mutateFormDataBeforeFill(array $data): array

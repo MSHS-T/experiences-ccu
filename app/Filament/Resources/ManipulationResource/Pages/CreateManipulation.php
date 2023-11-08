@@ -5,6 +5,7 @@ namespace App\Filament\Resources\ManipulationResource\Pages;
 use App\Filament\Resources\ManipulationResource;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class CreateManipulation extends CreateRecord
 {
@@ -12,9 +13,13 @@ class CreateManipulation extends CreateRecord
 
     protected function getHeaderWidgets(): array
     {
-        return [
-            ManipulationResource\Widgets\AttributionOverview::class,
-        ];
+        if (Auth::user()->hasRole('administrator')) {
+            return [];
+        } else {
+            return [
+                ManipulationResource\Widgets\AttributionOverview::class,
+            ];
+        }
     }
 
     protected function mutateFormDataBeforeFill(array $data): array
