@@ -3,10 +3,6 @@
 namespace App\Filament\Pages;
 
 use App\Settings\GeneralSettings;
-use Filament\Actions\Action;
-use Filament\Forms;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -30,16 +26,13 @@ class ManageSettings extends SettingsPage
     public function mount(): void
     {
         abort_unless(Auth::user()->hasRole('administrator'), 403);
+        parent::mount();
     }
 
     public function form(Form $form): Form
     {
         return $form
             ->schema([
-                // Grid::make()
-                //     // ->maxWidth('lg')
-                //     // ->columns(5)
-                //     ->schema([
                 RichEditor::make('presentation_text')
                     ->label(__('attributes.presentation_text'))
                     ->disableAllToolbarButtons()
@@ -74,20 +67,6 @@ class ManageSettings extends SettingsPage
                     ->minValue(0)
                     ->suffix('jours')
                     ->required(),
-                // ])
             ]);
-    }
-
-    public function getSaveFormAction(): Action
-    {
-        return Action::make('save')
-            ->label(__('filament::resources/pages/edit-record.form.actions.save.label'))
-            ->submit('save')
-            ->keyBindings(['mod+s']);
-    }
-
-    public function getSavedNotificationTitle(): ?string
-    {
-        return __('filament-support::actions/edit.single.messages.saved');
     }
 }
