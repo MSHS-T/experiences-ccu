@@ -15,15 +15,16 @@ use Illuminate\Support\Str;
 
 class SlotGenerator
 {
-    public static function estimateCount(?Plateau $plateau, ?string $startDate, ?string $endDate, ?array $availableHours, int|string|null $duration): ?int
+    public static function estimateCount(array $userIds, ?Plateau $plateau, ?string $startDate, ?string $endDate, ?array $availableHours, int|string|null $duration): ?int
     {
+        if (blank($userIds)) return null;
         if (blank($plateau)) return null;
         if (blank($startDate) || blank(self::parseDate($startDate))) return null;
         if (blank($endDate) || blank(self::parseDate($endDate)) || $endDate < $startDate) return null;
         if (blank($duration) || $duration <= 0) return null;
         if (blank($availableHours) || !self::validateAvailableHours($availableHours, $duration)) return null;
 
-        return self::make($plateau, $startDate, $endDate, $availableHours, $duration)->count();
+        return self::make($userIds, $plateau, $startDate, $endDate, $availableHours, $duration)->count();
     }
 
     public static function validateAvailableHours(array $availableHours, int $duration): bool
@@ -46,12 +47,12 @@ class SlotGenerator
     }
 
 
-    public static function make(Plateau $plateau, string $startDate, string $endDate, array $availableHours, int $duration): Collection
+    public static function make(array $userIds, Plateau $plateau, string $startDate, string $endDate, array $availableHours, int $duration): Collection
     {
         $startDate = self::parseDate($startDate);
         $endDate = self::parseDate($endDate);
 
-        $attributions = self::getAttributions($plateau, $startDate, $endDate);
+        $attributions = self::getAttributions($userIds, $plateau, $startDate, $endDate);
         $otherSlots = self::getOtherSlots($plateau, $startDate, $endDate);
 
         $slots = collect();
@@ -124,7 +125,14 @@ class SlotGenerator
 
     public static function makeFromManipulation(Manipulation $m): Collection
     {
-        return self::make($m->plateau, $m->start_date, $m->end_date, $m->available_hours, $m->duration);
+        return self::make(
+            $m->users->pluck('id')->all(),
+            $m->plateau,
+            $m->start_date,
+            $m->end_date,
+            $m->available_hours,
+            $m->duration
+        );
     }
 
     public static function getOtherSlots(Plateau $plateau, Carbon $start_date, Carbon $end_date): Collection
@@ -142,10 +150,10 @@ class SlotGenerator
         return $slots->filter(fn (Slot $s) => $s->start < $end && $s->end > $start)->isNotEmpty();
     }
 
-    public static function getAttributions(Plateau $plateau, Carbon $start_date, Carbon $end_date): Collection
+    public static function getAttributions(array $userIds, Plateau $plateau, Carbon $start_date, Carbon $end_date): Collection
     {
         return Attribution::where('plateau_id', $plateau->id)
-            ->where('manipulation_manager_id', Auth::id())
+            ->whereIn('manipulation_manager_id', $userIds)
             ->where('start_date', '<=', $end_date)
             ->where('end_date', '>=', $start_date)
             ->get();

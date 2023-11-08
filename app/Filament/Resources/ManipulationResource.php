@@ -39,6 +39,7 @@ class ManipulationResource extends Resource
         $computeSlotCount = fn (callable $set, callable $get) => $set(
             'slot_count',
             SlotGenerator::estimateCount(
+                $get('users'),
                 Plateau::find(intval($get('plateau_id'))),
                 $get('start_date'),
                 $get('end_date'),
