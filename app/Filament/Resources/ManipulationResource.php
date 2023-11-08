@@ -349,8 +349,8 @@ class ManipulationResource extends Resource
                     ->action(fn (Manipulation $record) => $record->archive())
                     ->requiresConfirmation()
                     ->color('danger')
-                    ->hidden(fn (Manipulation $record) => !Auth::user()->can('archive', $record))
-                    ->disabled(fn (Manipulation $record) => !Auth::user()->can('archive', $record)),
+                    ->hidden(fn (Manipulation $record) => $record->archived || !Auth::user()->can('archive', $record))
+                    ->disabled(fn (Manipulation $record) => $record->archived || !Auth::user()->can('archive', $record)),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
