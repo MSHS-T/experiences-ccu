@@ -24,7 +24,7 @@ return [
 
     // Manipulation
     'plateau'         => 'Plateau',
-    'duration'        => 'Durée',
+    'duration'        => 'Durée du créneau',
     'target_slots'    => 'Créneaux',
     'slot_count'      => 'Nombre de créneaux',
     'start_date'      => 'Date de début',
