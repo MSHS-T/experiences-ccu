@@ -8,6 +8,7 @@ return [
         'show_manips'         => 'Voir les expériences en cours',
         'funded_by'           => 'Financé par',
         'manip_list'          => 'Liste des expériences en cours',
+        'manip_disclaimer'    => 'Cette page présente la liste des expériences en cours sur la plateforme CCU (Cognition Comportement Usage). Vous pouvez vous porter volontaire aux expériences listées ci-dessous en choisissant la date et l’horaire qui vous convient parmi les créneaux proposés. Votre inscription ne sera possible que si vous remplissez les critères d’inclusion de l’expérience choisie. Une fois inscrit vous recevrez un mail de confirmation ainsi que plusieurs messages de rappels avant votre créneau de passation.',
         'no_manips'           => 'Aucune expérience en cours, revenez plus tard.',
         'show_slots'          => 'Voir les créneaux',
         'access_instructions' => 'Plan d\'accès',

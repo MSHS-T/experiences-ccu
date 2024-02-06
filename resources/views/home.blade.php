@@ -38,7 +38,7 @@
                 src="{{ Vite::asset('resources/images/mshs-toulouse.png') }}">
         </div>
     </div>
-    <section id="manipulations" class="relative overflow-hidden bg-blue-600 pb-28 pt-20 sm:py-32 min-h-screen">
+    <section id="manipulations" class="relative overflow-hidden bg-blue-600 py-16 sm:py-24 min-h-screen">
         <img alt="" loading="lazy" width="2245" height="1636" decoding="async" data-nimg="1"
             class="absolute left-1/2 top-1/2 max-w-none translate-x-[-44%] translate-y-[-42%]" style="color:transparent"
             src="{{ Vite::asset('resources/images/background-features.jpg') }}">
@@ -47,19 +47,25 @@
                 <h2 class="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
                     {{ __('public.home.manip_list') }}
                 </h2>
+                <p
+                    class="text-sm tracking-tight text-white sm:text-base md:text-lg text-justify mt-4 py-2 px-4 rounded-lg bg-white lg:bg-white/10 lg:ring-1 lg:ring-inset lg:ring-white/10">
+                    {{ __('public.home.manip_disclaimer') }}
+                </p>
             </div>
+
+
             @if ($manipulations->isEmpty())
                 <p class="mt-32 text-xl text-center tracking-tight text-blue-100">
                     {{ __('public.home.no_manips') }}
                 </p>
             @else
-                <div class="mt-8 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-16 lg:mt-24 lg:grid-cols-9 lg:pt-0"
+                <div class="mt-4 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-8 lg:mt-16 lg:grid-cols-9 lg:pt-0"
                     x-data="{ selected: {{ $selectedManipulation }} }">
                     <div class="-mx-4 flex overflow-x-auto pb-4 sm:mx-0 lg:overflow-visible lg:pb-0 lg:col-span-3">
                         <div class="relative w-full z-10 flex space-x-4 whitespace-nowrap px-4 sm:mx-auto sm:px-0 lg:mx-0 lg:block lg:space-x-0 lg:space-y-2 lg:whitespace-normal lg:py-12"
                             role="tablist" aria-orientation="vertical">
                             @foreach ($manipulations as $m)
-                                <div class="group relative rounded-full px-4 py-1 lg:rounded-l-xl lg:rounded-r-none lg:p-6"
+                                <div class="group relative rounded-full px-4 py-1 lg:rounded-l-xl lg:rounded-r-none lg:p-4"
                                     x-bind:class="selected === {{ $m->id }} ?
                                         'bg-white lg:bg-white/10 lg:ring-1 lg:ring-inset lg:ring-white/10' :
                                         'hover:bg-white/10 lg:hover:bg-white/5'">
