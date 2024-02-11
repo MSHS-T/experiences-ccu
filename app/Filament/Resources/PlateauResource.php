@@ -43,6 +43,9 @@ class PlateauResource extends Resource
                     ->label(__('attributes.name'))
                     ->required()
                     ->maxLength(255),
+                Forms\Components\ColorPicker::make('color')
+                    ->label(__('attributes.color'))
+                    ->nullable(),
                 Forms\Components\RichEditor::make('description')
                     ->label(__('attributes.description'))
                     ->required()
@@ -70,6 +73,9 @@ class PlateauResource extends Resource
                     ->formatStateUsing(
                         fn (Plateau $record): string => $record->manager->name
                     )
+                    ->sortable(),
+                Tables\Columns\ColorColumn::make('color')
+                    ->label(__('attributes.color'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('attributes.name'))

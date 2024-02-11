@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -51,6 +52,7 @@ class Plateau extends Model implements HasMedia
     protected $fillable = [
         'name',
         'description',
+        'color',
         'manager_id',
     ];
 
@@ -77,6 +79,11 @@ class Plateau extends Model implements HasMedia
     public function manipulations(): HasMany
     {
         return $this->hasMany(Manipulation::class);
+    }
+
+    public function slots(): HasManyThrough
+    {
+        return $this->hasManyThrough(Slot::class, Manipulation::class);
     }
 
     public function attributions(): HasMany
