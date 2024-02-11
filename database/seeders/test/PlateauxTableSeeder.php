@@ -29,6 +29,17 @@ class PlateauxTableSeeder extends Seeder
             'SIMULAUTO'   => 'simulateur de conduite automobile',
             'TAB'         => 'étude des réponses comportementales au niveau des apprentissages scolaires et au niveau des processus cognitifs liée au vieillissement',
         ];
+        $colors = [
+            'BabyLab'     => '#FF00FF', //(Fuchsia)
+            'CLOE'        => '#0000FF', //(Blue)
+            'PACOMP'      => '#008000', //(Green)
+            'ImNum'       => '#800000', //(Maroon)
+            'OCULOMÉTRIE' => '#808000', //(Olive)
+            'PETRA'       => '#008080', //(Teal)
+            'ROB'         => '#800080', //(Purple)
+            'SIMULAUTO'   => '#FF0000', //(Red)
+            'TAB'         => '#000080', //(Navy)
+        ];
 
         $managers = User::role('plateau_manager')->get();
         $equipments = Equipment::all();
@@ -40,7 +51,8 @@ class PlateauxTableSeeder extends Seeder
         foreach ($names as $name => $description) {
             $plateau = Plateau::make([
                 'name'        => $name,
-                'description' => '<p>' . $description . '</p>'
+                'description' => '<p>' . $description . '</p>',
+                'color'       => $colors[$name],
             ]);
             /** @var Plateau $plateau */
             $plateau->manager()->associate($managers->random());

@@ -21,6 +21,7 @@ return [
     // Plateau
     'manager'    => 'Gestionnaire',
     'equipments' => 'Équipements',
+    'color'      => 'Couleur',
 
     // Manipulation
     'plateau'              => 'Plateau',

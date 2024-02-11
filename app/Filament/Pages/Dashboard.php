@@ -3,6 +3,7 @@
 namespace App\Filament\Pages;
 
 use App\Filament\Widgets\CalendarWidget;
+use App\Filament\Widgets\DashboardCalendarWidget;
 use Filament\Pages\Dashboard as BasePage;
 use Filament\Widgets;
 
@@ -22,7 +23,8 @@ class Dashboard extends BasePage
     {
         return [
             Widgets\AccountWidget::class,
-            CalendarWidget::class,
+            // CalendarWidget::class,
+            DashboardCalendarWidget::class
         ];
     }
 }
