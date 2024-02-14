@@ -14,6 +14,7 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
 use Filament\Support\Enums\ActionSize;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -353,6 +354,13 @@ class ManipulationResource extends Resource
             )
             ->actions([
                 Tables\Actions\ViewAction::make(),
+                Tables\Actions\Action::make('evaluations')
+                    ->label(fn (Manipulation $record) => __('actions.planning'))
+                    ->url(fn (Manipulation $record) => route('filament.admin.resources.manipulations.planning', ['record' => $record]))
+                    ->color(Color::Green)
+                    ->icon('fas-calendar')
+                // ->hidden(fn (Manipulation $record) => !$record->projectCall->canEvaluate() || blank($record->submitted_at))
+                ,
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('toggle_published')
                     ->label(fn (Manipulation $record) => $record->published ? __('actions.unpublish') : __('actions.publish'))
@@ -386,10 +394,11 @@ class ManipulationResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListManipulations::route('/'),
-            'create' => Pages\CreateManipulation::route('/create'),
-            'view'   => Pages\ViewManipulation::route('/{record}'),
-            'edit'   => Pages\EditManipulation::route('/{record}/edit'),
+            'index'    => Pages\ListManipulations::route('/'),
+            'create'   => Pages\CreateManipulation::route('/create'),
+            'view'     => Pages\ViewManipulation::route('/{record}'),
+            'edit'     => Pages\EditManipulation::route('/{record}/edit'),
+            'planning' => Pages\ManipulationPlanning::route('/{record}/planning'),
         ];
     }
 
