@@ -147,6 +147,13 @@ class Manipulation extends Model
         return $this->belongsTo(Manipulation::class);
     }
 
+    protected function displayName(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => $attributes['name'] . ' (' . $this->plateau->name . ')',
+        );
+    }
+
     public function getAvailableHoursDisplay(): array
     {
         $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];

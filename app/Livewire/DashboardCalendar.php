@@ -2,17 +2,19 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Traits\DisplaysSlots;
+use App\Livewire\Traits\InteractsWithSlots;
 use App\Models\Plateau;
 use App\Models\Slot;
-use Filament\Support\Colors\Color;
-use Illuminate\Database\Eloquent\Builder;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Forms\Contracts\HasForms;
 use Livewire\Component;
-use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithEvents;
-use Spatie\Color\Rgb;
 
-class DashboardCalendar extends Component
+class DashboardCalendar extends Component implements HasForms, HasActions
 {
-    use InteractsWithEvents;
+    use DisplaysSlots;
+    use InteractsWithSlots;
+
     public $colors = [];
     public $plateaux;
     public $checkedPlateaux;
@@ -38,17 +40,14 @@ class DashboardCalendar extends Component
             ->filter(fn (Slot $slot) => $this->checkedPlateaux[$slot->manipulation->plateau->id] ?? false)
             ->map(
                 fn (Slot $slot) => [
-                    // TODO : title depending on booking
-                    'title'      => $slot->id . ' (' . $slot->manipulation->plateau->name . ')',
+                    'id'         => $slot->id,
+                    'title'      => $this->slotLabel($slot, showPlateau: true),
                     'start'      => $slot->start,
                     'end'        => $slot->end,
-                    // TODO : manage state of slot (booked+confirmed = plateau color, booked+not confirmed = striped plateau color with gray, not booked = only border in plateau color)
-                    'color'      => $this->plateauColor($slot->manipulation->plateau) . '66',
                     'resourceId' => $slot->manipulation->plateau->id,
+                    ...$this->slotColor($slot),
                 ]
             );
-
-        ray($events);
 
         return $events->all();
     }
@@ -56,21 +55,6 @@ class DashboardCalendar extends Component
     public function togglePlateau($plateau)
     {
         $this->refreshRecords();
-    }
-
-    protected function plateauColor(Plateau $plateau): string
-    {
-        if (filled($plateau->color)) {
-            return $plateau->color;
-        }
-        if (blank($this->colors)) {
-            $colors = array_values(Color::all());
-            shuffle($colors);
-            $this->colors = $colors;
-        }
-
-        $color = $this->colors[$plateau->id % count($this->colors)];
-        return strval(Rgb::fromString('rgb(' . $color[800] . ')')->toHex());
     }
 
     public function render()

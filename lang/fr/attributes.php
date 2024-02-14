@@ -44,8 +44,14 @@ return [
     'creator'               => 'Créateur',
     'attributions'          => 'Attributions',
 
+    // Slot
+    'start' => 'Début',
+    'end'   => 'Fin',
+
     // Booking
     'birthdate' => 'Date de Naissance',
+    'confirmed' => 'Confirmé ?',
+    'booked_at' => 'Date de réservation',
 
     // Hours
     'monday'    => 'Lundi',
