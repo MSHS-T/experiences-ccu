@@ -37,7 +37,7 @@ trait DisplaysSlots
             } else {
                 // Booking unconfirmed : striped plateau color (50% opacity) with gray
                 return [
-                    'background'  => "linear-gradient(135deg, {$baseColor}66 25%, #808080 25%, #808080 50%, {$baseColor}66 50%, {$baseColor}66 75%, #808080 75%, #808080 100%)",
+                    'background'  => "linear-gradient(135deg, {$baseColor}66 12.50%, #808080 12.50%, #808080 25%, {$baseColor}66 25%, {$baseColor}66 37.50%, #808080 37.50%, #808080 50%, {$baseColor}66 50%, {$baseColor}66 62.50%, #808080 62.50%, #808080 75%, {$baseColor}66 75%, {$baseColor}66 87.50%, #808080 87.50%, #808080 100%)",
                     'borderColor' => $baseColor
                 ];
             }
