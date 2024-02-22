@@ -31,7 +31,7 @@
                             customTimeGrid: {
                                 type: 'timeGrid',
                                 duration: {
-                                    days: (window.innerWidth > 500 ? 4 : 2)
+                                    days: (window.innerWidth < 640 ? 1 : (window.innerWidth <= 768 ? 2 : 4))
                                 }
                             }
                         },
