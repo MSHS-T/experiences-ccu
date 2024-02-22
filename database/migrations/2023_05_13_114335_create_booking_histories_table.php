@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('booking_histories', function (Blueprint $table) {
             $table->id();
             $table->string('hashed_email');
-            $table->date('birthday');
             $table->unsignedInteger('booking_made');
             $table->unsignedInteger('booking_confirmed');
             $table->unsignedInteger('booking_confirmed_honored');

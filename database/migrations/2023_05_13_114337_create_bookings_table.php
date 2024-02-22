@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email');
-            $table->date('birthday');
             $table->boolean('confirmed');
             $table->string('confirmation_code');
             $table->dateTime('confirm_before');

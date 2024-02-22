@@ -145,10 +145,6 @@ trait InteractsWithSlots
                         ->label(__('attributes.email'))
                         ->required()
                         ->maxLength(255),
-                    TextInput::make('birthday')
-                        ->label(__('attributes.birthdate'))
-                        ->required()
-                        ->maxLength(255),
                     DateTimePicker::make('created_at')
                         ->label(__('attributes.booked_at')),
                     Toggle::make('confirmed')
