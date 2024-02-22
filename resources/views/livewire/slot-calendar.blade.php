@@ -28,6 +28,7 @@
                     editable: @json(false),
                     config: {
                         allDaySlot: false,
+                        nowIndicator: true,
                         height: '80vh',
                         views: {
                             customTimeGrid: {
