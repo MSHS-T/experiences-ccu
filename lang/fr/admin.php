@@ -4,5 +4,6 @@ return [
     'slot'                  => 'Créneau',
     'booking'               => 'Réservation',
     'no_booking'            => 'Aucune réservation',
-    'manipulation_planning' => 'Planning de la Manipulation ":name"'
+    'plateau_planning'      => 'Planning du Plateau ":name"',
+    'manipulation_planning' => 'Planning de la Manipulation ":name"',
 ];
