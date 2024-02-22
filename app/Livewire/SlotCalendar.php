@@ -7,8 +7,11 @@ use App\Livewire\Traits\InteractsWithSlots;
 use App\Models\Manipulation;
 use App\Models\Plateau;
 use App\Models\Slot;
+use App\Utils\AttributionHelper;
+use App\Utils\SlotGenerator;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Contracts\HasForms;
+use Illuminate\Support\Carbon;
 use Livewire\Component;
 
 class SlotCalendar extends Component implements HasForms, HasActions
@@ -52,14 +55,31 @@ class SlotCalendar extends Component implements HasForms, HasActions
             ->filter(fn (Slot $slot) => $this->shouldDisplaySlot($slot))
             ->map(
                 fn (Slot $slot) => [
-                    'id'         => $slot->id,
-                    'title'      => $this->slotLabel($slot, showPlateau: !isset($this->plateau)),
-                    'start'      => $slot->start,
-                    'end'        => $slot->end,
+                    'id'    => $slot->id,
+                    'title' => $this->slotLabel($slot, showPlateau: !isset($this->plateau)),
+                    'start' => $slot->start,
+                    'end'   => $slot->end,
+                    'type'  => 'event',
                     // 'resourceId' => $slot->manipulation->plateau->id,
                     ...$this->slotColor($slot),
                 ]
             );
+        if (isset($this->manipulation) && filled($this->manipulation)) {
+            $attributions = SlotGenerator::availableZones(
+                $this->manipulation,
+                new Carbon($fetchInfo['start']),
+                new Carbon($fetchInfo['end'])
+            );
+
+            $events = $events->concat(
+                $attributions->map(fn ($att) => [
+                    'start'   => $att['start'],
+                    'end'     => $att['end'],
+                    'display' => 'background',
+                    'type'    => 'zone',
+                ])
+            );
+        }
         return $events->values()->all();
     }
 
