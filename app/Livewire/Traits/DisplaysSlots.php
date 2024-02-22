@@ -5,6 +5,7 @@ namespace App\Livewire\Traits;
 use App\Models\Plateau;
 use App\Models\Slot;
 use Filament\Support\Colors\Color;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Color\Rgb;
 
 trait DisplaysSlots
@@ -52,14 +53,19 @@ trait DisplaysSlots
 
     protected function slotLabel(Slot $slot, bool $showPlateau = false): string
     {
+        $prefix = ((!$slot->booking || $slot->booking->confirmed) ? '' : '[?] ');
         $suffix = $showPlateau ? (' (' . $slot->manipulation->plateau->name . ')') : '';
-        if (filled($slot->booking)) {
-            return ($slot->booking->confirmed ? '' : '[?] ')
-                . $slot->booking->name
-                . $suffix;
+        switch (Auth::user()->roles->first()->name) {
+            case 'administrator':
+            case 'plateau_manager':
+                return $prefix
+                    . $slot->manipulation->users->first()->name
+                    . $suffix;
+            case 'manipulation_manager':
+                return $prefix
+                    . $slot->manipulation->name
+                    . $suffix;
         }
-
-        // Slot not booked (default) : slot ID + plateau (if requested)
-        return '#' . $slot->id . $suffix;
+        return '';
     }
 }
