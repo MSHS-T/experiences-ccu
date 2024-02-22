@@ -15,7 +15,6 @@ use Illuminate\Support\Str;
  * @property string $first_name
  * @property string $last_name
  * @property string $email
- * @property \Illuminate\Support\Carbon $birthdate
  * @property bool $confirmed
  * @property string $confirmation_code
  * @property \Illuminate\Support\Carbon $confirm_before
@@ -52,7 +51,6 @@ class Booking extends Model
         'first_name',
         'last_name',
         'email',
-        'birthdate',
         'confirmed',
         'confirmation_code',
         'confirm_before',
@@ -66,7 +64,6 @@ class Booking extends Model
      */
     protected $casts = [
         'id'             => 'integer',
-        'birthdate'      => 'date',
         'confirmed'      => 'boolean',
         'confirm_before' => 'datetime',
         'honored'        => 'boolean',
