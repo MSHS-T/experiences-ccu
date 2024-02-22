@@ -60,7 +60,6 @@ class SlotCalendar extends Component implements HasForms, HasActions
                     ...$this->slotColor($slot),
                 ]
             );
-        ray($events->values()->all());
         return $events->values()->all();
     }
 

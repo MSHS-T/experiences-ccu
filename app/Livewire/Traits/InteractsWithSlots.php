@@ -36,7 +36,7 @@ trait InteractsWithSlots
     {
         return ViewAction::make()
             ->record($this->getRecord())
-            ->form($this->getFormSchema())
+            ->form(fn ($record) => $this->getFormSchema($record))
             ->modalHeading(__('actions.view_slot'))
             ->modalFooterActions([
                 DeleteAction::make('delete')
@@ -57,9 +57,9 @@ trait InteractsWithSlots
             ->cancelParentActions();
     }
 
-    public function getFormSchema(): array
+    public function getFormSchema(?Slot $record = null): array
     {
-        return [
+        return array_filter([
             Fieldset::make(__('admin.slot'))
                 ->columns([
                     'default' => 1,
@@ -107,13 +107,13 @@ trait InteractsWithSlots
                         ->label(__('attributes.end'))
                         ->required(),
                 ]),
-            Fieldset::make(__('admin.booking'))
+            $record !== null ? Fieldset::make(__('admin.booking'))
                 ->columns([
                     'default' => 1,
                     'sm' => 2,
                 ])
                 ->relationship('booking')
-                ->schema(fn (Slot $record) => blank($record->booking) ? [
+                ->schema(fn (?Slot $record) => blank($record?->booking) ? [
                     Placeholder::make(__('admin.no_booking'))
                         ->columnSpanFull()
                         ->view('components.no-booking'),
@@ -139,8 +139,9 @@ trait InteractsWithSlots
                     Toggle::make('confirmed')
                         ->label(__('attributes.confirmed'))
                         ->inline(false)
-                ]),
-        ];
+                ])
+                : null,
+        ]);
     }
 
     public function getModel(): ?string
