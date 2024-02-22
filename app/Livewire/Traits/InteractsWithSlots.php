@@ -28,9 +28,24 @@ trait InteractsWithSlots
 {
     use InteractsWithActions,
         InteractsWithForms;
-    use InteractsWithEvents,
-        InteractsWithModalActions,
+    use InteractsWithEvents {
+        onEventClick as protected onEventClickTrait;
+    }
+    use InteractsWithModalActions,
         InteractsWithRecords;
+
+    /**
+     * Triggered when the user clicks an event.
+     * @param array $event An Event Object that holds information about the event (date, title, etc).
+     * @return void
+     */
+    public function onEventClick(array $event): void
+    {
+        // Disable click on background events
+        if (array_key_exists('id', $event)) {
+            $this->onEventClickTrait($event);
+        }
+    }
 
     protected function viewAction(): Action
     {

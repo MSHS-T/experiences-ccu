@@ -46,7 +46,6 @@ class SlotGenerator
         return true;
     }
 
-
     public static function make(array $userIds, Plateau $plateau, string $startDate, string $endDate, array $availableHours, int $duration): Collection
     {
         $startDate = self::parseDate($startDate);
@@ -97,10 +96,84 @@ class SlotGenerator
             $cursorDate->addDay()->startOfDay();
         }
 
-        // ray($otherSlots->map(fn ($s) => $s['start']->format('Y-m-d') . ':' . $s['start']->format('H:i') . '-' . $s['end']->format('H:i')));
-        // ray($slots->map(fn ($s) => $s['start']->format('Y-m-d') . ':' . $s['start']->format('H:i') . '-' . $s['end']->format('H:i')));
-
         return $slots;
+    }
+
+    public static function availableZones(Manipulation $manipulation, string $startDate, string $endDate): Collection
+    {
+        $startDate    = self::parseDate($startDate);
+        $endDate      = self::parseDate($endDate);
+        $attributions = self::getAttributions($manipulation->users->pluck('id')->all(), $manipulation->plateau, $startDate, $endDate);
+        // Do not include slots from current manipulation as potential conflicts
+        $otherSlots   = self::getOtherSlots($manipulation->plateau, $startDate, $endDate)
+            ->filter(fn (Slot $slot) => $slot->manipulation->id !== $manipulation->id);
+
+
+        $slots = collect();
+        $cursorDate = $startDate->clone();
+        while ($cursorDate <= $endDate) {
+            $dow = Str::lower($cursorDate->format('l'));
+            if (Arr::has($manipulation->available_hours, $dow)) {
+                $dowHours = $manipulation->available_hours[$dow];
+
+                foreach (['am', 'pm'] as $halfDay) {
+                    // check attribution
+                    if (!self::hasAttributionForHalfDay($attributions, $cursorDate, $halfDay)) continue;
+
+                    if (filled($dowHours['start_' . $halfDay] ?? []) && filled($dowHours['end_' . $halfDay] ?? [])) {
+                        $startHalfDay = self::parseTime($dowHours['start_' . $halfDay]);
+                        $endHalfDay   = self::parseTime($dowHours['end_' . $halfDay]);
+                        if (is_null($startHalfDay) || is_null($endHalfDay)) {
+                            continue;
+                        }
+
+                        $startHalfDay  = $cursorDate->clone()->setTime(...explode(':', $startHalfDay));
+                        $endHalfDay    = $cursorDate->clone()->setTime(...explode(':', $endHalfDay));
+                        $cursorHalfDay = $startHalfDay->clone();
+
+                        do {
+                            $start = $cursorHalfDay->clone();
+                            $end = $cursorHalfDay->addMinutes($manipulation->duration)->clone();
+                            if ($end <= $endHalfDay) {
+                                // check for collisions
+                                if (self::hasSlotConflict($otherSlots, $start, $end)) {
+                                    continue;
+                                }
+                                $slots->push([
+                                    'start' => $start->format('Y-m-d H:i'),
+                                    'end'   => $end->format('Y-m-d H:i')
+                                ]);
+                            } else if ($end > $endHalfDay && $start < $endHalfDay) {
+                                if ($slots->last()['end'] === $start->format('Y-m-d H:i'))
+                                    $slots->push([
+                                        'start' => $start->format('Y-m-d H:i'),
+                                        'end'   => $endHalfDay->format('Y-m-d H:i')
+                                    ]);
+                            }
+                        } while ($cursorHalfDay < $endHalfDay);
+                    }
+                }
+            }
+            $cursorDate->addDay()->startOfDay();
+        }
+
+        return $slots->reduce(
+            function (Collection $carry, array $item) {
+                if ($carry->isEmpty()) {
+                    $carry->push($item);
+                } else if ($carry->last()['end'] === $item['start']) {
+                    $last = $carry->pop();
+                    $carry->push([
+                        'start' => $last['start'],
+                        'end'   => $item['end']
+                    ]);
+                } else {
+                    $carry->push($item);
+                }
+                return $carry;
+            },
+            collect([])
+        );
     }
 
     public static function parseTime(string $time): ?string
@@ -146,7 +219,6 @@ class SlotGenerator
 
     public static function hasSlotConflict(Collection $slots, Carbon $start, Carbon $end): bool
     {
-        // TODO : compare performances with other collection methods (some, every) ?
         return $slots->filter(fn (Slot $s) => $s->start < $end && $s->end > $start)->isNotEmpty();
     }
 
@@ -162,7 +234,6 @@ class SlotGenerator
     public static function hasAttributionForHalfDay(Collection $attributions, Carbon $date, string $halfDay): bool
     {
         $dow = Str::lower($date->format('l'));
-        // TODO : compare performances with other collection methods (some, every) ?
         return $attributions->filter(
             fn (Attribution $attribution) => $attribution->start_date <= $date
                 && $attribution->end_date >= $date

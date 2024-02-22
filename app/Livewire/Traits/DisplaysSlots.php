@@ -38,15 +38,15 @@ trait DisplaysSlots
             } else {
                 // Booking unconfirmed : striped plateau color (50% opacity) with 100% opacity
                 return [
-                    'background'  => "linear-gradient(135deg, {$baseColor}66 12.50%, {$baseColor} 12.50%, {$baseColor} 25%, {$baseColor}66 25%, {$baseColor}66 37.50%, {$baseColor} 37.50%, {$baseColor} 50%, {$baseColor}66 50%, {$baseColor}66 62.50%, {$baseColor} 62.50%, {$baseColor} 75%, {$baseColor}66 75%, {$baseColor}66 87.50%, {$baseColor} 87.50%, {$baseColor} 100%)",
+                    'background'  => "linear-gradient(135deg, {$baseColor} 12.50%, #808080 12.50%, #808080 25%, {$baseColor} 25%, {$baseColor} 37.50%, #808080 37.50%, #808080 50%, {$baseColor} 50%, {$baseColor} 62.50%, #808080 62.50%, #808080 75%, {$baseColor} 75%, {$baseColor} 87.50%, #808080 87.50%, #808080 100%)",
                     'borderColor' => $baseColor
                 ];
             }
         }
 
-        // Slot not booked (default) : plateau color (50% opacity)
+        // Slot not booked (default) : gray
         return [
-            'backgroundColor' => $baseColor . '66',
+            'backgroundColor' => '#808080',
             'borderColor' => $baseColor,
         ];
     }
