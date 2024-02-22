@@ -1,18 +1,20 @@
 <div class="h-full">
     <div class="relative divide-y">
-        <div class="w-full flex flex-wrap justify-between flex-1 mb-4">
-            @foreach ($plateaux as $plateau)
-                <label class="flex items-center gap-2">
-                    <x-filament::input.checkbox wire:model="checkedPlateaux.{{ $plateau['id'] }}"
-                        wire:change="togglePlateau({{ $plateau['id'] }})" />
-                    <span class="w-4 h-4 rounded-lg" style="background-color: {{ $plateau['color'] }}">
-                    </span>
-                    <span>
-                        {{ $plateau['name'] }}
-                    </span>
-                </label>
-            @endforeach
-        </div>
+        @if ($showPlateaux)
+            <div class="w-full flex flex-wrap justify-between flex-1 mb-4">
+                @foreach ($plateaux as $plateau)
+                    <label class="flex items-center gap-2">
+                        <x-filament::input.checkbox wire:model="checkedPlateaux.{{ $plateau['id'] }}"
+                            wire:change="togglePlateau({{ $plateau['id'] }})" />
+                        <span class="w-4 h-4 rounded-lg" style="background-color: {{ $plateau['color'] }}">
+                        </span>
+                        <span>
+                            {{ $plateau['name'] }}
+                        </span>
+                    </label>
+                @endforeach
+            </div>
+        @endif
         <div style="padding-top: 16px;">
             <div class="filament-fullcalendar" wire:ignore ax-load
                 ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('filament-fullcalendar-alpine', 'saade/filament-fullcalendar') }}"

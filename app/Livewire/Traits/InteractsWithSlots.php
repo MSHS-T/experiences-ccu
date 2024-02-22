@@ -9,6 +9,7 @@ use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\StaticAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Components\Actions\Action as FormAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Placeholder;
@@ -18,6 +19,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Support\Enums\Alignment;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithEvents;
 use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithModalActions;
 use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithRecords;
@@ -67,16 +69,37 @@ trait InteractsWithSlots
                     TextInput::make('id')
                         ->label('ID')
                         ->required()
-                        ->maxLength(255),
+                        ->maxLength(255)
+                        ->visible(Auth::user()->hasRole('administrator'))
+                        ->columnSpanFull(),
                     Select::make('manipulation_id')
                         ->label('Manipulation')
                         ->relationship(
                             name: 'manipulation',
-                            modifyQueryUsing: fn (Builder $query) => $query->with('plateau')
+                            titleAttribute: 'name',
                         )
-                        ->getOptionLabelFromRecordUsing(fn (Manipulation $record) => $record->displayName)
                         ->preload()
-                        ->required(),
+                        ->required()
+                        ->suffixAction(
+                            fn ($state) => FormAction::make('planning')
+                                ->icon('fas-calendar-days')
+                                ->url(route('filament.admin.resources.manipulations.planning', ['record' => $state]))
+                                ->openUrlInNewTab()
+                        ),
+                    Select::make('plateau_id')
+                        ->label('Plateau')
+                        ->relationship(
+                            name: 'plateau',
+                            titleAttribute: 'name'
+                        )
+                        ->preload()
+                        ->required()
+                        ->suffixAction(
+                            fn ($state) => FormAction::make('planning')
+                                ->icon('fas-calendar-days')
+                                ->url(route('filament.admin.resources.plateaux.planning', ['record' => $state]))
+                                ->openUrlInNewTab()
+                        ),
                     DateTimePicker::make('start')
                         ->label(__('attributes.start'))
                         ->required(),

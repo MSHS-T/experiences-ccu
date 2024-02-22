@@ -9,6 +9,7 @@ use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\Colors\Color;
 use Filament\Tables\Table;
 use Filament\Tables;
 use Filament\Tables\Filters\SelectFilter;
@@ -101,6 +102,11 @@ class PlateauResource extends Resource
             )
             ->actions([
                 Tables\Actions\ViewAction::make(),
+                Tables\Actions\Action::make('planning')
+                    ->label(__('actions.planning'))
+                    ->url(fn (Plateau $record) => route('filament.admin.resources.plateaux.planning', ['record' => $record]))
+                    ->color(Color::Green)
+                    ->icon('fas-calendar'),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -118,10 +124,11 @@ class PlateauResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListPlateaux::route('/'),
-            'create' => Pages\CreatePlateau::route('/create'),
-            'view'   => Pages\ViewPlateau::route('/{record}'),
-            'edit'   => Pages\EditPlateau::route('/{record}/edit'),
+            'index'    => Pages\ListPlateaux::route('/'),
+            'create'   => Pages\CreatePlateau::route('/create'),
+            'view'     => Pages\ViewPlateau::route('/{record}'),
+            'edit'     => Pages\EditPlateau::route('/{record}/edit'),
+            'planning' => Pages\PlateauPlanning::route('/{record}/planning'),
         ];
     }
 

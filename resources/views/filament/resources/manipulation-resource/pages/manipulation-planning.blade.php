@@ -1,3 +1,3 @@
 <x-filament-panels::page>
-    <livewire:manipulation-calendar :manipulationId="$manipulation->id" />
+    <livewire:slot-calendar :manipulationId="$manipulation->id" />
 </x-filament-panels::page>

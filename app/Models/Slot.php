@@ -60,6 +60,11 @@ class Slot extends Model
         return $this->belongsTo(Manipulation::class);
     }
 
+    public function plateau(): BelongsTo
+    {
+        return $this->manipulation->plateau();
+    }
+
     public function booking(): HasOne
     {
         return $this->hasOne(Booking::class);

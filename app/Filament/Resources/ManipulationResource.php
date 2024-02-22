@@ -354,13 +354,11 @@ class ManipulationResource extends Resource
             )
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\Action::make('evaluations')
-                    ->label(fn (Manipulation $record) => __('actions.planning'))
+                Tables\Actions\Action::make('planning')
+                    ->label(__('actions.planning'))
                     ->url(fn (Manipulation $record) => route('filament.admin.resources.manipulations.planning', ['record' => $record]))
                     ->color(Color::Green)
-                    ->icon('fas-calendar')
-                // ->hidden(fn (Manipulation $record) => !$record->projectCall->canEvaluate() || blank($record->submitted_at))
-                ,
+                    ->icon('fas-calendar'),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('toggle_published')
                     ->label(fn (Manipulation $record) => $record->published ? __('actions.unpublish') : __('actions.publish'))
