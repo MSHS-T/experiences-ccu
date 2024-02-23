@@ -4,8 +4,10 @@ namespace App\Livewire\Traits;
 
 use App\Models\Manipulation;
 use App\Models\Slot;
+use App\Utils\SlotGenerator;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\StaticAction;
 use Filament\Actions\ViewAction;
@@ -20,6 +22,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Support\Enums\Alignment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithEvents;
 use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithModalActions;
 use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithRecords;
@@ -70,6 +73,37 @@ trait InteractsWithSlots
             ])
             ->modalFooterActionsAlignment(Alignment::Center)
             ->cancelParentActions();
+    }
+
+    protected function createAction(): Action
+    {
+        return Action::make('create_slots')
+            ->modalHeading(__('actions.create_slots'))
+            ->modalContent(function ($arguments) {
+                $slots = SlotGenerator::makeFromManipulationAndDateTimes($this->manipulation, $arguments['start'], $arguments['end']);
+                return view('components.slot-creation-preview', ['slots' => $slots]);
+            })
+            ->modalFooterActions(fn ($arguments) => [
+                StaticAction::make('close')
+                    ->label(__('actions.close'))
+                    ->close()
+                    ->color('gray')
+                    ->button(),
+                Action::make('create')
+                    ->label(__('actions.create'))
+                    ->color('success')
+                    ->hidden(count(SlotGenerator::makeFromManipulationAndDateTimes($this->manipulation, $arguments['start'], $arguments['end'])) === 0)
+                    ->action(function () use ($arguments) {
+                        $slots = SlotGenerator::makeFromManipulationAndDateTimes($this->manipulation, $arguments['start'], $arguments['end']);
+                        $this->manipulation->slots()->createMany($slots);
+                    })
+                    ->after(function ($livewire) {
+                        $this->closeActionModal();
+                        $livewire->refreshRecords();
+                    })
+                    ->button(),
+            ])
+            ->modalFooterActionsAlignment(Alignment::Center);
     }
 
     public function getFormSchema(?Slot $record = null): array

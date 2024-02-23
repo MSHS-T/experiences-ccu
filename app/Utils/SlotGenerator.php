@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
 
 class SlotGenerator
 {
-    public static function estimateCount(array $userIds, ?Plateau $plateau, ?string $startDate, ?string $endDate, ?array $availableHours, int|string|null $duration): ?int
+    public static function estimateCount(array $userIds, ?Plateau $plateau, string|Carbon|null $startDate, string|Carbon|null $endDate, ?array $availableHours, int|string|null $duration): ?int
     {
         if (blank($userIds)) return null;
         if (blank($plateau)) return null;
@@ -46,7 +46,7 @@ class SlotGenerator
         return true;
     }
 
-    public static function make(array $userIds, Plateau $plateau, string $startDate, string $endDate, array $availableHours, int $duration): Collection
+    public static function make(array $userIds, Plateau $plateau, string|Carbon $startDate, string|Carbon $endDate, array $availableHours, int $duration): Collection
     {
         $startDate = self::parseDate($startDate);
         $endDate = self::parseDate($endDate);
@@ -99,7 +99,7 @@ class SlotGenerator
         return $slots;
     }
 
-    public static function availableZones(Manipulation $manipulation, string $startDate, string $endDate): Collection
+    public static function availableZones(Manipulation $manipulation, string|Carbon $startDate, string|Carbon $endDate): Collection
     {
         $startDate    = self::parseDate($startDate);
         $endDate      = self::parseDate($endDate);
@@ -107,7 +107,6 @@ class SlotGenerator
         // Do not include slots from current manipulation as potential conflicts
         $otherSlots   = self::getOtherSlots($manipulation->plateau, $startDate, $endDate)
             ->filter(fn (Slot $slot) => $slot->manipulation->id !== $manipulation->id);
-
 
         $slots = collect();
         $cursorDate = $startDate->clone();
@@ -140,14 +139,14 @@ class SlotGenerator
                                     continue;
                                 }
                                 $slots->push([
-                                    'start' => $start->format('Y-m-d H:i'),
-                                    'end'   => $end->format('Y-m-d H:i')
+                                    'start' => $start->format('Y-m-d H:i:s'),
+                                    'end'   => $end->format('Y-m-d H:i:s')
                                 ]);
                             } else if ($end > $endHalfDay && $start < $endHalfDay) {
-                                if ($slots->last()['end'] === $start->format('Y-m-d H:i'))
+                                if ($slots->last()['end'] === $start->format('Y-m-d H:i:s'))
                                     $slots->push([
-                                        'start' => $start->format('Y-m-d H:i'),
-                                        'end'   => $endHalfDay->format('Y-m-d H:i')
+                                        'start' => $start->format('Y-m-d H:i:s'),
+                                        'end'   => $endHalfDay->format('Y-m-d H:i:s')
                                     ]);
                             }
                         } while ($cursorHalfDay < $endHalfDay);
@@ -176,26 +175,6 @@ class SlotGenerator
         );
     }
 
-    public static function parseTime(string $time): ?string
-    {
-        if (Carbon::hasFormat($time, 'Y-m-d H:i:s')) {
-            return Arr::last(explode(' ', $time));
-        } else if (Carbon::hasFormat($time, 'H:i')) {
-            return $time . ':00';
-        }
-        return null;
-    }
-
-    public static function parseDate(string $date): ?Carbon
-    {
-        if (Carbon::hasFormat($date, 'Y-m-d H:i:s')) {
-            return self::parseDate(Arr::first(explode(' ', $date)));
-        } else if (Carbon::hasFormat($date, 'Y-m-d')) {
-            return Carbon::createFromFormat('Y-m-d', $date);
-        }
-        return null;
-    }
-
     public static function makeFromManipulation(Manipulation $m): Collection
     {
         return self::make(
@@ -206,6 +185,36 @@ class SlotGenerator
             $m->available_hours,
             $m->duration
         );
+    }
+
+    public static function makeFromManipulationAndDateTimes(Manipulation $m, string|Carbon $startDateTime, string|Carbon $endDateTime): Collection
+    {
+        $startDateTime = self::parseDateTime($startDateTime);
+        $endDateTime = self::parseDateTime($endDateTime);
+        $availableZones = self::availableZones($m, $startDateTime, $endDateTime);
+
+        $slots = collect();
+
+        // Iterate through available time frames
+        foreach ($availableZones as $zone) {
+            $zoneStart = Carbon::createFromFormat('Y-m-d H:i:s', $zone['start']);
+            $zoneEnd = Carbon::createFromFormat('Y-m-d H:i:s', $zone['end']);
+
+            // Check if the zone is within the overall start and end datetime
+            if ($zoneStart->lessThanOrEqualTo($endDateTime) && $zoneEnd->greaterThanOrEqualTo($startDateTime)) {
+                $currentTime = $startDateTime->greaterThan($zoneStart) ? $startDateTime : $zoneStart;
+
+                // Add events within the available time frame
+                while ($currentTime->addMinutes($m->duration)->lessThanOrEqualTo($zoneEnd) && $currentTime->lessThanOrEqualTo($endDateTime)) {
+                    $slots->push([
+                        'start' => $currentTime->copy()->subMinutes($m->duration)->format('Y-m-d H:i'),
+                        'end' => $currentTime->format('Y-m-d H:i')
+                    ]);
+                }
+            }
+        }
+
+        return $slots;
     }
 
     public static function getOtherSlots(Plateau $plateau, Carbon $start_date, Carbon $end_date): Collection
@@ -239,5 +248,37 @@ class SlotGenerator
                 && $attribution->end_date >= $date
                 && in_array($dow . '_' . $halfDay, $attribution->allowed_halfdays)
         )->isNotEmpty();
+    }
+
+    public static function parseTime(string $time): ?string
+    {
+        if (Carbon::hasFormat($time, 'Y-m-d H:i:s')) {
+            return Arr::last(explode(' ', $time));
+        } else if (Carbon::hasFormat($time, 'H:i')) {
+            return $time . ':00';
+        }
+        return null;
+    }
+
+    public static function parseDate(string|Carbon $date): ?Carbon
+    {
+        if ($date instanceof Carbon) {
+            return $date->clone()->startOfDay();
+        } else if (Carbon::hasFormat($date, 'Y-m-d H:i:s')) {
+            return self::parseDate(Arr::first(explode(' ', $date)));
+        } else if (Carbon::hasFormat($date, 'Y-m-d')) {
+            return Carbon::createFromFormat('Y-m-d', $date);
+        }
+        return null;
+    }
+
+    public static function parseDateTime(string|Carbon $date): ?Carbon
+    {
+        if ($date instanceof Carbon) {
+            return $date;
+        } else if (Carbon::hasFormat($date, 'Y-m-d H:i:s')) {
+            return Carbon::createFromFormat('Y-m-d H:i:s', $date);
+        }
+        return null;
     }
 }
