@@ -4,6 +4,7 @@ namespace App\View\Components;
 
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\Component;
 
 class PublicLayout extends Component

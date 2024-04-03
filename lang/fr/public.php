@@ -22,5 +22,8 @@ return [
         'check_requirements' => 'Vérification des critères d\'inclusion',
         'commitment'         => 'En vous inscrivant sur ce créneau, vous attestez que les informations fournies sont vraies, et vous engagez à honorer le rendez-vous.',
         'confirm_booking'    => 'Confirmer mon inscription'
+    ],
+    'my_bookings' => [
+        'page_title'         => 'Mes inscriptions',
     ]
 ];

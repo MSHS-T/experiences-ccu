@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>
-        @if (isset($title))
-            {{ $title }} |
-        @endif
-        {{ config('app.name') }}
+        {{ isset($title) ? $title . ' | ' : '' }}{{ config('app.name') }}
     </title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -27,11 +24,17 @@
                 </a>
             </div>
             <div class="flex items-center gap-x-5 md:gap-x-8">
-
-                <a class="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600"
-                    href="/mes-inscriptions">
-                    Mes inscriptions
-                </a>
+                @if (filled(Session::get('subject_email', null)) && Route::is('my_bookings'))
+                    <a class="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600"
+                        href="{{ route('subject_logout') }}">
+                        Déconnexion
+                    </a>
+                @else
+                    <a class="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600"
+                        href={{ route('my_bookings') }}>
+                        Mes inscriptions
+                    </a>
+                @endif
             </div>
         </nav>
     </header>

@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.1",
         "awcodes/filament-table-repeater": "^2.0",
+        "cesargb/laravel-magiclink": "^2.19",
         "filament/filament": "^3.0-stable",
         "filament/spatie-laravel-media-library-plugin": "^3.0-stable",
         "filament/spatie-laravel-settings-plugin": "^3.0-stable",
@@ -17,6 +18,7 @@
         "laravel/framework": "^10.8",
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
+        "livewire/livewire": "^3.4",
         "owenvoke/blade-fontawesome": "^2.2",
         "saade/filament-fullcalendar": "^3.0",
         "spatie/laravel-medialibrary": "^10.0.0",
