@@ -1,13 +1,10 @@
-@extends('layouts.public')
-
-@section('title', __('public.slots.page_title', ['manipulation' => $manipulationName]))
-
-@section('content')
+<x-public-layout>
+    <x-slot name="title">{{ __('public.slots.page_title', ['manipulation' => $manipulationName]) }}</x-slot>
     <div x-data="slotSelector">
         <section id="slots" class="relative overflow-hidden bg-blue-600 pb-28 pt-20 sm:py-32 lg:min-h-screen">
             <img alt="" loading="lazy" width="2245" height="1636" decoding="async" data-nimg="1"
-                class="absolute left-1/2 top-1/2 max-w-none translate-x-[-44%] translate-y-[-42%]" style="color:transparent"
-                src="{{ Vite::asset('resources/images/background-features.jpg') }}">
+                class="absolute left-1/2 top-1/2 max-w-none translate-x-[-44%] translate-y-[-42%]"
+                style="color:transparent" src="{{ Vite::asset('resources/images/background-features.jpg') }}">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
                 <div class="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
                     <h2 class="font-display text-3xl tracking-tight text-white sm:text-4xl md:text-5xl">
@@ -36,7 +33,8 @@
                                             <button
                                                 class="font-display text-lg [&:not(:focus-visible)]:focus:outline-none
                                         flex items-center justify-between w-full p-1 font-medium text-left text-white"
-                                                x-on:click="selectedDate = Object.keys(slots)[dayIndex - 1]" type="button">
+                                                x-on:click="selectedDate = Object.keys(slots)[dayIndex - 1]"
+                                                type="button">
                                                 <span class="absolute inset-0 rounded-xl"></span>
                                                 <span class="capitalize"
                                                     x-text="dayjs(Object.keys(slots)[dayIndex - 1]).format('dddd DD MMMM YYYY')"></span>
@@ -170,4 +168,4 @@
             }))
         })
     </script>
-@endsection
+</x-public-layout>

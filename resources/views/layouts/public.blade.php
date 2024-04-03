@@ -4,7 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@yield('title') | {{ config('app.name') }}</title>
+    <title>
+        @if (isset($title))
+            {{ $title }} |
+        @endif
+        {{ config('app.name') }}
+    </title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
     <link rel="stylesheet"
@@ -32,7 +37,7 @@
     </header>
 
     <main class="flex-grow">
-        @yield('content')
+        {{ $slot }}
     </main>
 
     <footer class="bg-white">
@@ -43,13 +48,13 @@
             </div>
             <div class="grid lg:grid-cols-3 items-center border-t border-slate-400/10 py-4 space-y-4 lg:space-y-0">
                 <p class="text-center sm:text-left text-sm text-slate-500 sm:mt-0">
-                    Copyright © 2023 Expériences CCU
+                    Copyright © 2024 Expériences CCU
                 </p>
                 <div class="flex justify-center gap-x-6">
                     <a class="inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900"
-                        href="{{ route('cookies') }}">Politique de Cookies</a>
+                        href="{{ route('cookies') }}">{{ __('public.cookie_policy') }}</a>
                     <a class="inline-block rounded-lg px-2 py-1 text-sm text-slate-700 hover:bg-slate-100 hover:text-slate-900"
-                        href="{{ route('legal') }}">Mentions Légales</a>
+                        href="{{ route('legal') }}">{{ __('public.legal') }}</a>
                 </div>
                 <a class="text-center sm:text-right text-sm text-slate-500 sm:mt-0" href="https://3rgo.tech"
                     target="_blank">

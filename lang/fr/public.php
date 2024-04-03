@@ -1,7 +1,9 @@
 <?php
 
 return [
-    'home' => [
+    'legal'         => 'Mentions Légales',
+    'cookie_policy' => 'Politique de Cookies',
+    'home'          => [
         'page_title'          => 'Accueil',
         'title1'              => 'Plateforme expérimentale dédiée à la recherche sur le',
         'title2'              => 'comportement humain',

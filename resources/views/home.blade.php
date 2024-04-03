@@ -1,8 +1,5 @@
-@extends('layouts.public')
-
-@section('title', __('public.home.page_title'))
-
-@section('content')
+<x-public-layout>
+    <x-slot name="title">{{ __('public.home.page_title') }}</x-slot>
     <div
         class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center lg:pt-8 min-h-[95vh] flex flex-col justify-between items-center">
         <div class="h-12 lg:h-16"></div>
@@ -195,5 +192,4 @@
             @endif
         </div>
     </section>
-
-@endsection
+</x-public-layout>
