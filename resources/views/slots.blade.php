@@ -1,4 +1,7 @@
 <x-public-layout>
+    @if ($errors->any())
+        {{ dump($errors->all()) }}
+    @endif
     <x-slot name="title">{{ __('public.slots.page_title', ['manipulation' => $manipulationName]) }}</x-slot>
     <div x-data="slotSelector">
         <section id="slots" class="relative overflow-hidden bg-blue-600 pb-28 pt-20 sm:py-32 lg:min-h-screen">
@@ -86,9 +89,13 @@
                         {{ __('attributes.first_name') }}
                     </label>
                     <div class="mt-2">
-                        <input type="text" name="first-name" id="first-name" autocomplete="given-name"
+                        <input type="text" name="first_name" id="first-name" autocomplete="given-name"
+                            value="{{ old('first_name') }}"
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
+                    @error('first_name')
+                        <p class="mt-2 text-sm text-red-600" id="first-name-error">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="sm:col-span-3">
@@ -96,9 +103,13 @@
                         {{ __('attributes.last_name') }}
                     </label>
                     <div class="mt-2">
-                        <input type="text" name="last-name" id="last-name" autocomplete="family-name"
+                        <input type="text" name="last_name" id="last-name" autocomplete="family-name"
+                            value="{{ old('last_name') }}"
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
+                    @error('last_name')
+                        <p class="mt-2 text-sm text-red-600" id="last-name-error">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="sm:col-span-6">
@@ -107,8 +118,12 @@
                     </label>
                     <div class="mt-2">
                         <input id="email" name="email" type="email" autocomplete="email"
+                            value="{{ old('email') }}"
                             class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
+                    @error('email')
+                        <p class="mt-2 text-sm text-red-600" id="email-error">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <fieldset class="sm:col-span-6">
@@ -119,29 +134,38 @@
                         @foreach ($manipulationRequirements as $i => $r)
                             <div class="relative flex gap-x-3">
                                 <div class="flex h-6 items-center">
-                                    <input id="requirements-{{ $i }}" name="requirements" type="checkbox"
-                                        value="{{ $i }}"
+                                    <input id="requirements-{{ $i }}"
+                                        name="requirements-{{ $i }}" type="checkbox"
                                         class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
                                 </div>
                                 <div class="text-sm leading-6">
                                     <label for="requirements-{{ $i }}"
                                         class="font-medium text-gray-500">{{ $r }}</label>
+                                    @error('requirements-' . $i)
+                                        <p class="mt-1 text-sm text-red-600" id="requirements-error">{{ $message }}
+                                        </p>
+                                    @enderror
                                 </div>
                             </div>
                         @endforeach
                     </div>
                 </fieldset>
 
-                <div class="sm:col-span-6 pt-4 flex items-start">
-                    <input id="commitment" name="commitment" type="checkbox"
-                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 mr-3">
-                    <label for="commitment" class="block text-sm font-medium leading-6 text-gray-900">
-                        {{ __('public.slots.commitment') }}
-                    </label>
+                <div class="sm:col-span-6 pt-4">
+                    <div class="flex items-start">
+                        <input id="commitment" name="commitment" type="checkbox"
+                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 mr-3">
+                        <label for="commitment" class="block text-sm font-medium leading-6 text-gray-900">
+                            {{ __('public.slots.commitment') }}
+                        </label>
+                    </div>
+                    @error('commitment')
+                        <p class="mt-2 text-sm text-red-600" id="commitment-error">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="sm:col-span-6 flex justify-center">
-                    <button type="submit"
+                    <button type="submit" x-bind:disabled="selectedSlot === null"
                         class="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600">
                         {{ __('public.slots.confirm_booking') }}
                     </button>
@@ -154,8 +178,14 @@
             Alpine.data('slotSelector', () => ({
                 slots: @json($slots),
                 selectedDate: '{{ $slots->keys()->first() }}',
-                selectedSlot: null,
+                selectedSlot: {{ old('slot_id', 'null') }},
                 daysDisplayed: 7,
+
+                init() {
+                    if (this.selectedSlot !== null) {
+                        this.$refs.nextSectionLink.click();
+                    }
+                },
 
                 loadMoreDays() {
                     this.daysDisplayed += 5;

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Slot;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class BookSlotRequest extends FormRequest
 {
@@ -11,7 +13,8 @@ class BookSlotRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        $slot = request()->route('slot');
+        return blank($slot->booking);
     }
 
     /**
@@ -21,8 +24,43 @@ class BookSlotRequest extends FormRequest
      */
     public function rules(): array
     {
+        $slot = request()->route('slot');
+        $otherSlots = Slot::with('booking')->where('manipulation_id', $slot->manipulation_id)->get();
+        $otherBookingsEmails = $otherSlots
+            ->map(fn (Slot $slot) => $slot->booking?->email)
+            ->filter(fn (?string $email) => filled($email))
+            ->toArray();
+
+        $requirementsRules = collect($slot->manipulation->requirements)
+            ->mapWithKeys(fn ($r, $k) => ['requirements-' . $k => 'accepted'])
+            ->all();
         return [
-            //
+            'first_name' => 'required|string',
+            'last_name'  => 'required|string',
+            'email'      => [
+                'required',
+                'email',
+                Rule::notIn($otherBookingsEmails),
+            ],
+            'commitment'     => 'accepted',
+            ...$requirementsRules
+        ];
+    }
+
+    public function messages(): array
+    {
+        $slot = request()->route('slot');
+        $requirementsMessages = collect($slot->manipulation->requirements)
+            ->mapWithKeys(fn ($r, $k) => ['requirements-' . $k => 'Vous devez confirmer que vous faites partie de tous les critères d\'inclusion.'])
+            ->all();
+        return [
+            'first_name.required'     => 'Le prénom est requis.',
+            'last_name.required'      => 'Le nom est requis.',
+            'email.required'          => 'L\'email est requis.',
+            'email.email'             => 'L\'email n\'est pas valide.',
+            'email.not_in'            => 'L\'email saisi est déjà inscrit pour cette manipulation.',
+            'commitment.accepted'     => 'Vous devez attester que les informations fournies sont vraies et vous engager à honorer le rendez-vous.',
+            ...$requirementsMessages
         ];
     }
 }

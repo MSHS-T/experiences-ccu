@@ -25,5 +25,8 @@ return [
     ],
     'my_bookings' => [
         'page_title'         => 'Mes inscriptions',
+    ],
+    'messages' => [
+        'booking_created' => 'Votre inscription a bien été effectuée. Vous allez recevoir un mail récapitulatif. Nous vous remercions de cliquer sur le lien contenu dans celui-ci afin de confirmer votre inscription'
     ]
 ];

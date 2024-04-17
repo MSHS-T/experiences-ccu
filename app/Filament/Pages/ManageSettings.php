@@ -53,7 +53,7 @@ class ManageSettings extends SettingsPage
                     ->label(__('attributes.booking_confirmation_delay'))
                     ->integer()
                     ->minValue(0)
-                    ->suffix('jours')
+                    ->suffix('heures')
                     ->required(),
                 TextInput::make('booking_opening_delay')
                     ->label(__('attributes.booking_opening_delay'))

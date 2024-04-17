@@ -22,7 +22,7 @@ return new class extends Migration
             $table->boolean('confirmed');
             $table->string('confirmation_code');
             $table->dateTime('confirm_before');
-            $table->boolean('honored');
+            $table->boolean('honored')->nullable();
             $table->timestamps();
         });
 

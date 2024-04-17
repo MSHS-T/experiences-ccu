@@ -17,7 +17,7 @@
                     </div>
                     <div class="ml-3">
                         <h3 class="text-sm font-medium text-red-800">Erreur</h3>
-                        <div class="mt-2 text-sm text-red-700">
+                        <div class="text-sm text-red-700">
                             <p>
                                 {{ $error }}
                             </p>
@@ -33,7 +33,7 @@
                         <x-fas-check-circle class="h-5 w-5 text-green-400" />
                     </div>
                     <div class="ml-3">
-                        <div class="mt-2 text-sm text-green-700">
+                        <div class="text-sm text-green-700">
                             <p>
                                 {{ $success }}
                             </p>

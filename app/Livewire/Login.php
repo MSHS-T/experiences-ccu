@@ -26,6 +26,9 @@ class Login extends Component
         if (filled(Session::get('subject_email', null))) {
             return redirect()->route('my_bookings');
         }
+        if (filled(session('success'))) {
+            $this->success = session('success');
+        }
     }
 
     public function submit()
