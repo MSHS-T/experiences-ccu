@@ -2,22 +2,24 @@
 
 namespace App\Mail;
 
-use App\Models\Booking;
+use App\Models\Manipulation;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Carbon;
 
 class BookingCancelled extends Mailable
 {
     use Queueable, SerializesModels;
 
+
     /**
      * Create a new message instance.
      */
-    public function __construct(protected Booking $booking)
+    public function __construct(protected Manipulation $manipulation, protected Carbon $start, protected Carbon $end)
     {
         //
     }
@@ -40,8 +42,10 @@ class BookingCancelled extends Mailable
         return new Content(
             markdown: 'mail.booking-cancelled',
             with: [
-                'booking'   => $this->booking,
-                'targetUrl' => route('manipulation_slots', ['manipulation' => $this->booking->slot->manipulation]),
+                'manipulation' => $this->manipulation->name,
+                'start'        => $this->start,
+                'end'          => $this->end,
+                'targetUrl'    => route('manipulation_slots', ['manipulation' => $this->manipulation]),
             ]
         );
     }

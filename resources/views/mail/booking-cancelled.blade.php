@@ -1,11 +1,11 @@
 <x-mail::message>
 Bonjour,
 
-Nous sommes dans l'obligation d'annuler votre inscription à l'expérience "{{ $booking->slot->manipulation->name }}".
+Nous sommes dans l'obligation d'annuler votre inscription à l'expérience "{{ $manipulation }}".
 
 Rappel de votre sélection :
- - Date : *{{ $booking->slot->start->translatedFormat('l d F Y')}}*
- - Heure : *{{ $booking->slot->start->translatedFormat('H\hi')}} à {{ $booking->slot->end->translatedFormat('H\hi')}}*
+ - Date : *{{ $start->translatedFormat('l d F Y')}}*
+ - Heure : *{{ $start->translatedFormat('H\hi')}} à {{ $end->translatedFormat('H\hi')}}*
 
 Si vous souhaitez vous réinscrire, vous pouvez cliquer sur le lien ci-dessous pour consulter la liste des créneaux restants pour cette expérience :
 

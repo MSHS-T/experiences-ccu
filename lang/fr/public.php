@@ -32,7 +32,13 @@ return [
         'confirmation_email_sent' => 'Un email vous a été envoyé. Veuillez cliquer sur le lien contenu dans celui-ci pour confirmer votre inscription.',
         'cancellation_email_sent' => 'Un email vous a été envoyé. Veuillez cliquer sur le lien contenu dans celui-ci pour annuler votre inscription.',
         'blocked'                 => 'Compte bloqué',
-        'blocked_description'     => 'Suite à un trop grand nombre d\'inscriptions non honorées, votre compte a été bloqué.'
+        'blocked_description'     => 'Suite à un trop grand nombre d\'inscriptions non honorées, votre compte a été bloqué.',
+        'history' => [
+            'made'                => 'Inscriptions effectuées',
+            'confirmed'           => 'Inscriptions confirmées',
+            'confirmed_honored'   => 'Inscriptions confirmées honorées',
+            'unconfirmed_honored' => 'Inscriptions non confirmées honorées',
+        ]
     ],
     'messages' => [
         'booking_created' => 'Votre inscription a bien été effectuée. Vous allez recevoir un mail récapitulatif. Nous vous remercions de cliquer sur le lien contenu dans celui-ci afin de confirmer votre inscription'

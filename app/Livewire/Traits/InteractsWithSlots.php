@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Traits;
 
+use App\Mail\BookingCancelled;
 use App\Models\Manipulation;
 use App\Models\Slot;
 use App\Utils\SlotGenerator;
@@ -22,6 +23,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Support\Enums\Alignment;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithEvents;
 use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithModalActions;
@@ -60,6 +62,13 @@ trait InteractsWithSlots
                 DeleteAction::make('delete')
                     ->label(__('actions.delete_slot'))
                     ->color('danger')
+                    ->before(function () {
+                        $record = $this->getRecord();
+                        if (filled($booking = $record->booking)) {
+                            Mail::to($booking->email)
+                                ->send(new BookingCancelled($record->manipulation, $record->start, $record->end));
+                        }
+                    })
                     ->after(function ($livewire) {
                         $this->closeActionModal();
                         $livewire->refreshRecords();

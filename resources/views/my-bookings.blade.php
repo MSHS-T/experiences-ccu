@@ -1,6 +1,6 @@
 <x-public-layout>
     <x-slot name="title">{{ __('public.my_bookings.page_title') }}</x-slot>
-    <div class="flex flex-col justify-start items-stretch px-6 py-12 lg:px-8 space-y-10">
+    <div class="h-full flex flex-col justify-start items-stretch px-6 py-12 lg:px-8 space-y-10">
         @if (session('success'))
             <div class="border-l-4 border-green-400 bg-green-50 p-4 sm:mx-auto sm:w-full sm:max-w-lg">
                 <div class="flex">
@@ -23,7 +23,7 @@
                 {{ __('public.my_bookings.page_title') }}
             </h2>
         </div>
-        <div class="flex-grow flex flex-col items-stretch justify-start">
+        <div class="flex-grow flex flex-col items-stretch justify-between space-y-4">
             @if ($history['blocked'])
                 <div
                     class="self-center relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left border border-gray-300 sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
@@ -100,6 +100,42 @@
                     @endforeach
                 </ul>
             @endif
+            <dl
+                class="lg:mx-auto lg:max-w-[50vw] grid grid-rows-4 lg:grid-rows-1 lg:grid-cols-4 divide-y lg:divide-x lg:divide-y-0 divide-white bg-gray-100 sm:grid-cols-2 border border-gray-100 rounded-xl">
+                <div
+                    class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 px-4 py-4 lg:py-8 sm:px-6 xl:px-8">
+                    <dt class="text-sm font-medium leading-6 text-gray-500">{{ __('public.my_bookings.history.made') }}
+                    </dt>
+                    <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">
+                        {{ $history['made'] }}
+                    </dd>
+                </div>
+                <div
+                    class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 px-4 py-4 lg:py-8 sm:px-6 xl:px-8">
+                    <dt class="text-sm font-medium leading-6 text-gray-500">
+                        {{ __('public.my_bookings.history.confirmed') }}</dt>
+                    <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">
+                        {{ $history['confirmed'] }}
+                    </dd>
+                </div>
+                <div
+                    class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 px-4 py-4 lg:py-8 sm:px-6 xl:px-8">
+                    <dt class="text-sm font-medium leading-6 text-gray-500">
+                        {{ __('public.my_bookings.history.confirmed_honored') }}</dt>
+                    <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">
+                        {{ $history['confirmed_honored'] }}
+                    </dd>
+                </div>
+                <div
+                    class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 px-4 py-4 lg:py-8 sm:px-6 xl:px-8">
+                    <dt class="text-sm font-medium leading-6 text-gray-500">
+                        {{ __('public.my_bookings.history.unconfirmed_honored') }}</dt>
+                    <dd class="w-full flex-none text-3xl font-medium leading-10 tracking-tight text-gray-900">
+                        {{ $history['unconfirmed_honored'] }}
+                    </dd>
+                </div>
+            </dl>
+
         </div>
     </div>
 </x-public-layout>
