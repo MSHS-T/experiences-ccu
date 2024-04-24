@@ -5,6 +5,7 @@ namespace Database\Seeders\Test;
 use App\Models\BookingHistory;
 use App\Models\Manipulation;
 use App\Models\User;
+use DateTimeInterface;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
@@ -24,14 +25,18 @@ class TestDatabaseSeeder extends Seeder
         $this->call(EquipmentsTableSeeder::class);
         $this->call(PlateauxTableSeeder::class);
 
-        $start = now()->startOfWeek(1)->addWeek();
-        $end   = $start->clone()->addWeeks(2);
-        $this->createManipulation($start, $end);
-
         foreach (range(1, 10) as $i) {
-            $start = new Carbon(fake()->dateTimeBetween('now', '+1 month'));
-            $end   = $start->clone()->addWeeks(3);
-            $this->createManipulation($start, $end);
+            if ($i === 1) {
+                $startDate = fake()->dateTimeBetween('-4 months', '-2 months');
+                $endDate = fake()->dateTimeBetween('-2 months', 'now');
+            } else if ($i <= 4) {
+                $startDate = fake()->dateTimeBetween('-2 months', 'now');
+                $endDate = fake()->dateTimeBetween('now', '+2 months');
+            } else {
+                $startDate = fake()->dateTimeBetween('now', '+2 months');
+                $endDate = $startDate->add(new \DateInterval('P' . random_int(2, 6) * 7 . 'D'));
+            }
+            $this->createManipulation($startDate, $endDate);
         }
 
         BookingHistory::create([
@@ -44,7 +49,7 @@ class TestDatabaseSeeder extends Seeder
         ]);
     }
 
-    protected function createManipulation(Carbon $start, Carbon $end)
+    protected function createManipulation(Carbon|DateTimeInterface $start, Carbon|DateTimeInterface $end)
     {
         $respPlateau = User::role('plateau_manager')
             ->get()
@@ -87,5 +92,17 @@ class TestDatabaseSeeder extends Seeder
         $manipulation->save();
         $manipulation->users()->attach($respManip->id);
         $manipulation->createOrUpdateSlots();
+        foreach ($manipulation->slots as $slot) {
+            if (fake()->boolean()) {
+                $slot->booking()->create([
+                    'first_name' => fake()->firstName(),
+                    'last_name' => fake()->lastName(),
+                    'email' => fake()->email(),
+                    'confirmed' => fake()->boolean(),
+                    'confirmation_code' => fake()->md5(),
+                    'confirm_before' => fake()->dateTimeBetween('now', '+2 months'),
+                ]);
+            }
+        }
     }
 }

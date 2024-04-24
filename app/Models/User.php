@@ -123,7 +123,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->hasVerifiedEmail() && $this->hasAnyRole(...config('collabccu.permissions'));
+        return $this->hasVerifiedEmail() && $this->hasAnyRole(...config('collabccu.roles'));
     }
 
     public function getFilamentName(): string

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\Pages\Attendance;
 use App\Filament\Resources\ManipulationResource\Pages;
 use App\Models\Manipulation;
 use App\Models\Plateau;
@@ -353,33 +354,39 @@ class ManipulationResource extends Resource
                 layout: \Filament\Tables\Enums\FiltersLayout::AboveContent
             )
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\Action::make('planning')
                     ->label(__('actions.planning'))
                     ->url(fn (Manipulation $record) => route('filament.admin.resources.manipulations.planning', ['record' => $record]))
                     ->color(Color::Green)
                     ->icon('fas-calendar'),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\Action::make('toggle_published')
-                    ->label(fn (Manipulation $record) => $record->published ? __('actions.unpublish') : __('actions.publish'))
-                    ->icon(fn (Manipulation $record) => $record->published ? 'fas-calendar-xmark' : 'fas-calendar-check')
-                    ->action(fn (Manipulation $record) => $record->togglePublished())
-                    ->requiresConfirmation()
-                    ->color(fn (Manipulation $record) => $record->published ? 'warning' : 'success')
-                    ->hidden(fn (Manipulation $record) => !Auth::user()->can('publish', $record))
-                    ->disabled(fn (Manipulation $record) => !Auth::user()->can('publish', $record)),
-                Tables\Actions\Action::make('archive')
-                    ->label(__('actions.archive'))
-                    ->icon('fas-calendar-check')
-                    ->action(fn (Manipulation $record) => $record->archive())
-                    ->requiresConfirmation()
-                    ->color('danger')
-                    ->hidden(fn (Manipulation $record) => $record->archived || !Auth::user()->can('archive', $record))
-                    ->disabled(fn (Manipulation $record) => $record->archived || !Auth::user()->can('archive', $record)),
+                Tables\Actions\Action::make('attendance')
+                    ->label(__('actions.attendance'))
+                    ->url(fn (Manipulation $record) => Attendance::getUrl(['manipulation' => $record->id]))
+                    ->color(Color::Cyan)
+                    ->icon('fas-signature'),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\Action::make('toggle_published')
+                        ->label(fn (Manipulation $record) => $record->published ? __('actions.unpublish') : __('actions.publish'))
+                        ->icon(fn (Manipulation $record) => $record->published ? 'fas-calendar-xmark' : 'fas-calendar-check')
+                        ->action(fn (Manipulation $record) => $record->togglePublished())
+                        ->requiresConfirmation()
+                        ->color(fn (Manipulation $record) => $record->published ? 'warning' : 'success')
+                        ->hidden(fn (Manipulation $record) => !Auth::user()->can('publish', $record))
+                        ->disabled(fn (Manipulation $record) => !Auth::user()->can('publish', $record)),
+                    Tables\Actions\Action::make('archive')
+                        ->label(__('actions.archive'))
+                        ->icon('fas-calendar-check')
+                        ->action(fn (Manipulation $record) => $record->archive())
+                        ->requiresConfirmation()
+                        ->color('danger')
+                        ->hidden(fn (Manipulation $record) => $record->archived || !Auth::user()->can('archive', $record))
+                        ->disabled(fn (Manipulation $record) => $record->archived || !Auth::user()->can('archive', $record)),
+                ]),
+
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
-            ]);
+            ->bulkActions([]);
     }
 
     public static function getRelations(): array
