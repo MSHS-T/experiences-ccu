@@ -2,6 +2,7 @@
 
 namespace Database\Seeders\Test;
 
+use App\Models\BookingHistory;
 use App\Models\Manipulation;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -32,6 +33,15 @@ class TestDatabaseSeeder extends Seeder
             $end   = $start->clone()->addWeeks(3);
             $this->createManipulation($start, $end);
         }
+
+        BookingHistory::create([
+            'hashed_email'                => md5('blocked@univ-tlse2.fr'),
+            'booking_made'                => 3,
+            'booking_confirmed'           => 0,
+            'booking_confirmed_honored'   => 0,
+            'booking_unconfirmed_honored' => 0,
+            'blocked'                     => true,
+        ]);
     }
 
     protected function createManipulation(Carbon $start, Carbon $end)

@@ -17,9 +17,11 @@ class CancelBookingAction extends ActionAbstract
         // Do something
         $this->booking->delete();
 
-        Session::remove('subject_email');
+        $targetRoute = Session::has('subject_email')
+            ? 'my_bookings'
+            : 'subject_login';
 
-        return response()->redirectToRoute('subject_login')
+        return response()->redirectToRoute($targetRoute)
             ->with('success', 'Votre inscription a bien été annulée.');
     }
 }

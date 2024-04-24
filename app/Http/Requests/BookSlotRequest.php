@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\BookingHistory;
 use App\Models\Slot;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -41,6 +42,12 @@ class BookSlotRequest extends FormRequest
                 'required',
                 'email',
                 Rule::notIn($otherBookingsEmails),
+                function ($attribute, $value, $fail) {
+                    $history = BookingHistory::where('hashed_email', md5($value))->first();
+                    if ($history !== null && $history->blocked) {
+                        $fail('L\'email saisi a été bloqué par l\'administrateur de la plateforme.');
+                    }
+                }
             ],
             'commitment'     => 'accepted',
             ...$requirementsRules

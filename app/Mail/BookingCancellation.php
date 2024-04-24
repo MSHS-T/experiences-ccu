@@ -10,14 +10,14 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class BookingCancelled extends Mailable
+class BookingCancellation extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(protected Booking $booking)
+    public function __construct(protected Booking $booking, protected string $cancellationUrl)
     {
         //
     }
@@ -38,10 +38,10 @@ class BookingCancelled extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'mail.booking-cancelled',
+            markdown: 'mail.booking-cancellation',
             with: [
-                'booking'   => $this->booking,
-                'targetUrl' => route('manipulation_slots', ['manipulation' => $this->booking->slot->manipulation]),
+                'cancellationUrl' => $this->cancellationUrl,
+                'booking'         => $this->booking,
             ]
         );
     }

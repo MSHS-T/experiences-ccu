@@ -21,6 +21,6 @@ class ConfirmBookingAction extends ActionAbstract
         Session::put('subject_email', $this->booking->email);
 
         return response()->redirectToRoute('my_bookings')
-            ->with('success', 'Votre inscription a bien été annulée.');
+            ->with('success', 'Votre inscription a bien été confirmée.');
     }
 }

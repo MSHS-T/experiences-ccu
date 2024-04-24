@@ -41,7 +41,7 @@ class Login extends Component
             $action = new SubjectLoginAction($this->email);
 
             if (App::isLocal()) {
-                // return $action->run();
+                return $action->run();
             }
 
             $url = MagicLink::create($action, 60, 1)->url; // 60 minutes, single use

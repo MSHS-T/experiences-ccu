@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\BookSlotController;
+use App\Http\Controllers\CancelBookingController;
+use App\Http\Controllers\ConfirmBookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\ManipulationController;
@@ -29,6 +31,8 @@ Route::get('/connexion', Login::class)->name('subject_login');
 Route::get('/deconnexion', LogoutController::class)->name('subject_logout');
 
 Route::get('/mes-inscriptions', MyBookingsController::class)->name('my_bookings');
+Route::get('/confirmer/{booking}', ConfirmBookingController::class)->name('confirm_booking');
+Route::get('/annuler/{booking}', CancelBookingController::class)->name('cancel_booking');
 
 Route::view('/mentions-legales', 'legal')->name('legal');
 Route::view('/politique-cookies', 'cookies')->name('cookies');
