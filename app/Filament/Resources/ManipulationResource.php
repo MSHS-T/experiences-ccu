@@ -21,6 +21,7 @@ use Filament\Tables\Table;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -349,7 +350,13 @@ class ManipulationResource extends Resource
                                         fn (Builder $query) => $query->where('id', $data['user_id'])
                                     ),
                                 );
-                        })
+                        }),
+                    TernaryFilter::make('archived')
+                        ->label(__('attributes.archived'))
+                        ->nullable()
+                        ->placeholder(__('attributes.archived_all'))
+                        ->trueLabel(__('attributes.archived_no'))
+                        ->falseLabel(__('attributes.archived_yes')),
                 ],
                 layout: \Filament\Tables\Enums\FiltersLayout::AboveContent
             )

@@ -36,6 +36,10 @@ return [
     'available_hours'      => 'Horaires',
     'requirements'         => 'Critères d\'inclusion',
     'published'            => 'Publié ?',
+    'archived'             => 'Etat d\'archivage',
+    'archived_yes'          => 'Archivés seulement',
+    'archived_no'           => 'Non archivés seulement',
+    'archived_all'          => 'Tous',
 
     // Attribution
     'manipulation_manager'  => 'Responsable de manipulation',
