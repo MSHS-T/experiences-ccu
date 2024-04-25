@@ -40,7 +40,7 @@
                                                 type="button">
                                                 <span class="absolute inset-0 rounded-xl"></span>
                                                 <span class="capitalize"
-                                                    x-text="dayjs(Object.keys(slots)[dayIndex - 1]).format('dddd DD MMMM YYYY')"></span>
+                                                    x-text="Object.values(slots)[dayIndex - 1][0]['formatted_date']"></span>
 
                                                 <x-fas-caret-down class="h-5 w-5 transition"
                                                     x-bind:class="selectedDate === Object.keys(slots)[dayIndex - 1] && 'rotate-180'" />

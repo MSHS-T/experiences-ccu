@@ -25,10 +25,11 @@ class ManipulationSlotsController extends Controller
             'manipulationRequirements' => $manipulation->requirements,
             'slots'                    => $manipulation->slots
                 ->map(fn (Slot $s) => [
-                    'id'    => $s->id,
-                    'day'   => $s->start->format('Y-m-d'),
-                    'start' => $s->start->format('H:i'),
-                    'end'   => $s->end->format('H:i'),
+                    'id'             => $s->id,
+                    'day'            => $s->start->format('Y-m-d'),
+                    'formatted_date' => $s->start->translatedFormat('l d F Y'),
+                    'start'          => $s->start->format('H:i'),
+                    'end'            => $s->end->format('H:i'),
                 ])
                 ->groupBy('day')
         ]);
