@@ -31,7 +31,7 @@ class SlotCalendar extends Component implements HasForms, HasActions
     {
         if (filled($plateauId)) {
             $this->plateau = Plateau::find($plateauId);
-            ray('test');
+            dump('test');
         } else if (filled($manipulationId)) {
             $this->manipulation = Manipulation::find($manipulationId);
         } else {

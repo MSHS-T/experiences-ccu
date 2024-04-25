@@ -42,8 +42,6 @@ class PlateauPlanning extends Page
 
         $breadcrumb = $this->getBreadcrumb();
 
-        // ray(request()->rou('record'));
-
         return [
             $resource::getUrl() => $resource::getBreadcrumb(),
             ...(filled($breadcrumb) ? [$breadcrumb] : []),

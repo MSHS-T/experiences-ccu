@@ -32,8 +32,6 @@ class CalendarWidget extends FullCalendarWidget
                 ]
             );
 
-        ray($events);
-
         // $plugin = \Saade\FilamentFullcalendar\FilamentFullCalendarPlugin::get();
         // $plugin->config(array_merge($plugin->getConfig(), [
         //     'resources' => $events->pluck('resourceName', 'resourceId')->map(fn ($title, $id) => compact('id', 'title'))->values()->all(),

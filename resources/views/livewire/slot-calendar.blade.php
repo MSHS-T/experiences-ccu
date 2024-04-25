@@ -24,7 +24,7 @@
                     plugins: @js(['timeGrid', 'interaction', 'moment', 'momentTimezone']),
                     schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
                     timeZone: @js(config('app.timezone')),
-                    selectable: @json(isset($this->plateau)),
+                    selectable: @json(isset($this->manipulation)),
                     editable: @json(false),
                     config: {
                         allDaySlot: false,
