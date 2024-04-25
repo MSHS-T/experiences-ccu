@@ -43,12 +43,6 @@ class ManageSettings extends SettingsPage
                     ->disableAllToolbarButtons()
                     ->enableToolbarButtons(['bold', 'italic', 'strike', 'link', 'bulletList', 'orderedList'])
                     ->required(),
-                TextInput::make('booking_cancellation_delay')
-                    ->label(__('attributes.booking_cancellation_delay'))
-                    ->integer()
-                    ->minValue(0)
-                    ->suffix('jours')
-                    ->required(),
                 TextInput::make('booking_confirmation_delay')
                     ->label(__('attributes.booking_confirmation_delay'))
                     ->integer()
@@ -61,11 +55,17 @@ class ManageSettings extends SettingsPage
                     ->minValue(0)
                     ->suffix('jours')
                     ->required(),
-                TextInput::make('email_reminder_delay')
-                    ->label(__('attributes.email_reminder_delay'))
+                TextInput::make('email_first_reminder_delay')
+                    ->label(__('attributes.email_first_reminder_delay'))
                     ->integer()
                     ->minValue(0)
-                    ->suffix('jours')
+                    ->suffix('heures')
+                    ->required(),
+                TextInput::make('email_last_reminder_delay')
+                    ->label(__('attributes.email_last_reminder_delay'))
+                    ->integer()
+                    ->minValue(0)
+                    ->suffix('heures')
                     ->required(),
             ]);
     }

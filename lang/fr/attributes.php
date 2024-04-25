@@ -70,10 +70,10 @@ return [
     'end_pm'    => 'Fin d\'après-midi',
 
     // Settings
-    'booking_cancellation_delay' => 'Délai de prévenance pour l\'annulation d\'une réservation',
     'booking_confirmation_delay' => 'Délai maximal pour la confirmation d\'une réservation',
     'booking_opening_delay'      => 'Délai d\'ouverture des inscriptions avant début de l\'expérience',
-    'email_reminder_delay'       => 'Délai avant réservation pour envoi du premier rappel par e-mail',
+    'email_first_reminder_delay' => 'Délai avant réservation pour envoi du premier email de rappel',
+    'email_last_reminder_delay'  => 'Délai avant réservation pour envoi du dernier email de rappel',
     'presentation_text'          => 'Texte de présentation du site (visible sur la page d\'accueil)',
     'access_instructions'        => 'Instructions d\'accès',
 
