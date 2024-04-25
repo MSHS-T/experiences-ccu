@@ -146,7 +146,7 @@ class Attendance extends Page implements HasForms, HasTable
                     ->color(fn (Slot $record) => $record->booking?->honored === true ? Color::Green : Color::Gray)
                     ->icon(fn (Slot $record) => $record->booking?->honored === true ? 'fas-check' : null)
                     ->action(function (Slot $record) {
-                        if ($record->booking->honored === null) {
+                        if ($record->booking->honored !== true) {
                             $record->booking->honored = true;
                         } else {
                             $record->booking->honored = null;
@@ -159,7 +159,7 @@ class Attendance extends Page implements HasForms, HasTable
                     ->color(fn (Slot $record) => $record->booking?->honored === false ? Color::Red : Color::Gray)
                     ->icon(fn (Slot $record) => $record->booking?->honored === false ? 'fas-check' : null)
                     ->action(function (Slot $record) {
-                        if ($record->booking->honored === null) {
+                        if ($record->booking->honored !== false) {
                             $record->booking->honored = false;
                         } else {
                             $record->booking->honored = null;
