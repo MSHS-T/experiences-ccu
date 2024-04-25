@@ -31,7 +31,6 @@ class SlotCalendar extends Component implements HasForms, HasActions
     {
         if (filled($plateauId)) {
             $this->plateau = Plateau::find($plateauId);
-            dump('test');
         } else if (filled($manipulationId)) {
             $this->manipulation = Manipulation::find($manipulationId);
         } else {
@@ -64,6 +63,7 @@ class SlotCalendar extends Component implements HasForms, HasActions
                     ...$this->slotColor($slot),
                 ]
             );
+        dump($events);
         if (isset($this->manipulation) && filled($this->manipulation)) {
             $attributions = SlotGenerator::availableZones(
                 $this->manipulation,

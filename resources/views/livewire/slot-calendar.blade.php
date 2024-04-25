@@ -44,14 +44,14 @@
                             'right': 'today',
                         },
                         initialView: 'customTimeGrid',
-                        eventDidMount: function(info) {
-                            if (info.event.extendedProps.background) {
-                                info.el.style.background = info.event.extendedProps.background;
-                            }
-                            if (info.event.extendedProps.type === 'event') {
-                                info.el.style.borderWidth = '3px';
-                                info.el.style.boxShadow = 'none';
-                            }
+                    },
+                    eventDidMount: function(info) {
+                        if (info.event.extendedProps.background) {
+                            info.el.style.background = info.event.extendedProps.background;
+                        }
+                        if (info.event.extendedProps.type === 'event') {
+                            info.el.style.borderWidth = '3px';
+                            info.el.style.boxShadow = 'none';
                         }
                     }
                 })">
