@@ -98,9 +98,10 @@ class TestDatabaseSeeder extends Seeder
                     'first_name' => fake()->firstName(),
                     'last_name' => fake()->lastName(),
                     'email' => fake()->email(),
-                    'confirmed' => fake()->boolean(),
+                    'confirmed' => fake()->boolean(chanceOfGettingTrue: 75),
                     'confirmation_code' => fake()->md5(),
                     'confirm_before' => fake()->dateTimeBetween('now', '+2 months'),
+                    'honored' => fake()->boolean(chanceOfGettingTrue: 75),
                 ]);
             }
         }

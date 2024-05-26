@@ -42,6 +42,7 @@ class ManipulationStatistics extends Model
      * @var array
      */
     protected $fillable = [
+        'month',
         'slot_count',
         'booking_made',
         'booking_confirmed',

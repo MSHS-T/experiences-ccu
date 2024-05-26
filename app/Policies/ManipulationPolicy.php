@@ -80,6 +80,6 @@ class ManipulationPolicy
      */
     public function archive(User $user, Manipulation $manipulation): bool
     {
-        return $user->can('manipulation.archive') && $manipulation->end_date->isAfter(now());
+        return $user->can('manipulation.archive') && $manipulation->end_date->isPast();
     }
 }

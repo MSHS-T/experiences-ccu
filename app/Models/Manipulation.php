@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
 
@@ -142,9 +143,9 @@ class Manipulation extends Model
         return $this->hasMany(Slot::class);
     }
 
-    public function statistics(): BelongsTo
+    public function statistics(): HasMany
     {
-        return $this->belongsTo(Manipulation::class);
+        return $this->hasMany(ManipulationStatistics::class);
     }
 
     protected function displayName(): Attribute
@@ -183,14 +184,50 @@ class Manipulation extends Model
 
     public function archive()
     {
-        if ($this->end_date->isBefore(Carbon::now())) {
+        if ($this->end_date->isFuture()) {
             return false;
         }
+        DB::beginTransaction();
+
         $this->archived = true;
-        // TODO : store slots statistics
-        // TODO : store booking statistics
-        // TODO : delete slots and bookings
         $this->save();
+
+        $this->load(['slots', 'slots.booking']);
+
+        $currentMonth = null;
+        $statistics = [];
+        foreach ($this->slots as $slot) {
+            $slotMonth = $slot->start->format('Y-m');
+            if ($slotMonth !== $currentMonth) {
+                $currentMonth = $slotMonth;
+                $statistics[$slotMonth] = [
+                    'month'                       => $slotMonth,
+                    'slot_count'                  => 0,
+                    'booking_made'                => 0,
+                    'booking_confirmed'           => 0,
+                    'booking_confirmed_honored'   => 0,
+                    'booking_unconfirmed_honored' => 0,
+                ];
+            }
+            $statistics[$slotMonth]['slot_count']++;
+            if ($slot->booking !== null) {
+                $statistics[$slotMonth]['booking_made']++;
+                if ($slot->booking->confirmed) {
+                    $statistics[$slotMonth]['booking_confirmed']++;
+                    if ($slot->booking->honored) {
+                        $statistics[$slotMonth]['booking_confirmed_honored']++;
+                    }
+                } else {
+                    if ($slot->booking->honored) {
+                        $statistics[$slotMonth]['booking_unconfirmed_honored']++;
+                    }
+                }
+            }
+        }
+        $this->statistics()->createMany(array_values($statistics));
+        $this->slots->each(fn (Slot $slot) => $slot->delete());
+
+        DB::commit();
     }
 
     public function createOrUpdateSlots()

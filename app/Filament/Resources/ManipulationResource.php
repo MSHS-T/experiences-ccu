@@ -290,6 +290,10 @@ class ManipulationResource extends Resource
                 Tables\Columns\IconColumn::make('published')
                     ->label(__('attributes.published'))
                     ->boolean(),
+                Tables\Columns\IconColumn::make('archived')
+                    ->label('Archivé ?')
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('available_hours_str')
                     ->label(__('attributes.available_hours'))
                     ->toggleable(isToggledHiddenByDefault: true)

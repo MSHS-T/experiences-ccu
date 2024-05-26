@@ -15,6 +15,8 @@ return new class extends Migration
 
         Schema::create('manipulation_statistics', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('manipulation_id')->constrained('manipulations');
+            $table->string('month');
             $table->unsignedInteger('slot_count');
             $table->unsignedInteger('booking_made');
             $table->unsignedInteger('booking_confirmed');
