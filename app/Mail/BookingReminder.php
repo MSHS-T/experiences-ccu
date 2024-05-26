@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\Booking;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -16,7 +17,7 @@ class BookingReminder extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(protected Booking $booking, protected string $cancellationUrl)
     {
         //
     }
@@ -27,7 +28,7 @@ class BookingReminder extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Booking Reminder',
+            subject: '[RAPPEL] Inscription à une expérience',
         );
     }
 
@@ -37,7 +38,11 @@ class BookingReminder extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            markdown: 'mail.booking-reminder',
+            with: [
+                'cancellationUrl' => $this->cancellationUrl,
+                'booking'         => $this->booking,
+            ]
         );
     }
 

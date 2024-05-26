@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         $schedule->command('app:notify-yesterday-unhonored-slots')->dailyAt('03:00');
+        $schedule->command('app:send-booking-reminders')->hourlyAt(5);
         // $schedule->command('inspire')->hourly();
     }
 
