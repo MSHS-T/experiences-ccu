@@ -151,7 +151,7 @@
                 </fieldset>
 
                 <div class="sm:col-span-6 pt-4">
-                    <div class="flex items-start">
+                    <div class="flex items-center">
                         <input id="commitment" name="commitment" type="checkbox"
                             class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 mr-3">
                         <label for="commitment" class="block text-sm font-medium leading-6 text-gray-900">
