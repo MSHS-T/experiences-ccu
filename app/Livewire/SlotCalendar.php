@@ -63,7 +63,7 @@ class SlotCalendar extends Component implements HasForms, HasActions
                     ...$this->slotColor($slot),
                 ]
             );
-        dump($events);
+
         if (isset($this->manipulation) && filled($this->manipulation)) {
             $attributions = SlotGenerator::availableZones(
                 $this->manipulation,
