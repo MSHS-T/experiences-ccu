@@ -1,7 +1,7 @@
 <x-public-layout>
-    @if ($errors->any())
+    {{-- @if ($errors->any())
         {{ dump($errors->all()) }}
-    @endif
+    @endif --}}
     <x-slot name="title">{{ __('public.slots.page_title', ['manipulation' => $manipulationName]) }}</x-slot>
     <div x-data="slotSelector">
         <section id="slots" class="relative overflow-hidden bg-blue-600 pb-28 pt-20 sm:py-32 lg:min-h-screen">
@@ -24,7 +24,6 @@
                 @else
                     <div class="mt-8 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-16 lg:pt-0">
                         <a href="#details" class="hidden" x-ref="nextSectionLink"></a>
-                        {{-- {{ dump($slots) }} --}}
                         <template x-for="dayIndex in daysDisplayed">
                             <template x-if="dayIndex <= Object.keys(slots).length">
                                 <div class="rounded-xl divide-y divide-white/10"
