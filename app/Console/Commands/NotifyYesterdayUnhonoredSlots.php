@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Console\Commands;
+
+use App\Mail\BookingFirstMiss;
+use App\Mail\BookingThirdMiss;
+use App\Models\Slot;
+use App\Utils\Subject;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Mail;
+
+class NotifyYesterdayUnhonoredSlots extends Command
+{
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'app:notify-yesterday-unhonored-slots';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Command description';
+
+    /**
+     * Execute the console command.
+     */
+    public function handle()
+    {
+        $slots = Slot::with(['booking', 'manipulation'])
+            ->whereDate('start', now()->subDay()->format('Y-m-d'))
+            ->get();
+
+        foreach ($slots as $slot) {
+            if ($slot && $slot->booking && !$slot->booking->honored) {
+                $subject = Subject::find($slot->booking->email);
+                $unhonoredCount = $subject->getUnhonoredCount();
+                if ($unhonoredCount % 3 === 1) {
+                    // Notify first miss (or first miss after unblock)
+                    Mail::to($slot->booking->email)->send(new BookingFirstMiss($slot->booking));
+                } else if ($unhonoredCount % 3 === 0) {
+                    // Blacklist after third miss (or third miss after unblock)
+                    $subject->block();
+                    Mail::to($slot->booking->email)->send(new BookingThirdMiss($slot->booking));
+                }
+            }
+        }
+    }
+}
