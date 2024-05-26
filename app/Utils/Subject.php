@@ -39,7 +39,7 @@ class Subject
         $this->bookingHistory = $bookingHistory;
     }
 
-    public function history(): array
+    public function history($withPercentage = false): array
     {
         $history = [
             'made'                => $this->bookingHistory ? $this->bookingHistory->booking_made : 0,
@@ -50,14 +50,28 @@ class Subject
         ];
 
         // List past bookings (not archived yet) and add them to booking history
-        $this->bookings->filter(fn (Booking $booking) => $booking->slot->end < now())
-            ->each(function (Booking $booking) use (&$history) {
-                $history['made']                += 1;
-                $history['confirmed']           += $booking->confirmed ? 1 : 0;
-                $history['confirmed_honored']   += ($booking->confirmed && $booking->honored) ? 1 : 0;
-                $history['unconfirmed_honored'] += (!$booking->confirmed && $booking->honored) ? 1 : 0;
-            });
+        $this->bookings->each(function (Booking $booking) use (&$history) {
+            $history['made']                += 1;
+            $history['confirmed']           += $booking->confirmed ? 1 : 0;
+            $history['confirmed_honored']   += ($booking->confirmed && $booking->honored) ? 1 : 0;
+            $history['unconfirmed_honored'] += (!$booking->confirmed && $booking->honored) ? 1 : 0;
+        });
+
+        if ($withPercentage) {
+            $history['confirmed_percentage']           = $history['made']                           === 0 ? 0
+                : $history['confirmed'] / $history['made'] * 100;
+            $history['confirmed_honored_percentage']   = $history['confirmed']                      === 0 ? 0
+                : $history['confirmed_honored'] / $history['confirmed'] * 100;
+            $history['unconfirmed_honored_percentage'] = ($history['made'] - $history['confirmed']) === 0 ? 0
+                : $history['unconfirmed_honored'] / ($history['made'] - $history['confirmed']) * 100;
+        }
+
         return $history;
+    }
+
+    public function isBlocked(): bool
+    {
+        return $this->bookingHistory ? $this->bookingHistory->blocked : false;
     }
 
     public function getUnhonoredCount(): int
@@ -84,6 +98,22 @@ class Subject
             ]);
         }
         $this->bookingHistory->blocked = true;
+        $this->bookingHistory->save();
+    }
+
+    public function unblock(): void
+    {
+        if (!$this->bookingHistory) {
+            $history = $this->history();
+            $this->bookingHistory = BookingHistory::create([
+                'hashed_email'                => $this->hashedEmail,
+                'booking_made'                => $history['made'],
+                'booking_confirmed'           => $history['confirmed'],
+                'booking_confirmed_honored'   => $history['confirmed_honored'],
+                'booking_unconfirmed_honored' => $history['unconfirmed_honored'],
+            ]);
+        }
+        $this->bookingHistory->blocked = false;
         $this->bookingHistory->save();
     }
 }
