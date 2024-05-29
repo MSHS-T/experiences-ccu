@@ -18,11 +18,10 @@ class SubjectHistory extends Page implements HasForms
 
     protected static ?string $navigationIcon  = 'fas-magnifying-glass';
     protected static ?string $navigationLabel = 'Recherche de participant';
-    protected static string $view             = 'filament.pages.subject-history';
     protected static ?string $title           = 'Recherche de participant';
-
-    protected static ?string $navigationGroup  = 'Plateforme';
-    protected static ?int $navigationSort      = 30;
+    protected static ?string $navigationGroup = 'Plateforme';
+    protected static ?int $navigationSort     = 30;
+    protected static string $view             = 'filament.pages.subject-history';
 
     public ?array $formData = [
         'email' => null,
