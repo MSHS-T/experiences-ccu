@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Pages\Attendance;
 use App\Filament\Resources\ManipulationResource\Pages;
+use App\Models\Attribution;
 use App\Models\Manipulation;
 use App\Models\Plateau;
 use App\Models\User;
@@ -70,7 +71,15 @@ class ManipulationResource extends Resource
                         'md'      => 2,
                         'lg'      => 1,
                     ])
-                    ->relationship('plateau', 'name')
+                    ->relationship(
+                        name: 'plateau',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn (Builder $query) => $query
+                            ->when(
+                                Auth::user()->hasRole('manipulation_manager'),
+                                fn (Builder $query) => $query->whereIn('id', Attribution::where('manipulation_manager_id', Auth::id())->pluck('plateau_id'))
+                            ),
+                    )
                     ->required(),
                 Forms\Components\Select::make('users')
                     ->label(__('attributes.manipulation_managers'))
@@ -84,6 +93,7 @@ class ManipulationResource extends Resource
                     ->afterStateUpdated($computeSlotCount)
                     ->multiple()
                     ->options(User::role('manipulation_manager')->get()->pluck('name', 'id')->unique()->all())
+                    ->default(Auth::user()->hasRole('manipulation_manager') ? [Auth::id()] : [])
                     ->required(),
                 Forms\Components\TextInput::make('name')
                     ->label(__('attributes.name'))
