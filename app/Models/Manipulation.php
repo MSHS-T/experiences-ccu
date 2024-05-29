@@ -106,28 +106,6 @@ class Manipulation extends Model
         'archived' => false,
     ];
 
-    /**
-     * The "booted" method of the model.
-     */
-    protected static function booted(): void
-    {
-        static::created(function (Manipulation $manipulation) {
-            $manipulation->createOrUpdateSlots();
-        });
-        static::updated(function (Manipulation $manipulation) {
-            $changes = $manipulation->getChanges();
-
-            if ($manipulation->published) {
-                // TODO : Determine what to do
-                // Add more slots at the end ?
-            } else {
-                // TODO : Delete slots ?
-                // $manipulation->slots->each(fn (Slot $s) => $s->delete());
-                // $manipulation->slots()->createMany(SlotGenerator::makeFromManipulation($manipulation));
-            }
-        });
-    }
-
     public function plateau(): BelongsTo
     {
         return $this->belongsTo(Plateau::class);

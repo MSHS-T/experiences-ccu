@@ -82,7 +82,6 @@ class ManipulationStatistics extends Page implements HasForms
             'month' => Statistics::getMonthlyStatistics($this->formData['period']),
             'year'  => Statistics::getYearlyStatistics($this->formData['period']),
         };
-        dump($this->statistics);
     }
 
     public static function canAccess(): bool

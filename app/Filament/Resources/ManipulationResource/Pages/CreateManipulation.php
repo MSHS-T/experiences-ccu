@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ManipulationResource\Pages;
 
 use App\Filament\Resources\ManipulationResource;
+use App\Models\Manipulation;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
@@ -42,5 +43,14 @@ class CreateManipulation extends CreateRecord
             ->all();
 
         return $data;
+    }
+
+    // Runs after the form fields are saved to the database.
+    protected function afterCreate(): void
+    {
+        /** @var Manipulation $manip */
+        $manip = $this->getRecord()->refresh();
+        $manip->load('users', 'plateau');
+        $manip->createOrUpdateSlots();
     }
 }
