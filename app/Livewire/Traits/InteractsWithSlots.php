@@ -5,6 +5,7 @@ namespace App\Livewire\Traits;
 use App\Mail\BookingCancelled;
 use App\Models\Manipulation;
 use App\Models\Slot;
+use App\Models\User;
 use App\Utils\SlotGenerator;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
@@ -73,6 +74,8 @@ trait InteractsWithSlots
                         $this->closeActionModal();
                         $livewire->refreshRecords();
                     })
+                    ->disabled(fn (Slot $record) => !$this->canManageBooking($record))
+                    ->hidden(fn (Slot $record) => !$this->canManageBooking($record))
                     ->button(),
                 StaticAction::make('close')
                     ->label(__('actions.close'))
@@ -165,7 +168,7 @@ trait InteractsWithSlots
                         ->label(__('attributes.end'))
                         ->required(),
                 ]),
-            $record !== null ? Fieldset::make(__('admin.booking'))
+            ($record !== null && $this->canManageBooking($record)) ? Fieldset::make(__('admin.booking'))
                 ->columns([
                     'default' => 1,
                     'sm' => 2,
@@ -196,6 +199,20 @@ trait InteractsWithSlots
                 ])
                 : null,
         ]);
+    }
+
+    public function canManageBooking(Slot $slot): bool
+    {
+        $currentUser = Auth::user();
+        return $currentUser->hasRole('administrator')
+            || (
+                $currentUser->hasRole('plateau_manager')
+                && $slot->manipulation->plateau->manager_id === $currentUser->id
+            )
+            || (
+                $currentUser->hasRole('manipulation_manager')
+                && $slot->manipulation->users->some(fn (User $user) => $user->id === $currentUser->id)
+            );
     }
 
     public function getModel(): ?string
