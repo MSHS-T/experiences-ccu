@@ -7,7 +7,9 @@ use App\Models\Attribution;
 use App\Models\Plateau;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Form;
+use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -30,6 +32,13 @@ class AttributionResource extends Resource
     {
         $user = Auth::user();
         $plateaux = $user->hasRole('administrator') ? Plateau::all() : $user->plateaux;
+        $halfdays = collect(['monday', 'tuesday', 'wednesday', 'thursday', 'friday'])
+            ->crossJoin(['am', 'pm'])
+            ->mapWithKeys(fn ($item) => [
+                $item[0] . '_' . $item[1] => __('attributes.' . $item[0]) . ' ' . __('attributes.' . $item[1])
+            ])
+            ->all();
+
         return $form
             ->schema([
                 Forms\Components\Select::make('plateau_id')
@@ -58,13 +67,18 @@ class AttributionResource extends Resource
                 Forms\Components\CheckboxList::make('allowed_halfdays')
                     ->label(__('attributes.allowed_halfdays'))
                     ->helperText(__('messages.allowed_halfdays_help'))
+                    ->hintActions([
+                        Action::make('checkAll')
+                            ->label('Tout cocher')
+                            ->icon('fas-plus')
+                            ->action(fn (Set $set) => $set('allowed_halfdays', array_keys($halfdays))),
+                        Action::make('uncheckAll')
+                            ->label('Tout décocher')
+                            ->icon('fas-minus')
+                            ->action(fn (Set $set) => $set('allowed_halfdays', []))
+                    ])
                     ->options(
-                        collect(['monday', 'tuesday', 'wednesday', 'thursday', 'friday'])
-                            ->crossJoin(['am', 'pm'])
-                            ->mapWithKeys(fn ($item) => [
-                                $item[0] . '_' . $item[1] => __('attributes.' . $item[0]) . ' ' . __('attributes.' . $item[1])
-                            ])
-                            ->all()
+                        $halfdays
                     )
                     ->columns([
                         'default' => 2,
