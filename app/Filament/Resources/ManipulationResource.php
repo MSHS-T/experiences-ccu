@@ -268,14 +268,15 @@ class ManipulationResource extends Resource
                     ->formatStateUsing(
                         fn (Manipulation $record) => Str::of(
                             sprintf(
-                                '<ul class="list-disc">%s</ul>',
+                                '<ul>%s</ul>',
                                 $record->users->map(fn (User $u) => $u?->name ?? '?')
                                     ->map(fn ($d) => '<li>' . $d . '</li>')
                                     ->join('')
                             )
                         )->sanitizeHtml()->toHtmlString()
                     )
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: Auth::user()->hasRole('manipulation_manager')),
                 Tables\Columns\TextColumn::make('name')
                     ->label(__('attributes.name'))
                     ->sortable(),
@@ -334,11 +335,13 @@ class ManipulationResource extends Resource
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('attributes.created_at'))
                     ->sortable()
-                    ->dateTime('d/m/Y H:i:s'),
+                    ->dateTime('d/m/Y H:i:s')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label(__('attributes.updated_at'))
                     ->sortable()
-                    ->dateTime('d/m/Y H:i:s'),
+                    ->dateTime('d/m/Y H:i:s')
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters(
                 [
@@ -378,24 +381,34 @@ class ManipulationResource extends Resource
                 Tables\Actions\Action::make('planning')
                     ->label(__('actions.planning'))
                     ->url(fn (Manipulation $record) => route('filament.admin.resources.manipulations.planning', ['record' => $record]))
-                    ->color(Color::Green)
+                    ->color(Color::Lime)
                     ->icon('fas-calendar'),
                 Tables\Actions\Action::make('attendance')
                     ->label(__('actions.attendance'))
                     ->url(fn (Manipulation $record) => Attendance::getUrl(['manipulation' => $record->id]))
                     ->color(Color::Cyan)
-                    ->icon('fas-signature'),
+                    ->icon('fas-signature')
+                    ->hidden(fn (Manipulation $record) => !$record->published)
+                    ->disabled(fn (Manipulation $record) => !$record->published),
+                Tables\Actions\Action::make('publish')
+                    ->label(__('actions.publish'))
+                    ->icon('fas-calendar-check')
+                    ->action(fn (Manipulation $record) => $record->togglePublished())
+                    ->requiresConfirmation()
+                    ->color('success')
+                    ->hidden(fn (Manipulation $record) => $record->published || !Auth::user()->can('publish', $record))
+                    ->disabled(fn (Manipulation $record) => $record->published || !Auth::user()->can('publish', $record)),
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make(),
-                    Tables\Actions\Action::make('toggle_published')
-                        ->label(fn (Manipulation $record) => $record->published ? __('actions.unpublish') : __('actions.publish'))
-                        ->icon(fn (Manipulation $record) => $record->published ? 'fas-calendar-xmark' : 'fas-calendar-check')
+                    Tables\Actions\Action::make('unpublish')
+                        ->label(__('actions.unpublish'))
+                        ->icon('fas-calendar-xmark')
                         ->action(fn (Manipulation $record) => $record->togglePublished())
                         ->requiresConfirmation()
-                        ->color(fn (Manipulation $record) => $record->published ? 'warning' : 'success')
-                        ->hidden(fn (Manipulation $record) => !Auth::user()->can('publish', $record))
-                        ->disabled(fn (Manipulation $record) => !Auth::user()->can('publish', $record)),
+                        ->color('warning')
+                        ->hidden(fn (Manipulation $record) => !$record->published || !Auth::user()->can('publish', $record))
+                        ->disabled(fn (Manipulation $record) => !$record->published || !Auth::user()->can('publish', $record)),
                     Tables\Actions\Action::make('archive')
                         ->label(__('actions.archive'))
                         ->icon('fas-calendar-check')

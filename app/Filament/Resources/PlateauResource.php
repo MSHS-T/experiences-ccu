@@ -105,7 +105,7 @@ class PlateauResource extends Resource
                 Tables\Actions\Action::make('planning')
                     ->label(__('actions.planning'))
                     ->url(fn (Plateau $record) => route('filament.admin.resources.plateaux.planning', ['record' => $record]))
-                    ->color(Color::Green)
+                    ->color(Color::Lime)
                     ->icon('fas-calendar'),
                 Tables\Actions\EditAction::make(),
             ])
