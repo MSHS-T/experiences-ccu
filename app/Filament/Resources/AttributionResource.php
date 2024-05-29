@@ -88,13 +88,13 @@ class AttributionResource extends Resource
                 Tables\Columns\TextColumn::make('manipulation_manager_id')
                     ->label(__('attributes.manipulation_manager'))
                     ->formatStateUsing(
-                        fn (Attribution $record): string => $record->manipulationManager->name
+                        fn (Attribution $record): string => $record->manipulationManager?->name ?? '?'
                     )
                     ->sortable(),
                 Tables\Columns\TextColumn::make('creator_id')
                     ->label(__('attributes.creator'))
                     ->formatStateUsing(
-                        fn (Attribution $record): string => $record->creator->name
+                        fn (Attribution $record): string => $record->creator?->name ?? '?'
                     )
                     ->sortable(),
                 Tables\Columns\TextColumn::make('start_date')

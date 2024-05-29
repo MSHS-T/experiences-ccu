@@ -72,7 +72,7 @@ class PlateauResource extends Resource
                 Tables\Columns\TextColumn::make('manager_id')
                     ->label(__('attributes.manager'))
                     ->formatStateUsing(
-                        fn (Plateau $record): string => $record->manager->name
+                        fn (Plateau $record): string => $record->manager?->name ?? '?'
                     )
                     ->sortable(),
                 Tables\Columns\ColorColumn::make('color')

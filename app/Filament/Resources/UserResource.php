@@ -9,6 +9,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
+use Filament\Tables\Enums\FiltersLayout;
 use Illuminate\Support\Arr;
 use Spatie\Permission\Models\Role;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
@@ -88,8 +89,8 @@ class UserResource extends Resource
                     ->dateTime('d/m/Y H:i:s'),
             ])
             ->filters([
-                //
-            ])
+                Tables\Filters\TrashedFilter::make(),
+            ], layout: FiltersLayout::AboveContent)
             ->actions([
                 Impersonate::make()->redirectTo(route('filament.admin.pages.dashboard')),
                 Tables\Actions\EditAction::make()
@@ -102,6 +103,9 @@ class UserResource extends Resource
 
                         return $record;
                     }),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([]);
     }

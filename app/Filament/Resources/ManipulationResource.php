@@ -259,7 +259,7 @@ class ManipulationResource extends Resource
                         fn (Manipulation $record) => Str::of(
                             sprintf(
                                 '<ul class="list-disc">%s</ul>',
-                                $record->users->map(fn (User $u) => $u->name)
+                                $record->users->map(fn (User $u) => $u?->name ?? '?')
                                     ->map(fn ($d) => '<li>' . $d . '</li>')
                                     ->join('')
                             )
