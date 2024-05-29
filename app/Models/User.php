@@ -159,6 +159,11 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         return $this->hasMany(Plateau::class, 'manager_id', 'id');
     }
 
+    public function attributions(): HasMany
+    {
+        return $this->hasMany(Attribution::class, 'manipulation_manager_id', 'id');
+    }
+
     public function manipulations(): BelongsToMany
     {
         return $this->belongsToMany(Manipulation::class);

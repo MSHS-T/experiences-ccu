@@ -4,14 +4,17 @@ namespace App\Livewire;
 
 use App\Livewire\Traits\DisplaysSlots;
 use App\Livewire\Traits\InteractsWithSlots;
+use App\Models\Attribution;
 use App\Models\Manipulation;
 use App\Models\Plateau;
 use App\Models\Slot;
+use App\Models\User;
 use App\Utils\AttributionHelper;
 use App\Utils\SlotGenerator;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Contracts\HasForms;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class SlotCalendar extends Component implements HasForms, HasActions
@@ -35,6 +38,19 @@ class SlotCalendar extends Component implements HasForms, HasActions
             $this->manipulation = Manipulation::find($manipulationId);
         } else {
             $this->plateaux = Plateau::all()
+                ->filter(function (Plateau $plateau) {
+                    $user = Auth::user();
+                    /** @var User $user */
+                    if ($user->hasRole('administrator')) {
+                        return true;
+                    }
+                    if ($user->hasRole('plateau_manager')) {
+                        return $plateau->manager?->id === $user->id;
+                    }
+                    if ($user->hasRole('manipulation_manager')) {
+                        return $user->attributions->some(fn (Attribution $attribution) => $attribution->plateau->id === $plateau->id);
+                    }
+                })
                 ->map(fn (Plateau $plateau) => [
                     'id'    => $plateau->id,
                     'name'  => $plateau->name,

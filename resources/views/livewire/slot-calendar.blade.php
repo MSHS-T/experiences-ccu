@@ -1,7 +1,7 @@
 <div class="h-full">
     <div class="relative divide-y">
         @if ($showPlateaux)
-            <div class="w-full flex flex-wrap justify-between flex-1 mb-4">
+            <div class="w-full flex flex-wrap justify-start flex-1 mb-4 space-x-4">
                 @foreach ($plateaux as $plateau)
                     <label class="flex items-center gap-2">
                         <x-filament::input.checkbox wire:model="checkedPlateaux.{{ $plateau['id'] }}"
