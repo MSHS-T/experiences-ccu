@@ -13,6 +13,7 @@ use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Pages\Page;
 use Filament\Support\Enums\VerticalAlignment;
+use Illuminate\Support\Facades\Auth;
 
 class ManipulationStatistics extends Page implements HasForms
 {
@@ -82,5 +83,10 @@ class ManipulationStatistics extends Page implements HasForms
             'year'  => Statistics::getYearlyStatistics($this->formData['period']),
         };
         dump($this->statistics);
+    }
+
+    public static function canAccess(): bool
+    {
+        return Auth::user()->hasRole('administrator');
     }
 }

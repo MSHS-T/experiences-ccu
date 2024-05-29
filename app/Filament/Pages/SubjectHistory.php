@@ -11,6 +11,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Support\Enums\VerticalAlignment;
+use Illuminate\Support\Facades\Auth;
 
 class SubjectHistory extends Page implements HasForms
 {
@@ -77,5 +78,10 @@ class SubjectHistory extends Page implements HasForms
             ($this->subjectHistory['blocked']) ? $subject->unblock() : $subject->block();
             $this->subjectHistory = $subject->history(withPercentage: true);
         }
+    }
+
+    public static function canAccess(): bool
+    {
+        return Auth::user()->hasRole('administrator');
     }
 }
