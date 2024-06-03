@@ -253,6 +253,7 @@ class ManipulationResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with(['statistics'])->withCount(['slots']))
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('#')
@@ -287,7 +288,7 @@ class ManipulationResource extends Resource
                     )
                     ->sortable(),
                 Tables\Columns\TextColumn::make('slots_count')
-                    ->counts('slots')
+                    ->getStateUsing(fn (Manipulation $record) => !$record->archived ? $record->slots->count() : $record->statistics->pluck('slot_count')->sum())
                     ->label(__('attributes.slot_count'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('start_date')

@@ -39,7 +39,7 @@ use Illuminate\Support\Stringable;
  * @property-read int|null $slots_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
- * @property-read Manipulation|null $statistics
+ * @property-read Illuminate\Database\Eloquent\Collection<int, \App\Models\ManipulationStatistics>|null $statistics
  * @method static \Database\Factories\ManipulationFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation newQuery()
