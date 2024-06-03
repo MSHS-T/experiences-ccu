@@ -115,6 +115,18 @@ class SlotCalendar extends Component implements HasForms, HasActions
         $this->refreshRecords();
     }
 
+    public function checkAllPlateaux()
+    {
+        $this->checkedPlateaux = array_fill_keys(array_column($this->plateaux, 'id'), true);
+        $this->refreshRecords();
+    }
+
+    public function uncheckAllPlateaux()
+    {
+        $this->checkedPlateaux = array_fill_keys(array_column($this->plateaux, 'id'), false);
+        $this->refreshRecords();
+    }
+
     public function render()
     {
         return view('livewire.slot-calendar', [

@@ -1,18 +1,28 @@
 <div class="h-full">
     <div class="relative divide-y">
         @if ($showPlateaux)
-            <div class="w-full flex flex-wrap justify-start flex-1 mb-4 space-x-4">
-                @foreach ($plateaux as $plateau)
-                    <label class="flex items-center gap-2">
-                        <x-filament::input.checkbox wire:model="checkedPlateaux.{{ $plateau['id'] }}"
-                            wire:change="togglePlateau({{ $plateau['id'] }})" />
-                        <span class="w-4 h-4 rounded-lg" style="background-color: {{ $plateau['color'] }}">
-                        </span>
-                        <span>
-                            {{ $plateau['name'] }}
-                        </span>
-                    </label>
-                @endforeach
+            <div class="w-full flex items-center mb-4 space-x-4">
+                <div class="w-full flex flex-wrap justify-start items-center flex-1 space-x-4">
+                    @foreach ($plateaux as $plateau)
+                        <label class="flex items-center gap-2">
+                            <x-filament::input.checkbox wire:model="checkedPlateaux.{{ $plateau['id'] }}"
+                                wire:change="togglePlateau({{ $plateau['id'] }})" />
+                            <span class="w-4 h-4 rounded-lg" style="background-color: {{ $plateau['color'] }}">
+                            </span>
+                            <span>
+                                {{ $plateau['name'] }}
+                            </span>
+                        </label>
+                    @endforeach
+                </div>
+                <div class="flex flex-col justify-center items-center text-sm flex-shrink-0">
+                    <button wire:click="checkAllPlateaux()" class="flex items-center gap-2">
+                        Tout cocher
+                    </button>
+                    <button wire:click="uncheckAllPlateaux()" class="flex items-center gap-2">
+                        Tout décocher
+                    </button>
+                </div>
             </div>
         @endif
         <div style="padding-top: 16px;">
