@@ -88,13 +88,13 @@ class Subject
     public function block(): void
     {
         if (!$this->bookingHistory) {
-            $history = $this->history();
             $this->bookingHistory = BookingHistory::create([
                 'hashed_email'                => $this->hashedEmail,
-                'booking_made'                => $history['made'],
-                'booking_confirmed'           => $history['confirmed'],
-                'booking_confirmed_honored'   => $history['confirmed_honored'],
-                'booking_unconfirmed_honored' => $history['unconfirmed_honored'],
+                'booking_made'                => 0,
+                'booking_confirmed'           => 0,
+                'booking_confirmed_honored'   => 0,
+                'booking_unconfirmed_honored' => 0,
+                'blocked'                     => false
             ]);
         }
         $this->bookingHistory->blocked = true;
@@ -104,13 +104,13 @@ class Subject
     public function unblock(): void
     {
         if (!$this->bookingHistory) {
-            $history = $this->history();
             $this->bookingHistory = BookingHistory::create([
                 'hashed_email'                => $this->hashedEmail,
-                'booking_made'                => $history['made'],
-                'booking_confirmed'           => $history['confirmed'],
-                'booking_confirmed_honored'   => $history['confirmed_honored'],
-                'booking_unconfirmed_honored' => $history['unconfirmed_honored'],
+                'booking_made'                => 0,
+                'booking_confirmed'           => 0,
+                'booking_confirmed_honored'   => 0,
+                'booking_unconfirmed_honored' => 0,
+                'blocked'                     => false
             ]);
         }
         $this->bookingHistory->blocked = false;
