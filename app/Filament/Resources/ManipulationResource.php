@@ -384,34 +384,36 @@ class ManipulationResource extends Resource
                     ->url(fn (Manipulation $record) => route('filament.admin.resources.manipulations.planning', ['record' => $record]))
                     ->color(Color::Lime)
                     ->icon('fas-calendar')
-                    ->hidden(fn (Manipulation $record) => !$record->published || !Auth::user()->can('update', $record))
-                    ->disabled(fn (Manipulation $record) => !$record->published || !Auth::user()->can('update', $record)),
+                    ->hidden(fn (Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('update', $record))
+                    ->disabled(fn (Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('update', $record)),
                 Tables\Actions\Action::make('attendance')
                     ->label(__('actions.attendance'))
                     ->url(fn (Manipulation $record) => Attendance::getUrl(['manipulation' => $record->id]))
                     ->color(Color::Cyan)
                     ->icon('fas-signature')
-                    ->hidden(fn (Manipulation $record) => !$record->published || !Auth::user()->can('update', $record))
-                    ->disabled(fn (Manipulation $record) => !$record->published || !Auth::user()->can('update', $record)),
+                    ->hidden(fn (Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('update', $record))
+                    ->disabled(fn (Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('update', $record)),
                 Tables\Actions\Action::make('publish')
                     ->label(__('actions.publish'))
                     ->icon('fas-calendar-check')
                     ->action(fn (Manipulation $record) => $record->togglePublished())
                     ->requiresConfirmation()
                     ->color('success')
-                    ->hidden(fn (Manipulation $record) => $record->published || !Auth::user()->can('publish', $record))
-                    ->disabled(fn (Manipulation $record) => $record->published || !Auth::user()->can('publish', $record)),
+                    ->hidden(fn (Manipulation $record) => $record->published || $record->archived || !Auth::user()->can('publish', $record))
+                    ->disabled(fn (Manipulation $record) => $record->published || $record->archived || !Auth::user()->can('publish', $record)),
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
-                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\EditAction::make()
+                        ->hidden(fn (Manipulation $record) => $record->archived || !Auth::user()->can('update', $record))
+                        ->disabled(fn (Manipulation $record) => $record->archived || !Auth::user()->can('update', $record)),
                     Tables\Actions\Action::make('unpublish')
                         ->label(__('actions.unpublish'))
                         ->icon('fas-calendar-xmark')
                         ->action(fn (Manipulation $record) => $record->togglePublished())
                         ->requiresConfirmation()
                         ->color('warning')
-                        ->hidden(fn (Manipulation $record) => !$record->published || !Auth::user()->can('publish', $record))
-                        ->disabled(fn (Manipulation $record) => !$record->published || !Auth::user()->can('publish', $record)),
+                        ->hidden(fn (Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('publish', $record))
+                        ->disabled(fn (Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('publish', $record)),
                     Tables\Actions\Action::make('archive')
                         ->label(__('actions.archive'))
                         ->icon('fas-calendar-check')
