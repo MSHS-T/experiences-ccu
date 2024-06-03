@@ -382,14 +382,16 @@ class ManipulationResource extends Resource
                     ->label(__('actions.planning'))
                     ->url(fn (Manipulation $record) => route('filament.admin.resources.manipulations.planning', ['record' => $record]))
                     ->color(Color::Lime)
-                    ->icon('fas-calendar'),
+                    ->icon('fas-calendar')
+                    ->hidden(fn (Manipulation $record) => !$record->published || !Auth::user()->can('update', $record))
+                    ->disabled(fn (Manipulation $record) => !$record->published || !Auth::user()->can('update', $record)),
                 Tables\Actions\Action::make('attendance')
                     ->label(__('actions.attendance'))
                     ->url(fn (Manipulation $record) => Attendance::getUrl(['manipulation' => $record->id]))
                     ->color(Color::Cyan)
                     ->icon('fas-signature')
-                    ->hidden(fn (Manipulation $record) => !$record->published)
-                    ->disabled(fn (Manipulation $record) => !$record->published),
+                    ->hidden(fn (Manipulation $record) => !$record->published || !Auth::user()->can('update', $record))
+                    ->disabled(fn (Manipulation $record) => !$record->published || !Auth::user()->can('update', $record)),
                 Tables\Actions\Action::make('publish')
                     ->label(__('actions.publish'))
                     ->icon('fas-calendar-check')
