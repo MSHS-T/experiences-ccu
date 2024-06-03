@@ -77,7 +77,12 @@ class ManipulationResource extends Resource
                         modifyQueryUsing: fn (Builder $query) => $query
                             ->when(
                                 Auth::user()->hasRole('manipulation_manager'),
-                                fn (Builder $query) => $query->whereIn('id', Attribution::where('manipulation_manager_id', Auth::id())->pluck('plateau_id'))
+                                fn (Builder $query) => $query->whereIn(
+                                    'id',
+                                    Attribution::where('manipulation_manager_id', Auth::id())
+                                        ->where('end_date', '>=', today())
+                                        ->pluck('plateau_id')
+                                )
                             ),
                     )
                     ->required(),
