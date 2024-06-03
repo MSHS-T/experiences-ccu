@@ -252,8 +252,27 @@ class ManipulationResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $plateaux = Plateau::all()
+            ->filter(function (Plateau $plateau) {
+                $user = Auth::user();
+                /** @var User $user */
+                if ($user->hasRole('administrator')) {
+                    return true;
+                }
+                if ($user->hasRole('plateau_manager')) {
+                    return $plateau->manager?->id === $user->id;
+                }
+                if ($user->hasRole('manipulation_manager')) {
+                    return $user->attributions->some(fn (Attribution $attribution) => $attribution->plateau->id === $plateau->id);
+                }
+            });
         return $table
-            ->modifyQueryUsing(fn (Builder $query) => $query->with(['statistics'])->withCount(['slots']))
+            ->modifyQueryUsing(
+                fn (Builder $query) =>
+                $query->with(['statistics'])
+                    ->withCount(['slots'])
+                    ->whereIn('plateau_id', $plateaux->pluck('id'))
+            )
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('#')
@@ -348,10 +367,9 @@ class ManipulationResource extends Resource
                 [
                     SelectFilter::make('plateau_id')
                         ->label(__('attributes.plateau'))
-                        ->options(
-                            Plateau::all()->pluck('name', 'id')->unique()->all()
-                        ),
+                        ->options($plateaux->pluck('name', 'id')->unique()->all()),
                     Filter::make('users')
+                        ->hidden(Auth::user()->hasRole('manipulation_manager'))
                         ->form([
                             Forms\Components\Select::make('user_id')
                                 ->label(__('attributes.manipulation_managers'))
