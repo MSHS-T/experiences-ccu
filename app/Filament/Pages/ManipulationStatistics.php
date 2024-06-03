@@ -68,10 +68,10 @@ class ManipulationStatistics extends Page implements HasForms
     {
         switch ($granularity) {
             case 'month':
-                $months = Statistics::getMonths();
+                $months = array_filter(Statistics::getMonths());
                 return array_combine($months, $months);
             case 'year':
-                $years = Statistics::getYears();
+                $years = array_filter(Statistics::getYears());
                 return array_combine($years, $years);
         }
     }
