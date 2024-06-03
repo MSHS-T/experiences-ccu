@@ -13,7 +13,9 @@ use Filament\Forms\Set;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -93,7 +95,26 @@ class AttributionResource extends Resource
 
     public static function table(Table $table): Table
     {
+        $plateaux = Plateau::all()
+            ->filter(function (Plateau $plateau) {
+                $user = Auth::user();
+                /** @var User $user */
+                if ($user->hasRole('administrator')) {
+                    return true;
+                }
+                if ($user->hasRole('plateau_manager')) {
+                    return $plateau->manager?->id === $user->id;
+                }
+                if ($user->hasRole('manipulation_manager')) {
+                    return $user->attributions->some(fn (Attribution $attribution) => $attribution->plateau->id === $plateau->id);
+                }
+            });
         return $table
+            ->modifyQueryUsing(
+                fn (Builder $query) =>
+                $query->whereIn('plateau_id', $plateaux->pluck('id'))
+                    ->when(Auth::user()->hasRole('manipulation_manager'), fn (Builder $query) => $query->where('manipulation_manager_id', Auth::id()))
+            )
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->label('#')
@@ -145,10 +166,11 @@ class AttributionResource extends Resource
                     SelectFilter::make('plateau_id')
                         ->label(__('attributes.plateau'))
                         ->options(
-                            Plateau::all()->pluck('name', 'id')->unique()->all()
+                            $plateaux->pluck('name', 'id')->unique()->all()
                         ),
                     SelectFilter::make('manipulation_manager_id')
                         ->label(__('attributes.manipulation_manager'))
+                        ->hidden(Auth::user()->hasRole('manipulation_manager'))
                         ->options(
                             User::role('plateau_manager')
                                 ->get()
@@ -156,7 +178,7 @@ class AttributionResource extends Resource
                                 ->all()
                         )
                 ],
-                layout: \Filament\Tables\Enums\FiltersLayout::AboveContentCollapsible
+                layout: FiltersLayout::AboveContent
             )
             ->actions([
                 Tables\Actions\EditAction::make(),
