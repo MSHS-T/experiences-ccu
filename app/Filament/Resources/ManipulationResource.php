@@ -272,6 +272,7 @@ class ManipulationResource extends Resource
                 $query->with(['statistics'])
                     ->withCount(['slots'])
                     ->whereIn('plateau_id', $plateaux->pluck('id'))
+                    ->when(Auth::user()->hasRole('manipulation_manager'), fn (Builder $query) => $query->whereHas('users', fn (Builder $query) => $query->where('id', Auth::id())))
             )
             ->columns([
                 Tables\Columns\TextColumn::make('id')
