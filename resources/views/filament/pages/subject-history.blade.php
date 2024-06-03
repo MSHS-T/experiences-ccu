@@ -101,8 +101,13 @@
                     </div>
                 </dl>
                 <div class="bg-white dark:bg-gray-900 border border-gray-200 shadow sm:rounded-xl mt-4">
-                    <div class="px-4 py-5 sm:p-6 sm:flex sm:items-start sm:justify-between">
-                        <div class="max-w-xl text-sm text-gray-500 dark:text-gray-400">
+                    <div class="px-4 py-5 sm:p-6 sm:flex sm:items-center">
+                        @if ($subjectHistory['blocked'])
+                            <x-fas-ban class="h-8 w-8 text-red-600" />
+                        @else
+                            <x-fas-check class="h-8 w-8 text-green-600" />
+                        @endif
+                        <div class="flex-1 text-sm text-gray-500 dark:text-gray-400 pl-4">
                             <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
                                 {{ $subjectHistory['blocked'] ? 'Participant bloqué' : 'Participant actif' }}
                             </h3>
