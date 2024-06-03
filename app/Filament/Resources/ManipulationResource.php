@@ -173,20 +173,22 @@ class ManipulationResource extends Resource
                     ->schema(
                         collect(['monday', 'tuesday', 'wednesday', 'thursday', 'friday'])
                             ->map(
-                                fn ($day) => Forms\Components\Section::make(function (Get $get) use ($day) {
-                                    $hours = [];
-                                    foreach (['am', 'pm'] as $halfday) {
-                                        $start = $get("available_hours.$day.start_$halfday");
-                                        $end   = $get("available_hours.$day.end_$halfday");
-                                        if (filled($start) && filled($end)) {
-                                            $hours[] = $start . '-' . $end;
+                                fn ($day) => Forms\Components\Section::make($day)
+                                    ->heading(__('attributes.' . $day))
+                                    ->description(function (Get $get) use ($day) {
+                                        $hours = [];
+                                        foreach (['am', 'pm'] as $halfday) {
+                                            $start = $get("available_hours.$day.start_$halfday");
+                                            $end   = $get("available_hours.$day.end_$halfday");
+                                            if (filled($start) && filled($end)) {
+                                                $hours[] = $start . '-' . $end;
+                                            }
                                         }
-                                    }
-                                    if (filled($hours)) {
-                                        return Str::of(__('attributes.' . $day) . ' <i><small>(' . implode(' & ', $hours) . ')</small></i>')->toHtmlString();
-                                    }
-                                    return __('attributes.' . $day);
-                                })
+                                        if (filled($hours)) {
+                                            return Str::of('<small>' . implode(' & ', $hours) . '</small>')->toHtmlString();
+                                        }
+                                        return '∅';
+                                    })
                                     ->columnSpan(1)
                                     ->columns(1)
                                     ->collapsible()
@@ -199,6 +201,7 @@ class ManipulationResource extends Resource
                                             ->seconds(false)
                                             ->format('H:i')
                                             ->displayFormat('H:i')
+                                            ->reactive()
                                             ->hintAction($clearHalfDayAction("available_hours.$day.start_am")),
                                         Forms\Components\TimePicker::make("available_hours.$day.end_am")
                                             ->label(__('attributes.end_am'))
@@ -206,6 +209,7 @@ class ManipulationResource extends Resource
                                             ->seconds(false)
                                             ->format('H:i')
                                             ->displayFormat('H:i')
+                                            ->reactive()
                                             ->hintAction($clearHalfDayAction("available_hours.$day.end_am"))
                                             ->requiredWith("available_hours.$day.start_am"),
                                         Forms\Components\TimePicker::make("available_hours.$day.start_pm")
@@ -214,6 +218,7 @@ class ManipulationResource extends Resource
                                             ->seconds(false)
                                             ->format('H:i')
                                             ->displayFormat('H:i')
+                                            ->reactive()
                                             ->hintAction($clearHalfDayAction("available_hours.$day.start_pm"))
                                             ->nullable()
                                             ->after("available_hours.$day.end_am"),
@@ -223,6 +228,7 @@ class ManipulationResource extends Resource
                                             ->seconds(false)
                                             ->format('H:i')
                                             ->displayFormat('H:i')
+                                            ->reactive()
                                             ->hintAction($clearHalfDayAction("available_hours.$day.end_pm"))
                                             ->requiredWith("available_hours.$day.start_pm"),
                                         Forms\Components\Actions::make([
