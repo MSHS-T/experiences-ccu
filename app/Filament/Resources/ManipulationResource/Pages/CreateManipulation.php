@@ -53,4 +53,9 @@ class CreateManipulation extends CreateRecord
         $manip->load('users', 'plateau');
         $manip->createOrUpdateSlots();
     }
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
 }
