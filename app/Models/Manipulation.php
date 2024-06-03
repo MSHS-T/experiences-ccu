@@ -225,4 +225,16 @@ class Manipulation extends Model
             ->where('end_date', '>', Carbon::today())
             ->orderBy('end_date', 'asc');
     }
+
+    /**
+     * Scope a query to only include manipulations visible for the public.
+     */
+    public function scopeActive(Builder $query): void
+    {
+        $booking_opening_delay = app(GeneralSettings::class)->booking_opening_delay;
+        $query->where('published', true)
+            ->where('archived', false)
+            ->where('start_date', '<=', Carbon::today()->addDays($booking_opening_delay))
+            ->where('end_date', '>', Carbon::today());
+    }
 }

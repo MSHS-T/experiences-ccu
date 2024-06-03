@@ -35,10 +35,13 @@ return [
     'location'             => 'Emplacement',
     'available_hours'      => 'Horaires',
     'requirements'         => 'Critères d\'inclusion',
-    'published'            => 'Publié ?',
-    'archived'             => 'Etat d\'archivage',
-    'archived_yes'          => 'Archivés seulement',
-    'archived_no'           => 'Non archivés seulement',
+    'published'            => 'État de publication',
+    'published_yes'          => 'Publiées seulement',
+    'published_no'           => 'Non publiées seulement',
+    'published_all'          => 'Tous',
+    'archived'             => 'État d\'archivage',
+    'archived_yes'          => 'Archivées seulement',
+    'archived_no'           => 'Non archivées seulement',
     'archived_all'          => 'Tous',
 
     // Attribution

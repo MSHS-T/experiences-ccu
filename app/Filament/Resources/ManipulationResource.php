@@ -320,7 +320,7 @@ class ManipulationResource extends Resource
                     ->sortable()
                     ->date('d/m/Y'),
                 Tables\Columns\IconColumn::make('published')
-                    ->label(__('attributes.published'))
+                    ->label('Publié ?')
                     ->boolean(),
                 Tables\Columns\IconColumn::make('archived')
                     ->label('Archivé ?')
@@ -394,6 +394,12 @@ class ManipulationResource extends Resource
                         ->placeholder(__('attributes.archived_all'))
                         ->trueLabel(__('attributes.archived_no'))
                         ->falseLabel(__('attributes.archived_yes')),
+                    TernaryFilter::make('published')
+                        ->label(__('attributes.published'))
+                        ->nullable()
+                        ->placeholder(__('attributes.published_all'))
+                        ->trueLabel(__('attributes.published_no'))
+                        ->falseLabel(__('attributes.published_yes')),
                 ],
                 layout: \Filament\Tables\Enums\FiltersLayout::AboveContent
             )
@@ -474,7 +480,7 @@ class ManipulationResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::wherePublished(true)->whereArchived(false)->count();
+        return static::getModel()::query()->active()->count();
     }
 
     protected function getDefaultTableSortColumn(): ?string
