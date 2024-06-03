@@ -143,6 +143,7 @@ class Attendance extends Page implements HasForms, HasTable
                 TableAction::make('markHonored')
                     ->label(__('actions.mark_honored'))
                     ->hidden(fn (Slot $record) => blank($record->booking))
+                    ->disabled(fn (Slot $record) => $record->start->startOfDay()->isAfter(now()->startOfDay()))
                     ->color(fn (Slot $record) => $record->booking?->honored === true ? Color::Green : Color::Gray)
                     ->icon(fn (Slot $record) => $record->booking?->honored === true ? 'fas-check' : null)
                     ->action(function (Slot $record) {
@@ -156,6 +157,7 @@ class Attendance extends Page implements HasForms, HasTable
                 TableAction::make('markNotHonored')
                     ->label(__('actions.mark_not_honored'))
                     ->hidden(fn (Slot $record) => blank($record->booking))
+                    ->disabled(fn (Slot $record) => $record->start->startOfDay()->isAfter(now()->startOfDay()))
                     ->color(fn (Slot $record) => $record->booking?->honored === false ? Color::Red : Color::Gray)
                     ->icon(fn (Slot $record) => $record->booking?->honored === false ? 'fas-check' : null)
                     ->action(function (Slot $record) {
