@@ -26,7 +26,7 @@ class Statistics
 
         // Generate all months (Y-m format) between min and max
         $months = [$min];
-        while (last($months) !== $max) {
+        while (last($months) < $max) {
             $months[] = (new Carbon(last($months)))->addMonth()->format('Y-m');
         }
 
@@ -49,7 +49,7 @@ class Statistics
 
         // Generate all years (Y format) between min and max
         $years = [$min];
-        while (last($years) !== $max) {
+        while (last($years) < $max) {
             $years[] = (new Carbon(last($years)))->addYear()->format('Y-m');
         }
 
