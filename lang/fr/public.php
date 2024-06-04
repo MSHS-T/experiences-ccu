@@ -40,7 +40,15 @@ return [
             'unconfirmed_honored' => 'Inscriptions non confirmées honorées',
         ]
     ],
+    'contact' => [
+        'page_title' => 'Nous contacter',
+        'text'       => 'Remplissez le formulaire ci-dessous pour contacter les administrateurs de la plateforme.',
+        'name'       => 'Nom',
+        'email'      => 'Email',
+        'message'    => 'Message',
+    ],
     'messages' => [
-        'booking_created' => 'Votre inscription a bien été effectuée. Vous allez recevoir un mail récapitulatif. Nous vous remercions de cliquer sur le lien contenu dans celui-ci afin de confirmer votre inscription'
+        'booking_created' => 'Votre inscription a bien été effectuée. Vous allez recevoir un mail récapitulatif. Nous vous remercions de cliquer sur le lien contenu dans celui-ci afin de confirmer votre inscription',
+        'contact_sent'    => 'Votre message a bien été envoyé aux administrateurs de la plateforme.'
     ]
 ];

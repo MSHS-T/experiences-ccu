@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookSlotController;
 use App\Http\Controllers\CancelBookingController;
 use App\Http\Controllers\ConfirmBookingController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\ManipulationController;
@@ -34,5 +35,7 @@ Route::get('/mes-inscriptions', MyBookingsController::class)->name('my_bookings'
 Route::get('/confirmer/{booking}', ConfirmBookingController::class)->name('confirm_booking');
 Route::get('/annuler/{booking}', CancelBookingController::class)->name('cancel_booking');
 
+Route::view('/contact', 'contact')->name('contact');
+Route::post('/contact', ContactController::class)->name('contact_send');
 Route::view('/mentions-legales', 'legal')->name('legal');
 Route::view('/politique-cookies', 'cookies')->name('cookies');
