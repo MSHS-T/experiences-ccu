@@ -125,30 +125,33 @@
                     @enderror
                 </div>
 
-                <fieldset class="sm:col-span-6">
-                    <legend class="text-sm font-semibold leading-6 text-gray-900">
-                        {{ __('public.slots.check_requirements') }}
-                    </legend>
-                    <div class="mt-6 space-y-6">
-                        @foreach ($manipulationRequirements as $i => $r)
-                            <div class="relative flex gap-x-3">
-                                <div class="flex h-6 items-center">
-                                    <input id="requirements-{{ $i }}"
-                                        name="requirements-{{ $i }}" type="checkbox"
-                                        class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                @if (filled($manipulationRequirements))
+                    <fieldset class="sm:col-span-6">
+                        <legend class="text-sm font-semibold leading-6 text-gray-900">
+                            {{ __('public.slots.check_requirements') }}
+                        </legend>
+                        <div class="mt-6 space-y-6">
+                            @foreach ($manipulationRequirements as $i => $r)
+                                <div class="relative flex gap-x-3">
+                                    <div class="flex h-6 items-center">
+                                        <input id="requirements-{{ $i }}"
+                                            name="requirements-{{ $i }}" type="checkbox"
+                                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                    </div>
+                                    <div class="text-sm leading-6">
+                                        <label for="requirements-{{ $i }}"
+                                            class="font-medium text-gray-500">{{ $r }}</label>
+                                        @error('requirements-' . $i)
+                                            <p class="mt-1 text-sm text-red-600" id="requirements-error">
+                                                {{ $message }}
+                                            </p>
+                                        @enderror
+                                    </div>
                                 </div>
-                                <div class="text-sm leading-6">
-                                    <label for="requirements-{{ $i }}"
-                                        class="font-medium text-gray-500">{{ $r }}</label>
-                                    @error('requirements-' . $i)
-                                        <p class="mt-1 text-sm text-red-600" id="requirements-error">{{ $message }}
-                                        </p>
-                                    @enderror
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </fieldset>
+                            @endforeach
+                        </div>
+                    </fieldset>
+                @endif
 
                 <div class="sm:col-span-6 pt-4">
                     <div class="flex items-center">

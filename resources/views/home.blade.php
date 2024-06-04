@@ -89,7 +89,7 @@
                                 class="h-full w-full flex flex-col items-stretch justify-center p-4 sm:p-10 rounded-xl bg-white shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 space-y-4">
                                 {{-- <div class=" grid grid-cols-1 lg:grid-cols-6 items-start gap-x-8 gap-y-4"> --}}
                                 <div class="flex flex-col lg:flex-row items-stretch lg:space-x-8">
-                                    <div class="lg:col-span-6">
+                                    <div class="flex-1 lg:col-span-6">
                                         <h3
                                             class="font-display text-2xl font-bold tracking-tight text-slate-900 flex items-center px-3 space-x-2">
                                             <x-fas-circle-info class="h-5 w-5" />
@@ -98,7 +98,7 @@
                                             </span>
                                         </h3>
                                         <div
-                                            class="rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
+                                            class="w-full rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
                                             {!! $m->description !!}
                                         </div>
                                     </div>
@@ -145,13 +145,17 @@
                                         </h3>
                                         <ol role="list"
                                             class="flex-grow divide-y divide-slate-300/30 rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
-                                            @foreach ($m->requirements as $r)
-                                                <li class="flex justify-between py-1 sm:py-3"
-                                                    aria-label="Strokes and fills on page 21">
+                                            @forelse ($m->requirements as $r)
+                                                <li class="flex justify-between py-1 sm:py-3">
                                                     <span class="font-medium text-slate-900"
                                                         aria-hidden="true">{{ $r }}</span>
                                                 </li>
-                                            @endforeach
+                                            @empty
+                                                <li class="flex items-center justify-center h-full py-1 sm:py-3">
+                                                    <span class="font-medium text-slate-900"
+                                                        aria-hidden="true">{{ __('attributes.no_requirements') }}</span>
+                                                </li>
+                                            @endforelse
                                         </ol>
                                     </div>
                                     <div class="lg:basis-1/3 h-full flex flex-col">

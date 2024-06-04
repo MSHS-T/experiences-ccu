@@ -35,6 +35,7 @@ return [
     'location'             => 'Emplacement',
     'available_hours'      => 'Horaires',
     'requirements'         => 'Critères d\'inclusion',
+    'no_requirements'      => 'Aucune restriction',
     'published'            => 'État de publication',
     'published_yes'        => 'Publiées seulement',
     'published_no'         => 'Non publiées seulement',
