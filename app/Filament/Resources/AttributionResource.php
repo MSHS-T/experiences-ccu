@@ -34,7 +34,7 @@ class AttributionResource extends Resource
     {
         $user = Auth::user();
         $plateaux = $user->hasRole('administrator') ? Plateau::all() : $user->plateaux;
-        $halfdays = collect(['monday', 'tuesday', 'wednesday', 'thursday', 'friday'])
+        $halfdays = collect(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'])
             ->crossJoin(['am', 'pm'])
             ->mapWithKeys(fn($item) => [
                 $item[0] . '_' . $item[1] => __('attributes.' . $item[0]) . ' ' . __('attributes.' . $item[1])
@@ -85,7 +85,8 @@ class AttributionResource extends Resource
                     ->columns([
                         'default' => 2,
                         'md'      => 3,
-                        'xl'      => 5
+                        'lg'      => 5,
+                        'xl' => 7
                     ])
                     ->columnSpanFull()
                     ->required()

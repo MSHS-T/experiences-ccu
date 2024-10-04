@@ -129,13 +129,13 @@ class Manipulation extends Model
     protected function displayName(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value, array $attributes) => $attributes['name'] . ' (' . $this->plateau->name . ')',
+            get: fn(mixed $value, array $attributes) => $attributes['name'] . ' (' . $this->plateau->name . ')',
         );
     }
 
     public function getAvailableHoursDisplay(): array
     {
-        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
         return collect($this->available_hours)->map(function ($hours, $day) {
             if (collect($hours)->filter()->isEmpty()) {
@@ -147,10 +147,10 @@ class Manipulation extends Model
                     collect([$hours['start_am'], $hours['end_am']])->filter()->join('-'),
                     collect([$hours['start_pm'], $hours['end_pm']])->filter()->join('-')
                 ])
-                ->filter(fn ($s) => strlen($s) > 0)
+                ->filter(fn($s) => strlen($s) > 0)
                 ->join(' &amp; ');
         })->filter()
-            ->sortKeysUsing(fn ($a, $b) => array_search($a, $days) <=> array_search($b, $days))
+            ->sortKeysUsing(fn($a, $b) => array_search($a, $days) <=> array_search($b, $days))
             ->all();
     }
 
@@ -203,7 +203,7 @@ class Manipulation extends Model
             }
         }
         $this->statistics()->createMany(array_values($statistics));
-        $this->slots->each(fn (Slot $slot) => $slot->delete());
+        $this->slots->each(fn(Slot $slot) => $slot->delete());
 
         DB::commit();
     }

@@ -41,7 +41,7 @@ class ManipulationResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $computeSlotCount = fn (callable $set, callable $get) => $set(
+        $computeSlotCount = fn(callable $set, callable $get) => $set(
             'slot_count',
             SlotGenerator::estimateCount(
                 $get('users') ?? [],
@@ -52,10 +52,10 @@ class ManipulationResource extends Resource
                 $get('duration'),
             )
         );
-        $clearHalfDayAction = fn (string $fieldName) => Action::make('emptyHalfDay')
+        $clearHalfDayAction = fn(string $fieldName) => Action::make('emptyHalfDay')
             ->icon('fas-eraser')
             ->label(__('actions.clear'))
-            ->action(fn (Set $set) => $set($fieldName, null));
+            ->action(fn(Set $set) => $set($fieldName, null));
 
         return $form
             ->columns([
@@ -74,10 +74,10 @@ class ManipulationResource extends Resource
                     ->relationship(
                         name: 'plateau',
                         titleAttribute: 'name',
-                        modifyQueryUsing: fn (Builder $query) => $query
+                        modifyQueryUsing: fn(Builder $query) => $query
                             ->when(
                                 Auth::user()->hasRole('manipulation_manager'),
-                                fn (Builder $query) => $query->whereIn(
+                                fn(Builder $query) => $query->whereIn(
                                     'id',
                                     Attribution::where('manipulation_manager_id', Auth::id())
                                         ->where('end_date', '>=', today())
@@ -145,7 +145,7 @@ class ManipulationResource extends Resource
                     ->defaultItems(1)
                     ->withoutHeader()
                     ->formatStateUsing(
-                        fn (?Manipulation $record) => collect($record?->requirements ?? [])->map(fn ($r) => ['text' => $r])->all()
+                        fn(?Manipulation $record) => collect($record?->requirements ?? [])->map(fn($r) => ['text' => $r])->all()
                     )
                     ->reorderable(false)
                     ->schema([
@@ -167,13 +167,13 @@ class ManipulationResource extends Resource
                     ])
                     ->columns([
                         'default' => 1,
-                        'md'      => 1,
-                        'xl'      => 5
+                        'md'      => 2,
+                        'xl'      => 4
                     ])
                     ->schema(
-                        collect(['monday', 'tuesday', 'wednesday', 'thursday', 'friday'])
+                        collect(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'])
                             ->map(
-                                fn ($day) => Forms\Components\Section::make($day)
+                                fn($day) => Forms\Components\Section::make($day)
                                     ->heading(__('attributes.' . $day))
                                     ->description(function (Get $get) use ($day) {
                                         $hours = [];
@@ -274,16 +274,16 @@ class ManipulationResource extends Resource
                     return $plateau->manager?->id === $user->id;
                 }
                 if ($user->hasRole('manipulation_manager')) {
-                    return $user->attributions->some(fn (Attribution $attribution) => $attribution->plateau->id === $plateau->id);
+                    return $user->attributions->some(fn(Attribution $attribution) => $attribution->plateau->id === $plateau->id);
                 }
             });
         return $table
             ->modifyQueryUsing(
-                fn (Builder $query) =>
+                fn(Builder $query) =>
                 $query->with(['statistics'])
                     ->withCount(['slots'])
                     ->whereIn('plateau_id', $plateaux->pluck('id'))
-                    ->when(Auth::user()->hasRole('manipulation_manager'), fn (Builder $query) => $query->whereHas('users', fn (Builder $query) => $query->where('id', Auth::id())))
+                    ->when(Auth::user()->hasRole('manipulation_manager'), fn(Builder $query) => $query->whereHas('users', fn(Builder $query) => $query->where('id', Auth::id())))
             )
             ->columns([
                 Tables\Columns\TextColumn::make('id')
@@ -298,11 +298,11 @@ class ManipulationResource extends Resource
                 Tables\Columns\TextColumn::make('users.id')
                     ->label(__('attributes.manipulation_managers'))
                     ->formatStateUsing(
-                        fn (Manipulation $record) => Str::of(
+                        fn(Manipulation $record) => Str::of(
                             sprintf(
                                 '<ul>%s</ul>',
-                                $record->users->map(fn (User $u) => $u?->name ?? '?')
-                                    ->map(fn ($d) => '<li>' . $d . '</li>')
+                                $record->users->map(fn(User $u) => $u?->name ?? '?')
+                                    ->map(fn($d) => '<li>' . $d . '</li>')
                                     ->join('')
                             )
                         )->sanitizeHtml()->toHtmlString()
@@ -315,11 +315,11 @@ class ManipulationResource extends Resource
                 Tables\Columns\TextColumn::make('duration')
                     ->label(__('attributes.duration'))
                     ->formatStateUsing(
-                        fn (Manipulation $record): string => $record->duration . ' min'
+                        fn(Manipulation $record): string => $record->duration . ' min'
                     )
                     ->sortable(),
                 Tables\Columns\TextColumn::make('slots_count')
-                    ->getStateUsing(fn (Manipulation $record) => !$record->archived ? $record->slots->count() : $record->statistics->pluck('slot_count')->sum())
+                    ->getStateUsing(fn(Manipulation $record) => !$record->archived ? $record->slots->count() : $record->statistics->pluck('slot_count')->sum())
                     ->label(__('attributes.slot_count'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('start_date')
@@ -341,11 +341,11 @@ class ManipulationResource extends Resource
                     ->label(__('attributes.available_hours'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->formatStateUsing(
-                        fn (Manipulation $record) => Str::of(
+                        fn(Manipulation $record) => Str::of(
                             sprintf(
                                 '<ul class="list-disc">%s</ul>',
                                 collect($record->getAvailableHoursDisplay())
-                                    ->map(fn ($d) => '<li>' . $d . '</li>')
+                                    ->map(fn($d) => '<li>' . $d . '</li>')
                                     ->join('')
                             )
                         )->sanitizeHtml()->toHtmlString()
@@ -354,11 +354,11 @@ class ManipulationResource extends Resource
                     ->label(__('attributes.requirements'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->formatStateUsing(
-                        fn (Manipulation $record) => Str::of(
+                        fn(Manipulation $record) => Str::of(
                             sprintf(
                                 '<ul class="list-disc">%s</ul>',
                                 collect($record->requirements)
-                                    ->map(fn ($r) => '<li>' . $r . '</li>')
+                                    ->map(fn($r) => '<li>' . $r . '</li>')
                                     ->join('')
                             )
                         )->sanitizeHtml()->toHtmlString()
@@ -393,9 +393,9 @@ class ManipulationResource extends Resource
                             return $query
                                 ->when(
                                     $data['user_id'],
-                                    fn (Builder $query): Builder => $query->whereHas(
+                                    fn(Builder $query): Builder => $query->whereHas(
                                         'users',
-                                        fn (Builder $query) => $query->where('id', $data['user_id'])
+                                        fn(Builder $query) => $query->where('id', $data['user_id'])
                                     ),
                                 );
                         }),
@@ -417,47 +417,47 @@ class ManipulationResource extends Resource
             ->actions([
                 Tables\Actions\Action::make('planning')
                     ->label(__('actions.planning'))
-                    ->url(fn (Manipulation $record) => route('filament.admin.resources.manipulations.planning', ['record' => $record]))
+                    ->url(fn(Manipulation $record) => route('filament.admin.resources.manipulations.planning', ['record' => $record]))
                     ->color(Color::Lime)
                     ->icon('fas-calendar')
-                    ->hidden(fn (Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('update', $record))
-                    ->disabled(fn (Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('update', $record)),
+                    ->hidden(fn(Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('update', $record))
+                    ->disabled(fn(Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('update', $record)),
                 Tables\Actions\Action::make('attendance')
                     ->label(__('actions.attendance'))
-                    ->url(fn (Manipulation $record) => Attendance::getUrl(['manipulation' => $record->id]))
+                    ->url(fn(Manipulation $record) => Attendance::getUrl(['manipulation' => $record->id]))
                     ->color(Color::Cyan)
                     ->icon('fas-signature')
-                    ->hidden(fn (Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('update', $record))
-                    ->disabled(fn (Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('update', $record)),
+                    ->hidden(fn(Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('update', $record))
+                    ->disabled(fn(Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('update', $record)),
                 Tables\Actions\Action::make('publish')
                     ->label(__('actions.publish'))
                     ->icon('fas-calendar-check')
-                    ->action(fn (Manipulation $record) => $record->togglePublished())
+                    ->action(fn(Manipulation $record) => $record->togglePublished())
                     ->requiresConfirmation()
                     ->color('success')
-                    ->hidden(fn (Manipulation $record) => $record->published || $record->archived || !Auth::user()->can('publish', $record))
-                    ->disabled(fn (Manipulation $record) => $record->published || $record->archived || !Auth::user()->can('publish', $record)),
+                    ->hidden(fn(Manipulation $record) => $record->published || $record->archived || !Auth::user()->can('publish', $record))
+                    ->disabled(fn(Manipulation $record) => $record->published || $record->archived || !Auth::user()->can('publish', $record)),
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make(),
                     Tables\Actions\EditAction::make()
-                        ->hidden(fn (Manipulation $record) => $record->archived || !Auth::user()->can('update', $record))
-                        ->disabled(fn (Manipulation $record) => $record->archived || !Auth::user()->can('update', $record)),
+                        ->hidden(fn(Manipulation $record) => $record->archived || !Auth::user()->can('update', $record))
+                        ->disabled(fn(Manipulation $record) => $record->archived || !Auth::user()->can('update', $record)),
                     Tables\Actions\Action::make('unpublish')
                         ->label(__('actions.unpublish'))
                         ->icon('fas-calendar-xmark')
-                        ->action(fn (Manipulation $record) => $record->togglePublished())
+                        ->action(fn(Manipulation $record) => $record->togglePublished())
                         ->requiresConfirmation()
                         ->color('warning')
-                        ->hidden(fn (Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('publish', $record))
-                        ->disabled(fn (Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('publish', $record)),
+                        ->hidden(fn(Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('publish', $record))
+                        ->disabled(fn(Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('publish', $record)),
                     Tables\Actions\Action::make('archive')
                         ->label(__('actions.archive'))
                         ->icon('fas-calendar-check')
-                        ->action(fn (Manipulation $record) => $record->archive())
+                        ->action(fn(Manipulation $record) => $record->archive())
                         ->requiresConfirmation()
                         ->color('danger')
-                        ->hidden(fn (Manipulation $record) => $record->archived || !Auth::user()->can('archive', $record))
-                        ->disabled(fn (Manipulation $record) => $record->archived || !Auth::user()->can('archive', $record)),
+                        ->hidden(fn(Manipulation $record) => $record->archived || !Auth::user()->can('archive', $record))
+                        ->disabled(fn(Manipulation $record) => $record->archived || !Auth::user()->can('archive', $record)),
                 ]),
 
             ])

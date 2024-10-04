@@ -26,7 +26,7 @@ class ManipulationsTableSeeder extends Seeder
         $plateaux = Plateau::all();
         $faker = Faker::create('fr_FR');
 
-        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
         $nbManipulations = 10;
 

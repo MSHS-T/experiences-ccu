@@ -80,7 +80,7 @@ class Attribution extends Model
 
     public function getAllowedHalfdaysDisplay(): array
     {
-        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
         return collect($this->allowed_halfdays)
             ->sort(function ($a, $b) use ($days) {
                 $daysCmp = array_search(Str::before($a, '_'), $days) <=> array_search(Str::before($b, '_'), $days);
@@ -98,7 +98,7 @@ class Attribution extends Model
 
     public function getSimplifiedAllowedHalfdaysDisplay(): array
     {
-        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
         $halfdays = ['am', 'pm'];
 
         $result = collect();

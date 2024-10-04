@@ -67,6 +67,8 @@ return [
     'wednesday' => 'Mercredi',
     'thursday'  => 'Jeudi',
     'friday'    => 'Vendredi',
+    'saturday'  => 'Samedi',
+    'sunday'    => 'Dimanche',
     'am'        => 'Matin',
     'pm'        => 'Après-midi',
     'start_am'  => 'Début de matinée',
