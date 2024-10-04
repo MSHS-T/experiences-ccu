@@ -6,6 +6,7 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -46,7 +47,7 @@ class UserResource extends Resource
                 Forms\Components\Select::make('roles')
                     ->label(__('attributes.role'))
                     ->relationship('roles', 'name')
-                    ->getOptionLabelFromRecordUsing(fn (Role $record) => __('attributes.roles.' . $record->name))
+                    ->getOptionLabelFromRecordUsing(fn(Role $record) => __('attributes.roles.' . $record->name))
                     ->preload()
                     ->multiple()
                     ->required(),
@@ -72,12 +73,12 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('roles.name')
                     ->label(__('attributes.role'))
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'administrator'        => 'danger',
                         'plateau_manager'      => 'warning',
                         'manipulation_manager' => 'primary',
                     })
-                    ->formatStateUsing(fn (string $state) => __('attributes.roles.' . $state))
+                    ->formatStateUsing(fn(string $state) => __('attributes.roles.' . $state))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('attributes.created_at'))
@@ -103,7 +104,18 @@ class UserResource extends Resource
 
                         return $record;
                     }),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->action(function (User $record) {
+                        if ($record->hasRole('manipulation_manager') && $record->manipulations()->active()->count() > 0) {
+                            Notification::make()
+                                ->title('Erreur')
+                                ->body('Impossible de supprimer un Responsable Manipulation associé à des expériences en cours.')
+                                ->danger()
+                                ->send();
+                            return;
+                        }
+                        $record->delete();
+                    }),
                 Tables\Actions\ForceDeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
             ])
