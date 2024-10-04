@@ -36,7 +36,7 @@ class AttributionResource extends Resource
         $plateaux = $user->hasRole('administrator') ? Plateau::all() : $user->plateaux;
         $halfdays = collect(['monday', 'tuesday', 'wednesday', 'thursday', 'friday'])
             ->crossJoin(['am', 'pm'])
-            ->mapWithKeys(fn ($item) => [
+            ->mapWithKeys(fn($item) => [
                 $item[0] . '_' . $item[1] => __('attributes.' . $item[0]) . ' ' . __('attributes.' . $item[1])
             ])
             ->all();
@@ -73,11 +73,11 @@ class AttributionResource extends Resource
                         Action::make('checkAll')
                             ->label('Tout cocher')
                             ->icon('fas-plus')
-                            ->action(fn (Set $set) => $set('allowed_halfdays', array_keys($halfdays))),
+                            ->action(fn(Set $set) => $set('allowed_halfdays', array_keys($halfdays))),
                         Action::make('uncheckAll')
                             ->label('Tout décocher')
                             ->icon('fas-minus')
-                            ->action(fn (Set $set) => $set('allowed_halfdays', []))
+                            ->action(fn(Set $set) => $set('allowed_halfdays', []))
                     ])
                     ->options(
                         $halfdays
@@ -106,14 +106,14 @@ class AttributionResource extends Resource
                     return $plateau->manager?->id === $user->id;
                 }
                 if ($user->hasRole('manipulation_manager')) {
-                    return $user->attributions->some(fn (Attribution $attribution) => $attribution->plateau->id === $plateau->id);
+                    return $user->attributions->some(fn(Attribution $attribution) => $attribution->plateau->id === $plateau->id);
                 }
             });
         return $table
             ->modifyQueryUsing(
-                fn (Builder $query) =>
+                fn(Builder $query) =>
                 $query->whereIn('plateau_id', $plateaux->pluck('id'))
-                    ->when(Auth::user()->hasRole('manipulation_manager'), fn (Builder $query) => $query->where('manipulation_manager_id', Auth::id()))
+                    ->when(Auth::user()->hasRole('manipulation_manager'), fn(Builder $query) => $query->where('manipulation_manager_id', Auth::id()))
             )
             ->columns([
                 Tables\Columns\TextColumn::make('id')
@@ -123,13 +123,13 @@ class AttributionResource extends Resource
                 Tables\Columns\TextColumn::make('manipulation_manager_id')
                     ->label(__('attributes.manipulation_manager'))
                     ->formatStateUsing(
-                        fn (Attribution $record): string => $record->manipulationManager?->name ?? '?'
+                        fn(Attribution $record): string => $record->manipulationManager?->name ?? '?'
                     )
                     ->sortable(),
                 Tables\Columns\TextColumn::make('creator_id')
                     ->label(__('attributes.creator'))
                     ->formatStateUsing(
-                        fn (Attribution $record): string => $record->creator?->name ?? '?'
+                        fn(Attribution $record): string => $record->creator?->name ?? '?'
                     )
                     ->sortable(),
                 Tables\Columns\TextColumn::make('start_date')
@@ -143,11 +143,11 @@ class AttributionResource extends Resource
                 Tables\Columns\TextColumn::make('allowed_halfdays')
                     ->label(__('attributes.allowed_halfdays'))
                     ->formatStateUsing(
-                        fn (Attribution $record) => Str::of(
+                        fn(Attribution $record) => Str::of(
                             sprintf(
                                 '<ul class="list-disc">%s</ul>',
                                 collect($record->getSimplifiedAllowedHalfdaysDisplay())
-                                    ->map(fn ($r) => '<li>' . $r . '</li>')
+                                    ->map(fn($r) => '<li>' . $r . '</li>')
                                     ->join('')
                             )
                         )->sanitizeHtml()->toHtmlString()
@@ -172,7 +172,7 @@ class AttributionResource extends Resource
                         ->label(__('attributes.manipulation_manager'))
                         ->hidden(Auth::user()->hasRole('manipulation_manager'))
                         ->options(
-                            User::role('plateau_manager')
+                            User::role('manipulation_manager')
                                 ->get()
                                 ->pluck('name', 'id')
                                 ->all()
