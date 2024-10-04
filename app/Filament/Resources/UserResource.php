@@ -80,6 +80,10 @@ class UserResource extends Resource
                     })
                     ->formatStateUsing(fn(string $state) => __('attributes.roles.' . $state))
                     ->sortable(),
+                Tables\Columns\IconColumn::make('email_verified_at')
+                    ->label(__('attributes.email_verified_at'))
+                    ->sortable()
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('attributes.created_at'))
                     ->sortable()
@@ -93,7 +97,8 @@ class UserResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ], layout: FiltersLayout::AboveContent)
             ->actions([
-                Impersonate::make()->redirectTo(route('filament.admin.pages.dashboard')),
+                Impersonate::make()
+                    ->redirectTo(route('filament.admin.pages.dashboard')),
                 Tables\Actions\EditAction::make()
                     ->using(function (User $record, array $data): User {
                         $role = Arr::get($data, 'role', null);

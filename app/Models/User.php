@@ -126,6 +126,12 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         return $this->hasVerifiedEmail() && $this->hasAnyRole(...config('collabccu.roles'));
     }
 
+    public function canBeImpersonated()
+    {
+        // Let's prevent impersonating users that cannot login or administrators
+        return $this->hasVerifiedEmail() && $this->hasAnyRole(...config('collabccu.roles')) && !$this->hasRole('administrator');
+    }
+
     public function getFilamentName(): string
     {
         return $this->name;
@@ -140,7 +146,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
             default                => Color::Fuchsia[900]
         };
         $color = ltrim(Rgb::fromString('rgb(' . $color . ')')->toHex(), '#');
-        $initials = collect(explode(' ', $this->name))->map(fn ($str) => substr($str, 0, 1))->join('+');
+        $initials = collect(explode(' ', $this->name))->map(fn($str) => substr($str, 0, 1))->join('+');
         return "https://ui-avatars.com/api/?name=$initials&color=FFFFFF&background=$color&length=3";
     }
 
@@ -150,7 +156,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
     protected function name(): Attribute
     {
         return Attribute::make(
-            get: fn (mixed $value, array $attributes) => $attributes['first_name'] . ' ' . ucfirst($attributes['last_name']),
+            get: fn(mixed $value, array $attributes) => $attributes['first_name'] . ' ' . ucfirst($attributes['last_name']),
         );
     }
 

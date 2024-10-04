@@ -10,10 +10,11 @@ return [
     'updated_at'  => 'Modification',
 
     // User
-    'first_name' => 'Prénom',
-    'last_name'  => 'Nom de famille',
-    'email'      => 'Adresse e-mail',
-    'role'       => 'Rôles',
+    'first_name'        => 'Prénom',
+    'last_name'         => 'Nom de famille',
+    'email'             => 'Adresse e-mail',
+    'role'              => 'Rôles',
+    'email_verified_at' => 'Email vérifié ?',
 
     // Equipment
     'quantity' => 'Quantité',
