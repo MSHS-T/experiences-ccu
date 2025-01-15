@@ -20,7 +20,7 @@ return [
     'quantity' => 'Quantité',
 
     // Plateau
-    'manager'    => 'Gestionnaire',
+    'manager'    => 'Responsable',
     'equipments' => 'Équipements',
     'color'      => 'Couleur',
 
