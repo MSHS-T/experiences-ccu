@@ -8,6 +8,7 @@ use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 
 class ListManipulations extends ListRecords
 {
@@ -22,15 +23,21 @@ class ListManipulations extends ListRecords
 
     public function getTabs(): array
     {
+        $query = Manipulation::query()
+            ->when(
+                Auth::user()->hasRole('manipulation_manager'),
+                fn(Builder $query) => $query->whereHas('users', fn(Builder $query) => $query->where('id', Auth::id()))
+            );
+
         return [
             'all' => Tab::make('Toutes')
-                ->badge(Manipulation::query()->count()),
+                ->badge($query->count()),
             'active' => Tab::make('Actives')
-                ->modifyQueryUsing(fn (Builder $query) => $query->active())
-                ->badge(Manipulation::query()->active()->count()),
+                ->modifyQueryUsing(fn(Builder $query) => $query->active())
+                ->badge($query->active()->count()),
             'inactive' => Tab::make('Archivées')
-                ->modifyQueryUsing(fn (Builder $query) => $query->where('archived', true))
-                ->badge(Manipulation::query()->where('archived', true)->count()),
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('archived', true))
+                ->badge($query->where('archived', true)->count()),
         ];
     }
 }
