@@ -47,7 +47,8 @@ class ManipulationPolicy
      */
     public function delete(User $user, Manipulation $manipulation): bool
     {
-        return $user->can('manipulation.delete') && !$manipulation->published;
+        return ($user->can('manipulation.delete') || $manipulation->users->pluck('id')->contains($user->id))
+            && !$manipulation->published;
     }
 
     /**

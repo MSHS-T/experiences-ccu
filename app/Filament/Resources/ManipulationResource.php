@@ -361,6 +361,14 @@ class ManipulationResource extends Resource
                         ->color('warning')
                         ->hidden(fn(Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('publish', $record))
                         ->disabled(fn(Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('publish', $record)),
+                    Tables\Actions\Action::make('delete')
+                        ->label(__('actions.delete'))
+                        ->icon('fas-trash')
+                        ->action(fn(Manipulation $record) => $record->delete())
+                        ->requiresConfirmation()
+                        ->color('danger')
+                        ->hidden(fn(Manipulation $record) => $record->archived || !Auth::user()->can('delete', $record))
+                        ->disabled(fn(Manipulation $record) => $record->archived || !Auth::user()->can('delete', $record)),
                     Tables\Actions\Action::make('archive')
                         ->label(__('actions.archive'))
                         ->icon('fas-calendar-check')

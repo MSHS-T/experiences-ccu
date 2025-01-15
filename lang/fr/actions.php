@@ -15,4 +15,5 @@ return [
     'attendance'       => 'Émargement',
     'mark_honored'     => 'Présent',
     'mark_not_honored' => 'Absent',
+    'delete'           => 'Supprimer',
 ];
