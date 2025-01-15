@@ -38,19 +38,6 @@ class ManipulationsTableSeeder extends Seeder
                 return '<p>' . $p . '</p>';
             }, $faker->paragraphs(1));
 
-            $hours = [];
-            foreach ($days as $day) {
-                // 3 chances out of 4 to enable a day
-                if (random_int(0, 3) > 0) {
-                    $hours[$day] = [
-                        'start_am' => collect(['08:00', '08:30', '09:00', '09:30', '10:00'])->random(),
-                        'end_am'   => collect(['11:00', '11:30', '12:00', '12:30'])->random(),
-                        'start_pm' => collect(['13:00', '13:30', '14:00', '14:30', '15:00'])->random(),
-                        'end_pm'   => collect(['16:00', '16:30', '17:00', '17:30', '18:00'])->random()
-                    ];
-                }
-            }
-
             if ($i === 1) {
                 $startDate = fake()->dateTimeBetween('-4 months', '-2 months');
                 $endDate = fake()->dateTimeBetween('-2 months', 'now');
@@ -69,7 +56,6 @@ class ManipulationsTableSeeder extends Seeder
                 'start_date'      => $startDate->format('Y-m-d'),
                 'end_date'        => $endDate->format('Y-m-d'),
                 'requirements'    => $faker->sentences(random_int(1, 5)),
-                'available_hours' => $hours
             ]);
 
             if ($i <= 4) {

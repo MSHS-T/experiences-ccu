@@ -48,14 +48,10 @@ class ManipulationResource extends Resource
                 Plateau::find(intval($get('plateau_id'))),
                 $get('start_date'),
                 $get('end_date'),
-                $get('available_hours'),
                 $get('duration'),
+                $form->getRecord()?->id
             )
         );
-        $clearHalfDayAction = fn(string $fieldName) => Action::make('emptyHalfDay')
-            ->icon('fas-eraser')
-            ->label(__('actions.clear'))
-            ->action(fn(Set $set) => $set($fieldName, null));
 
         return $form
             ->columns([
@@ -155,99 +151,6 @@ class ManipulationResource extends Resource
                             ->hiddenLabel()
                             ->maxLength(255)
                     ]),
-                Forms\Components\Section::make('available_hours')
-                    ->heading(__('attributes.available_hours'))
-                    ->description(Str::of(__('messages.available_hours_description'))->sanitizeHtml()->toHtmlString())
-                    ->extraAttributes(['class' => '!bg-gray-100 dark:!bg-gray-800'])
-                    ->compact()
-                    ->collapsible()
-                    ->columnSpan([
-                        'default' => 1,
-                        'md'      => 'full'
-                    ])
-                    ->columns([
-                        'default' => 1,
-                        'md'      => 2,
-                        'xl'      => 4
-                    ])
-                    ->schema(
-                        collect(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'])
-                            ->map(
-                                fn($day) => Forms\Components\Section::make($day)
-                                    ->heading(__('attributes.' . $day))
-                                    ->description(function (Get $get) use ($day) {
-                                        $hours = [];
-                                        foreach (['am', 'pm'] as $halfday) {
-                                            $start = $get("available_hours.$day.start_$halfday");
-                                            $end   = $get("available_hours.$day.end_$halfday");
-                                            if (filled($start) && filled($end)) {
-                                                $hours[] = $start . '-' . $end;
-                                            }
-                                        }
-                                        if (filled($hours)) {
-                                            return Str::of('<small>' . implode(' & ', $hours) . '</small>')->toHtmlString();
-                                        }
-                                        return '∅';
-                                    })
-                                    ->columnSpan(1)
-                                    ->columns(1)
-                                    ->collapsible()
-                                    ->collapsed(/* $day !== 'monday' */)
-                                    ->visible()
-                                    ->schema([
-                                        Forms\Components\TimePicker::make("available_hours.$day.start_am")
-                                            ->label(__('attributes.start_am'))
-                                            ->default(config('collabccu.default_hours.start_am'))
-                                            ->seconds(false)
-                                            ->format('H:i')
-                                            ->displayFormat('H:i')
-                                            ->reactive()
-                                            ->hintAction($clearHalfDayAction("available_hours.$day.start_am")),
-                                        Forms\Components\TimePicker::make("available_hours.$day.end_am")
-                                            ->label(__('attributes.end_am'))
-                                            ->default(config('collabccu.default_hours.end_am'))
-                                            ->seconds(false)
-                                            ->format('H:i')
-                                            ->displayFormat('H:i')
-                                            ->reactive()
-                                            ->hintAction($clearHalfDayAction("available_hours.$day.end_am"))
-                                            ->requiredWith("available_hours.$day.start_am"),
-                                        Forms\Components\TimePicker::make("available_hours.$day.start_pm")
-                                            ->label(__('attributes.start_pm'))
-                                            ->default(config('collabccu.default_hours.start_pm'))
-                                            ->seconds(false)
-                                            ->format('H:i')
-                                            ->displayFormat('H:i')
-                                            ->reactive()
-                                            ->hintAction($clearHalfDayAction("available_hours.$day.start_pm"))
-                                            ->nullable()
-                                            ->after("available_hours.$day.end_am"),
-                                        Forms\Components\TimePicker::make("available_hours.$day.end_pm")
-                                            ->label(__('attributes.end_pm'))
-                                            ->default(config('collabccu.default_hours.end_pm'))
-                                            ->seconds(false)
-                                            ->format('H:i')
-                                            ->displayFormat('H:i')
-                                            ->reactive()
-                                            ->hintAction($clearHalfDayAction("available_hours.$day.end_pm"))
-                                            ->requiredWith("available_hours.$day.start_pm"),
-                                        Forms\Components\Actions::make([
-                                            Action::make('clearDay' . $day)
-                                                ->label(__('actions.clear_day'))
-                                                ->icon('fas-eraser')
-                                                ->color('warning')
-                                                ->size(ActionSize::ExtraSmall)
-                                                ->action(function (Set $set) use ($day) {
-                                                    $set("available_hours.$day.start_am", null);
-                                                    $set("available_hours.$day.end_am", null);
-                                                    $set("available_hours.$day.start_pm", null);
-                                                    $set("available_hours.$day.end_pm", null);
-                                                })
-                                        ])->alignCenter()
-                                    ])
-                            )
-                            ->all()
-                    ),
                 Forms\Components\TextInput::make('slot_count')
                     ->label(__('attributes.generated_slot_count'))
                     ->disabled()
@@ -337,19 +240,6 @@ class ManipulationResource extends Resource
                     ->label('Archivé ?')
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->boolean(),
-                Tables\Columns\TextColumn::make('available_hours_str')
-                    ->label(__('attributes.available_hours'))
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->formatStateUsing(
-                        fn(Manipulation $record) => Str::of(
-                            sprintf(
-                                '<ul class="list-disc">%s</ul>',
-                                collect($record->getAvailableHoursDisplay())
-                                    ->map(fn($d) => '<li>' . $d . '</li>')
-                                    ->join('')
-                            )
-                        )->sanitizeHtml()->toHtmlString()
-                    ),
                 Tables\Columns\TextColumn::make('requirements_str')
                     ->label(__('attributes.requirements'))
                     ->toggleable(isToggledHiddenByDefault: true)

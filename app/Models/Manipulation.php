@@ -28,7 +28,6 @@ use Illuminate\Support\Stringable;
  * @property int $duration
  * @property \Illuminate\Support\Carbon $start_date
  * @property \Illuminate\Support\Carbon $end_date
- * @property array $available_hours
  * @property array $requirements
  * @property bool $published
  * @property bool $archived
@@ -44,7 +43,6 @@ use Illuminate\Support\Stringable;
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation query()
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereAvailableHours($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereDuration($value)
@@ -76,7 +74,6 @@ class Manipulation extends Model
         'duration',
         'start_date',
         'end_date',
-        'available_hours',
         'requirements',
     ];
 
@@ -86,14 +83,13 @@ class Manipulation extends Model
      * @var array
      */
     protected $casts = [
-        'id'              => 'integer',
-        'duration'        => 'integer',
-        'start_date'      => 'date',
-        'end_date'        => 'date',
-        'available_hours' => 'array',
-        'requirements'    => 'array',
-        'published'       => 'boolean',
-        'archived'        => 'boolean',
+        'id'           => 'integer',
+        'duration'     => 'integer',
+        'start_date'   => 'date',
+        'end_date'     => 'date',
+        'requirements' => 'array',
+        'published'    => 'boolean',
+        'archived'     => 'boolean',
     ];
 
     /**
@@ -103,7 +99,7 @@ class Manipulation extends Model
      */
     protected $attributes = [
         'published' => false,
-        'archived' => false,
+        'archived'  => false,
     ];
 
     public function plateau(): BelongsTo
@@ -131,27 +127,6 @@ class Manipulation extends Model
         return Attribute::make(
             get: fn(mixed $value, array $attributes) => $attributes['name'] . ' (' . $this->plateau->name . ')',
         );
-    }
-
-    public function getAvailableHoursDisplay(): array
-    {
-        $days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-
-        return collect($this->available_hours)->map(function ($hours, $day) {
-            if (collect($hours)->filter()->isEmpty()) {
-                return null;
-            }
-            return __('attributes.' . $day)
-                . ' : '
-                . collect([
-                    collect([$hours['start_am'], $hours['end_am']])->filter()->join('-'),
-                    collect([$hours['start_pm'], $hours['end_pm']])->filter()->join('-')
-                ])
-                ->filter(fn($s) => strlen($s) > 0)
-                ->join(' &amp; ');
-        })->filter()
-            ->sortKeysUsing(fn($a, $b) => array_search($a, $days) <=> array_search($b, $days))
-            ->all();
     }
 
     public function togglePublished()
@@ -210,7 +185,34 @@ class Manipulation extends Model
 
     public function createOrUpdateSlots()
     {
-        $this->slots()->createMany(SlotGenerator::makeFromManipulation($this));
+        $this->loadMissing('slots');
+        $newSlots = SlotGenerator::makeFromManipulation($this);
+
+        // Convert existing slots to a comparable format
+        $existingSlotKeys = $this->slots->mapWithKeys(function (Slot $slot) {
+            $key = $slot->start->format('Y-m-d H:i:s') . ';' . $slot->end->format('Y-m-d H:i:s');
+            return [$key => $slot];
+        });
+
+        // Convert new slots to a comparable format
+        $newSlotKeys = $newSlots->mapWithKeys(function ($slot) {
+            $key = $slot['start']->format('Y-m-d H:i:s') . ';' . $slot['end']->format('Y-m-d H:i:s');
+            return [$key => $slot];
+        });
+
+        // Find slots to delete (exist in current but not in new)
+        $slotsToDelete = $existingSlotKeys->keys()->diff($newSlotKeys->keys());
+
+        // Find slots to create (exist in new but not in current)
+        $slotsToCreate = $newSlotKeys->filter(function ($slot, $key) use ($existingSlotKeys) {
+            return !$existingSlotKeys->has($key);
+        });
+
+        // Delete unnecessary slots
+        $this->slots->whereIn('id', $slotsToDelete->map(fn($key) => $existingSlotKeys[$key]->id))->each->delete();
+
+        // Create new slots
+        $this->slots()->createMany($slotsToCreate);
     }
 
     /**

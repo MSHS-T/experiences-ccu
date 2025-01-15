@@ -57,6 +57,8 @@ return [
         ],
     ],
 
+    'default_days' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+
     'default_hours' => [
         'start_am' => '08:00',
         'end_am'   => '12:00',

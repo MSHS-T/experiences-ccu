@@ -34,7 +34,7 @@ class TestDatabaseSeeder extends Seeder
                 $endDate = fake()->dateTimeBetween('now', '+2 months');
             } else {
                 $startDate = fake()->dateTimeBetween('now', '+2 months');
-                $endDate = $startDate->add(new \DateInterval('P' . random_int(2, 6) * 7 . 'D'));
+                $endDate = (new \DateTime($startDate->format('Y-m-d H:i:s')))->add(new \DateInterval('P' . random_int(2, 6) * 7 . 'D'));
             }
             $this->createManipulation($startDate, $endDate);
         }
@@ -78,14 +78,6 @@ class TestDatabaseSeeder extends Seeder
             'duration'        => 60,
             'start_date'      => $start,
             'end_date'        => $end,
-            'available_hours' => $halfDays
-                ->map(fn($hd) => explode('_', $hd))
-                ->reduce(function ($all, $day) {
-                    Arr::add($all, $day[0], []);
-                    Arr::set($all, $day[0] . '.start_' . $day[1], config('collabccu.default_hours.start_' . $day[1]));
-                    Arr::set($all, $day[0] . '.end_' . $day[1], config('collabccu.default_hours.end_' . $day[1]));
-                    return $all;
-                }, []),
             'requirements' => Collection::times(3)->map(fn() => fake()->words(3, true))->all(),
             'published'    => true,
         ]);

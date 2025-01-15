@@ -28,7 +28,7 @@ class EditManipulation extends EditRecord
     {
         if (filled($data['requirements'])) {
             $data['requirements'] = collect($data['requirements'])
-                ->map(fn ($r) => ['text' => $r])
+                ->map(fn($r) => ['text' => $r])
                 ->all();
         }
 
@@ -38,7 +38,7 @@ class EditManipulation extends EditRecord
     protected function mutateFormDataBeforeSave(array $data): array
     {
         $data['requirements'] = collect($data['requirements'])
-            ->map(fn ($r) => array_values(Arr::wrap($r)))
+            ->map(fn($r) => array_values(Arr::wrap($r)))
             ->flatten()
             ->unique()
             ->all();
@@ -51,8 +51,17 @@ class EditManipulation extends EditRecord
         return [
             Actions\ViewAction::make(),
             Actions\DeleteAction::make()
-                ->hidden(fn (Manipulation $record) => !Auth::user()->can('manipulation.delete'))
-                ->disabled(fn (Manipulation $record) => !Auth::user()->can('manipulation.delete') || $record->published),
+                ->hidden(fn(Manipulation $record) => !Auth::user()->can('manipulation.delete'))
+                ->disabled(fn(Manipulation $record) => !Auth::user()->can('manipulation.delete') || $record->published),
         ];
+    }
+
+    // Runs after the form fields are saved to the database.
+    protected function afterSave(): void
+    {
+        /** @var Manipulation $manip */
+        $manip = $this->getRecord()->refresh();
+        $manip->load('users', 'plateau');
+        $manip->createOrUpdateSlots();
     }
 }

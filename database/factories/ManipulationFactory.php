@@ -28,15 +28,6 @@ class ManipulationFactory extends Factory
             'duration'        => random_int(1, 6) * 15,
             'start_date'      => $startDate,
             'end_date'        => fake()->dateTimeBetween($startDate, '+3 months'),
-            'available_hours' => json_encode([
-                "monday"    => ["end_am" => "12:00", "end_pm" => "17:00", "start_am" => "09:00", "start_pm" => "14:00"],
-                "tuesday"   => ["end_am" => "12:00", "end_pm" => "17:00", "start_am" => "09:00", "start_pm" => "14:00"],
-                "thursday"  => ["end_am" => "12:00", "end_pm" => "17:00", "start_am" => "09:00", "start_pm" => "14:00"],
-                "wednesday" => ["end_am" => "12:00", "end_pm" => "17:00", "start_am" => "09:00", "start_pm" => "14:00"],
-                "friday"    => ["end_am" => "12:00", "end_pm" => "17:00", "start_am" => "09:00", "start_pm" => "14:00"],
-                "saturday"  => ["end_am" => "12:00", "end_pm" => "17:00", "start_am" => "09:00", "start_pm" => "14:00"],
-                "sunday"    => ["end_am" => "12:00", "end_pm" => "17:00", "start_am" => "09:00", "start_pm" => "14:00"],
-            ]),
             'requirements'    => Collection::times(random_int(3, 5), fn() => fake()->sentence())->toJson(),
         ];
     }
