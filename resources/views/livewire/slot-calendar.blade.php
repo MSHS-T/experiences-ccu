@@ -1,27 +1,29 @@
 <div class="h-full">
     <div class="relative divide-y">
         @if ($showPlateaux)
-            <div class="w-full flex items-center mb-4 space-x-4">
-                <div class="w-full flex flex-wrap justify-start items-center flex-1 space-x-4">
+            <div class="w-full flex flex-col lg:flex-row items-center mb-4 space-y-2 lg:space-y-0 space-x-4">
+                <div class="w-full grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 items-center gap-2">
                     @foreach ($plateaux as $plateau)
                         <label class="flex items-center gap-2">
                             <x-filament::input.checkbox wire:model="checkedPlateaux.{{ $plateau['id'] }}"
                                 wire:change="togglePlateau({{ $plateau['id'] }})" />
                             <span class="w-4 h-4 rounded-lg" style="background-color: {{ $plateau['color'] }}">
                             </span>
-                            <span>
+                            <span class="text-xs lg:text-base">
                                 {{ $plateau['name'] }}
                             </span>
                         </label>
                     @endforeach
                 </div>
-                <div class="flex flex-col justify-center items-center text-sm flex-shrink-0">
-                    <button wire:click="checkAllPlateaux()" class="flex items-center gap-2">
+                <div
+                    class="flex flex-row lg:flex-col justify-evenly lg:justify-center items-stretch text-sm flex-shrink-0 gap-2">
+                    <x-filament::button size="xs" wire:click="checkAllPlateaux()" class="flex items-center gap-2">
                         Tout cocher
-                    </button>
-                    <button wire:click="uncheckAllPlateaux()" class="flex items-center gap-2">
+                    </x-filament::button>
+                    <x-filament::button size="xs" wire:click="uncheckAllPlateaux()"
+                        class="flex items-center gap-2">
                         Tout décocher
-                    </button>
+                    </x-filament::button>
                 </div>
             </div>
         @endif
@@ -44,7 +46,7 @@
                             customTimeGrid: {
                                 type: 'timeGrid',
                                 duration: {
-                                    days: (window.innerWidth < 640 ? 1 : (window.innerWidth <= 768 ? 2 : 4))
+                                    days: (window.innerWidth < 640 ? 1 : (window.innerWidth <= 768 ? 3 : 7))
                                 }
                             }
                         },
