@@ -42,6 +42,7 @@ class BookingReminder extends Mailable
             with: [
                 'cancellationUrl' => $this->cancellationUrl,
                 'booking'         => $this->booking,
+                'managers'        => $this->booking->slot->manipulation->users,
             ]
         );
     }

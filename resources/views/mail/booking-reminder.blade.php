@@ -9,6 +9,11 @@ Rappel de votre sélection :
 
 Vous devrez vous rendre à la plateforme CCU au rez-de-chaussée de la Maison de la Recherche de l'Université Toulouse-Jean-Jaurès (<a href="{{ asset(config('collabccu.access_map')) }}" target="_blank">{{ __('public.home.access_instructions') }}</a>).
 
+Vous serez accueilli par l'une des personnes suivantes :
+@foreach ($managers as $manager)
+    - {{ $manager->name }}
+@endforeach
+
 Si votre venue n'est pas possible, veuillez cliquer sur le lien ci-dessous pour l'annuler :
 
 <x-mail::button :url="$cancellationUrl">
