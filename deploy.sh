@@ -4,6 +4,7 @@
 APP_NAME="Expérience CCU"
 DISCORD_WEBHOOK_URL="${DISCORD_WEBHOOK_URL}"
 LOCK_FILE="./deployment.lock"
+BRANCH="develop"
 
 # Find a matching CLI PHP binary
 PHP_BIN=""
@@ -84,7 +85,7 @@ deploy() {
 }
 
 # Check if we should deploy
-if [ "$1" = "--force" ] || { $GIT_BIN fetch -q origin && [ -n "$($GIT_BIN log --oneline ..origin/master)" ]; }; then
+if [ "$1" = "--force" ] || { $GIT_BIN fetch -q origin && [ -n "$($GIT_BIN log --oneline ..origin/$BRANCH)" ]; }; then
     deploy
 fi
 
