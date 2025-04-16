@@ -61,7 +61,7 @@ return [
 
     'default_hours' => [
         'start_am' => '08:00',
-        'end_am'   => '12:00',
+        'end_am'   => '14:00',
         'start_pm' => '14:00',
         'end_pm'   => '20:00',
     ]
