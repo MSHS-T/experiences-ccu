@@ -35,16 +35,18 @@ class NotifyYesterdayUnhonoredSlots extends Command
             ->get();
 
         foreach ($slots as $slot) {
-            if ($slot && $slot->booking && !$slot->booking->honored) {
-                $subject = Subject::find($slot->booking->email);
-                $unhonoredCount = $subject->getUnhonoredCount();
-                if ($unhonoredCount % 3 === 1) {
-                    // Notify first miss (or first miss after unblock)
-                    Mail::to($slot->booking->email)->send(new BookingFirstMiss($slot->booking));
-                } else if ($unhonoredCount % 3 === 0) {
-                    // Blacklist after third miss (or third miss after unblock)
-                    $subject->block();
-                    Mail::to($slot->booking->email)->send(new BookingThirdMiss($slot->booking));
+            foreach ($slot->bookings as $booking) {
+                if (!$booking->honored) {
+                    $subject = Subject::find($booking->email);
+                    $unhonoredCount = $subject->getUnhonoredCount();
+                    if ($unhonoredCount % 3 === 1) {
+                        // Notify first miss (or first miss after unblock)
+                        Mail::to($booking->email)->send(new BookingFirstMiss($booking));
+                    } else if ($unhonoredCount % 3 === 0) {
+                        // Blacklist after third miss (or third miss after unblock)
+                        $subject->block();
+                        Mail::to($booking->email)->send(new BookingThirdMiss($booking));
+                    }
                 }
             }
         }

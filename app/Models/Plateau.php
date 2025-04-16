@@ -17,9 +17,12 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property int $id
  * @property string $name
  * @property string $description
+ * @property string|null $color
  * @property int $manager_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Attribution> $attributions
+ * @property-read int|null $attributions_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Equipment> $equipments
  * @property-read int|null $equipments_count
  * @property-read \App\Models\User $manager
@@ -27,10 +30,13 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  * @property-read int|null $manipulations_count
  * @property-read \Spatie\MediaLibrary\MediaCollections\Models\Collections\MediaCollection<int, \Spatie\MediaLibrary\MediaCollections\Models\Media> $media
  * @property-read int|null $media_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Slot> $slots
+ * @property-read int|null $slots_count
  * @method static \Database\Factories\PlateauFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Plateau newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Plateau newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Plateau query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Plateau whereColor($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plateau whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plateau whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Plateau whereId($value)

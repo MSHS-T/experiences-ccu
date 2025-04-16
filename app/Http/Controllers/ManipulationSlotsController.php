@@ -15,16 +15,17 @@ class ManipulationSlotsController extends Controller
      */
     public function __invoke(Manipulation $manipulation)
     {
-        $manipulation->load(['slots' => function ($builder) {
+        $maxBookingPerSlot = $manipulation->max_booking_per_slot;
+        $manipulation->load(['slots' => function ($builder) use ($maxBookingPerSlot) {
             $builder->where('start', '>=', Carbon::now())
-                ->whereDoesntHave(('booking'));
+                ->has('bookings', '<', $maxBookingPerSlot);
         }]);
         return view('slots', [
             'manipulationId'           => $manipulation->id,
             'manipulationName'         => $manipulation->name,
             'manipulationRequirements' => $manipulation->requirements,
             'slots'                    => $manipulation->slots
-                ->map(fn (Slot $s) => [
+                ->map(fn(Slot $s) => [
                     'id'             => $s->id,
                     'day'            => $s->start->format('Y-m-d'),
                     'formatted_date' => $s->start->translatedFormat('l d F Y'),

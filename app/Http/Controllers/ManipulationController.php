@@ -12,7 +12,7 @@ class ManipulationController extends Controller
      */
     public function __invoke()
     {
-        $manipulations = Manipulation::with(['slots', 'slots.booking'])
+        $manipulations = Manipulation::with(['slots', 'slots.bookings'])
             ->visibleForParticipants()
             ->get();
         return view('manipulations', [

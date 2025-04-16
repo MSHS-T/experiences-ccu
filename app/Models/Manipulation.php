@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -26,36 +27,41 @@ use Illuminate\Support\Stringable;
  * @property string $description
  * @property int $plateau_id
  * @property int $duration
- * @property \Illuminate\Support\Carbon $start_date
- * @property \Illuminate\Support\Carbon $end_date
+ * @property int $max_booking_per_slot
+ * @property Carbon $start_date
+ * @property Carbon $end_date
  * @property array $requirements
  * @property bool $published
  * @property bool $archived
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read mixed $display_name
  * @property-read \App\Models\Plateau $plateau
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Slot> $slots
  * @property-read int|null $slots_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\ManipulationStatistics> $statistics
+ * @property-read int|null $statistics_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
- * @property-read Illuminate\Database\Eloquent\Collection<int, \App\Models\ManipulationStatistics>|null $statistics
+ * @method static Builder|Manipulation active()
  * @method static \Database\Factories\ManipulationFactory factory($count = null, $state = [])
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation query()
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereDuration($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation wherePlateauId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereRequirements($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereStartDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereEndDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereTargetSlots($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation wherePublished($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Manipulation whereArchived($value)
+ * @method static Builder|Manipulation newModelQuery()
+ * @method static Builder|Manipulation newQuery()
+ * @method static Builder|Manipulation query()
+ * @method static Builder|Manipulation visibleForParticipants()
+ * @method static Builder|Manipulation whereArchived($value)
+ * @method static Builder|Manipulation whereCreatedAt($value)
+ * @method static Builder|Manipulation whereDescription($value)
+ * @method static Builder|Manipulation whereDuration($value)
+ * @method static Builder|Manipulation whereEndDate($value)
+ * @method static Builder|Manipulation whereId($value)
+ * @method static Builder|Manipulation whereMaxBookingPerSlot($value)
+ * @method static Builder|Manipulation whereName($value)
+ * @method static Builder|Manipulation wherePlateauId($value)
+ * @method static Builder|Manipulation wherePublished($value)
+ * @method static Builder|Manipulation whereRequirements($value)
+ * @method static Builder|Manipulation whereStartDate($value)
+ * @method static Builder|Manipulation whereUpdatedAt($value)
  * @mixin \Eloquent
  */
 class Manipulation extends Model
@@ -72,6 +78,7 @@ class Manipulation extends Model
         'name',
         'description',
         'duration',
+        'max_booking_per_slot',
         'start_date',
         'end_date',
         'requirements',
@@ -83,13 +90,14 @@ class Manipulation extends Model
      * @var array
      */
     protected $casts = [
-        'id'           => 'integer',
-        'duration'     => 'integer',
-        'start_date'   => 'date',
-        'end_date'     => 'date',
-        'requirements' => 'array',
-        'published'    => 'boolean',
-        'archived'     => 'boolean',
+        'id'                   => 'integer',
+        'duration'             => 'integer',
+        'max_booking_per_slot' => 'integer',
+        'start_date'           => 'date',
+        'end_date'             => 'date',
+        'requirements'         => 'array',
+        'published'            => 'boolean',
+        'archived'             => 'boolean',
     ];
 
     /**
@@ -115,6 +123,11 @@ class Manipulation extends Model
     public function slots(): HasMany
     {
         return $this->hasMany(Slot::class);
+    }
+
+    public function bookings(): HasManyThrough
+    {
+        return $this->hasManyThrough(Booking::class, Slot::class);
     }
 
     public function statistics(): HasMany
@@ -175,19 +188,19 @@ class Manipulation extends Model
             }
 
             $statistics[$slotMonth]['slot_count']++;
-            if ($slot->booking !== null) {
+            $slot->bookings->each(function (Booking $booking) use (&$statistics, $slotMonth) {
                 $statistics[$slotMonth]['booking_made']++;
-                if ($slot->booking->confirmed) {
+                if ($booking->confirmed) {
                     $statistics[$slotMonth]['booking_confirmed']++;
-                    if ($slot->booking->honored) {
+                    if ($booking->honored) {
                         $statistics[$slotMonth]['booking_confirmed_honored']++;
                     }
                 } else {
-                    if ($slot->booking->honored) {
+                    if ($booking->honored) {
                         $statistics[$slotMonth]['booking_unconfirmed_honored']++;
                     }
                 }
-            }
+            });
         }
         $this->statistics()->createMany(array_values($statistics));
         $this->slots->each(fn(Slot $slot) => $slot->delete());
@@ -241,7 +254,7 @@ class Manipulation extends Model
     }
 
     /**
-     * Scope a query to only include manipulations visible for the public.
+     * Scope a query to only include active manipulations.
      */
     public function scopeActive(Builder $query): void
     {

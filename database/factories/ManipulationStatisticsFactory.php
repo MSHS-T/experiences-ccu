@@ -21,10 +21,11 @@ class ManipulationStatisticsFactory extends Factory
     public function definition(): array
     {
         return [
-            'slot_count' => $this->faker->randomNumber(),
-            'booking_made' => $this->faker->randomNumber(),
-            'booking_confirmed' => $this->faker->randomNumber(),
-            'booking_confirmed_honored' => $this->faker->randomNumber(),
+            'slot_count'                  => $this->faker->randomNumber(),
+            'half_day_count'              => $this->faker->randomNumber(),
+            'booking_made'                => $this->faker->randomNumber(),
+            'booking_confirmed'           => $this->faker->randomNumber(),
+            'booking_confirmed_honored'   => $this->faker->randomNumber(),
             'booking_unconfirmed_honored' => $this->faker->randomNumber(),
         ];
     }

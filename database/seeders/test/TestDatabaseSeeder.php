@@ -71,30 +71,38 @@ class TestDatabaseSeeder extends Seeder
             'allowed_halfdays'        => $halfDays->all(),
         ]);
 
+        $maxBookingPerSlot = random_int(1, 3);
+
         $manipulation = new Manipulation([
-            'plateau_id'      => $plateau->id,
-            'name'            => fake()->words(3, true),
-            'description'     => fake()->words(15, true),
-            'duration'        => 60,
-            'start_date'      => $start,
-            'end_date'        => $end,
-            'requirements' => Collection::times(3)->map(fn() => fake()->words(3, true))->all(),
-            'published'    => true,
+            'plateau_id'           => $plateau->id,
+            'name'                 => fake()->words(3, true),
+            'description'          => fake()->words(15, true),
+            'duration'             => 60,
+            'max_booking_per_slot' => $maxBookingPerSlot,
+            'start_date'           => $start,
+            'end_date'             => $end,
+            'requirements'         => Collection::times(3)->map(fn() => fake()->words(3, true))->all(),
+            'published'            => true,
         ]);
         $manipulation->save();
         $manipulation->users()->attach($respManip->id);
         $manipulation->createOrUpdateSlots();
-        foreach ($manipulation->slots as $slot) {
-            if (fake()->boolean()) {
-                $slot->booking()->create([
-                    'first_name' => fake()->firstName(),
-                    'last_name' => fake()->lastName(),
-                    'email' => fake()->email(),
-                    'confirmed' => fake()->boolean(chanceOfGettingTrue: 75),
-                    'confirmation_code' => fake()->md5(),
-                    'confirm_before' => fake()->dateTimeBetween('now', '+2 months'),
-                    'honored' => fake()->boolean(chanceOfGettingTrue: 75),
-                ]);
+        $slots = $manipulation->slots()->get();
+        foreach ($slots as $slot) {
+            $hasBookings = fake()->boolean(chanceOfGettingTrue: 75);
+            if ($hasBookings) {
+                $bookingCount = random_int(1, $maxBookingPerSlot);
+                foreach (range(1, $bookingCount) as $i) {
+                    $slot->bookings()->create([
+                        'first_name' => fake()->firstName(),
+                        'last_name' => fake()->lastName(),
+                        'email' => fake()->email(),
+                        'confirmed' => fake()->boolean(chanceOfGettingTrue: 75),
+                        'confirmation_code' => fake()->md5(),
+                        'confirm_before' => fake()->dateTimeBetween('now', '+2 months'),
+                        'honored' => fake()->boolean(chanceOfGettingTrue: 75),
+                    ]);
+                }
             }
         }
     }

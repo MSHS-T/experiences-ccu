@@ -10,6 +10,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * App\Models\ManipulationStatistics
  *
  * @property int $id
+ * @property int $manipulation_id
+ * @property string $month
+ * @property int $half_day_count
  * @property int $slot_count
  * @property int $booking_made
  * @property int $booking_confirmed
@@ -17,7 +20,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $booking_unconfirmed_honored
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Manipulation|null $manipulation
+ * @property-read \App\Models\Manipulation $manipulation
  * @method static \Database\Factories\ManipulationStatisticsFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ManipulationStatistics newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ManipulationStatistics newQuery()
@@ -27,7 +30,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|ManipulationStatistics whereBookingMade($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ManipulationStatistics whereBookingUnconfirmedHonored($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ManipulationStatistics whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ManipulationStatistics whereHalfDayCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ManipulationStatistics whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ManipulationStatistics whereManipulationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ManipulationStatistics whereMonth($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ManipulationStatistics whereSlotCount($value)
  * @method static \Illuminate\Database\Eloquent\Builder|ManipulationStatistics whereUpdatedAt($value)
  * @mixin \Eloquent

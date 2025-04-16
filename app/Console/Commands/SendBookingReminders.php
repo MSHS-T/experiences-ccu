@@ -41,14 +41,14 @@ class SendBookingReminders extends Command
             ->get();
 
         foreach ($slots as $slot) {
-            if ($slot && $slot->booking) {
+            foreach ($slot->bookings as $booking) {
                 $startingIn = now()->diffInHours($slot->start, absolute: true);
-                $cancellationUrl = MagicLink::create(new CancelBookingAction($slot->booking), now()->diffInSeconds($slot->start, true), 1)->url;
+                $cancellationUrl = MagicLink::create(new CancelBookingAction($booking), now()->diffInSeconds($slot->start, true), 1)->url;
                 if ($startingIn >= $firstReminderDelay && $startingIn < ($firstReminderDelay + 1)) {
-                    Mail::to($slot->booking->email)->send(new BookingReminder($slot->booking, $cancellationUrl));
+                    Mail::to($booking->email)->send(new BookingReminder($booking, $cancellationUrl));
                 }
                 if ($startingIn >= $lastReminderDelay && $startingIn < ($lastReminderDelay + 1)) {
-                    Mail::to($slot->booking->email)->send(new BookingReminder($slot->booking, $cancellationUrl));
+                    Mail::to($booking->email)->send(new BookingReminder($booking, $cancellationUrl));
                 }
             }
         }

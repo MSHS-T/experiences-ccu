@@ -5,19 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\Slot
  *
  * @property int $id
+ * @property int $manipulation_id
  * @property \Illuminate\Support\Carbon $start
  * @property \Illuminate\Support\Carbon $end
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Booking|null $booking
- * @property int $manipulation_id
- * @property-read \App\Models\Manipulation|null $manipulation
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Booking> $bookings
+ * @property-read int|null $bookings_count
+ * @property-read \App\Models\Manipulation $manipulation
  * @method static \Database\Factories\SlotFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Slot newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Slot newQuery()
@@ -25,9 +26,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|Slot whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Slot whereEnd($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Slot whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Slot whereManipulationId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Slot whereStart($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Slot whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Slot whereManipulationId($value)
  * @mixin \Eloquent
  */
 class Slot extends Model
@@ -65,8 +66,8 @@ class Slot extends Model
         return $this->manipulation->plateau();
     }
 
-    public function booking(): HasOne
+    public function bookings(): HasMany
     {
-        return $this->hasOne(Booking::class);
+        return $this->hasMany(Booking::class);
     }
 }

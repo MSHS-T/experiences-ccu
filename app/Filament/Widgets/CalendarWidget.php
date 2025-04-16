@@ -23,7 +23,7 @@ class CalendarWidget extends FullCalendarWidget
             ->where('end', '<=', $fetchInfo['end'])
             ->get()
             ->map(
-                fn (Slot $slot) => [
+                fn(Slot $slot) => [
                     'title' => $slot->id . ' (' . $slot->manipulation->plateau->name . ')',
                     'start' => $slot->start,
                     'end' => $slot->end,
@@ -49,7 +49,7 @@ class CalendarWidget extends FullCalendarWidget
         }
 
         $color = $this->colors[$slot->manipulation->plateau->id % count($this->colors)];
-        $shade = filled($slot->booking) ? 800 : 400;
+        $shade = filled($slot->bookings) ? 800 : 400;
 
         return strval(Rgb::fromString('rgb(' . $color[$shade] . ')')->toHex());
     }

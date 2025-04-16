@@ -24,7 +24,7 @@ class BookSlotController extends Controller
         $confirmationCode = md5(time() . $request->first_name . $request->last_name . $request->email);
         $confirmBefore = $slot->start->subHours($settings->booking_confirmation_delay);
 
-        $booking = $slot->booking()->create([
+        $booking = $slot->bookings()->create([
             'first_name'        => $request->first_name,
             'last_name'         => $request->last_name,
             'email'             => $request->email,

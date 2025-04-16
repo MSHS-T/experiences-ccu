@@ -27,6 +27,7 @@ return [
     // Manipulation
     'plateau'              => 'Plateau',
     'duration'             => 'Durée du créneau',
+    'max_booking_per_slot' => 'Nombre de personnes maximum par créneau',
     'target_slots'         => 'Créneaux',
     'slot_count'           => 'Nombre de créneaux',
     'generated_slot_count' => 'Nombre de créneaux générés',

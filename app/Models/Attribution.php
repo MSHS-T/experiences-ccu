@@ -11,6 +11,36 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+/**
+ * App\Models\Attribution
+ *
+ * @property int $id
+ * @property int $plateau_id
+ * @property int $manipulation_manager_id
+ * @property int $creator_id
+ * @property \Illuminate\Support\Carbon $start_date
+ * @property \Illuminate\Support\Carbon $end_date
+ * @property array $allowed_halfdays
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User $creator
+ * @property-read \App\Models\User $manipulationManager
+ * @property-read \App\Models\Plateau $plateau
+ * @method static Builder|Attribution newModelQuery()
+ * @method static Builder|Attribution newQuery()
+ * @method static Builder|Attribution notFinished()
+ * @method static Builder|Attribution query()
+ * @method static Builder|Attribution whereAllowedHalfdays($value)
+ * @method static Builder|Attribution whereCreatedAt($value)
+ * @method static Builder|Attribution whereCreatorId($value)
+ * @method static Builder|Attribution whereEndDate($value)
+ * @method static Builder|Attribution whereId($value)
+ * @method static Builder|Attribution whereManipulationManagerId($value)
+ * @method static Builder|Attribution wherePlateauId($value)
+ * @method static Builder|Attribution whereStartDate($value)
+ * @method static Builder|Attribution whereUpdatedAt($value)
+ * @mixin \Eloquent
+ */
 class Attribution extends Model
 {
     use HasFactory;

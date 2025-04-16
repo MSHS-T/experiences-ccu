@@ -62,7 +62,7 @@ class Statistics
             ->when(filled($month), fn(Builder $query) => $query->where('month', $month))
             ->get();
 
-        $slots = Slot::with(['manipulation', 'manipulation.plateau', 'booking'])
+        $slots = Slot::with(['manipulation', 'manipulation.plateau', 'bookings'])
             ->when(filled($month), function (Builder $query) use ($month) {
                 [$y, $m] = array_map('intval', explode('-', $month));
                 return $query->whereYear('start', $y)
@@ -79,7 +79,7 @@ class Statistics
             ->when(filled($year), fn(Builder $query) => $query->where('month', 'like', $year . '%'))
             ->get();
 
-        $slots = Slot::with(['manipulation', 'manipulation.plateau', 'booking'])
+        $slots = Slot::with(['manipulation', 'manipulation.plateau', 'bookings'])
             ->when(filled($year), fn(Builder $query) => $query->whereYear('start', $year))
             ->get();
 
@@ -90,13 +90,13 @@ class Statistics
     {
         $stats = $history->map(function (ManipulationStatistics $st) {
             return [
-                'plateau_id'        => $st->manipulation->plateau_id,
-                'plateau'           => $st->manipulation->plateau,
-                'slot_count'        => $st->slot_count,
-                'hour_count'        => $st->slot_count * $st->manipulation->duration / 60,
-                'booking_made'      => $st->booking_made,
-                'booking_confirmed' => $st->booking_confirmed,
-                'booking_confirmed_honored' => $st->booking_confirmed_honored,
+                'plateau_id'                  => $st->manipulation->plateau_id,
+                'plateau'                     => $st->manipulation->plateau,
+                'slot_count'                  => $st->slot_count,
+                'hour_count'                  => $st->slot_count * $st->manipulation->duration / 60,
+                'booking_made'                => $st->booking_made,
+                'booking_confirmed'           => $st->booking_confirmed,
+                'booking_confirmed_honored'   => $st->booking_confirmed_honored,
                 'booking_unconfirmed_honored' => $st->booking_unconfirmed_honored,
             ];
         })->reduce(function (array $carry, array $item) {
@@ -128,12 +128,15 @@ class Statistics
                     'booking_unconfirmed_honored' => 0,
                 ];
             }
-            $stats[$plateau]['slot_count']                  += 1;
-            $stats[$plateau]['hour_count']                  += $slot->manipulation->duration / 60;
-            $stats[$plateau]['booking_made']                += filled($slot->booking) ? 1 : 0;
-            $stats[$plateau]['booking_confirmed']           += (filled($slot->booking) && $slot->booking->confirmed) ? 1 : 0;
-            $stats[$plateau]['booking_confirmed_honored']   += (filled($slot->booking) && $slot->booking->confirmed && $slot->booking->honored) ? 1 : 0;
-            $stats[$plateau]['booking_unconfirmed_honored'] += (filled($slot->booking) && !$slot->booking->confirmed && $slot->booking->honored) ? 1 : 0;
+            $stats[$plateau]['slot_count'] += 1;
+            $stats[$plateau]['hour_count'] += $slot->manipulation->duration / 60;
+
+            foreach ($slot->bookings as $booking) {
+                $stats[$plateau]['booking_made']                += 1;
+                $stats[$plateau]['booking_confirmed']           += $booking->confirmed ? 1 : 0;
+                $stats[$plateau]['booking_confirmed_honored']   += ($booking->confirmed && $booking->honored) ? 1 : 0;
+                $stats[$plateau]['booking_unconfirmed_honored'] += (!$booking->confirmed && $booking->honored) ? 1 : 0;
+            }
         }
 
         return collect($stats)->map(fn($item) => (object) [
@@ -237,13 +240,16 @@ class Statistics
                         'booking_unconfirmed_honored' => 0,
                     ];
                 }
-                $stats[$manager->id]['half_day_count']              += $incrementHalfDay ? 1 : 0;
-                $stats[$manager->id]['slot_count']                  += 1;
-                $stats[$manager->id]['hour_count']                  += $slot->manipulation->duration / 60;
-                $stats[$manager->id]['booking_made']                += filled($slot->booking) ? 1 : 0;
-                $stats[$manager->id]['booking_confirmed']           += (filled($slot->booking) && $slot->booking->confirmed) ? 1 : 0;
-                $stats[$manager->id]['booking_confirmed_honored']   += (filled($slot->booking) && $slot->booking->confirmed && $slot->booking->honored) ? 1 : 0;
-                $stats[$manager->id]['booking_unconfirmed_honored'] += (filled($slot->booking) && !$slot->booking->confirmed && $slot->booking->honored) ? 1 : 0;
+                $stats[$manager->id]['half_day_count'] += $incrementHalfDay ? 1 : 0;
+                $stats[$manager->id]['slot_count']     += 1;
+                $stats[$manager->id]['hour_count']     += $slot->manipulation->duration / 60;
+
+                foreach ($slot->bookings as $booking) {
+                    $stats[$manager->id]['booking_made']                += 1;
+                    $stats[$manager->id]['booking_confirmed']           += $booking->confirmed ? 1 : 0;
+                    $stats[$manager->id]['booking_confirmed_honored']   += ($booking->confirmed && $booking->honored) ? 1 : 0;
+                    $stats[$manager->id]['booking_unconfirmed_honored'] += (!$booking->confirmed && $booking->honored) ? 1 : 0;
+                }
             }
         }
 

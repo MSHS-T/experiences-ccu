@@ -13,7 +13,7 @@ class HomeController extends Controller
      */
     public function __invoke(GeneralSettings $settings)
     {
-        $manipulations = Manipulation::with(['slots', 'slots.booking'])
+        $manipulations = Manipulation::with(['slots', 'slots.bookings'])
             ->visibleForParticipants()
             // ->limit(6)
             ->get();

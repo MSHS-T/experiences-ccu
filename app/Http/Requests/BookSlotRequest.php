@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Booking;
 use App\Models\BookingHistory;
 use App\Models\Slot;
 use Illuminate\Foundation\Http\FormRequest;
@@ -15,7 +16,7 @@ class BookSlotRequest extends FormRequest
     public function authorize(): bool
     {
         $slot = request()->route('slot');
-        return blank($slot->booking);
+        return $slot->bookings_count < $slot->manipulation->max_participants;
     }
 
     /**
@@ -26,14 +27,13 @@ class BookSlotRequest extends FormRequest
     public function rules(): array
     {
         $slot = request()->route('slot');
-        $otherSlots = Slot::with('booking')->where('manipulation_id', $slot->manipulation_id)->get();
-        $otherBookingsEmails = $otherSlots
-            ->map(fn (Slot $slot) => $slot->booking?->email)
-            ->filter(fn (?string $email) => filled($email))
+        $otherBookingsEmails = $slot->manipulation->bookings
+            ->map(fn(Booking $booking) => $booking->email)
+            ->filter(fn(?string $email) => filled($email))
             ->toArray();
 
         $requirementsRules = collect($slot->manipulation->requirements)
-            ->mapWithKeys(fn ($r, $k) => ['requirements-' . $k => 'accepted'])
+            ->mapWithKeys(fn($r, $k) => ['requirements-' . $k => 'accepted'])
             ->all();
         return [
             'first_name' => 'required|string',
@@ -58,7 +58,7 @@ class BookSlotRequest extends FormRequest
     {
         $slot = request()->route('slot');
         $requirementsMessages = collect($slot->manipulation->requirements)
-            ->mapWithKeys(fn ($r, $k) => ['requirements-' . $k => 'Vous devez confirmer que vous faites partie de tous les critères d\'inclusion.'])
+            ->mapWithKeys(fn($r, $k) => ['requirements-' . $k => 'Vous devez confirmer que vous faites partie de tous les critères d\'inclusion.'])
             ->all();
         return [
             'first_name.required'     => 'Le prénom est requis.',

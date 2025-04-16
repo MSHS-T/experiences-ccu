@@ -17,6 +17,7 @@ use Filament\Forms\Components\Actions\Action as FormAction;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -57,7 +58,7 @@ trait InteractsWithSlots
     {
         return ViewAction::make()
             ->record($this->getRecord())
-            ->form(fn ($record) => $this->getFormSchema($record))
+            ->form(fn($record) => $this->getFormSchema($record))
             ->modalHeading(__('actions.view_slot'))
             ->modalFooterActions([
                 DeleteAction::make('delete')
@@ -65,17 +66,19 @@ trait InteractsWithSlots
                     ->color('danger')
                     ->before(function () {
                         $record = $this->getRecord();
-                        if (filled($booking = $record->booking)) {
-                            Mail::to($booking->email)
-                                ->send(new BookingCancelled($record->manipulation, $record->start, $record->end));
+                        if ($record->bookings()->isNotEmpty()) {
+                            foreach ($record->bookings as $booking) {
+                                Mail::to($booking->email)
+                                    ->send(new BookingCancelled($record->manipulation, $record->start, $record->end));
+                            }
                         }
                     })
                     ->after(function ($livewire) {
                         $this->closeActionModal();
                         $livewire->refreshRecords();
                     })
-                    ->disabled(fn (Slot $record) => !$this->canManageBooking($record))
-                    ->hidden(fn (Slot $record) => !$this->canManageBooking($record))
+                    ->disabled(fn(Slot $record) => !$this->canManageBooking($record))
+                    ->hidden(fn(Slot $record) => !$this->canManageBooking($record))
                     ->button(),
                 StaticAction::make('close')
                     ->label(__('actions.close'))
@@ -95,7 +98,7 @@ trait InteractsWithSlots
                 $slots = SlotGenerator::makeFromManipulationAndDateTimes($this->manipulation, $arguments['start'], $arguments['end']);
                 return view('components.slot-creation-preview', ['slots' => $slots]);
             })
-            ->modalFooterActions(fn ($arguments) => [
+            ->modalFooterActions(fn($arguments) => [
                 StaticAction::make('close')
                     ->label(__('actions.close'))
                     ->close()
@@ -142,7 +145,7 @@ trait InteractsWithSlots
                         ->preload()
                         ->required()
                         ->suffixAction(
-                            fn ($state) => FormAction::make('planning')
+                            fn($state) => FormAction::make('planning')
                                 ->icon('fas-calendar-days')
                                 ->url(route('filament.admin.resources.manipulations.planning', ['record' => $state]))
                                 ->openUrlInNewTab()
@@ -156,7 +159,7 @@ trait InteractsWithSlots
                         ->preload()
                         ->required()
                         ->suffixAction(
-                            fn ($state) => FormAction::make('planning')
+                            fn($state) => FormAction::make('planning')
                                 ->icon('fas-calendar-days')
                                 ->url(route('filament.admin.resources.plateaux.planning', ['record' => $state]))
                                 ->openUrlInNewTab()
@@ -168,34 +171,45 @@ trait InteractsWithSlots
                         ->label(__('attributes.end'))
                         ->required(),
                 ]),
-            ($record !== null && $this->canManageBooking($record)) ? Fieldset::make(__('admin.booking'))
+            ($record !== null && $this->canManageBooking($record))
+                ? Fieldset::make(__('admin.booking'))
                 ->columns([
                     'default' => 1,
                     'sm' => 2,
                 ])
-                ->relationship('booking')
-                ->schema(fn (?Slot $record) => blank($record?->booking) ? [
+                ->schema(fn(?Slot $record) => $record->bookings->isEmpty() ? [
                     Placeholder::make(__('admin.no_booking'))
                         ->columnSpanFull()
                         ->view('components.no-booking'),
                 ] : [
-                    TextInput::make('last_name')
-                        ->label(__('attributes.last_name'))
-                        ->required()
-                        ->maxLength(255),
-                    TextInput::make('first_name')
-                        ->label(__('attributes.first_name'))
-                        ->required()
-                        ->maxLength(255),
-                    TextInput::make('email')
-                        ->label(__('attributes.email'))
-                        ->required()
-                        ->maxLength(255),
-                    DateTimePicker::make('created_at')
-                        ->label(__('attributes.booked_at')),
-                    Toggle::make('confirmed')
-                        ->label(__('attributes.confirmed'))
-                        ->inline(false)
+                    Repeater::make('bookings')
+                        ->label('')
+                        ->relationship('bookings')
+                        ->columnSpanFull()
+                        ->columns([
+                            'default' => 1,
+                            'sm' => 2,
+                            'lg' => 3,
+                        ])
+                        ->schema([
+                            TextInput::make('last_name')
+                                ->label(__('attributes.last_name'))
+                                ->required()
+                                ->maxLength(255),
+                            TextInput::make('first_name')
+                                ->label(__('attributes.first_name'))
+                                ->required()
+                                ->maxLength(255),
+                            TextInput::make('email')
+                                ->label(__('attributes.email'))
+                                ->required()
+                                ->maxLength(255),
+                            DateTimePicker::make('created_at')
+                                ->label(__('attributes.booked_at')),
+                            Toggle::make('confirmed')
+                                ->label(__('attributes.confirmed'))
+                                ->inline(false)
+                        ])
                 ])
                 : null,
         ]);
@@ -211,7 +225,7 @@ trait InteractsWithSlots
             )
             || (
                 $currentUser->hasRole('manipulation_manager')
-                && $slot->manipulation->users->some(fn (User $user) => $user->id === $currentUser->id)
+                && $slot->manipulation->users->some(fn(User $user) => $user->id === $currentUser->id)
             );
     }
 
@@ -222,6 +236,6 @@ trait InteractsWithSlots
 
     protected function getEloquentQuery(): Builder
     {
-        return Slot::query()->with('booking');
+        return Slot::with('bookings');
     }
 }

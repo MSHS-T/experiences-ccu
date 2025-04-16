@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Pages\Attendance;
 use App\Filament\Resources\ManipulationResource\Pages;
 use App\Models\Attribution;
+use App\Models\Booking;
 use App\Models\Manipulation;
 use App\Models\ManipulationStatistics;
 use App\Models\Plateau;
@@ -134,6 +135,12 @@ class ManipulationResource extends Resource
                     ->reactive()
                     ->afterStateUpdated($computeSlotCount)
                     ->required(),
+                Forms\Components\TextInput::make('max_booking_per_slot')
+                    ->label(__('attributes.max_booking_per_slot'))
+                    ->suffix('personnes')
+                    ->integer()
+                    ->minValue(1)
+                    ->required(),
                 TableRepeater::make('requirements')
                     ->label(__('attributes.requirements'))
                     ->emptyLabel(__('messages.no_requirement'))
@@ -228,20 +235,20 @@ class ManipulationResource extends Resource
                     ->label(__('attributes.slot_count'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('slots_booked')
-                    ->getStateUsing(fn(Manipulation $record) => !$record->archived ? $record->slots->filter(fn(Slot $slot) => $slot->booking)->count() : $record->statistics->pluck('booking_made')->sum())
+                    ->getStateUsing(fn(Manipulation $record) => !$record->archived ? $record->bookings->count() : $record->statistics->pluck('booking_made')->sum())
                     ->label(__('attributes.booked_slots'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('slots_honored')
                     ->getStateUsing(fn(Manipulation $record) => !$record->archived
-                        ? $record->slots->filter(fn(Slot $slot) => $slot->booking && $slot->booking->honored)->count()
+                        ? $record->bookings->filter(fn(Booking $booking) => $booking->honored)->count()
                         : $record->statistics->map(fn(ManipulationStatistics $stat) => $stat->booking_confirmed_honored + $stat->booking_unconfirmed_honored)->sum())
                     ->label(__('attributes.honored_slots'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('slots_absent')
                     ->getStateUsing(fn(Manipulation $record) => !$record->archived
-                        ? $record->slots->filter(fn(Slot $slot) => $slot->booking && !$slot->booking->honored)->count()
+                        ? $record->bookings->filter(fn(Booking $booking) => !$booking->honored)->count()
                         : $record->statistics->map(fn(ManipulationStatistics $stat) => $stat->booking_made - $stat->booking_confirmed - $stat->booking_unconfirmed)->sum())
                     ->label(__('attributes.absent_slots'))
                     ->sortable()

@@ -12,16 +12,18 @@ use Illuminate\Support\Str;
  * App\Models\Booking
  *
  * @property int $id
+ * @property int $slot_id
  * @property string $first_name
  * @property string $last_name
  * @property string $email
  * @property bool $confirmed
  * @property string $confirmation_code
  * @property \Illuminate\Support\Carbon $confirm_before
- * @property bool $honored
+ * @property bool|null $honored
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Slot|null $slot
+ * @property-read mixed $name
+ * @property-read \App\Models\Slot $slot
  * @method static \Database\Factories\BookingFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Booking newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Booking newQuery()
@@ -35,6 +37,7 @@ use Illuminate\Support\Str;
  * @method static \Illuminate\Database\Eloquent\Builder|Booking whereHonored($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Booking whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Booking whereLastName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Booking whereSlotId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Booking whereUpdatedAt($value)
  * @mixin \Eloquent
  */
