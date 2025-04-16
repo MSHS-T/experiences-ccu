@@ -18,6 +18,7 @@ return [
     'slots' => [
         'page_title'         => 'Liste des créneaux',
         'show_more_dates'    => 'Voir plus de dates',
+        'no_slots'           => 'Aucun créneau disponible pour cette expérience.',
         'details'            => 'Vos coordonnées',
         'check_requirements' => 'Vérification des critères d\'inclusion',
         'commitment'         => 'En vous inscrivant sur ce créneau, vous attestez que les informations fournies sont vraies, et vous engagez à honorer le rendez-vous.',
