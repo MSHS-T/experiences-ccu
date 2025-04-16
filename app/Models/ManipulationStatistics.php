@@ -43,6 +43,7 @@ class ManipulationStatistics extends Model
      */
     protected $fillable = [
         'month',
+        'half_day_count',
         'slot_count',
         'booking_made',
         'booking_confirmed',
@@ -57,6 +58,7 @@ class ManipulationStatistics extends Model
      */
     protected $casts = [
         'id'                          => 'integer',
+        'half_day_count'              => 'integer',
         'slot_count'                  => 'integer',
         'booking_made'                => 'integer',
         'booking_confirmed'           => 'integer',

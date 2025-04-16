@@ -149,12 +149,17 @@ class Manipulation extends Model
 
         $currentMonth = null;
         $statistics = [];
+
+        $slots = $this->slots->sortBy('start');
+        $lastHalfDay = null;
+
         foreach ($this->slots as $slot) {
             $slotMonth = $slot->start->format('Y-m');
             if ($slotMonth !== $currentMonth) {
                 $currentMonth = $slotMonth;
                 $statistics[$slotMonth] = [
                     'month'                       => $slotMonth,
+                    'half_day_count'              => 0,
                     'slot_count'                  => 0,
                     'booking_made'                => 0,
                     'booking_confirmed'           => 0,
@@ -162,6 +167,13 @@ class Manipulation extends Model
                     'booking_unconfirmed_honored' => 0,
                 ];
             }
+
+            $currentHalfDay = $slot->start->format('Y-m-d') . '_' . ($slot->start->hour < 14 ? 'am' : 'pm');
+            if ($currentHalfDay !== $lastHalfDay) {
+                $statistics[$slotMonth]['half_day_count']++;
+                $lastHalfDay = $currentHalfDay;
+            }
+
             $statistics[$slotMonth]['slot_count']++;
             if ($slot->booking !== null) {
                 $statistics[$slotMonth]['booking_made']++;

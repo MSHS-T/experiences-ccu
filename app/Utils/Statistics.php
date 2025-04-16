@@ -56,10 +56,10 @@ class Statistics
         return $years;
     }
 
-    public static function getMonthlyStatistics(string $month = null): Collection
+    public static function getPlateauMonthlyStatistics(?string $month = null): Collection
     {
         $history = ManipulationStatistics::with(['manipulation', 'manipulation.plateau'])
-            ->when(filled($month), fn (Builder $query) => $query->where('month', $month))
+            ->when(filled($month), fn(Builder $query) => $query->where('month', $month))
             ->get();
 
         $slots = Slot::with(['manipulation', 'manipulation.plateau', 'booking'])
@@ -70,23 +70,23 @@ class Statistics
             })
             ->get();
 
-        return self::buildStatistics($history, $slots);
+        return self::buildPlateauStatistics($history, $slots);
     }
 
-    public static function getYearlyStatistics(string $year = null): Collection
+    public static function getPlateauYearlyStatistics(?string $year = null): Collection
     {
         $history = ManipulationStatistics::with(['manipulation', 'manipulation.plateau'])
-            ->when(filled($year), fn (Builder $query) => $query->where('month', 'like', $year . '%'))
+            ->when(filled($year), fn(Builder $query) => $query->where('month', 'like', $year . '%'))
             ->get();
 
         $slots = Slot::with(['manipulation', 'manipulation.plateau', 'booking'])
-            ->when(filled($year), fn (Builder $query) => $query->whereYear('start', $year))
+            ->when(filled($year), fn(Builder $query) => $query->whereYear('start', $year))
             ->get();
 
-        return self::buildStatistics($history, $slots);
+        return self::buildPlateauStatistics($history, $slots);
     }
 
-    public static function buildStatistics(Collection $history, Collection $slots): Collection
+    public static function buildPlateauStatistics(Collection $history, Collection $slots): Collection
     {
         $stats = $history->map(function (ManipulationStatistics $st) {
             return [
@@ -136,14 +136,126 @@ class Statistics
             $stats[$plateau]['booking_unconfirmed_honored'] += (filled($slot->booking) && !$slot->booking->confirmed && $slot->booking->honored) ? 1 : 0;
         }
 
-        return collect($stats)->map(fn ($item) => (object) [
+        return collect($stats)->map(fn($item) => (object) [
             'plateau'           => $item['plateau'],
             'slot_count'        => $item['slot_count'],
             'hour_count'        => $item['hour_count'],
             'booking_rate'      => $item['booking_made'] / $item['slot_count'] * 100,
             'confirmation_rate' => $item['booking_confirmed'] / $item['slot_count'] * 100,
-            'presence_rate'     => ($item['booking_confirmed_honored'] + $item['booking_unconfirmed_honored']) / $item['booking_made'] * 100,
+            'presence_rate'     => $item['booking_made'] > 0 ? ($item['booking_confirmed_honored'] + $item['booking_unconfirmed_honored']) / $item['booking_made'] * 100 : 0,
         ])
-            ->sortBy(fn ($item) => $item->plateau->name);
+            ->sortBy(fn($item) => $item->plateau->name);
+    }
+
+    public static function getManagerMonthlyStatistics(?string $month = null): Collection
+    {
+        $history = ManipulationStatistics::with(['manipulation', 'manipulation.users'])
+            ->when(filled($month), fn(Builder $query) => $query->where('month', $month))
+            ->get();
+
+        $slots = Slot::with(['manipulation', 'manipulation.users', 'booking'])
+            ->when(filled($month), function (Builder $query) use ($month) {
+                [$y, $m] = array_map('intval', explode('-', $month));
+                return $query->whereYear('start', $y)
+                    ->whereMonth('start', $m);
+            })
+            ->get();
+
+        return self::buildManagerStatistics($history, $slots);
+    }
+
+    public static function getManagerYearlyStatistics(?string $year = null): Collection
+    {
+        $history = ManipulationStatistics::with(['manipulation', 'manipulation.users'])
+            ->when(filled($year), fn(Builder $query) => $query->where('month', 'like', $year . '%'))
+            ->get();
+
+        $slots = Slot::with(['manipulation', 'manipulation.users', 'booking'])
+            ->when(filled($year), fn(Builder $query) => $query->whereYear('start', $year))
+            ->get();
+
+        return self::buildManagerStatistics($history, $slots);
+    }
+
+    public static function buildManagerStatistics(Collection $history, Collection $slots): Collection
+    {
+        $stats = $history->map(function (ManipulationStatistics $st) {
+            return [
+                'managers'                    => $st->manipulation->users,
+                'slot_count'                  => $st->slot_count,
+                'hour_count'                  => $st->slot_count * $st->manipulation->duration / 60,
+                'booking_made'                => $st->booking_made,
+                'booking_confirmed'           => $st->booking_confirmed,
+                'booking_confirmed_honored'   => $st->booking_confirmed_honored,
+                'booking_unconfirmed_honored' => $st->booking_unconfirmed_honored,
+            ];
+        })->reduce(function (array $carry, array $item) {
+            foreach ($item['managers'] as $manager) {
+                if (!array_key_exists($manager->id, $carry)) {
+                    $carry[$manager->id] = [
+                        'manager'                     => $manager,
+                        'half_day_count'              => 0,
+                        'slot_count'                  => 0,
+                        'hour_count'                  => 0,
+                        'booking_made'                => 0,
+                        'booking_confirmed'           => 0,
+                        'booking_confirmed_honored'   => 0,
+                        'booking_unconfirmed_honored' => 0,
+                    ];
+                }
+                $carry[$manager->id]['half_day_count']              += $item['half_day_count'];
+                $carry[$manager->id]['slot_count']                  += $item['slot_count'];
+                $carry[$manager->id]['hour_count']                  += $item['hour_count'];
+                $carry[$manager->id]['booking_made']                += $item['booking_made'];
+                $carry[$manager->id]['booking_confirmed']           += $item['booking_confirmed'];
+                $carry[$manager->id]['booking_confirmed_honored']   += $item['booking_confirmed_honored'];
+                $carry[$manager->id]['booking_unconfirmed_honored'] += $item['booking_unconfirmed_honored'];
+            }
+            return $carry;
+        }, []);
+
+        $lastHalfDay = null;
+        foreach ($slots as $slot) {
+            $currentHalfDay = $slot->start->format('Y-m-d') . '_' . ($slot->start->hour < 14 ? 'am' : 'pm');
+            $incrementHalfDay = false;
+            if ($currentHalfDay !== $lastHalfDay) {
+                $lastHalfDay = $currentHalfDay;
+                $incrementHalfDay = true;
+            }
+            $managers = $slot->manipulation->users;
+            /** @var Slot $slot */
+            foreach ($managers as $manager) {
+                if (!array_key_exists($manager->id, $stats)) {
+                    $stats[$manager->id] = [
+                        'manager'                     => $manager,
+                        'half_day_count'              => 0,
+                        'slot_count'                  => 0,
+                        'hour_count'                  => 0,
+                        'booking_made'                => 0,
+                        'booking_confirmed'           => 0,
+                        'booking_confirmed_honored'   => 0,
+                        'booking_unconfirmed_honored' => 0,
+                    ];
+                }
+                $stats[$manager->id]['half_day_count']              += $incrementHalfDay ? 1 : 0;
+                $stats[$manager->id]['slot_count']                  += 1;
+                $stats[$manager->id]['hour_count']                  += $slot->manipulation->duration / 60;
+                $stats[$manager->id]['booking_made']                += filled($slot->booking) ? 1 : 0;
+                $stats[$manager->id]['booking_confirmed']           += (filled($slot->booking) && $slot->booking->confirmed) ? 1 : 0;
+                $stats[$manager->id]['booking_confirmed_honored']   += (filled($slot->booking) && $slot->booking->confirmed && $slot->booking->honored) ? 1 : 0;
+                $stats[$manager->id]['booking_unconfirmed_honored'] += (filled($slot->booking) && !$slot->booking->confirmed && $slot->booking->honored) ? 1 : 0;
+            }
+        }
+
+        return collect($stats)->map(fn($item) => (object) [
+            'manager'           => $item['manager'],
+            'half_day_count'    => $item['half_day_count'],
+            'slot_count'        => $item['slot_count'],
+            'hour_count'        => $item['hour_count'],
+            'booking_rate'      => $item['booking_made'] / $item['slot_count'] * 100,
+            'confirmation_rate' => $item['booking_confirmed'] / $item['slot_count'] * 100,
+            'presence_rate'     => $item['booking_made'] > 0 ? ($item['booking_confirmed_honored'] + $item['booking_unconfirmed_honored']) / $item['booking_made'] * 100 : 0,
+        ])
+            ->sortBy(fn($item) => $item->manager->name);
     }
 }

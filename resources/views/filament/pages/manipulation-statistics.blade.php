@@ -9,18 +9,27 @@
     <div class="flex-1 max-w-full flex justify-center">
         @if ($this->statistics !== null)
             <table class="mt-6 w-full whitespace-nowrap text-left">
-                <colgroup>
-                    <col class="w-full sm:w-7/12">
+                {{-- <colgroup>
+                    <col class="">
+                    <col class="lg:w-1/12">
+                    @if ($this->type === 'manager')
+                        <col class="lg:w-1/12">
+                    @endif
                     <col class="lg:w-1/12">
                     <col class="lg:w-1/12">
                     <col class="lg:w-1/12">
                     <col class="lg:w-1/12">
-                    <col class="lg:w-1/12">
-                </colgroup>
+                </colgroup> --}}
                 <thead class="border-b border-gray-900/10 dark:border-white/10 text-sm leading-6 dark:text-white">
                     <tr>
-                        <th scope="col" class="py-2 pl-4 pr-8 font-semibold sm:pl-6 lg:pl-8">Plateau</th>
+                        <th scope="col" class="py-2 pl-4 pr-8 font-semibold sm:pl-6 lg:pl-8">
+                            {{ $this->type === 'plateau' ? 'Plateau' : '' }}
+                            {{ $this->type === 'manager' ? 'Responsable Manipulation' : '' }}
+                        </th>
                         <th scope="col" class="py-2 pl-0 pr-8 font-semibold">Nombre de créneaux</th>
+                        @if ($this->type === 'manager')
+                            <th scope="col" class="py-2 pl-0 pr-8 font-semibold">Nombre de demi-jours</th>
+                        @endif
                         <th scope="col" class="py-2 pl-0 pr-8 font-semibold">Nombre d'heures</th>
                         <th scope="col" class="py-2 pl-0 pr-8 font-semibold">Taux d'inscription</th>
                         <th scope="col" class="py-2 pl-0 pr-8 font-semibold">Taux de confirmation</th>
@@ -32,13 +41,22 @@
                         <tr>
                             <td class="py-4 pl-4 pr-8 sm:pl-6 lg:pl-8">
                                 <div class="flex items-center gap-x-4">
-                                    <div class="h-8 w-8 rounded-full"
-                                        style="background-color: {{ $row->plateau->color }}"></div>
-                                    <div class="truncate text-sm font-medium leading-6 dark:text-white">
-                                        {{ $row->plateau->name }}</div>
+                                    @if ($this->type === 'plateau')
+                                        <div class="h-8 w-8 rounded-full"
+                                            style="background-color: {{ $row->plateau->color }}"></div>
+                                        <div class="truncate text-sm font-medium leading-6 dark:text-white">
+                                            {{ $row->plateau->name }}</div>
+                                    @elseif ($this->type === 'manager')
+                                        <div class="truncate text-sm font-medium leading-6 dark:text-white">
+                                            {{ $row->manager->name }}</div>
+                                    @endif
                                 </div>
                             </td>
                             <td class="py-4 pl-0 pr-4 text-sm leading-6 sm:pr-8 lg:pr-20">{{ $row->slot_count }}</td>
+                            @if ($this->type === 'manager')
+                                <td class="py-4 pl-0 pr-4 text-sm leading-6 sm:pr-8 lg:pr-20">{{ $row->half_day_count }}
+                                </td>
+                            @endif
                             <td class="py-4 pl-0 pr-4 text-sm leading-6 sm:pr-8 lg:pr-20">{{ $row->hour_count }} h</td>
                             <td class="py-4 pl-0 pr-4 text-sm leading-6 sm:pr-8 lg:pr-20">
                                 {{ round($row->booking_rate, 2) }} %
@@ -66,7 +84,13 @@
                             </div>
                         </th>
                         <td class="pl-0 pr-4 pt-6 text-sm text-gray-500">
-                            {{ $this->statistics->pluck('slot_count')->sum() }}</td>
+                            {{ $this->statistics->pluck('slot_count')->sum() }}
+                        </td>
+                        @if ($this->type === 'manager')
+                            <td class="pl-0 pr-4 pt-6 text-sm text-gray-500">
+                                {{ $this->statistics->pluck('half_day_count')->sum() }}
+                            </td>
+                        @endif
                         <td class="pl-0 pr-4 pt-6 text-sm text-gray-500">
                             {{ $this->statistics->pluck('hour_count')->sum() }} h</td>
                         <td class="pl-0 pr-4 pt-6 text-sm text-gray-500">

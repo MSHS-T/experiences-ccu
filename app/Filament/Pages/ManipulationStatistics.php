@@ -27,12 +27,13 @@ class ManipulationStatistics extends Page implements HasForms
     protected static string $view = 'filament.pages.manipulation-statistics';
 
     public ?array $formData = [
+        'type'        => 'plateau',
         'granularity' => 'month',
         'period'      => null
     ];
 
     public $statistics = null;
-
+    public $type = null;
     public function form(Form $form): Form
     {
         return $form
@@ -42,6 +43,12 @@ class ManipulationStatistics extends Page implements HasForms
                 'sm'      => 4
             ])
             ->schema([
+                Select::make('type')
+                    ->label('Type de statistiques')
+                    ->options([
+                        'plateau' => 'Plateau',
+                        'manager' => 'Responsable Manipulation'
+                    ]),
                 Select::make('granularity')
                     ->label('Type de période')
                     ->placeholder('Tous')
@@ -52,7 +59,7 @@ class ManipulationStatistics extends Page implements HasForms
                     ->reactive(),
                 Select::make('period')
                     ->label('Période')
-                    ->options(fn (Get $get) => $this->getPeriods($get('granularity')))
+                    ->options(fn(Get $get) => $this->getPeriods($get('granularity')))
                     ->placeholder('Toutes'),
                 Actions::make([
                     Action::make('submit')
@@ -73,15 +80,20 @@ class ManipulationStatistics extends Page implements HasForms
             case 'year':
                 $years = array_filter(Statistics::getYears());
                 return array_combine($years, $years);
+            default:
+                return [];
         }
     }
 
     public function computeStatistics()
     {
-        $this->statistics = match ($this->formData['granularity']) {
-            'month' => Statistics::getMonthlyStatistics($this->formData['period']),
-            'year'  => Statistics::getYearlyStatistics($this->formData['period']),
+        $this->statistics = match ([$this->formData['type'], $this->formData['granularity']]) {
+            ['plateau', 'month'] => Statistics::getPlateauMonthlyStatistics($this->formData['period']),
+            ['plateau', 'year']  => Statistics::getPlateauYearlyStatistics($this->formData['period']),
+            ['manager', 'month'] => Statistics::getManagerMonthlyStatistics($this->formData['period']),
+            ['manager', 'year']  => Statistics::getManagerYearlyStatistics($this->formData['period']),
         };
+        $this->type = $this->formData['type'];
     }
 
     public static function canAccess(): bool
