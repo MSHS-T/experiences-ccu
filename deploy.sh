@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # App name and Discord webhook URL
-APP_NAME="Expérience CCU"
+APP_NAME="Expériences CCU"
 DISCORD_WEBHOOK_URL="${DISCORD_WEBHOOK_URL}"
 LOCK_FILE="./deployment.lock"
 BRANCH="develop"
