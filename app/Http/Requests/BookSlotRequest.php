@@ -16,7 +16,7 @@ class BookSlotRequest extends FormRequest
     public function authorize(): bool
     {
         $slot = request()->route('slot');
-        return $slot->bookings_count < $slot->manipulation->max_participants;
+        return $slot->bookings_count < $slot->manipulation->max_booking_per_slot;
     }
 
     /**
