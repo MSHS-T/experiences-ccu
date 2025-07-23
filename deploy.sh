@@ -74,6 +74,7 @@ deploy() {
     $PHP_BIN artisan route:cache
     $PHP_BIN artisan view:cache
     $PHP_BIN artisan migrate --force
+    $PHP_BIN artisan db:seed --class="RolesPermissionsSeeder" --force
     $PHP_BIN artisan up
     # $PHP_BIN artisan sitemap:generate
 
