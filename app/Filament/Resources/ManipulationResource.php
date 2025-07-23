@@ -368,6 +368,15 @@ class ManipulationResource extends Resource
                         ->color('warning')
                         ->hidden(fn(Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('publish', $record))
                         ->disabled(fn(Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('publish', $record)),
+                    Tables\Actions\Action::make('share_public_link')
+                        ->label(__('actions.share_public_link'))
+                        ->icon('fas-share')
+                        ->action(function () {})
+                        ->color(Color::Lime)
+                        ->modalHeading(fn(Manipulation $record) => __('messages.share_public_link.title', ['name' => $record->name]))
+                        ->modalContent(fn(Manipulation $record) => view('filament.resources.manipulation-resource.share-public-link', ['record' => $record]))
+                        ->modalSubmitAction(false)
+                        ->modalCancelActionLabel(__('actions.close')),
                     Tables\Actions\Action::make('delete')
                         ->label(__('actions.delete'))
                         ->icon('fas-trash')

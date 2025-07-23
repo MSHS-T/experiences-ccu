@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "@fullcalendar/resource-timegrid": "^6.1.10",
+        "canvg": "^4.0.3",
         "dayjs": "^1.11.10"
     }
 }
