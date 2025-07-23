@@ -12,6 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        DB::statement($this->dropView());
         DB::statement($this->createView());
     }
 

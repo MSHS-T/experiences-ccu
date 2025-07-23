@@ -66,7 +66,7 @@ trait InteractsWithSlots
                     ->color('danger')
                     ->before(function () {
                         $record = $this->getRecord();
-                        if ($record->bookings()->isNotEmpty()) {
+                        if ($record->bookings->isNotEmpty()) {
                             foreach ($record->bookings as $booking) {
                                 Mail::to($booking->email)
                                     ->send(new BookingCancelled($record->manipulation, $record->start, $record->end));
