@@ -12,17 +12,17 @@ class Statistics
 {
     public static function getMonths(): array
     {
-        $min = min([
+        $min = min(array_filter([
             ManipulationStatistics::min('month'),
             (new Carbon(Slot::min('start')))->format('Y-m'),
-        ]);
-        $max = min([
-            max([
+        ]));
+        $max = min(array_filter([
+            max(array_filter([
                 ManipulationStatistics::max('month'),
                 (new Carbon(Slot::max('start')))->format('Y-m'),
-            ]),
+            ])),
             now()->format('Y-m')
-        ]);
+        ]));
 
         // Generate all months (Y-m format) between min and max
         $months = [$min];
@@ -35,17 +35,17 @@ class Statistics
 
     public static function getYears(): array
     {
-        $min = min([
+        $min = min(array_filter([
             (new Carbon(ManipulationStatistics::min('month')))->format('Y'),
             (new Carbon(Slot::min('start')))->format('Y'),
-        ]);
-        $max = min([
-            max([
+        ]));
+        $max = min(array_filter([
+            max(array_filter([
                 (new Carbon(ManipulationStatistics::max('month')))->format('Y'),
                 (new Carbon(Slot::max('start')))->format('Y'),
-            ]),
+            ])),
             now()->format('Y')
-        ]);
+        ]));
 
         // Generate all years (Y format) between min and max
         $years = [$min];
@@ -58,6 +58,11 @@ class Statistics
 
     public static function getPlateauMonthlyStatistics(?string $month = null): Collection
     {
+        // If month is not of the format YYYY-MM, return an empty collection
+        if (!preg_match('/^\d{4}-\d{2}$/', $month)) {
+            return collect();
+        }
+
         $history = ManipulationStatistics::with(['manipulation', 'manipulation.plateau'])
             ->when(filled($month), fn(Builder $query) => $query->where('month', $month))
             ->get();
@@ -75,6 +80,11 @@ class Statistics
 
     public static function getPlateauYearlyStatistics(?string $year = null): Collection
     {
+        // If year is not of the format YYYY, return an empty collection
+        if (!preg_match('/^\d{4}$/', $year)) {
+            return collect();
+        }
+
         $history = ManipulationStatistics::with(['manipulation', 'manipulation.plateau'])
             ->when(filled($year), fn(Builder $query) => $query->where('month', 'like', $year . '%'))
             ->get();
@@ -156,7 +166,7 @@ class Statistics
             ->when(filled($month), fn(Builder $query) => $query->where('month', $month))
             ->get();
 
-        $slots = Slot::with(['manipulation', 'manipulation.users', 'booking'])
+        $slots = Slot::with(['manipulation', 'manipulation.users', 'bookings'])
             ->when(filled($month), function (Builder $query) use ($month) {
                 [$y, $m] = array_map('intval', explode('-', $month));
                 return $query->whereYear('start', $y)
@@ -173,7 +183,7 @@ class Statistics
             ->when(filled($year), fn(Builder $query) => $query->where('month', 'like', $year . '%'))
             ->get();
 
-        $slots = Slot::with(['manipulation', 'manipulation.users', 'booking'])
+        $slots = Slot::with(['manipulation', 'manipulation.users', 'bookings'])
             ->when(filled($year), fn(Builder $query) => $query->whereYear('start', $year))
             ->get();
 

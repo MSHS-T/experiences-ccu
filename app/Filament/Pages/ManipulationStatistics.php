@@ -27,8 +27,8 @@ class ManipulationStatistics extends Page implements HasForms
     protected static string $view = 'filament.pages.manipulation-statistics';
 
     public ?array $formData = [
-        'type'        => 'plateau',
-        'granularity' => 'month',
+        'type'        => null,
+        'granularity' => null,
         'period'      => null
     ];
 
@@ -51,7 +51,6 @@ class ManipulationStatistics extends Page implements HasForms
                     ]),
                 Select::make('granularity')
                     ->label('Type de période')
-                    ->placeholder('Tous')
                     ->options([
                         'month' => 'Mois',
                         'year'  => 'Année'
@@ -67,11 +66,12 @@ class ManipulationStatistics extends Page implements HasForms
                         ->submit('computeStatistics')
                         ->color('success')
                         ->icon('fas-magnifying-glass')
+                        ->disabled(fn(Get $get) => empty($get('granularity')) || empty($get('type'))),
                 ])->verticalAlignment(VerticalAlignment::End)
             ]);
     }
 
-    public function getPeriods(string $granularity): array
+    public function getPeriods(string|null $granularity): array
     {
         switch ($granularity) {
             case 'month':
@@ -92,6 +92,7 @@ class ManipulationStatistics extends Page implements HasForms
             ['plateau', 'year']  => Statistics::getPlateauYearlyStatistics($this->formData['period']),
             ['manager', 'month'] => Statistics::getManagerMonthlyStatistics($this->formData['period']),
             ['manager', 'year']  => Statistics::getManagerYearlyStatistics($this->formData['period']),
+            default => null,
         };
         $this->type = $this->formData['type'];
     }
