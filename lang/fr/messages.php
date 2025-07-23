@@ -7,5 +7,5 @@ return [
     'add_requirement'              => 'Ajouter un critère d\'inclusion',
     'no_requirement'               => 'Aucun critère d\'inclusion',
     'no_allowed_halfdays_selected' => 'Au minimum une demi-journée doit être sélectionnée',
-    'allowed_halfdays_help'        => 'Matin : 8h-13h ; Après-midi : 13h-18h',
+    'allowed_halfdays_help'        => 'Matin : 8h-14h ; Après-midi : 14h-20h',
 ];
