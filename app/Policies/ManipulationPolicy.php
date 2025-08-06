@@ -73,7 +73,10 @@ class ManipulationPolicy
     public function publish(User $user, Manipulation $manipulation): bool
     {
         return $user->hasRole('administrator')
-            || ($user->can('manipulation.publish') && $manipulation->plateau->manager_id === $user->id);
+            || ($user->can('manipulation.publish') && (
+                $manipulation->plateau->manager_id === $user->id
+                || $manipulation->users->pluck('id')->contains($user->id)
+            ));
     }
 
     /**
