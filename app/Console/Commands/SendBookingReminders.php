@@ -7,6 +7,7 @@ use App\Mail\BookingReminder;
 use App\Models\Slot;
 use App\Settings\GeneralSettings;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use MagicLink\MagicLink;
 
@@ -35,7 +36,7 @@ class SendBookingReminders extends Command
         $firstReminderDelay = $settings->email_first_reminder_delay;
         $lastReminderDelay = $settings->email_last_reminder_delay;
 
-        $slots = Slot::with(['booking', 'manipulation'])
+        $slots = Slot::with(['bookings', 'manipulation'])
             ->where('start', '>=', now())
             ->where('start', '<=', now()->addHours($firstReminderDelay * 2))
             ->get();
@@ -45,9 +46,11 @@ class SendBookingReminders extends Command
                 $startingIn = now()->diffInHours($slot->start, absolute: true);
                 $cancellationUrl = MagicLink::create(new CancelBookingAction($booking), now()->diffInSeconds($slot->start, true), 1)->url;
                 if ($startingIn >= $firstReminderDelay && $startingIn < ($firstReminderDelay + 1)) {
+                    Log::info('Sending first reminder to ' . $booking->email . 'for booking ' . $booking->id . ' at date ' . $slot->start->format('Y-m-d H:i:s'));
                     Mail::to($booking->email)->send(new BookingReminder($booking, $cancellationUrl));
                 }
                 if ($startingIn >= $lastReminderDelay && $startingIn < ($lastReminderDelay + 1)) {
+                    Log::info('Sending last reminder to ' . $booking->email . 'for booking ' . $booking->id . ' at date ' . $slot->start->format('Y-m-d H:i:s'));
                     Mail::to($booking->email)->send(new BookingReminder($booking, $cancellationUrl));
                 }
             }
