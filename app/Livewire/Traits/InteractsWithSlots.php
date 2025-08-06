@@ -60,32 +60,29 @@ trait InteractsWithSlots
             ->record($this->getRecord())
             ->form(fn($record) => $this->getFormSchema($record))
             ->modalHeading(__('actions.view_slot'))
-            ->modalFooterActions([
-                DeleteAction::make('delete')
+            ->modalCancelAction(
+                fn(StaticAction $action) => $action
+                    ->label(__('actions.close'))
+                    ->color('gray'),
+            )
+            ->modalSubmitAction(
+                fn(StaticAction $action) => $action
                     ->label(__('actions.delete_slot'))
                     ->color('danger')
-                    ->before(function () {
-                        $record = $this->getRecord();
-                        if ($record->bookings->isNotEmpty()) {
-                            foreach ($record->bookings as $booking) {
-                                Mail::to($booking->email)
-                                    ->send(new BookingCancelled($record->manipulation, $record->start, $record->end));
-                            }
-                        }
-                    })
-                    ->after(function ($livewire) {
-                        $this->closeActionModal();
-                        $livewire->refreshRecords();
-                    })
-                    ->disabled(fn(Slot $record) => !$this->canManageBooking($record))
-                    ->hidden(fn(Slot $record) => !$this->canManageBooking($record))
-                    ->button(),
-                StaticAction::make('close')
-                    ->label(__('actions.close'))
-                    ->close()
-                    ->color('gray')
-                    ->button()
-            ])
+                    ->hidden(fn() => !$this->canManageBooking($this->getRecord()))
+                    ->disabled(fn() => !$this->canManageBooking($this->getRecord())),
+            )
+            ->action(function ($livewire) {
+                $record = $this->getRecord();
+                if ($record->bookings->isNotEmpty()) {
+                    foreach ($record->bookings as $booking) {
+                        Mail::to($booking->email)
+                            ->send(new BookingCancelled($record->manipulation, $record->start, $record->end));
+                    }
+                }
+                $this->getRecord()->delete();
+                $livewire->refreshRecords();
+            })
             ->modalFooterActionsAlignment(Alignment::Center)
             ->cancelParentActions();
     }
@@ -98,27 +95,24 @@ trait InteractsWithSlots
                 $slots = SlotGenerator::makeFromManipulationAndDateTimes($this->manipulation, $arguments['start'], $arguments['end']);
                 return view('components.slot-creation-preview', ['slots' => $slots]);
             })
-            ->modalFooterActions(fn($arguments) => [
-                StaticAction::make('close')
+            ->modalCancelAction(
+                fn(StaticAction $action) => $action
                     ->label(__('actions.close'))
-                    ->close()
-                    ->color('gray')
-                    ->button(),
-                Action::make('create')
+                    ->color('gray'),
+            )
+            ->modalSubmitAction(
+                fn(StaticAction $action, $arguments) => $action
                     ->label(__('actions.create'))
                     ->color('success')
-                    ->hidden(count(SlotGenerator::makeFromManipulationAndDateTimes($this->manipulation, $arguments['start'], $arguments['end'])) === 0)
-                    ->action(function () use ($arguments) {
-                        $slots = SlotGenerator::makeFromManipulationAndDateTimes($this->manipulation, $arguments['start'], $arguments['end']);
-                        $this->manipulation->slots()->createMany($slots);
-                    })
-                    ->after(function ($livewire) {
-                        $this->closeActionModal();
-                        $livewire->refreshRecords();
-                    })
-                    ->button(),
-            ])
-            ->modalFooterActionsAlignment(Alignment::Center);
+                    ->hidden(fn() => count(SlotGenerator::makeFromManipulationAndDateTimes($this->manipulation, $arguments['start'], $arguments['end'])) === 0),
+            )
+            ->modalFooterActionsAlignment(Alignment::Center)
+            ->action(function ($livewire, $arguments) {
+                $slots = SlotGenerator::makeFromManipulationAndDateTimes($this->manipulation, $arguments['start'], $arguments['end']);
+                $this->manipulation->slots()->createMany($slots);
+                $livewire->refreshRecords();
+            })
+            ->cancelParentActions();
     }
 
     public function getFormSchema(?Slot $record = null): array
@@ -218,6 +212,7 @@ trait InteractsWithSlots
     public function canManageBooking(Slot $slot): bool
     {
         $currentUser = Auth::user();
+        $slot->loadMissing(['manipulation.plateau.manager', 'manipulation.users']);
         return $currentUser->hasRole('administrator')
             || (
                 $currentUser->hasRole('plateau_manager')
