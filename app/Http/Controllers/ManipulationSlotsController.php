@@ -25,6 +25,7 @@ class ManipulationSlotsController extends Controller
             'manipulationName'         => $manipulation->name,
             'manipulationRequirements' => $manipulation->requirements,
             'slots'                    => $manipulation->slots
+                ->sortBy('start')
                 ->map(fn(Slot $s) => [
                     'id'             => $s->id,
                     'day'            => $s->start->format('Y-m-d'),
