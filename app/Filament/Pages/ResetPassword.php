@@ -28,7 +28,6 @@ class ResetPassword extends BasePage
     public function getTitle(): string | Htmlable
     {
         $user = User::where('email', $this->email)->first();
-        dump($user);
         if ($user !== null && $user->created_at->timestamp === $user->updated_at->timestamp) {
             return __('admin.init_password');
         }

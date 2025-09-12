@@ -25,7 +25,7 @@ class ManipulationFactory extends Factory
         return [
             'name'            => fake()->name,
             'description'     => implode('<br/>', fake()->paragraphs(3)),
-            'duration'        => random_int(1, 6) * 15,
+            'duration'        => random_int(1, 4) * 30,
             'start_date'      => $startDate,
             'end_date'        => fake()->dateTimeBetween($startDate, '+3 months'),
             'requirements'    => Collection::times(random_int(3, 5), fn() => fake()->sentence())->toJson(),

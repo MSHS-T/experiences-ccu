@@ -77,7 +77,7 @@ class TestDatabaseSeeder extends Seeder
             'plateau_id'           => $plateau->id,
             'name'                 => fake()->words(3, true),
             'description'          => fake()->words(15, true),
-            'duration'             => 60,
+            'duration'             => random_int(1, 4) * 30,
             'max_booking_per_slot' => $maxBookingPerSlot,
             'start_date'           => $start,
             'end_date'             => $end,

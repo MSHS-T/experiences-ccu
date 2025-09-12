@@ -129,9 +129,12 @@ class ManipulationResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('duration')
                     ->label(__('attributes.duration'))
+                    ->helperText(__('messages.manipulation_duration_help'))
                     ->suffix('minutes')
                     ->integer()
-                    ->minValue(1)
+                    ->minValue(30)
+                    ->step(30)
+                    ->rules(['multiple_of:30'])
                     ->reactive()
                     ->afterStateUpdated($computeSlotCount)
                     ->required(),

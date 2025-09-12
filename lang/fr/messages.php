@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'manipulation_duration_help'   => 'La durée de la manipulation doit être un multiple de 30 minutes',
     'no_equipments_title'          => 'Aucun Équipement',
     'no_equipments_description'    => 'Vous pouvez en associer via le bouton ci-dessus.',
     'no_plateaux_title'            => 'Aucun Plateau',
