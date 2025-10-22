@@ -37,6 +37,7 @@ class BookingReminder extends Mailable
      */
     public function content(): Content
     {
+        $this->booking->loadMissing(['slot.manipulation.users']);
         return new Content(
             markdown: 'mail.booking-reminder',
             with: [
