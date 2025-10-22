@@ -30,13 +30,13 @@ class NotifyYesterdayUnhonoredSlots extends Command
      */
     public function handle()
     {
-        $slots = Slot::with(['booking', 'manipulation'])
+        $slots = Slot::with(['bookings', 'manipulation'])
             ->whereDate('start', now()->subDay()->format('Y-m-d'))
             ->get();
 
         foreach ($slots as $slot) {
             foreach ($slot->bookings as $booking) {
-                if (!$booking->honored) {
+                if ($booking->honored === false) {
                     $subject = Subject::find($booking->email);
                     $unhonoredCount = $subject->getUnhonoredCount();
                     if ($unhonoredCount % 3 === 1) {
