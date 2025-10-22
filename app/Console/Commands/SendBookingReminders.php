@@ -42,7 +42,7 @@ class SendBookingReminders extends Command
         $lastReminderDelay = $settings->email_last_reminder_delay;
 
         // Log the current settings for debugging
-        Log::info("Reminder settings - First: {$firstReminderDelay}h, Last: {$lastReminderDelay}h");
+        // Log::info("Reminder settings - First: {$firstReminderDelay}h, Last: {$lastReminderDelay}h");
 
         // Calculate the maximum delay to determine query range
         $maxDelay = max($firstReminderDelay, $lastReminderDelay);
@@ -54,7 +54,7 @@ class SendBookingReminders extends Command
             ->whereBetween('start', [now(), now()->addHours($maxDelay + 2)])
             ->get();
 
-        Log::info("Found {$slots->count()} slots to check for reminders");
+        // Log::info("Found {$slots->count()} slots to check for reminders");
 
         $remindersSent = 0;
 
@@ -79,7 +79,7 @@ class SendBookingReminders extends Command
                 $hoursUntilSlot = floor($startingIn);
                 if ($hoursUntilSlot == $firstReminderDelay) {
                     try {
-                        Log::info("Sending first reminder to {$booking->email} for booking {$booking->id} at date {$slot->start->format('Y-m-d H:i:s')} (starting in {$startingIn}h)");
+                        // Log::info("Sending first reminder to {$booking->email} for booking {$booking->id} at date {$slot->start->format('Y-m-d H:i:s')} (starting in {$startingIn}h)");
                         Mail::to($booking->email)->send(new BookingReminder($booking, $cancellationUrl));
                         $remindersSent++;
                     } catch (\Exception $e) {
@@ -91,7 +91,7 @@ class SendBookingReminders extends Command
                 // Example: if lastReminderDelay is 2, send between 2-3 hours before
                 if ($hoursUntilSlot == $lastReminderDelay) {
                     try {
-                        Log::info("Sending last reminder to {$booking->email} for booking {$booking->id} at date {$slot->start->format('Y-m-d H:i:s')} (starting in {$startingIn}h)");
+                        // Log::info("Sending last reminder to {$booking->email} for booking {$booking->id} at date {$slot->start->format('Y-m-d H:i:s')} (starting in {$startingIn}h)");
                         Mail::to($booking->email)->send(new BookingReminder($booking, $cancellationUrl));
                         $remindersSent++;
                     } catch (\Exception $e) {
@@ -101,7 +101,7 @@ class SendBookingReminders extends Command
             }
         }
 
-        Log::info("Reminder command completed. Sent {$remindersSent} reminder emails.");
+        // Log::info("Reminder command completed. Sent {$remindersSent} reminder emails.");
         $this->info("Sent {$remindersSent} reminder emails.");
     }
 }
