@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ManipulationResource\Pages;
 
+use App\Filament\Resources\ManipulationResource\Widgets\AttributionOverview;
 use App\Filament\Resources\ManipulationResource;
 use App\Models\Manipulation;
 use Filament\Resources\Pages\CreateRecord;
@@ -18,7 +19,7 @@ class CreateManipulation extends CreateRecord
             return [];
         } else {
             return [
-                ManipulationResource\Widgets\AttributionOverview::class,
+                AttributionOverview::class,
             ];
         }
     }

@@ -4,7 +4,7 @@
         @if (session('success'))
             <div class="border-l-4 border-green-400 bg-green-50 p-4 sm:mx-auto sm:w-full sm:max-w-lg">
                 <div class="flex">
-                    <div class="flex-shrink-0">
+                    <div class="shrink-0">
                         <x-fas-check-circle class="h-5 w-5 text-green-400" />
                     </div>
                     <div class="ml-3">
@@ -23,7 +23,7 @@
                 {{ __('public.my_bookings.page_title') }}
             </h2>
         </div>
-        <div class="flex-grow flex flex-col items-stretch justify-between space-y-4">
+        <div class="grow flex flex-col items-stretch justify-between space-y-4">
             @if ($history['blocked'])
                 <div
                     class="self-center relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left border border-gray-300 sm:my-8 sm:w-full sm:max-w-sm sm:p-6">
@@ -87,12 +87,12 @@
                             <div class="flex flex-none items-center gap-x-4">
                                 @unless ($booking->confirmed)
                                     <a href="{{ route('confirm_booking', $booking) }}"
-                                        class="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-blue-900 shadow-sm ring-1 ring-inset ring-blue-300 hover:bg-blue-50 sm:block">
+                                        class="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-blue-900 shadow-xs ring-1 ring-inset ring-blue-300 hover:bg-blue-50 sm:block">
                                         {{ __('public.my_bookings.confirm') }}
                                     </a>
                                 @endunless
                                 <a href="{{ route('cancel_booking', $booking) }}"
-                                    class="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">
+                                    class="hidden rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:block">
                                     {{ __('public.my_bookings.cancel') }}
                                 </a>
                             </div>

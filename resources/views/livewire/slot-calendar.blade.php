@@ -16,7 +16,7 @@
                     @endforeach
                 </div>
                 <div
-                    class="flex flex-row lg:flex-col justify-evenly lg:justify-center items-stretch text-sm flex-shrink-0 gap-2">
+                    class="flex flex-row lg:flex-col justify-evenly lg:justify-center items-stretch text-sm shrink-0 gap-2">
                     <x-filament::button size="xs" wire:click="checkAllPlateaux()" class="flex items-center gap-2">
                         Tout cocher
                     </x-filament::button>
@@ -28,9 +28,8 @@
             </div>
         @endif
         <div style="padding-top: 16px;">
-            <div class="filament-fullcalendar" wire:ignore ax-load
-                ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('filament-fullcalendar-alpine', 'saade/filament-fullcalendar') }}"
-                ax-load-css="{{ \Filament\Support\Facades\FilamentAsset::getStyleHref('filament-fullcalendar-styles', 'saade/filament-fullcalendar') }}"
+            <div class="filament-fullcalendar" wire:ignore x-load
+                x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('filament-fullcalendar-alpine', 'saade/filament-fullcalendar') }}"
                 x-ignore x-data="fullcalendar({
                     locale: @js(app()->getLocale()),
                     plugins: @js(['timeGrid', 'interaction', 'moment', 'momentTimezone']),

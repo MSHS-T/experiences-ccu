@@ -2,20 +2,20 @@
 
 namespace App\Filament\Pages;
 
+use Filament\Schemas\Schema;
 use App\Settings\GeneralSettings;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
 use Filament\Pages\SettingsPage;
 use Illuminate\Support\Facades\Auth;
 
 class ManageSettings extends SettingsPage
 {
     protected static string $settings         = GeneralSettings::class;
-    protected static ?string $navigationIcon  = 'fas-cog';
+    protected static string | \BackedEnum | null $navigationIcon  = 'fas-cog';
     protected static ?string $navigationLabel = 'Réglages';
     protected static ?int $navigationSort     = 50;
-    protected static ?string $navigationGroup = 'Administration';
+    protected static string | \UnitEnum | null $navigationGroup = 'Administration';
     protected ?string $heading                = 'Réglages';
 
     public static function shouldRegisterNavigation(): bool
@@ -29,10 +29,10 @@ class ManageSettings extends SettingsPage
         parent::mount();
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 RichEditor::make('presentation_text')
                     ->label(__('attributes.presentation_text'))
                     ->disableAllToolbarButtons()

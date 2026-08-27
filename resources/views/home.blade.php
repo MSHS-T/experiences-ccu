@@ -23,7 +23,7 @@
                 {!! $presentation_text !!}
             </div>
             <div class="mt-10 flex justify-center gap-x-6">
-                <a class="group inline-flex ring-1 items-center justify-center rounded-full py-2 px-4 text-sm focus:outline-none ring-slate-200 text-slate-700 hover:text-slate-900 hover:ring-slate-300 active:bg-slate-100 active:text-slate-600 focus-visible:outline-blue-600 focus-visible:ring-slate-300"
+                <a class="group inline-flex ring-1 items-center justify-center rounded-full py-2 px-4 text-sm focus:outline-hidden ring-slate-200 text-slate-700 hover:text-slate-900 hover:ring-slate-300 active:bg-slate-100 active:text-slate-600 focus-visible:outline-blue-600 focus-visible:ring-slate-300"
                     href="#manipulations">
                     <x-fas-arrow-down class="h-4 w-4 fill-blue-600" />
                     <span class="ml-3">{{ __('public.home.show_manips') }}</span>
@@ -68,7 +68,7 @@
                                         'hover:bg-white/10 lg:hover:bg-white/5'">
                                     <h3>
                                         <button
-                                            class="font-display text-lg [&:not(:focus-visible)]:focus:outline-none whitespace-normal text-start"
+                                            class="font-display text-lg [&:not(:focus-visible)]:focus:outline-hidden whitespace-normal text-start"
                                             x-bind:class="selected === {{ $m->id }} ?
                                                 'text-blue-600 lg:text-white' :
                                                 'text-blue-100 hover:text-white lg:text-white'"
@@ -144,7 +144,7 @@
                                             </span>
                                         </h3>
                                         <ol role="list"
-                                            class="flex-grow divide-y divide-slate-300/30 rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
+                                            class="grow divide-y divide-slate-300/30 rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight ">
                                             @forelse ($m->requirements as $r)
                                                 <li class="flex justify-between py-1 sm:py-3">
                                                     <span class="font-medium text-slate-900"
@@ -167,7 +167,7 @@
                                             </span>
                                         </h3>
                                         <div
-                                            class="flex-grow rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight space-y-4 access_instructions">
+                                            class="grow rounded-2xl bg-slate-100 px-4 py-2 sm:px-4 sm:py-3 text-base font-medium text-slate-700 tracking-tight space-y-4 access_instructions">
                                             {!! $access_instructions !!}
                                             <div class="flex justify-center">
                                                 <a href="{{ asset(config('collabccu.access_map')) }}" target="_blank"
@@ -180,7 +180,7 @@
                                     </div>
                                 </div>
                                 <div class="lg:col-span-6 flex justify-end items-end">
-                                    <a class="group inline-flex items-center justify-center space-x-2 rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600"
+                                    <a class="group inline-flex items-center justify-center space-x-2 rounded-full py-2 px-4 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600"
                                         href="{{ route('manipulation_slots', ['manipulation' => $m]) }}">
                                         <span>
                                             {{ __('public.home.show_slots') }}

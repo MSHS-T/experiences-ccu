@@ -2,12 +2,30 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\ColorPicker;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ColorColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Actions\ViewAction;
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\PlateauResource\RelationManagers\EquipmentsRelationManager;
+use App\Filament\Resources\PlateauResource\Pages\ListPlateaux;
+use App\Filament\Resources\PlateauResource\Pages\CreatePlateau;
+use App\Filament\Resources\PlateauResource\Pages\ViewPlateau;
+use App\Filament\Resources\PlateauResource\Pages\EditPlateau;
+use App\Filament\Resources\PlateauResource\Pages\PlateauPlanning;
 use App\Filament\Resources\PlateauResource\Pages;
 use App\Filament\Resources\PlateauResource\RelationManagers;
 use App\Models\Plateau;
 use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Support\Colors\Color;
 use Filament\Tables\Table;
@@ -18,18 +36,18 @@ class PlateauResource extends Resource
 {
     protected static ?string $model = Plateau::class;
 
-    protected static ?string $navigationIcon   = 'fas-border-all';
+    protected static string | \BackedEnum | null $navigationIcon   = 'fas-border-all';
     protected static ?string $navigationLabel  = 'Plateaux';
     protected static ?int $navigationSort      = 20;
-    protected static ?string $navigationGroup  = 'Gestion';
+    protected static string | \UnitEnum | null $navigationGroup  = 'Gestion';
     protected static ?string $modelLabel       = 'Plateau';
     protected static ?string $pluralModelLabel = 'Plateaux';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Select::make('manager_id')
+        return $schema
+            ->components([
+                Select::make('manager_id')
                     ->label(__('attributes.manager'))
                     ->options(
                         User::role('plateau_manager')
@@ -40,20 +58,20 @@ class PlateauResource extends Resource
                     ->preload()
                     ->searchable()
                     ->required(),
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->label(__('attributes.name'))
                     ->required()
                     ->maxLength(255),
-                Forms\Components\ColorPicker::make('color')
+                ColorPicker::make('color')
                     ->label(__('attributes.color'))
                     ->nullable(),
-                Forms\Components\RichEditor::make('description')
+                RichEditor::make('description')
                     ->label(__('attributes.description'))
                     ->required()
                     ->disableAllToolbarButtons()
                     ->enableToolbarButtons(['bold', 'italic', 'strike', 'link', 'bulletList', 'orderedList'])
                     ->columnSpan(2),
-                Forms\Components\SpatieMediaLibraryFileUpload::make('photos')
+                SpatieMediaLibraryFileUpload::make('photos')
                     ->label(__('attributes.photos'))
                     ->multiple()
                     ->enableReordering()
@@ -66,26 +84,26 @@ class PlateauResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('#')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('manager_id')
+                TextColumn::make('manager_id')
                     ->label(__('attributes.manager'))
                     ->formatStateUsing(
                         fn (Plateau $record): string => $record->manager?->name ?? '?'
                     )
                     ->sortable(),
-                Tables\Columns\ColorColumn::make('color')
+                ColorColumn::make('color')
                     ->label(__('attributes.color'))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(__('attributes.name'))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label(__('attributes.created_at'))
                     ->sortable()
                     ->dateTime('d/m/Y H:i:s'),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label(__('attributes.updated_at'))
                     ->sortable()
                     ->dateTime('d/m/Y H:i:s'),
@@ -98,37 +116,37 @@ class PlateauResource extends Resource
                             User::all()->pluck('name', 'id')->unique()->all()
                         )
                 ],
-                layout: \Filament\Tables\Enums\FiltersLayout::AboveContentCollapsible
+                layout: FiltersLayout::AboveContentCollapsible
             )
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\Action::make('planning')
+            ->recordActions([
+                ViewAction::make(),
+                Action::make('planning')
                     ->label(__('actions.planning'))
                     ->url(fn (Plateau $record) => route('filament.admin.resources.plateaux.planning', ['record' => $record]))
                     ->color(Color::Lime)
                     ->icon('fas-calendar'),
-                Tables\Actions\EditAction::make(),
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                DeleteBulkAction::make(),
             ]);
     }
 
     public static function getRelations(): array
     {
         return [
-            RelationManagers\EquipmentsRelationManager::class,
+            EquipmentsRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index'    => Pages\ListPlateaux::route('/'),
-            'create'   => Pages\CreatePlateau::route('/create'),
-            'view'     => Pages\ViewPlateau::route('/{record}'),
-            'edit'     => Pages\EditPlateau::route('/{record}/edit'),
-            'planning' => Pages\PlateauPlanning::route('/{record}/planning'),
+            'index'    => ListPlateaux::route('/'),
+            'create'   => CreatePlateau::route('/create'),
+            'view'     => ViewPlateau::route('/{record}'),
+            'edit'     => EditPlateau::route('/{record}/edit'),
+            'planning' => PlateauPlanning::route('/{record}/planning'),
         ];
     }
 

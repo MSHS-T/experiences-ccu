@@ -17,7 +17,7 @@ class CancelBookingController extends Controller
     public function __invoke(Booking $booking, Request $request)
     {
         $cancelAction = new CancelBookingAction($booking);
-        $cancellationUrl = MagicLink::create($cancelAction, now()->diffInSeconds($booking->slot->start, true), 1)->url;
+        $cancellationUrl = MagicLink::create($cancelAction, (int) now()->diffInSeconds($booking->slot->start, true), 1)->url;
 
         Mail::to($booking->email)->send(new BookingCancellation($booking, $cancellationUrl));
 

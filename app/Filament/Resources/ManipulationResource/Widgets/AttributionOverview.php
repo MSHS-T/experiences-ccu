@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AttributionOverview extends Widget
 {
-    protected static string $view = 'filament.resources.manipulation-resource.widgets.attribution-overview';
+    protected string $view = 'filament.resources.manipulation-resource.widgets.attribution-overview';
     protected int | string | array $columnSpan = 'full';
 
 

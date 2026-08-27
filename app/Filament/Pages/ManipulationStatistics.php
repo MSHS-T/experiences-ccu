@@ -2,15 +2,15 @@
 
 namespace App\Filament\Pages;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Actions;
+use Filament\Actions\Action;
 use App\Models\Plateau;
 use App\Utils\Statistics;
-use Filament\Forms\Components\Actions;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
-use Filament\Forms\Get;
 use Filament\Pages\Page;
 use Filament\Support\Enums\VerticalAlignment;
 use Illuminate\Support\Facades\Auth;
@@ -19,12 +19,12 @@ class ManipulationStatistics extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon  = 'fas-chart-column';
+    protected static string | \BackedEnum | null $navigationIcon  = 'fas-chart-column';
     protected static ?string $navigationLabel = 'Statistiques';
     protected static ?string $title           = 'Statistiques';
-    protected static ?string $navigationGroup = 'Plateforme';
+    protected static string | \UnitEnum | null $navigationGroup = 'Plateforme';
     protected static ?int $navigationSort     = 40;
-    protected static string $view = 'filament.pages.manipulation-statistics';
+    protected string $view = 'filament.pages.manipulation-statistics';
 
     public ?array $formData = [
         'type'        => null,
@@ -34,9 +34,9 @@ class ManipulationStatistics extends Page implements HasForms
 
     public $statistics = null;
     public $type = null;
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->statePath('formData')
             ->columns([
                 'default' => 1,

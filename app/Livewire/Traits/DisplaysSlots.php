@@ -7,7 +7,6 @@ use App\Models\Plateau;
 use App\Models\Slot;
 use Filament\Support\Colors\Color;
 use Illuminate\Support\Facades\Auth;
-use Spatie\Color\Rgb;
 
 trait DisplaysSlots
 {
@@ -23,7 +22,7 @@ trait DisplaysSlots
         }
 
         $color = $this->colors[$plateau->id % count($this->colors)];
-        return strval(Rgb::fromString('rgb(' . $color[800] . ')')->toHex());
+        return Color::convertToHex($color[800]);
     }
 
     protected function slotColor(Slot $slot): array

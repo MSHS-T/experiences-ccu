@@ -13,7 +13,7 @@
         @session('success')
             <div class="border-l-4 border-green-400 bg-green-50 p-4 sm:mx-auto sm:w-full sm:max-w-lg">
                 <div class="flex">
-                    <div class="flex-shrink-0">
+                    <div class="shrink-0">
                         <x-fas-check-circle class="h-5 w-5 text-green-400" />
                     </div>
                     <div class="ml-3">
@@ -35,7 +35,7 @@
                     <div class="mt-2">
                         <input id="name" name="name" type="text" autocomplete="name" required
                             aria-describedby="name-error" value="{{ old('name') }}"
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     </div>
                     @error('name')
                         <p class="mt-1 text-sm text-red-600" id="name-error">{{ $message }}
@@ -49,7 +49,7 @@
                     <div class="mt-2">
                         <input id="email" name="email" type="email" autocomplete="email" required
                             aria-describedby="email-error" value="{{ old('email') }}"
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     </div>
                     @error('email')
                         <p class="mt-1 text-sm text-red-600" id="email-error">{{ $message }}
@@ -62,7 +62,7 @@
                     </label>
                     <div class="mt-2">
                         <textarea id="message" name="message" required aria-describedby="message-error"
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">{{ old('message') }}</textarea>
+                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">{{ old('message') }}</textarea>
                     </div>
                     @error('message')
                         <p class="mt-1 text-sm text-red-600" id="message-error">{{ $message }}
@@ -72,7 +72,7 @@
 
                 <div>
                     <button type="submit"
-                        class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                        class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-xs hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                         Recevoir un lien de connexion
                     </button>
                 </div>

@@ -2,6 +2,24 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\DatePicker;
+use Filament\Actions\Action;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use App\Filament\Resources\ManipulationResource\Pages\ListManipulations;
+use App\Filament\Resources\ManipulationResource\Pages\CreateManipulation;
+use App\Filament\Resources\ManipulationResource\Pages\ViewManipulation;
+use App\Filament\Resources\ManipulationResource\Pages\EditManipulation;
+use App\Filament\Resources\ManipulationResource\Pages\ManipulationPlanning;
+use App\Filament\Resources\ManipulationResource\Widgets\AttributionOverview;
 use App\Filament\Pages\Attendance;
 use App\Filament\Resources\ManipulationResource\Pages;
 use App\Models\Attribution;
@@ -12,10 +30,8 @@ use App\Models\Plateau;
 use App\Models\Slot;
 use App\Models\User;
 use App\Utils\SlotGenerator;
-use Awcodes\FilamentTableRepeater\Components\TableRepeater;
+use Filament\Forms\Components\Repeater\TableColumn;
 use Filament\Forms;
-use Filament\Forms\Components\Actions\Action;
-use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
@@ -35,14 +51,14 @@ class ManipulationResource extends Resource
 {
     protected static ?string $model = Manipulation::class;
 
-    protected static ?string $navigationIcon   = 'fas-flask-vial';
+    protected static string | \BackedEnum | null $navigationIcon   = 'fas-flask-vial';
     protected static ?string $navigationLabel  = 'Expériences';
     protected static ?int $navigationSort      = 10;
-    protected static ?string $navigationGroup  = 'Plateforme';
+    protected static string | \UnitEnum | null $navigationGroup  = 'Plateforme';
     protected static ?string $modelLabel       = 'Expérience';
     protected static ?string $pluralModelLabel = 'Expériences';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
         $computeSlotCount = fn(callable $set, callable $get) => $set(
             'slot_count',
@@ -52,18 +68,18 @@ class ManipulationResource extends Resource
                 $get('start_date'),
                 $get('end_date'),
                 $get('duration'),
-                $form->getRecord()?->id
+                $schema->getRecord()?->id
             )
         );
 
-        return $form
+        return $schema
             ->columns([
                 'default' => 1,
                 'md'      => 2,
                 'lg'      => 3
             ])
             ->schema([
-                Forms\Components\Select::make('plateau_id')
+                Select::make('plateau_id')
                     ->label(__('attributes.plateau'))
                     ->columnSpan([
                         'default' => 1,
@@ -85,7 +101,7 @@ class ManipulationResource extends Resource
                             ),
                     )
                     ->required(),
-                Forms\Components\Select::make('users')
+                Select::make('users')
                     ->label(__('attributes.manipulation_managers'))
                     ->columnSpan([
                         'default' => 1,
@@ -99,7 +115,7 @@ class ManipulationResource extends Resource
                     ->options(User::role('manipulation_manager')->get()->pluck('name', 'id')->unique()->all())
                     ->default(Auth::user()->hasRole('manipulation_manager') ? [Auth::id()] : [])
                     ->required(),
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->label(__('attributes.name'))
                     ->columnSpan([
                         'default' => 1,
@@ -108,26 +124,26 @@ class ManipulationResource extends Resource
                     ])
                     ->required()
                     ->maxLength(255),
-                Forms\Components\RichEditor::make('description')
+                RichEditor::make('description')
                     ->label(__('attributes.description'))
                     ->required()
                     ->disableAllToolbarButtons()
                     ->enableToolbarButtons(['bold', 'italic', 'strike', 'link', 'bulletList', 'orderedList'])
                     ->columnSpan('full'),
-                Forms\Components\DatePicker::make('start_date')
+                DatePicker::make('start_date')
                     ->label(__('attributes.start_date'))
                     ->displayFormat('d/m/Y')
                     ->reactive()
                     ->afterStateUpdated($computeSlotCount)
                     ->required(),
-                Forms\Components\DatePicker::make('end_date')
+                DatePicker::make('end_date')
                     ->label(__('attributes.end_date'))
                     ->displayFormat('d/m/Y')
                     ->after('start_date')
                     ->reactive()
                     ->afterStateUpdated($computeSlotCount)
                     ->required(),
-                Forms\Components\TextInput::make('duration')
+                TextInput::make('duration')
                     ->label(__('attributes.duration'))
                     ->helperText(__('messages.manipulation_duration_help'))
                     ->suffix('minutes')
@@ -138,32 +154,33 @@ class ManipulationResource extends Resource
                     ->reactive()
                     ->afterStateUpdated($computeSlotCount)
                     ->required(),
-                Forms\Components\TextInput::make('max_booking_per_slot')
+                TextInput::make('max_booking_per_slot')
                     ->label(__('attributes.max_booking_per_slot'))
                     ->suffix('personnes')
                     ->integer()
                     ->minValue(1)
                     ->required(),
-                TableRepeater::make('requirements')
+                Forms\Components\Repeater::make('requirements')
                     ->label(__('attributes.requirements'))
-                    ->emptyLabel(__('messages.no_requirement'))
                     ->addActionLabel(__('messages.add_requirement'))
                     ->columnSpan('full')
-                    ->hideLabels()
                     ->defaultItems(1)
-                    ->withoutHeader()
+                    ->table([
+                        TableColumn::make(__('attributes.requirements'))
+                            ->hiddenHeaderLabel(),
+                    ])
                     ->formatStateUsing(
                         fn(?Manipulation $record) => collect($record?->requirements ?? [])->map(fn($r) => ['text' => $r])->all()
                     )
                     ->reorderable(false)
                     ->schema([
-                        Forms\Components\TextInput::make('text')
+                        TextInput::make('text')
                             ->required()
                             ->columnSpan('full')
                             ->hiddenLabel()
                             ->maxLength(255)
                     ]),
-                Forms\Components\TextInput::make('slot_count')
+                TextInput::make('slot_count')
                     ->label(__('attributes.generated_slot_count'))
                     ->disabled()
                     // ->required()
@@ -201,16 +218,16 @@ class ManipulationResource extends Resource
                     ->when(Auth::user()->hasRole('manipulation_manager'), fn(Builder $query) => $query->whereHas('users', fn(Builder $query) => $query->where('id', Auth::id())))
             )
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('#')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('plateau.name')
+                TextColumn::make('plateau.name')
                     ->label(__('attributes.plateau'))
                     // ->formatStateUsing(
                     //     fn (Manipulation $record): string => $record->plateau->name
                     // )
                     ->sortable(),
-                Tables\Columns\TextColumn::make('users.id')
+                TextColumn::make('users.id')
                     ->label(__('attributes.manipulation_managers'))
                     ->formatStateUsing(
                         fn(Manipulation $record) => Str::of(
@@ -224,54 +241,54 @@ class ManipulationResource extends Resource
                     )
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: Auth::user()->hasRole('manipulation_manager')),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(__('attributes.name'))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('duration')
+                TextColumn::make('duration')
                     ->label(__('attributes.duration'))
                     ->formatStateUsing(
                         fn(Manipulation $record): string => $record->duration . ' min'
                     )
                     ->sortable(),
-                Tables\Columns\TextColumn::make('slots_count')
+                TextColumn::make('slots_count')
                     ->getStateUsing(fn(Manipulation $record) => !$record->archived ? $record->slots->count() : $record->statistics->pluck('slot_count')->sum())
                     ->label(__('attributes.slot_count'))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('slots_booked')
+                TextColumn::make('slots_booked')
                     ->getStateUsing(fn(Manipulation $record) => !$record->archived ? $record->bookings->count() : $record->statistics->pluck('booking_made')->sum())
                     ->label(__('attributes.booked_slots'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('slots_honored')
+                TextColumn::make('slots_honored')
                     ->getStateUsing(fn(Manipulation $record) => !$record->archived
                         ? $record->bookings->filter(fn(Booking $booking) => $booking->honored)->count()
                         : $record->statistics->map(fn(ManipulationStatistics $stat) => $stat->booking_confirmed_honored + $stat->booking_unconfirmed_honored)->sum())
                     ->label(__('attributes.honored_slots'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('slots_absent')
+                TextColumn::make('slots_absent')
                     ->getStateUsing(fn(Manipulation $record) => !$record->archived
                         ? $record->bookings->filter(fn(Booking $booking) => !$booking->honored)->count()
                         : $record->statistics->map(fn(ManipulationStatistics $stat) => $stat->booking_made - $stat->booking_confirmed - $stat->booking_unconfirmed)->sum())
                     ->label(__('attributes.absent_slots'))
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('start_date')
+                TextColumn::make('start_date')
                     ->label(__('attributes.start_date'))
                     ->sortable()
                     ->date('d/m/Y'),
-                Tables\Columns\TextColumn::make('end_date')
+                TextColumn::make('end_date')
                     ->label(__('attributes.end_date'))
                     ->sortable()
                     ->date('d/m/Y'),
-                Tables\Columns\IconColumn::make('published')
+                IconColumn::make('published')
                     ->label('Publié ?')
                     ->boolean(),
-                Tables\Columns\IconColumn::make('archived')
+                IconColumn::make('archived')
                     ->label('Archivé ?')
                     ->toggleable(isToggledHiddenByDefault: false)
                     ->boolean(),
-                Tables\Columns\TextColumn::make('requirements_str')
+                TextColumn::make('requirements_str')
                     ->label(__('attributes.requirements'))
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->formatStateUsing(
@@ -285,12 +302,12 @@ class ManipulationResource extends Resource
                         )->sanitizeHtml()->toHtmlString()
 
                     ),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label(__('attributes.created_at'))
                     ->sortable()
                     ->dateTime('d/m/Y H:i:s')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label(__('attributes.updated_at'))
                     ->sortable()
                     ->dateTime('d/m/Y H:i:s')
@@ -303,8 +320,8 @@ class ManipulationResource extends Resource
                         ->options($plateaux->pluck('name', 'id')->unique()->all()),
                     Filter::make('users')
                         ->hidden(Auth::user()->hasRole('manipulation_manager'))
-                        ->form([
-                            Forms\Components\Select::make('user_id')
+                        ->schema([
+                            Select::make('user_id')
                                 ->label(__('attributes.manipulation_managers'))
                                 ->options(
                                     User::role('manipulation_manager')->get()->pluck('name', 'id')->unique()->all()
@@ -333,24 +350,24 @@ class ManipulationResource extends Resource
                         ->trueLabel(__('attributes.published_no'))
                         ->falseLabel(__('attributes.published_yes')),
                 ],
-                layout: \Filament\Tables\Enums\FiltersLayout::AboveContent
+                layout: FiltersLayout::AboveContent
             )
-            ->actions([
-                Tables\Actions\Action::make('planning')
+            ->recordActions([
+                Action::make('planning')
                     ->label(__('actions.planning'))
                     ->url(fn(Manipulation $record) => route('filament.admin.resources.manipulations.planning', ['record' => $record]))
                     ->color(Color::Lime)
                     ->icon('fas-calendar')
                     ->hidden(fn(Manipulation $record) => $record->archived || !Auth::user()->can('update', $record))
                     ->disabled(fn(Manipulation $record) => $record->archived || !Auth::user()->can('update', $record)),
-                Tables\Actions\Action::make('attendance')
+                Action::make('attendance')
                     ->label(__('actions.attendance'))
                     ->url(fn(Manipulation $record) => Attendance::getUrl(['manipulation' => $record->id]))
                     ->color(Color::Cyan)
                     ->icon('fas-signature')
                     ->hidden(fn(Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('update', $record))
                     ->disabled(fn(Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('update', $record)),
-                Tables\Actions\Action::make('publish')
+                Action::make('publish')
                     ->label(__('actions.publish'))
                     ->icon('fas-calendar-check')
                     ->action(fn(Manipulation $record) => $record->togglePublished())
@@ -358,12 +375,12 @@ class ManipulationResource extends Resource
                     ->color('success')
                     ->hidden(fn(Manipulation $record) => $record->published || $record->archived || !Auth::user()->can('publish', $record))
                     ->disabled(fn(Manipulation $record) => $record->published || $record->archived || !Auth::user()->can('publish', $record)),
-                Tables\Actions\ActionGroup::make([
-                    Tables\Actions\ViewAction::make(),
-                    Tables\Actions\EditAction::make()
+                ActionGroup::make([
+                    ViewAction::make(),
+                    EditAction::make()
                         ->hidden(fn(Manipulation $record) => $record->archived || !Auth::user()->can('update', $record))
                         ->disabled(fn(Manipulation $record) => $record->archived || !Auth::user()->can('update', $record)),
-                    Tables\Actions\Action::make('unpublish')
+                    Action::make('unpublish')
                         ->label(__('actions.unpublish'))
                         ->icon('fas-calendar-xmark')
                         ->action(fn(Manipulation $record) => $record->togglePublished())
@@ -371,7 +388,7 @@ class ManipulationResource extends Resource
                         ->color('warning')
                         ->hidden(fn(Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('publish', $record))
                         ->disabled(fn(Manipulation $record) => !$record->published || $record->archived || !Auth::user()->can('publish', $record)),
-                    Tables\Actions\Action::make('share_public_link')
+                    Action::make('share_public_link')
                         ->label(__('actions.share_public_link'))
                         ->icon('fas-share')
                         ->action(function () {})
@@ -380,7 +397,7 @@ class ManipulationResource extends Resource
                         ->modalContent(fn(Manipulation $record) => view('filament.resources.manipulation-resource.share-public-link', ['record' => $record]))
                         ->modalSubmitAction(false)
                         ->modalCancelActionLabel(__('actions.close')),
-                    Tables\Actions\Action::make('delete')
+                    Action::make('delete')
                         ->label(__('actions.delete'))
                         ->icon('fas-trash')
                         ->action(fn(Manipulation $record) => $record->delete())
@@ -388,7 +405,7 @@ class ManipulationResource extends Resource
                         ->color('danger')
                         ->hidden(fn(Manipulation $record) => $record->archived || !Auth::user()->can('delete', $record))
                         ->disabled(fn(Manipulation $record) => $record->archived || !Auth::user()->can('delete', $record)),
-                    Tables\Actions\Action::make('archive')
+                    Action::make('archive')
                         ->label(__('actions.archive'))
                         ->icon('fas-calendar-check')
                         ->action(fn(Manipulation $record) => $record->archive())
@@ -399,7 +416,7 @@ class ManipulationResource extends Resource
                 ]),
 
             ])
-            ->bulkActions([]);
+            ->toolbarActions([]);
     }
 
     public static function getRelations(): array
@@ -412,18 +429,18 @@ class ManipulationResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'    => Pages\ListManipulations::route('/'),
-            'create'   => Pages\CreateManipulation::route('/create'),
-            'view'     => Pages\ViewManipulation::route('/{record}'),
-            'edit'     => Pages\EditManipulation::route('/{record}/edit'),
-            'planning' => Pages\ManipulationPlanning::route('/{record}/planning'),
+            'index'    => ListManipulations::route('/'),
+            'create'   => CreateManipulation::route('/create'),
+            'view'     => ViewManipulation::route('/{record}'),
+            'edit'     => EditManipulation::route('/{record}/edit'),
+            'planning' => ManipulationPlanning::route('/{record}/planning'),
         ];
     }
 
     public static function getWidgets(): array
     {
         return [
-            ManipulationResource\Widgets\AttributionOverview::class,
+            AttributionOverview::class,
         ];
     }
 

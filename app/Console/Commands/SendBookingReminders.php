@@ -69,7 +69,7 @@ class SendBookingReminders extends Command
                 // The link expires when the slot starts and can only be used once
                 $cancellationUrl = MagicLink::create(
                     new CancelBookingAction($booking),
-                    now()->diffInSeconds($slot->start, true), // TTL in seconds until slot start
+                    (int) now()->diffInSeconds($slot->start, true), // TTL in seconds until slot start
                     1 // Maximum uses: 1
                 )->url;
 

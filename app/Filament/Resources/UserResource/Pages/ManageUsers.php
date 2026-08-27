@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\UserResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\UserResource;
 use App\Models\User;
 use Filament\Actions;
@@ -15,7 +16,7 @@ class ManageUsers extends ManageRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
+            CreateAction::make()
                 ->using(function (array $data): User {
                     $roles = Arr::get($data, 'roles', null);
                     $record = static::getModel()::create(Arr::except($data, 'roles'));

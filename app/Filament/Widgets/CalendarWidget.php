@@ -8,7 +8,6 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\Widget;
 use Saade\FilamentFullCalendar\Widgets\FullCalendarWidget;
-use Spatie\Color\Rgb;
 
 class CalendarWidget extends FullCalendarWidget
 {
@@ -51,6 +50,6 @@ class CalendarWidget extends FullCalendarWidget
         $color = $this->colors[$slot->manipulation->plateau->id % count($this->colors)];
         $shade = filled($slot->bookings) ? 800 : 400;
 
-        return strval(Rgb::fromString('rgb(' . $color[$shade] . ')')->toHex());
+        return Color::convertToHex($color[$shade]);
     }
 }

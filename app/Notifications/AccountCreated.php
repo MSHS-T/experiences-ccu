@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use Filament\Notifications\Auth\ResetPassword;
+use Filament\Auth\Notifications\ResetPassword;
 use Illuminate\Notifications\Messages\MailMessage;
 
 class AccountCreated extends ResetPassword

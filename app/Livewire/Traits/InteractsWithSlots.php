@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Traits;
 
+use Filament\Schemas\Components\Fieldset;
 use App\Mail\BookingCancelled;
 use App\Models\Manipulation;
 use App\Models\Slot;
@@ -11,11 +12,8 @@ use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
-use Filament\Actions\StaticAction;
 use Filament\Actions\ViewAction;
-use Filament\Forms\Components\Actions\Action as FormAction;
 use Filament\Forms\Components\DateTimePicker;
-use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -28,7 +26,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithEvents;
-use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithModalActions;
 use Saade\FilamentFullCalendar\Widgets\Concerns\InteractsWithRecords;
 
 trait InteractsWithSlots
@@ -38,8 +35,7 @@ trait InteractsWithSlots
     use InteractsWithEvents {
         onEventClick as protected onEventClickTrait;
     }
-    use InteractsWithModalActions,
-        InteractsWithRecords;
+    use InteractsWithRecords;
 
     /**
      * Triggered when the user clicks an event.
@@ -58,15 +54,15 @@ trait InteractsWithSlots
     {
         return ViewAction::make()
             ->record($this->getRecord())
-            ->form(fn($record) => $this->getFormSchema($record))
+            ->schema(fn($record) => $this->getFormSchema($record))
             ->modalHeading(__('actions.view_slot'))
             ->modalCancelAction(
-                fn(StaticAction $action) => $action
+                fn(Action $action) => $action
                     ->label(__('actions.close'))
                     ->color('gray'),
             )
             ->modalSubmitAction(
-                fn(StaticAction $action) => $action
+                fn(Action $action) => $action
                     ->label(__('actions.delete_slot'))
                     ->color('danger')
                     ->hidden(fn() => !$this->canManageBooking($this->getRecord()))
@@ -96,12 +92,12 @@ trait InteractsWithSlots
                 return view('components.slot-creation-preview', ['slots' => $slots]);
             })
             ->modalCancelAction(
-                fn(StaticAction $action) => $action
+                fn(Action $action) => $action
                     ->label(__('actions.close'))
                     ->color('gray'),
             )
             ->modalSubmitAction(
-                fn(StaticAction $action, $arguments) => $action
+                fn(Action $action, $arguments) => $action
                     ->label(__('actions.create'))
                     ->color('success')
                     ->hidden(fn() => count(SlotGenerator::makeFromManipulationAndDateTimes($this->manipulation, $arguments['start'], $arguments['end'])) === 0),
@@ -139,7 +135,7 @@ trait InteractsWithSlots
                         ->preload()
                         ->required()
                         ->suffixAction(
-                            fn($state) => FormAction::make('planning')
+                            fn($state) => Action::make('planning')
                                 ->icon('fas-calendar-days')
                                 ->url(route('filament.admin.resources.manipulations.planning', ['record' => $state]))
                                 ->openUrlInNewTab()
@@ -153,7 +149,7 @@ trait InteractsWithSlots
                         ->preload()
                         ->required()
                         ->suffixAction(
-                            fn($state) => FormAction::make('planning')
+                            fn($state) => Action::make('planning')
                                 ->icon('fas-calendar-days')
                                 ->url(route('filament.admin.resources.plateaux.planning', ['record' => $state]))
                                 ->openUrlInNewTab()

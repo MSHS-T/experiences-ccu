@@ -2,8 +2,10 @@
 
 namespace App\Filament\Resources\EquipmentResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -14,11 +16,11 @@ class PlateauxRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -28,10 +30,10 @@ class PlateauxRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(__('attributes.name'))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('quantity')
+                TextColumn::make('quantity')
                     ->label(__('attributes.quantity'))
                     ->sortable(),
             ])

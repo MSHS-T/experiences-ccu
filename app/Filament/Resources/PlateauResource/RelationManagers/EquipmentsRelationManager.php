@@ -2,8 +2,14 @@
 
 namespace App\Filament\Resources\PlateauResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Actions\AttachAction;
+use Filament\Actions\DetachAction;
+use Filament\Actions\DetachBulkAction;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -16,11 +22,11 @@ class EquipmentsRelationManager extends RelationManager
     protected static ?string $modelLabel       = 'Équipement';
     protected static ?string $pluralModelLabel = 'Équipements';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -30,10 +36,10 @@ class EquipmentsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(__('attributes.name'))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('pivot.quantity')
+                TextColumn::make('pivot.quantity')
                     ->label(__('attributes.quantity'))
                     ->sortable(),
             ])
@@ -41,11 +47,11 @@ class EquipmentsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\AttachAction::make()
+                AttachAction::make()
                     ->preloadRecordSelect()
-                    ->form(fn (Tables\Actions\AttachAction $action): array => [
+                    ->form(fn (AttachAction $action): array => [
                         $action->getRecordSelect(),
-                        Forms\Components\TextInput::make('quantity')
+                        TextInput::make('quantity')
                             ->label(__('attributes.quantity'))
                             ->required()
                             ->integer()
@@ -53,12 +59,12 @@ class EquipmentsRelationManager extends RelationManager
                             ->step(1),
                     ]),
             ])
-            ->actions([
-                Tables\Actions\DetachAction::make(),
+            ->recordActions([
+                DetachAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DetachBulkAction::make(),
-                Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                DetachBulkAction::make(),
+                DeleteBulkAction::make(),
             ]);
     }
 

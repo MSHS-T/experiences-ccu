@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\ManipulationResource\Pages;
 
+use App\Filament\Resources\ManipulationResource\Widgets\AttributionOverview;
+use Filament\Actions\ViewAction;
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\ManipulationResource;
 use App\Models\Manipulation;
 use Filament\Actions;
@@ -19,7 +22,7 @@ class EditManipulation extends EditRecord
             return [];
         } else {
             return [
-                ManipulationResource\Widgets\AttributionOverview::class,
+                AttributionOverview::class,
             ];
         }
     }
@@ -49,8 +52,8 @@ class EditManipulation extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\ViewAction::make(),
-            Actions\DeleteAction::make()
+            ViewAction::make(),
+            DeleteAction::make()
                 ->hidden(fn(Manipulation $record) => !Auth::user()->can('manipulation.delete'))
                 ->disabled(fn(Manipulation $record) => !Auth::user()->can('manipulation.delete') || $record->published),
         ];

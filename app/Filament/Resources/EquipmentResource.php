@@ -2,12 +2,24 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\RichEditor;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\EquipmentResource\RelationManagers\PlateauxRelationManager;
+use App\Filament\Resources\EquipmentResource\Pages\ListEquipment;
+use App\Filament\Resources\EquipmentResource\Pages\CreateEquipment;
+use App\Filament\Resources\EquipmentResource\Pages\ViewEquipment;
+use App\Filament\Resources\EquipmentResource\Pages\EditEquipment;
 use App\Filament\Resources\EquipmentResource\Pages;
 use App\Filament\Resources\EquipmentResource\RelationManagers;
 use App\Models\Equipment;
 use Filament\Forms;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables\Table;
 use Filament\Tables;
@@ -17,35 +29,35 @@ class EquipmentResource extends Resource
 {
     protected static ?string $model = Equipment::class;
 
-    protected static ?string $navigationIcon   = 'fas-screwdriver-wrench';
+    protected static string | \BackedEnum | null $navigationIcon   = 'fas-screwdriver-wrench';
     protected static ?string $navigationLabel  = 'Équipements';
     protected static ?int $navigationSort      = 30;
-    protected static ?string $navigationGroup  = 'Gestion';
+    protected static string | \UnitEnum | null $navigationGroup  = 'Gestion';
     protected static ?string $modelLabel       = 'Équipement';
     protected static ?string $pluralModelLabel = 'Équipements';
 
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->columns(2)
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->label(__('attributes.name'))
                     ->required()
                     ->maxLength(255)
                     ->columnSpan(2),
-                Forms\Components\TextInput::make('type')
+                TextInput::make('type')
                     ->label(__('attributes.type'))
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('quantity')
+                TextInput::make('quantity')
                     ->label(__('attributes.quantity'))
                     ->required()
                     ->integer()
                     ->minValue(0)
                     ->step(1),
-                Forms\Components\RichEditor::make('description')
+                RichEditor::make('description')
                     ->label(__('attributes.description'))
                     ->required()
                     ->disableAllToolbarButtons()
@@ -65,24 +77,24 @@ class EquipmentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->label('#')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label(__('attributes.name'))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('type')
+                TextColumn::make('type')
                     ->label(__('attributes.type'))
                     ->sortable(),
-                Tables\Columns\TextColumn::make('quantity')
+                TextColumn::make('quantity')
                     ->label(__('attributes.quantity'))
                     ->sortable(),
                 // Tables\Columns\TextColumn::make('description'),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label(__('attributes.created_at'))
                     ->dateTime('d/m/Y H:i:s')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label(__('attributes.updated_at'))
                     ->dateTime('d/m/Y H:i:s')
                     ->sortable(),
@@ -94,14 +106,14 @@ class EquipmentResource extends Resource
                             Equipment::all()->pluck('type', 'type')->unique()->all()
                         )
                 ],
-                layout: \Filament\Tables\Enums\FiltersLayout::AboveContentCollapsible
+                layout: FiltersLayout::AboveContentCollapsible
             )
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                DeleteBulkAction::make(),
             ])
             ->defaultSort('name');
     }
@@ -109,17 +121,17 @@ class EquipmentResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\PlateauxRelationManager::class,
+            PlateauxRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListEquipment::route('/'),
-            'create' => Pages\CreateEquipment::route('/create'),
-            'view'   => Pages\ViewEquipment::route('/{record}'),
-            'edit'   => Pages\EditEquipment::route('/{record}/edit'),
+            'index'  => ListEquipment::route('/'),
+            'create' => CreateEquipment::route('/create'),
+            'view'   => ViewEquipment::route('/{record}'),
+            'edit'   => EditEquipment::route('/{record}/edit'),
         ];
     }
 

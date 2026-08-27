@@ -30,7 +30,7 @@ class SlotCalendar extends Component implements HasForms, HasActions
     public $plateaux = [];
     public $checkedPlateaux;
 
-    public function mount(int $plateauId = null, int $manipulationId = null)
+    public function mount(?int $plateauId = null, ?int $manipulationId = null)
     {
         if (filled($plateauId)) {
             $this->plateau = Plateau::find($plateauId);

@@ -15,7 +15,7 @@
                 </span>
             </div>
         @elseif(filled($subjectHistory))
-            <div class="flex-shrink flex-grow max-w-full p-4" style="height: 40rem;">
+            <div class="shrink grow max-w-full p-4" style="height: 40rem;">
                 <dl class="mx-auto grid grid-cols-1 gap-px bg-white dark:bg-gray-900/5 sm:grid-cols-2 xl:grid-cols-4">
                     <div
                         class="flex flex-col items-stretch justify-between gap-x-4 gap-y-2 bg-white dark:bg-gray-900 px-4 py-8 sm:py-12 sm:px-6 xl:px-8 border border-gray-200 rounded-t-xl sm:rounded-tr-none sm:rounded-tl-xl xl:rounded-l-xl">
@@ -100,7 +100,7 @@
                         </dd>
                     </div>
                 </dl>
-                <div class="bg-white dark:bg-gray-900 border border-gray-200 shadow sm:rounded-xl mt-4">
+                <div class="bg-white dark:bg-gray-900 border border-gray-200 shadow-sm sm:rounded-xl mt-4">
                     <div class="px-4 py-5 sm:p-6 sm:flex sm:items-center">
                         @if ($subjectHistory['blocked'])
                             <x-fas-ban class="h-8 w-8 text-red-600" />
@@ -115,9 +115,9 @@
                                 Un compte bloqué ne peut pas s'inscrire aux manipulations.
                             </p>
                         </div>
-                        <div class="mt-5 sm:ml-6 sm:mt-0 sm:flex sm:flex-shrink-0 sm:items-center">
+                        <div class="mt-5 sm:ml-6 sm:mt-0 sm:flex sm:shrink-0 sm:items-center">
                             <button type="button" wire:click="toggleBlock"
-                                class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+                                class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
                                 {{ $subjectHistory['blocked'] ? 'Débloquer' : 'Bloquer' }}
                             </button>
                         </div>

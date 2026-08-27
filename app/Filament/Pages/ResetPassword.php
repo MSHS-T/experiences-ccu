@@ -2,12 +2,11 @@
 
 namespace App\Filament\Pages;
 
+use Filament\Auth\Http\Responses\Contracts\PasswordResetResponse;
 use App\Models\User;
-use Filament\Http\Responses\Auth\Contracts\PasswordResetResponse;
-use Filament\Pages\Auth\PasswordReset\ResetPassword as BasePage;
 use Illuminate\Contracts\Support\Htmlable;
 
-class ResetPassword extends BasePage
+class ResetPassword extends \Filament\Auth\Pages\PasswordReset\ResetPassword
 {
     public function resetPassword(): ?PasswordResetResponse
     {

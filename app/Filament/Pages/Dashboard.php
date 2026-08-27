@@ -10,9 +10,9 @@ use Illuminate\Contracts\Support\Htmlable;
 
 class Dashboard extends BasePage
 {
-    protected static ?string $navigationIcon = 'fas-home';
+    protected static string | \BackedEnum | null $navigationIcon = 'fas-home';
 
-    public function getColumns(): int | string | array
+    public function getColumns(): int|array
     {
         return [
             'default' => 1,

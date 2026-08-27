@@ -11,7 +11,7 @@ class ManipulationPlanning extends Page
 {
     protected static string $resource = ManipulationResource::class;
 
-    protected static string $view = 'filament.resources.manipulation-resource.pages.manipulation-planning';
+    protected string $view = 'filament.resources.manipulation-resource.pages.manipulation-planning';
 
     public Manipulation $manipulation;
 

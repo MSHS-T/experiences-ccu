@@ -11,7 +11,7 @@ class PlateauPlanning extends Page
 {
     protected static string $resource = PlateauResource::class;
 
-    protected static string $view = 'filament.resources.plateau-resource.pages.plateau-planning';
+    protected string $view = 'filament.resources.plateau-resource.pages.plateau-planning';
 
     public Plateau $plateau;
 

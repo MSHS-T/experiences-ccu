@@ -11,7 +11,6 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Pages\Page;
 use Filament\Support\Colors\Color;
-use Filament\Tables\Actions\Action as TableAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -30,8 +29,8 @@ class Attendance extends Page implements HasForms, HasTable
     use InteractsWithTable;
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon = 'fas-signature';
-    protected static string $view = 'filament.pages.attendance';
+    protected static string | \BackedEnum | null $navigationIcon = 'fas-signature';
+    protected string $view = 'filament.pages.attendance';
 
     #[Url(as: 'date', history: true)]
     public ?string $queryDate;
@@ -153,8 +152,8 @@ class Attendance extends Page implements HasForms, HasTable
                     ->label('')
                     ->getTitleFromRecordUsing(fn($record) => Carbon::parse($record['start'])->format('H:i') . ' - ' . Carbon::parse($record['end'])->format('H:i')),
             )
-            ->actions([
-                TableAction::make('markHonored')
+            ->recordActions([
+                Action::make('markHonored')
                     ->label(__('actions.mark_honored'))
                     ->hidden(fn(SlotBooking $record) => blank($record->booking_id))
                     ->disabled(fn(SlotBooking $record) => Carbon::parse($record->start)->startOfDay()->isAfter(now()->startOfDay()))
@@ -169,7 +168,7 @@ class Attendance extends Page implements HasForms, HasTable
                             Booking::find($record->booking_id)->update(['honored' => null]);
                         }
                     }),
-                TableAction::make('markNotHonored')
+                Action::make('markNotHonored')
                     ->label(__('actions.mark_not_honored'))
                     ->hidden(fn(SlotBooking $record) => blank($record->booking_id))
                     ->disabled(fn(SlotBooking $record) => Carbon::parse($record->start)->startOfDay()->isAfter(now()->startOfDay()))

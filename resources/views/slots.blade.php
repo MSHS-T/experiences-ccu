@@ -33,8 +33,7 @@
                                     <div class="group relative px-4 py-1 lg:p-3">
                                         <h2>
                                             <button
-                                                class="font-display text-lg [&:not(:focus-visible)]:focus:outline-none
-                                        flex items-center justify-between w-full p-1 font-medium text-left text-white"
+                                                class="font-display text-lg [&:not(:focus-visible)]:focus:outline-hidden                                        flex items-center justify-between w-full p-1 font-medium text-left text-white"
                                                 x-on:click="selectedDate = Object.keys(slots)[dayIndex - 1]"
                                                 type="button">
                                                 <span class="absolute inset-0 rounded-xl"></span>
@@ -66,7 +65,7 @@
                         </template>
                         <div class="flex justify-center" x-show="daysDisplayed < Object.keys(slots).length">
                             <button
-                                class="group inline-flex ring-1 items-center justify-center rounded-full py-2 px-4 text-sm focus:outline-none ring-slate-200 text-white hover:text-slate-900 hover:ring-slate-300 active:bg-slate-100 active:text-slate-600 focus-visible:outline-blue-600 focus-visible:ring-slate-300"
+                                class="group inline-flex ring-1 items-center justify-center rounded-full py-2 px-4 text-sm focus:outline-hidden ring-slate-200 text-white hover:text-slate-900 hover:ring-slate-300 active:bg-slate-100 active:text-slate-600 focus-visible:outline-blue-600 focus-visible:ring-slate-300"
                                 type="button" x-on:click="loadMoreDays">
                                 <x-fas-arrow-down class="h-4 w-4" />
                                 <span class="ml-3">{{ __('public.slots.show_more_dates') }}</span>
@@ -90,7 +89,7 @@
                     <div class="mt-2">
                         <input type="text" name="first_name" id="first-name" autocomplete="given-name"
                             value="{{ old('first_name') }}"
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                     @error('first_name')
                         <p class="mt-2 text-sm text-red-600" id="first-name-error">{{ $message }}</p>
@@ -104,7 +103,7 @@
                     <div class="mt-2">
                         <input type="text" name="last_name" id="last-name" autocomplete="family-name"
                             value="{{ old('last_name') }}"
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                     @error('last_name')
                         <p class="mt-2 text-sm text-red-600" id="last-name-error">{{ $message }}</p>
@@ -118,7 +117,7 @@
                     <div class="mt-2">
                         <input id="email" name="email" type="email" autocomplete="email"
                             value="{{ old('email') }}"
-                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-xs ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
                     </div>
                     @error('email')
                         <p class="mt-2 text-sm text-red-600" id="email-error">{{ $message }}</p>
@@ -136,7 +135,7 @@
                                     <div class="flex h-6 items-center">
                                         <input id="requirements-{{ $i }}"
                                             name="requirements-{{ $i }}" type="checkbox"
-                                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+                                            class="h-4 w-4 rounded-sm border-gray-300 text-indigo-600 focus:ring-indigo-600">
                                     </div>
                                     <div class="text-sm leading-6">
                                         <label for="requirements-{{ $i }}"
@@ -156,7 +155,7 @@
                 <div class="sm:col-span-6 pt-4">
                     <div class="flex items-center">
                         <input id="commitment" name="commitment" type="checkbox"
-                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600 mr-3">
+                            class="h-4 w-4 rounded-sm border-gray-300 text-indigo-600 focus:ring-indigo-600 mr-3">
                         <label for="commitment" class="block text-sm font-medium leading-6 text-gray-900">
                             {{ __('public.slots.commitment') }}
                         </label>
@@ -168,7 +167,7 @@
 
                 <div class="sm:col-span-6 flex justify-center">
                     <button type="submit" x-bind:disabled="selectedSlot === null"
-                        class="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600">
+                        class="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-hidden focus-visible:outline-2 focus-visible:outline-offset-2 bg-blue-600 text-white hover:text-slate-100 hover:bg-blue-500 active:bg-blue-800 active:text-blue-100 focus-visible:outline-blue-600">
                         {{ __('public.slots.confirm_booking') }}
                     </button>
                 </div>

@@ -2,13 +2,13 @@
 
 namespace App\Filament\Pages;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Actions;
+use Filament\Actions\Action;
 use App\Utils\Subject;
-use Filament\Forms\Components\Actions;
-use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Form;
 use Filament\Pages\Page;
 use Filament\Support\Enums\VerticalAlignment;
 use Illuminate\Support\Facades\Auth;
@@ -17,12 +17,12 @@ class SubjectHistory extends Page implements HasForms
 {
     use InteractsWithForms;
 
-    protected static ?string $navigationIcon  = 'fas-magnifying-glass';
+    protected static string | \BackedEnum | null $navigationIcon  = 'fas-magnifying-glass';
     protected static ?string $navigationLabel = 'Recherche de participant';
     protected static ?string $title           = 'Recherche de participant';
-    protected static ?string $navigationGroup = 'Plateforme';
+    protected static string | \UnitEnum | null $navigationGroup = 'Plateforme';
     protected static ?int $navigationSort     = 30;
-    protected static string $view             = 'filament.pages.subject-history';
+    protected string $view             = 'filament.pages.subject-history';
 
     public ?array $formData = [
         'email' => null,
@@ -31,9 +31,9 @@ class SubjectHistory extends Page implements HasForms
     public ?array $subjectHistory;
     public bool $notFound = false;
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->statePath('formData')
             ->columns([
                 'default' => 1,

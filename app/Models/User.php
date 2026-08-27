@@ -7,7 +7,7 @@ use Filament\Facades\Filament;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasName;
-use Filament\Notifications\Auth\ResetPassword as ResetPasswordNotification;
+use Filament\Auth\Notifications\ResetPassword as ResetPasswordNotification;
 use Filament\Panel;
 use Filament\Support\Colors\Color;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -21,7 +21,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
-use Spatie\Color\Rgb;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
@@ -145,7 +144,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
             'manipulation_manager' => Color::Lime[900],
             default                => Color::Fuchsia[900]
         };
-        $color = ltrim(Rgb::fromString('rgb(' . $color . ')')->toHex(), '#');
+        $color = ltrim(Color::convertToHex($color), '#');
         $initials = collect(explode(' ', $this->name))->map(fn($str) => substr($str, 0, 1))->join('+');
         return "https://ui-avatars.com/api/?name=$initials&color=FFFFFF&background=$color&length=3";
     }

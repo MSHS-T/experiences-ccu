@@ -18,13 +18,13 @@
                             {{ \Illuminate\Support\Carbon::parse($slot['start'])->format('d/m/Y') }}
                         </li>
                         <li>
-                            <x-fas-minus class="h-4 w-4 flex-shrink-0" />
+                            <x-fas-minus class="h-4 w-4 shrink-0" />
                         </li>
                         <li class="text-sm font-medium">
                             {{ \Illuminate\Support\Carbon::parse($slot['start'])->format('H:i') }}
                         </li>
                         <li>
-                            <x-fas-angle-right class="h-5 w-5 flex-shrink-0" />
+                            <x-fas-angle-right class="h-5 w-5 shrink-0" />
                         </li>
                         <li class="ml-4 text-sm font-medium">
                             {{ \Illuminate\Support\Carbon::parse($slot['end'])->format('H:i') }}

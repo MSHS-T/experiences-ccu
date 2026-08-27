@@ -40,8 +40,8 @@ class BookSlotController extends Controller
             // return $confirmAction->run();
         }
 
-        $confirmationUrl = MagicLink::create($confirmAction, now()->diffInSeconds($confirmBefore, true), 1)->url;
-        $cancellationUrl = MagicLink::create(new CancelBookingAction($booking), now()->diffInSeconds($slot->start, true), 1)->url;
+        $confirmationUrl = MagicLink::create($confirmAction, (int) now()->diffInSeconds($confirmBefore, true), 1)->url;
+        $cancellationUrl = MagicLink::create(new CancelBookingAction($booking), (int) now()->diffInSeconds($slot->start, true), 1)->url;
 
         Mail::to($request->email)->send(new BookingConfirmation($booking, $confirmationUrl, $cancellationUrl));
 

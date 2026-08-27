@@ -1,6 +1,7 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/* Tailwind v4 reads the existing v3 config (theme, plugins, content, safelist) from here. */
+@config '../../tailwind.config.js';
 
 html {
     scroll-behavior: smooth;
