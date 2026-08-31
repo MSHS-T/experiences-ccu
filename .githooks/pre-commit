@@ -1,0 +1,49 @@
+#!/bin/bash
+#
+# Guards the npm lockfile, which is the source of truth for production:
+# deploy.sh runs `npm ci`, and that fails outright when package.json and
+# package-lock.json disagree — after the site has already gone into
+# maintenance mode. Catch the drift here instead.
+#
+# Enable once per clone:
+#   git config core.hooksPath .githooks
+
+set -uo pipefail
+
+staged=$(git diff --cached --name-only --diff-filter=ACM)
+
+echo "$staged" | grep -qE '^(package\.json|package-lock\.json|pnpm-lock\.yaml)$' || exit 0
+
+if ! command -v npm > /dev/null 2>&1; then
+    echo "pre-commit: npm not found, skipping lockfile check" >&2
+    exit 0
+fi
+
+# Same validation `npm ci` performs on the server, without installing anything.
+# Note: this inspects the working tree, not the staged content.
+if ! output=$(npm ci --dry-run 2>&1); then
+    echo >&2
+    echo "pre-commit: package.json and package-lock.json are out of sync." >&2
+    echo "            deploy.sh runs 'npm ci' and would fail mid-deploy." >&2
+    echo >&2
+    # Keep the lines that name the drift; npm buries them above a wall of usage text.
+    echo "$output" \
+        | grep -E 'can only install|Invalid:|Missing:|Extraneous:' \
+        | head -12 \
+        | sed 's/^npm error */  /' >&2
+    echo >&2
+    echo "  Fix:    npm install --package-lock-only" >&2
+    echo "  Bypass: git commit --no-verify" >&2
+    echo >&2
+    exit 1
+fi
+
+# pnpm is a local convenience only; production has npm only. Warn, never block.
+if [ -f pnpm-lock.yaml ] \
+   && echo "$staged" | grep -qE '^(package\.json|package-lock\.json)$' \
+   && ! echo "$staged" | grep -q '^pnpm-lock\.yaml$'; then
+    echo "pre-commit: warning — npm deps changed but pnpm-lock.yaml is not staged." >&2
+    echo "            Run 'pnpm import' to refresh it." >&2
+fi
+
+exit 0
