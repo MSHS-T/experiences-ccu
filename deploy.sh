@@ -5,11 +5,55 @@
 # still report success, which could bring the site back up with stale assets.
 set -euo pipefail
 
-# App name and Discord webhook URL
+# App name
 APP_NAME="Expériences CCU"
-DISCORD_WEBHOOK_URL="${DISCORD_WEBHOOK_URL}"
 LOCK_FILE="./deployment.lock"
 BRANCH="develop"
+
+# The Discord webhook URL is a secret and this repository is public, so it is
+# never stored here. The caller supplies it with --webhook (or in the
+# DISCORD_WEBHOOK_URL environment variable). It is optional: without it the
+# deployment runs exactly the same, only without notifications.
+DISCORD_WEBHOOK_URL="${DISCORD_WEBHOOK_URL:-}"
+FORCE_DEPLOY=0
+
+usage() {
+    echo "Usage: $0 [--force] [--webhook <discord-webhook-url>]" >&2
+}
+
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --force)
+            FORCE_DEPLOY=1
+            ;;
+        --webhook)
+            if [ $# -lt 2 ]; then
+                echo "Error: --webhook requires a URL" >&2
+                usage
+                exit 1
+            fi
+            DISCORD_WEBHOOK_URL="$2"
+            shift
+            ;;
+        --webhook=*)
+            DISCORD_WEBHOOK_URL="${1#--webhook=}"
+            ;;
+        -h|--help)
+            usage
+            exit 0
+            ;;
+        *)
+            echo "Error: unknown option: $1" >&2
+            usage
+            exit 1
+            ;;
+    esac
+    shift
+done
+
+if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+    echo "Notice: no webhook URL given; deployment notifications are disabled." >&2
+fi
 
 # Find a matching CLI PHP binary
 PHP_BIN=""
@@ -56,6 +100,8 @@ done
 
 # Send Discord notification
 send_discord_notification() {
+    # No webhook configured: skip silently rather than curl an empty URL.
+    [ -n "${2:-}" ] || return 0
     curl -s -H "Content-Type: application/json" -X POST -d "{\"content\": \"$1\"}" "$2" > /dev/null || true
 }
 
@@ -72,7 +118,7 @@ on_failure() {
     local exit_code=$?
     echo "Deployment FAILED during: ${CURRENT_STEP} (exit ${exit_code})" >&2
     send_discord_notification \
-        "🔴 **$APP_NAME** deployment FAILED during \\\"${CURRENT_STEP}\\\" (exit ${exit_code}). Site is still in maintenance mode. Fix the cause, then run \`./deploy.sh --force\`." \
+        "🔴 **$APP_NAME** deployment FAILED during \\\"${CURRENT_STEP}\\\" (exit ${exit_code}). Site is still in maintenance mode. Fix the cause, then re-run the deployment with \`--force\`." \
         "$DISCORD_WEBHOOK_URL"
     exit "$exit_code"
 }
@@ -149,7 +195,7 @@ deploy() {
 }
 
 # Check if we should deploy
-if [ "${1:-}" = "--force" ] || { $GIT_BIN fetch -q origin && [ -n "$($GIT_BIN log --oneline ..origin/$BRANCH)" ]; }; then
+if [ "$FORCE_DEPLOY" -eq 1 ] || { $GIT_BIN fetch -q origin && [ -n "$($GIT_BIN log --oneline ..origin/$BRANCH)" ]; }; then
     deploy
 fi
 
